@@ -7,7 +7,7 @@ import Home from './Components/Home';
 import Details from './Components/Details/Details'
 import Cart from './Components/Cart/Cart'
 import Default from './Components/Default/Default'
-
+import Model from './Components/Model';
 
 function App() {
   return (
@@ -20,7 +20,7 @@ function App() {
            <Route path='/cart' component = {Cart}/> 
            <Route component={Default}/>
            </Switch>  
-        
+           <Model/>
     </React.Fragment> 
   );
 }

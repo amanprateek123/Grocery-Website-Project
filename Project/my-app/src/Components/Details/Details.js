@@ -39,7 +39,8 @@ export default class Details extends Component {
                                             back to products 
                                         </Button>
                                      </NavLink>
-                                     <Button cart disabled={inCart?true:false} onClick={() => value.addToCart(id)}>
+                                     <Button cart disabled={inCart?true:false} onClick={() => {value.addToCart(id);
+                                                                                               value.openModel(id);}}>
                                             {inCart?"in Cart":"add to cart"}
                                     </Button>
                                  </div>

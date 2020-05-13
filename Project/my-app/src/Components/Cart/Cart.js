@@ -1,11 +1,12 @@
 import React, { Component } from 'react'
+import Title from '../ProductList/Title';
 
 export default class Cart extends Component {
     render() {
         return (
-            <div>
-                Cart 
-            </div>
+            <section>
+               <Title name="your" title="cart"/>
+            </section>
         )
     }
 }

@@ -7,12 +7,28 @@ class ProductProvider extends Component {
     state ={
         products: [],
         detailProduct: detailProduct,
-        cart:[]
+        cart:[],
+        modelOpen:false,
+        modelProduct:detailProduct,
+        cartSubTotal:0,
+        cartTax:0,
+        cartTotal:0
     }
     componentDidMount(){
         this.setProducts();
     }
+    increament =()=>{
+        
+    }
+    decreament=()=>{
 
+    }
+    removeIem=()=>{
+
+    }
+    clearCart=()=>{
+
+    }
     setProducts = () =>{
         let product = [];
         storeProducts.forEach(item =>{
@@ -35,6 +51,19 @@ class ProductProvider extends Component {
          return {detailProduct:product}
       })
     }
+    
+    openModel = id =>{
+      const product = this.getItem(id)
+      this.setState(() =>{
+          return {modelProduct:product,modelOpen:true}
+      })
+    }
+    closeModel=()=>{
+        this.setState(()=>{
+            return {modelOpen:false}
+        })
+    }
+
     addToCart = (id)=>{
         const temp_product = [...this.state.products];
         const index = temp_product.indexOf(this.getItem(id));
@@ -52,7 +81,14 @@ class ProductProvider extends Component {
     }
     render() {
         return (
-            <ProductContext.Provider value={{...this.state, handelDetail:this.handelDetail,addToCart:this.addToCart}}>
+            <ProductContext.Provider value={{...this.state, handelDetail:this.handelDetail,
+                                                            addToCart:this.addToCart,
+                                                            openModel:this.openModel,
+                                                            closeModel:this.closeModel,
+                                                            increament:this.increament,
+                                                            decreament:this.decreament,
+                                                            removeIem:this.removeIem,
+                                                            clearCart:this.clearCart}}>
                 {this.props.children}
             </ProductContext.Provider>
         )
