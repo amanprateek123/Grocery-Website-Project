@@ -2,7 +2,7 @@
 - task: Npm@1
   inputs:
     command: 'install'
-    workingDir: 'https://LalaDukaan@dev.azure.com/LalaDukaan/LalaDukaan/_git/LalaDukaan'
+    workingDir: $(Agent.BuildDirectory)
 # Build a Node.js project that uses React.
 # Add steps that analyze code, save build artifacts, deploy, and more:
 # https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
