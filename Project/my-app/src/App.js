@@ -2,9 +2,9 @@ import React from 'react';
 
 import {Switch, Route} from 'react-router-dom'
 import './App.css';
-import Navbar from './Components/Navbar/Navbar'
+import Navbar from './Components/Navbar/Nav'
 import Home from './Components/Home';
-import Details from './Components/Details/Details'
+import Details from './Components/Details/Detail'
 import Cart from './Components/Cart/Cart'
 import Default from './Components/Default/Default'
 import Model from './Components/Model';
