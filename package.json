@@ -9,6 +9,7 @@
     "dev": "concurrently --kill-others-on-fail \"npm run server\" \"npm run client\""
   },
   "dependencies": {
+    "@sendgrid/mail": "^7.1.1",
     "body-parser": "^1.18.3",
     "dotenv": "^8.2.0",
     "express": "^4.16.4",

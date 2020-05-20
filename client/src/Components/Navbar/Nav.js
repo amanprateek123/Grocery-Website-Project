@@ -42,6 +42,7 @@ export default class Nav extends Component {
                                                 </span>
                                             </li>
                                         </ul>
+<<<<<<< HEAD
                                      </div>
                                </div>
                            </div>
@@ -71,6 +72,37 @@ export default class Nav extends Component {
                                  <span className="ba">
                                      My basket
                                      <br/>
+=======
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </header>
+                    <div className="container">
+                        <div className="n">
+                            <NavLink to="/" className="logo">
+                                <img src={pic} alt="pic" />
+                            </NavLink>
+                            <div className="input">
+                                <div className="input-group">
+                                    <input type="search" placeholder="Search for Products.." />
+                                </div>
+                                <div className="butn">
+                                    <button className="bb-search" type="submit">
+                                        <i className="fa fa-search " aria-hidden="true" />
+                                    </button>
+                                </div>
+                            </div>
+                            <div className="cart">
+                                <NavLink to="/cart" className="basket" type="button">
+                                    <span className="a">
+                                        <i className="fa fa-shopping-basket" aria-hidden="true" />
+                                    </span>
+                                    <span className="b">
+                                        <span className="ba">
+                                            My basket
+                                     <br />
+>>>>>>> 92f42a4b549a98efd027dd008f3d12b6886f580b
                                      0 items
                                  </span>
                              </span>
