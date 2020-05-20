@@ -63,7 +63,7 @@ export default class Nav extends Component {
                                     </button>
                                 </div>
                             </div>
-                            <div class="cart">
+                            <div className="cart">
                                 <NavLink to="/cart" className="basket" type="button">
                                     <span className="a">
                                         <i className="fa fa-shopping-basket" aria-hidden="true" />
