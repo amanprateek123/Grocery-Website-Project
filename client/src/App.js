@@ -2,7 +2,7 @@ import React from 'react';
 
 import {Switch, Route} from 'react-router-dom'
 import './App.css';
-import Navbar from './Components/Navbar/Nav'
+import Navbar from './Components/Navbar/Navbar'
 import Home from './Components/Home';
 import Details from './Components/Details/Detail'
 import Cart from './Components/Cart/Cart'
