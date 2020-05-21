@@ -2,23 +2,20 @@ import React, { useState, Component } from 'react';
 
 import { Switch, Route } from 'react-router-dom'
 import './App.css';
-import Navbar from './Components/Navbar/Navbar'
-import Home from './Components/Home';
-import Details from './Components/Details/Detail'
-import Cart from './Components/Cart/Cart'
-import Default from './Components/Default/Default'
-import Model from './Components/Model';
-import Modal from './Components/Modal/Modal';
-import SignUp from './Components/SignUp/SignUp';
+import Navbar from './components/Navbar/Navbar'
+import Home from './containers/Home/Home';
+import E404 from './containers/E404/E404'
+import Modal from './components/Modal/Modal';
+import SignUp from './components/SignUp/SignUp';
+import { connect } from 'react-redux';
+import * as actions from './store/actions'
 
 
 class App extends Component {
-  state = {
-    modalVisible: true,
-  }
 
-  closeModal = () => {
-    this.setState({ ...this.state, modalVisible: false });
+  componentDidMount() {
+    console.log(this.props);
+
   }
 
   render() {
@@ -26,19 +23,33 @@ class App extends Component {
       <React.Fragment>
 
         <Navbar />
+
+        <Modal visible={this.props.authModalVisible} closeModal={this.props.closeModal}>
+          <SignUp />
+        </Modal>
+
         <Switch>
           <Route path='/' exact >
-            <Home {...this.state} closeModal={this.closeModal} />
+            <Home {...this.props} />
           </Route>
-          <Route path='/details' component={Details} />
-          <Route path='/cart' component={Cart} />
-          <Route component={Default} />
-
+          <Route component={E404} />
         </Switch>
-        <Model />
       </React.Fragment>
     );
   }
 }
 
-export default App;
+const mapStateToProps = state => {
+  return {
+    authModalVisible: state.authModalVisible
+  }
+}
+
+const mapDispatchToProps = dispatch => {
+  return {
+    closeModal: () => dispatch({ type: actions.CLOSE_AUTH_MODAL }),
+    openModal: () => dispatch({ type: actions.OPEN_AUTH_MODAL })
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);

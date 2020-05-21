@@ -141,7 +141,7 @@ exports.login = (req, res) => {
         if (user) {
 
             if (user.dataValues.password == req.body.password) {
-                res.json({ status: 200, message: "Success" })
+                res.json({ status: 200, message: "Success", userId: user.id, idToken: Math.random() })
             }
             else {
                 res.json({ status: 401, message: "Wrong Password" })
