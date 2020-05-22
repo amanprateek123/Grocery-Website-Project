@@ -4,6 +4,7 @@ import { NavLink } from 'react-router-dom';
 import img from '../../assets/LalaDukaan_nav_logo.png';
 import { connect } from 'react-redux';
 import * as actions from '../../store/actions'
+import { logout } from '../../store/actions';
 
 class Navbar extends Component {
     render() {
@@ -30,11 +31,21 @@ class Navbar extends Component {
                                     </div>
                                 </form>
                             </div>
+                            {this.props.userName
+                                ? <div className="dHG">
+                                    <div className="badge">{this.props.userName}</div>
+                                </div>
+                                : null
+                            }
                             <div className="login_app">
                                 <div className="dHG">
                                     <div className="yop">
                                         <div>
-                                            <div onClick={this.props.openModal} className="_12qw" to="/account/login?ret=/plus">Login</div>
+                                            {this.props.idToken ?
+                                                <div onClick={this.props.logout} className="badge badge-secondary p-2 " to="/account/login?ret=/plus">Logout</div>
+                                                :
+                                                <div onClick={this.props.openModal} className="badge bg-white text-dark p-2 px-3" to="/account/login?ret=/plus">Login</div>
+                                            }
                                         </div>
                                     </div>
                                 </div>
@@ -93,13 +104,15 @@ class Navbar extends Component {
 
 const mapStateToProps = state => {
     return {
-
+        idToken: state.idToken,
+        userName: state.userName
     }
 }
 
 const mapDispatchToProps = dispatch => {
     return {
-        openModal: () => dispatch({ type: actions.OPEN_AUTH_MODAL })
+        openModal: () => dispatch({ type: actions.OPEN_AUTH_MODAL }),
+        logout: () => dispatch(actions.logout())
     }
 }
 

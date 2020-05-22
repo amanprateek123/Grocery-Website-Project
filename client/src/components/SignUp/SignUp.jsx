@@ -8,7 +8,7 @@ import { useEffect } from 'react';
 
 const SignUp = props => {
 
-    const [regMode, setRegMode] = useState(true)
+    const [regMode, setRegMode] = useState(false)
     const [email, setEmail] = useState('');
     const [id, setId] = useState(null)
     const [otp, setOTP] = useState('');

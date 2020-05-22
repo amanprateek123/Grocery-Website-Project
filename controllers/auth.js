@@ -1,4 +1,6 @@
 const crypto = require('crypto');
+const bcrypt = require('bcryptjs')
+const jwt = require('jsonwebtoken')
 
 const sgMail = require('@sendgrid/mail');
 require('dotenv').config()
@@ -118,17 +120,19 @@ exports.verifyOTP = (req, res) => {
 exports.registerUserDetails = (req, res) => {
     console.log(req.body);
     //? needs server side validation and authentication through jwt.
-    User.update({
-        name: req.body.name,
-        password: req.body.password, //! hash password
-        mobile: req.body.mobile
-    }, {
-        where: {
-            id: req.body.id  //! security issue
-        }
-    })
 
-    res.json({ status: 200, message: "Successfully Finished the registration Process." })
+    let password = bcrypt.hash(req.body.password, 12).then(hashedPassword => {
+        User.update({
+            name: req.body.name,
+            password: hashedPassword,
+            mobile: req.body.mobile
+        }, {
+            where: {
+                id: req.body.id  //! security issue
+            }
+        })
+        res.json({ status: 200, message: "Successfully Finished the registration Process." })
+    })
 
 }
 
@@ -140,15 +144,29 @@ exports.login = (req, res) => {
     }).then(user => {
         if (user) {
 
-            if (user.dataValues.password == req.body.password) {
-                res.json({ status: 200, message: "Success", userId: user.id, idToken: Math.random() })
-            }
-            else {
-                res.json({ status: 401, message: "Wrong Password" })
-            }
+            bcrypt.compare(req.body.password, user.dataValues.password).then(match => {
+                if (match) {
+                    let token = jwt.sign({
+                        email: user.dataValues.email,
+                        userId: user.dataValues.id
+                    }, 'lalasupersecretkey', {
+                        expiresIn: '1h'
+                    });
+                    res.json({ status: 200, message: "Success", userId: user.id, userName: user.dataValues.name, idToken: token })
+                }
+                else {
+                    res.json({ status: 401, message: "Wrong Password" })
+                }
+            })
+
         }
         else {
             res.json({ status: 401, message: "No account with this Email." })
         }
     })
+}
+
+
+exports.getProfile = (req, res) => {
+    res.json({ message: "here is your profile" })
 }

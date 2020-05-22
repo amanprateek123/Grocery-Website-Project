@@ -1,9 +1,10 @@
 import * as actions from "../actions/";
 
-const initialState = {
+let initialState = {
     //auth
     idToken: localStorage.getItem('idToken') || null,
     userId: localStorage.getItem('userId') || null,
+    userName: localStorage.getItem('userName') || null,
     authError: null,
     authenticating: false,
     response: { status: 0, message: '' },
@@ -11,6 +12,27 @@ const initialState = {
 
 };
 
+let expireDate = localStorage.getItem('expireDate');
+
+if (expireDate) {
+    let remainingTime = expireDate - new Date().getTime();
+    console.log(remainingTime);
+    if (remainingTime <= 0) {
+        localStorage.removeItem('idToken');
+        localStorage.removeItem('userId');
+        localStorage.removeItem('userName');
+        localStorage.removeItem('expireDate');
+
+        initialState = {
+            ...initialState,
+            idToken: null,
+            userId: null,
+            userName: null,
+            authenticating: false,
+            authError: false
+        }
+    }
+}
 
 
 
@@ -53,6 +75,7 @@ function authSuccess(state, action) {
         ...state,
         idToken: action.idToken,
         userId: action.userId,
+        userName: action.userName,
         authenticating: false,
         authError: false,
         authModalVisible: false
@@ -72,6 +95,7 @@ function logOut(state, action) {
         ...state,
         idToken: null,
         userId: null,
+        userName: null,
         authenticating: false,
         authError: false
     }
@@ -80,7 +104,11 @@ function logOut(state, action) {
 const closeModal = state => {
     return {
         ...state,
-        authModalVisible: false
+        authModalVisible: false,
+        response: {
+            ...state.response,
+            status: 0
+        }
 
     }
 }
