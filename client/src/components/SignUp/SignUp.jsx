@@ -112,12 +112,12 @@ const SignUp = props => {
         props.setResponse({ status: 0, message: '' })
     }
 
-    const signUpForm = <>
+    const signUpForm = <React.Fragment>
         {[0, 1].includes(formState) ?
-            <>
+            <React.Fragment>
                 <h1>SignUp</h1>
                 <p>We are happy to see you coming.</p>
-            </>
+            </React.Fragment>
             : null}
         <p>{props.response.message || "Create an account for LalaDukaan using your Email Account."}</p>
         {formState == 0 ?
@@ -155,9 +155,9 @@ const SignUp = props => {
                         <h3 className="text-success text-center">Your Account is Created.</h3>
                         : null
         }
-    </>;
+    </React.Fragment>;
 
-    const logInForm = <>
+    const logInForm = <React.Fragment>
         <h1>Log In</h1>
         <p>Login to Your Account</p>
         {
@@ -170,7 +170,7 @@ const SignUp = props => {
                 <button className="btn btn-full btn-primary m-centered" type="submit">Login</button>
             </form>
         }
-    </>
+    </React.Fragment>
 
     return (
         <div className="form-container">
