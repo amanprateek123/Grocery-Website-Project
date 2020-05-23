@@ -9,11 +9,11 @@ import { useEffect } from 'react';
 const SignUp = props => {
 
     const [regMode, setRegMode] = useState(false)
-    const [email, setEmail] = useState('');
-    const [id, setId] = useState(null)
-    const [otp, setOTP] = useState('');
     const [formState, setFormState] = useState(0);
-    const [userDetails, setUserDetails] = useState({ name: '', mobile: '', password: '', confirmPassword: '' });
+    const [id, setId] = useState(null)
+    const [userDetails, setUserDetails] = useState({ name: '', mobile: '', password: '', confirmPassword: '', email: '' });
+    const [otp, setOTP] = useState('');
+    const [email, setEmail] = useState('');
     const [password, setPassword] = useState('')
 
     const handleChangeEmail = e => {
@@ -32,12 +32,13 @@ const SignUp = props => {
 
     const sendOTP = (e) => {
         e.preventDefault();
+        let details = { id, name: userDetails.name, password: userDetails.password, mobile: userDetails.mobile, email: userDetails.email }
         fetch('/otp', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ email })
+            body: JSON.stringify(details)
         }).then(res => {
             res.json().then(res => {
                 console.log(res);
@@ -64,31 +65,8 @@ const SignUp = props => {
             res.json().then(res => {
                 console.log(res);
                 props.setResponse({ status: res.status, message: res.message })
-                if (res.status == 200)
-                    setFormState(2)
-            })
-
-        }).catch(err => {
-            console.log(err);
-
-        })
-    }
-
-    const sendDetails = (e) => {
-        e.preventDefault();
-        let details = { id, name: userDetails.name, password: userDetails.password, mobile: userDetails.mobile }
-        fetch('/register', {
-            method: 'post',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(details)
-        }).then(res => {
-            res.json().then(res => {
-                console.log(res);
-                props.setResponse({ status: res.status, message: res.message })
                 if (res.status == 200) {
-                    setFormState(3)
+                    setFormState(2)
                     setTimeout(() => {
                         setFormState(0);
                         setRegMode(false);
@@ -101,6 +79,7 @@ const SignUp = props => {
 
         })
     }
+
     const login = (e) => {
         e.preventDefault();
         props.login(email, password);
@@ -122,9 +101,22 @@ const SignUp = props => {
         <p>{props.response.message || "Create an account for LalaDukaan using your Email Account."}</p>
         {formState == 0 ?
             <form onSubmit={sendOTP} className="form">
+                <label htmlFor="name">Full Name</label>
+                <input required type="text" value={userDetails.name} name="name" id="name" onChange={handleChange} />
+
                 <label htmlFor="email">Enter your Email Id</label>
-                <input required type="email" name="email" id="email" onChange={handleChangeEmail} value={email} />
+                <input required type="email" name="email" id="email" onChange={handleChange} value={userDetails.email} />
                 {[6, 7].includes(props.response.status) ? <div className="error">{props.response.message}</div> : null}
+
+                <label htmlFor="mobile">Mobile Number</label>
+                <input required type="text" name="mobile" value={userDetails.mobile} id="mobile" placeholder="+91 9874543210" onChange={handleChange} />
+
+                <label htmlFor="password">Create Password</label>
+                <input required type="password" name="password" value={userDetails.password} id="password" onChange={handleChange} />
+
+                <label htmlFor="confirmPassword">Confirm Password</label>
+                <input required type="password" name="confirmPassword" value={userDetails.confirmPassword} id="confirmPassword" onChange={handleChange} />
+
                 <button className="btn btn-full btn-primary m-centered" type="submit">Sign Up Using OTP</button>
             </form>
             : formState == 1 ?
@@ -136,24 +128,8 @@ const SignUp = props => {
                 </form>
                 :
                 formState == 2 ?
-                    <form onSubmit={sendDetails} className="form">
-                        <label htmlFor="name">Full Name</label>
-                        <input required type="text" value={userDetails.name} name="name" id="name" onChange={handleChange} />
-
-                        <label htmlFor="mobile">Mobile Number</label>
-                        <input required type="text" name="mobile" value={userDetails.mobile} id="mobile" placeholder="+91 9874543210" onChange={handleChange} />
-
-                        <label htmlFor="password">Create Password</label>
-                        <input required type="password" name="password" value={userDetails.password} id="password" onChange={handleChange} />
-
-                        <label htmlFor="confirmPassword">Confirm Password</label>
-                        <input required type="password" name="confirmPassword" value={userDetails.confirmPassword} id="confirmPassword" onChange={handleChange} />
-
-                        <button className="btn btn-full btn-primary m-centered" type="submit">Sign Up Using OTP</button>
-                    </form>
-                    : formState == 3 ?
-                        <h3 className="text-success text-center">Your Account is Created.</h3>
-                        : null
+                    <h3 className="text-success text-center">Your Account is Created.</h3>
+                    : null
         }
     </React.Fragment>;
 

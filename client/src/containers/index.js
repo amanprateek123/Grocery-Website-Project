@@ -1,4 +1,4 @@
-import Cart from './Cart/Cart'
+// import Cart from './Cart/Cart'
 import Checkout from './Checkout/Checkout'
 import Details from './Details/Details'
 import E404 from './E404/E404'
@@ -7,7 +7,6 @@ import Orders from './Orders/Orders'
 import Profile from './Profile/Profile'
 
 export {
-    Cart,
     Checkout,
     Details,
     E404,

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './Navbar.css';
-import { NavLink } from 'react-router-dom';
+import { NavLink, Link } from 'react-router-dom';
 import img from '../../assets/LalaDukaan_nav_logo.png';
 import { connect } from 'react-redux';
 import * as actions from '../../store/actions'
@@ -33,7 +33,7 @@ class Navbar extends Component {
                             </div>
                             {this.props.userName
                                 ? <div className="dHG">
-                                    <div className="badge">{this.props.userName}</div>
+                                    <Link to="/profile"><div className="badge text-white">{this.props.userName}</div></Link>
                                 </div>
                                 : null
                             }

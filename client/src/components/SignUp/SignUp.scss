@@ -1,3 +1,10 @@
+
+.error{
+    color: #d60000;
+    font-size: 0.8em;
+    margin: 0.7em 0 ;
+}
+
 .form-container{
     padding: 3em 1em 2em;
     width: 25em;
@@ -51,6 +58,7 @@
         align-items: flex-start;
         color: #444;
         width: 100%;
+        margin-bottom: 3em;
         padding: 1em 2em;
 
         label{
@@ -68,11 +76,7 @@
             border-radius: 0.2em;
 
         }
-        .error{
-            color: #d60000;
-            font-size: 0.8em;
-            margin-top: 0.5em;
-        }
+        
 
     }
     *{

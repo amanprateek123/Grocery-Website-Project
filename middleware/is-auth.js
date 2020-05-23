@@ -3,8 +3,8 @@ module.exports = (req, res, next) => {
     let token = req.get('Authorization');
     if (!token) {
         res.status(401).json({ status: 401, message: "No Authorization Header" })
+        return;
     }
-
     token = token.split(' ')[1];
     let decodedToken;
     try {

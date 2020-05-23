@@ -1,37 +1,30 @@
 import React from 'react';
-import './Profile.css';
+import './Profile.scss';
 
 export default function ProfileList(props) {
     return (
         <li className="list_box">
-                                         <div className="a_pad">
-                                             <form className="form_security" action="" method="">
-                                                 <div style={{position:'relative'}}>
-                                                     <div style={{paddingRight:'70px',position: 'relative'}}>
-                                                         <div className="fixed_box">
-                                                             <div style={{width:'100%'}}>
-                                                                 <span style={{fontWeight: 'bold'}}>{props.property}</span>
-                                                             </div>
-                                                             <div style={{width:'100%'}} className="mar">
-                                                                 {props.value}
-                                                             </div>
-                                                         </div>
-                                                         <div className="edit_btn">
-                                                            <div style={{width:'100%'}}>
-                                                                <span className="btn_span">
-                                                                   <span className="qwert">
-                                                                       <input type='submit'/>
-                                                                       <span className="asd">
-                                                                           Edit
-                                                                       </span>
-                                                                   </span>
-                                                                </span>
-                                                            </div>
-                                                         </div>
-                                                     </div>
-                                                 </div>
-                                             </form>
-                                         </div>
-                                     </li>
+            <div className="a_pad">
+                <div style={{ position: 'relative' }}>
+                    <div style={{ paddingRight: '70px', position: 'relative' }}>
+                        <div className="fixed_box">
+                            <div style={{ width: '100%' }}>
+                                <span style={{ fontWeight: 'bold' }}>{props.property}</span>
+                            </div>
+                            <div style={{ width: '100%' }} className="mar">
+                                <input disabled={!props.editing} onChange={props.onChange} type={props.type} className="field" value={props.value ?? ''} />
+                            </div>
+                        </div>
+                        {props.editable ?
+                            !props.editing ?
+                                <button className="btn btn-link btn-sm position-absolute" onClick={props.toggleEdit}>Edit</button>
+                                :
+                                <button className="btn btn-link text-success btn-sm position-absolute" onClick={props.toggleEdit}>Done</button>
+                            : null
+                        }
+                    </div>
+                </div>
+            </div>
+        </li>
     )
 }
