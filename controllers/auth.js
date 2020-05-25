@@ -6,13 +6,12 @@ const sgMail = require('@sendgrid/mail');
 require('dotenv').config()
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
-const otp = require('../models/otp')
-const User = require('../models/user')
+const db = require('../utils/database')
 
 exports.sendOTP = (req, res) => {
     console.log(req.body);
 
-    User.findAll({
+    db.users.findAll({
         where: { email: req.body.email }
     }).then(docs => {
         if (docs.length) {
@@ -23,7 +22,7 @@ exports.sendOTP = (req, res) => {
                 let id = docs[0].id;
                 bcrypt.hash(req.body.password, 12).then(hashedPassword => {
 
-                    User.update({
+                    db.users.update({
                         email: req.body.email,
                         name: req.body.name,
                         password: hashedPassword,
@@ -35,7 +34,7 @@ exports.sendOTP = (req, res) => {
                             var token = buffer.toString('hex');
                             console.log('otp : ' + token);
 
-                            otp.create({
+                            db.otp.create({
                                 userId: id,
                                 value: token
                             })
@@ -65,7 +64,7 @@ exports.sendOTP = (req, res) => {
         else {
             bcrypt.hash(req.body.password, 12).then(hashedPassword => {
 
-                User.create({
+                db.users.create({
                     email: req.body.email,
                     name: req.body.name,
                     password: hashedPassword,
@@ -78,7 +77,7 @@ exports.sendOTP = (req, res) => {
                         var token = buffer.toString('hex');
                         console.log('otp : ' + token);
 
-                        otp.create({
+                        db.otp.create({
                             userId: id,
                             value: token
                         })
@@ -128,7 +127,7 @@ exports.verifyOTP = (req, res) => {
     }
     let userId = decodedToken.id;
 
-    otp.findAll({
+    db.otp.findAll({
         where: { userId: userId },
         order: [['createdAt', 'DESC']]
     }).then(doc => {
@@ -136,14 +135,14 @@ exports.verifyOTP = (req, res) => {
         console.log("OTP FOUND : ");
         // console.log(doc);
         if (doc.dataValues.value == req.body.otp) {
-            User.update(
+            db.users.update(
                 { verified: true },
                 { where: { id: userId } }
             ).then(rowsUpdated => {
                 console.log(rowsUpdated);
                 res.json({ status: 200, message: 'Successfully Verified' })
 
-                otp.destroy({
+                db.otp.destroy({
                     where: { userId: userId },
                 })
             })
@@ -158,7 +157,7 @@ exports.verifyOTP = (req, res) => {
 exports.login = (req, res) => {
     console.log(req.body);
 
-    User.findOne({
+    db.users.findOne({
         where: { email: req.body.email }
     }).then(user => {
         if (user) {
@@ -193,7 +192,7 @@ exports.login = (req, res) => {
 
 exports.getProfile = (req, res) => {
 
-    User.findAll({
+    db.users.findAll({
         where: {
             id: req.userId
         }
@@ -214,7 +213,7 @@ exports.postProfile = (req, res) => {
 
     console.log(req.body);
 
-    User.findAll({
+    db.users.findAll({
         where: {
             id: req.userId
         }
@@ -223,7 +222,7 @@ exports.postProfile = (req, res) => {
         // console.log(user);
         bcrypt.compare(req.body.confirmationPassword, user.password).then(match => {
             if (match) {
-                User.update({
+                db.users.update({
                     name: req.body.name,
                     address: req.body.address,
                     mobile: req.body.mobile

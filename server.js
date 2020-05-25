@@ -1,8 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
-const sequelize = require('./utils/database')
-const Product = require('./models/product')
+const sequelize = require('./utils/database').sequelize
 require('dotenv').config()
 
 const authRoutes = require('./routes/auth')
