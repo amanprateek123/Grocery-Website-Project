@@ -11,7 +11,7 @@ const db = require('../utils/database')
 exports.sendOTP = (req, res) => {
     console.log(req.body);
 
-    db.users.findAll({
+    db.user.findAll({
         where: { email: req.body.email }
     }).then(docs => {
         if (docs.length) {
@@ -22,7 +22,7 @@ exports.sendOTP = (req, res) => {
                 let id = docs[0].id;
                 bcrypt.hash(req.body.password, 12).then(hashedPassword => {
 
-                    db.users.update({
+                    db.user.update({
                         email: req.body.email,
                         name: req.body.name,
                         password: hashedPassword,
@@ -64,7 +64,7 @@ exports.sendOTP = (req, res) => {
         else {
             bcrypt.hash(req.body.password, 12).then(hashedPassword => {
 
-                db.users.create({
+                db.user.create({
                     email: req.body.email,
                     name: req.body.name,
                     password: hashedPassword,
@@ -135,7 +135,7 @@ exports.verifyOTP = (req, res) => {
         console.log("OTP FOUND : ");
         // console.log(doc);
         if (doc.dataValues.value == req.body.otp) {
-            db.users.update(
+            db.user.update(
                 { verified: true },
                 { where: { id: userId } }
             ).then(rowsUpdated => {
@@ -157,7 +157,7 @@ exports.verifyOTP = (req, res) => {
 exports.login = (req, res) => {
     console.log(req.body);
 
-    db.users.findOne({
+    db.user.findOne({
         where: { email: req.body.email }
     }).then(user => {
         if (user) {
@@ -190,60 +190,16 @@ exports.login = (req, res) => {
 }
 
 
-exports.getProfile = (req, res) => {
-
-    db.users.findAll({
-        where: {
-            id: req.userId
+exports.getTest = (req, res) => {
+    db.user.findAll({
+        include: {
+            model: db.address
         }
     }).then(user => {
-        user = user[0].dataValues;
-        // console.log(user);
-        res.json({ status: 200, message: "fetched user details", user: { name: user.name, email: user.email, mobile: user.mobile, address: user.address } })
+        res.json(user)
 
     }).catch(err => {
-        console.log(err);
-        res.json({ status: 401, message: err.message })
 
+        res.send('error')
     })
-
-}
-
-exports.postProfile = (req, res) => {
-
-    console.log(req.body);
-
-    db.users.findAll({
-        where: {
-            id: req.userId
-        }
-    }).then(user => {
-        user = user[0].dataValues;
-        // console.log(user);
-        bcrypt.compare(req.body.confirmationPassword, user.password).then(match => {
-            if (match) {
-                db.users.update({
-                    name: req.body.name,
-                    address: req.body.address,
-                    mobile: req.body.mobile
-                }, {
-                    where: {
-                        id: req.userId
-                    }
-                }).then(rowsUpdated => {
-                    res.json({ status: 200, message: "Successfully Updated Profile" })
-                }).catch(err => {
-                    res.json({ status: 500, message: "Server Error" })
-                })
-            } else {
-                res.json({ status: 400, message: "Wrong Password" })
-            }
-        })
-
-    }).catch(err => {
-        console.log(err);
-        res.json({ status: 401, message: err.message })
-
-    })
-
 }

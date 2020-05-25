@@ -14,11 +14,6 @@ import * as actions from './store/actions';
 
 class App extends Component {
 
-  componentDidMount() {
-    console.log(this.props);
-
-  }
-
   render() {
     return (
       <React.Fragment>

@@ -5,10 +5,14 @@ import * as actions from '../../store/actions'
 import ProfileList from './ProfileList'
 import { useState } from 'react';
 import Modal from "../../components/Modal/Modal";
+import Address from './Address';
+import AddressEditor from './AddressEditor';
+import { Toast } from "react-bootstrap";
 
 const Profile = (props) => {
 
     const [user, setUser] = useState({});
+    const [addingAddress, setAddingAddress] = useState(false);
     const [modal, setModal] = useState(false);
     const [details, setDetails] = useState({
         name: {
@@ -57,6 +61,38 @@ const Profile = (props) => {
         setModal(false);
     }
 
+    const addAddress = (address) => {
+        fetch('/add-address', {
+            headers: {
+                'Authorization': 'Bearer ' + props.idToken,
+                'Content-Type': 'application/json'
+            },
+            method: 'POST',
+            body: JSON.stringify(address)
+        }).then(async res => {
+            res = await res.json();
+            console.log(res);
+            if (res.status == 200) {
+                setAddingAddress(false);
+                props.setResponse(res);
+                setUser({
+                    ...user,
+                    addresses: [
+                        ...user.addresses,
+                        address
+                    ]
+                })
+            }
+            else {
+                props.setResponse(res);
+            }
+
+        }).catch(err => {
+            console.log(err);
+
+        })
+    }
+
     useEffect(() => {
         fetch('/profile', {
             headers: {
@@ -83,6 +119,35 @@ const Profile = (props) => {
             console.log(res);
             if (res.status == 200) {
                 closeModal();
+                props.setResponse(res);
+            }
+            else {
+                props.setResponse(res);
+            }
+
+        }).catch(err => {
+            console.log(err);
+
+        })
+    }
+
+    const removeAddress = (id) => {
+        fetch('/remove-address', {
+            headers: {
+                'Authorization': 'Bearer ' + props.idToken,
+                'Content-Type': 'application/json'
+            },
+            method: 'DELETE',
+            body: JSON.stringify({ id })
+        }).then(async res => {
+            res = await res.json();
+            console.log(res);
+            if (res.status == 200) {
+                props.setResponse(res);
+                setUser({
+                    ...user,
+                    addresses: user.addresses.filter(add => add.id != id)
+                })
             }
             else {
                 props.setResponse(res);
@@ -98,12 +163,22 @@ const Profile = (props) => {
     return (
         <div className="container">
             <h1>Profile</h1>
-            {props.response.message}
+            <div className="response">
+                <Toast>
+
+                    <Toast.Body>{props.response.message}</Toast.Body>
+                </Toast>
+            </div>
             {user ?
                 <div className="login_security">
                     <h1 className="login_header">
                         Login & Security
-               </h1>
+                    </h1>
+
+                    <Modal visible={addingAddress} closeModal={() => setAddingAddress(false)}>
+                        <AddressEditor addAddress={addAddress} closeModal={() => setAddingAddress(false)} />
+                    </Modal>
+
                     <div className="a_sec">
                         <div className="security_box">
                             <div className="inner_box">
@@ -112,7 +187,19 @@ const Profile = (props) => {
                                     <ProfileList property="Email:" value={user.email} editable={false} type={details.email.type} editing={details.email.editing} onChange={(e) => onChangeHandler('email', e)} toggleEdit={() => toggleEdit('email')} />
                                     <ProfileList property="Mobile Number:" value={user.mobile} editable type={details.mobile.type} editing={details.mobile.editing} onChange={(e) => onChangeHandler('mobile', e)} toggleEdit={() => toggleEdit('mobile')} />
                                     <ProfileList property="Password:" value={user.password ?? '********'} editable={false} type={details.password.type} editing={details.password.editing} onChange={(e) => onChangeHandler('password', e)} toggleEdit={() => toggleEdit('password')} />
-                                    <ProfileList property="Address:" value={user.address} editable type={details.address.type} editing={details.address.editing} onChange={(e) => onChangeHandler('address', e)} toggleEdit={() => toggleEdit('address')} />
+                                    <div className="sec">
+                                        <h6>Addresses</h6>
+                                        <div className="actions">
+                                            <button className="btn btn-link btn-sm" onClick={() => setAddingAddress(true)}>+Add</button>
+                                        </div>
+                                    </div>
+                                    {user.addresses?.map((address, i) =>
+                                        <Address key={address.id}
+                                            property={`Address ${i + 1} :`}
+                                            value={address}
+                                            removeAddress={() => removeAddress(address.id)}
+                                        />
+                                    )}
                                 </ul>
                             </div>
                         </div>

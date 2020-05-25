@@ -7,7 +7,6 @@ router.post('/otp', authCtrl.sendOTP);
 router.post('/verify-otp', authCtrl.verifyOTP);
 router.post('/login', authCtrl.login);
 
-router.get('/profile', isAuth, authCtrl.getProfile)
-router.post('/profile', isAuth, authCtrl.postProfile)
+router.get('/test', authCtrl.getTest)
 
 module.exports = router

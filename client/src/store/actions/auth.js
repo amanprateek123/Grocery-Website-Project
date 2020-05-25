@@ -23,6 +23,7 @@ export const login = (email, password) => {
                     if (timer) { clearTimeout(timer) }
                     timer = setTimeout(() => dispatch(logout()), 3600000)
                     dispatch({ type: actions.AUTH_SUCCESS, idToken: res.idToken, userId: res.userId, userName: res.userName });
+                    window.location.reload();
                 }
             })
 
@@ -33,12 +34,14 @@ export const login = (email, password) => {
 }
 
 export const logout = () => {
-    localStorage.removeItem('idToken');
-    localStorage.removeItem('userId');
-    localStorage.removeItem('userName');
-    localStorage.removeItem('expireDate');
-    return {
-        type: actions.LOG_OUT
+    return dispatch => {
+
+        localStorage.removeItem('idToken');
+        localStorage.removeItem('userId');
+        localStorage.removeItem('userName');
+        localStorage.removeItem('expireDate');
+        dispatch({ type: actions.LOG_OUT });
+        window.location.reload();
     }
 
 }

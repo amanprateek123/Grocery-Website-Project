@@ -11,15 +11,16 @@ db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
 //Models/tables
-db.users = require('../models/user')(sequelize, Sequelize);
-db.products = require('../models/product')(sequelize, Sequelize);
+db.user = require('../models/user')(sequelize, Sequelize);
+db.product = require('../models/product')(sequelize, Sequelize);
 db.otp = require('../models/otp')(sequelize, Sequelize);
+db.address = require('../models/address')(sequelize, Sequelize);
 
 //Relations
-db.otp.belongsTo(db.users);
-db.users.hasMany(db.otp);
+db.otp.belongsTo(db.user);
+db.user.hasMany(db.otp);
 
-// db.posts.belongsTo(db.users);
-// db.users.hasMany(db.posts);
+db.address.belongsTo(db.user);
+db.user.hasMany(db.address);
 
 module.exports = db;
