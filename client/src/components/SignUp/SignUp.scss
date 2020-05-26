@@ -18,6 +18,15 @@
     border-radius: 0.2em;
     position: relative;
 
+    .terms{
+        font-size: 0.7em;
+        position: absolute;
+        bottom: 4.5em;
+        text-align: center;
+        left: 55%;
+        transform: translate(-50%,0);
+    }
+
     .form-nav{
         position: absolute;
         bottom: 0;

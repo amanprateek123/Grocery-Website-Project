@@ -80,7 +80,9 @@ exports.addAddress = (req, res) => {
         ...address,
         userId: req.userId
     }).then(rowsUpdated => {
-        res.json({ status: 200, message: "Address Added Successfully" });
+        console.log(rowsUpdated);
+
+        res.json({ status: 200, message: "Address Added Successfully", addressId: rowsUpdated.dataValues.id });
     }).catch(err => {
         res.json({ status: 500, message: "Server Error" });
     })

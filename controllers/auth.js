@@ -73,30 +73,30 @@ exports.sendOTP = (req, res) => {
                     let id = user.dataValues.id;
                     console.log('User created with ID : ' + id);
                     let authToken = jwt.sign({ id }, 'lalasupersecretkey', { expiresIn: '1h' });
-                    crypto.randomBytes(3, function (err, buffer) {
-                        var token = buffer.toString('hex');
-                        console.log('otp : ' + token);
+                    let token = parseInt(Math.random() * 1000000) % 10000000;
 
-                        db.otp.create({
-                            userId: id,
-                            value: token
-                        })
-                        const msg = {
-                            to: req.body.email,
-                            from: process.env.MAIL_SENDER,
-                            subject: 'OTP for LalaDukaan',
-                            html: `Welcome to LalaDukaan. <strong>${token}</strong> is your OTP for the registration process. go ahead and complete your registration.`,
-                        };
-                        // sgMail.send(msg).then(success => {
-                        //     console.log(success);
-                        //     res.json({ message: 'OTP has been sent to your email.', id: id });
-                        // }).catch(err => {
-                        //     console.log(err);
-                        //     console.log(err.response.body.errors);
-                        //     res.status(500).json({ message: 'Server Error' });
-                        // });
-                        res.json({ message: 'OTP has been sent to your email.', id: authToken });
-                    });
+                    console.log('otp : ' + token);
+
+                    db.otp.create({
+                        userId: id,
+                        value: token
+                    })
+                    const msg = {
+                        to: req.body.email,
+                        from: process.env.MAIL_SENDER,
+                        subject: 'OTP for LalaDukaan',
+                        html: `Welcome to LalaDukaan. <strong>${token}</strong> is your OTP for the registration process. go ahead and complete your registration.`,
+                    };
+                    // sgMail.send(msg).then(success => {
+                    //     console.log(success);
+                    //     res.json({ message: 'OTP has been sent to your email.', id: id });
+                    // }).catch(err => {
+                    //     console.log(err);
+                    //     console.log(err.response.body.errors);
+                    //     res.status(500).json({ message: 'Server Error' });
+                    // });
+                    res.json({ message: 'OTP has been sent to your email.', id: authToken });
+
                 }).catch(err => {
                     console.log(err);
                     res.status(500).json({ message: 'internal Server Error' })
@@ -148,7 +148,7 @@ exports.verifyOTP = (req, res) => {
             })
         }
         else
-            res.json({ status: 401, message: 'OTP did not Match.!' })
+            res.json({ status: 401, message: 'OTP did NOT Match.!' })
 
     })
 };
@@ -186,6 +186,161 @@ exports.login = (req, res) => {
         else {
             res.json({ status: 401, message: "No account with this Email." })
         }
+    })
+}
+
+
+exports.changePassword = (req, res) => {
+    db.user.findAll({
+        where: {
+            id: req.userId
+        }
+    }).then(rows => {
+        if (rows) {
+            let user = rows[0].dataValues;
+            bcrypt.compare(req.body.old, user.password).then(match => {
+                if (match) {
+                    bcrypt.hash(req.body.new, 12).then(hashedPassword => {
+                        db.user.update({
+                            password: hashedPassword
+                        }, {
+                            where: {
+                                id: req.userId
+                            }
+                        }).then(rowsUpdated => {
+                            res.json({ status: 200, message: 'Successfully Updated Password.' })
+                        }).catch(err => {
+                            res.json({ status: 500, message: err.message });
+                        })
+                    }).catch(err => {
+                        res.json({ status: 500, message: err.message });
+                    })
+                }
+                else {
+                    res.json({ status: 403, message: 'Wrong Password' })
+                }
+            }).catch(err => {
+                res.json({ status: 500, message: err.message })
+            })
+        }
+    })
+}
+
+
+
+exports.prOTP = (req, res) => {
+    db.user.findAll({
+        where: {
+            email: req.body.email
+        }
+    }).then(rows => {
+        if (rows) {
+            let user = rows[0];
+
+            if (user) {
+                let token = parseInt(Math.random() * 1000000) % 10000000;
+                console.log("OTP: ", token);
+
+                db.otp.create({
+                    userId: user.id,
+                    value: token
+                })
+
+                const msg = {
+                    to: req.body.email,
+                    from: process.env.MAIL_SENDER,
+                    subject: 'OTP for LalaDukaan',
+                    html: `Laladukaan. <strong>${token}</strong> is your OTP for resetting your password.`,
+                };
+                // sgMail.send(msg).then(success => {
+                //     console.log(success);
+                //     res.json({ message: 'OTP has been sent to your email.', id: id });
+                // }).catch(err => {
+                //     console.log(err);
+                //     console.log(err.response.body.errors);
+                //     res.status(500).json({ message: 'Server Error' });
+                // });
+                res.json({ status: 200, message: "OTP has been sent to your email.", id: user.id });
+            } else {
+                res.json({ status: 400, message: 'No Account with this email' })
+            }
+
+        }
+        else {
+            res.json({ status: 400, message: 'No Account with this email' })
+        }
+    })
+}
+
+
+exports.prOTPVerify = (req, res) => {
+    db.otp.findAll({
+        where: {
+            userId: req.body.id
+        },
+        order: [['createdAt', 'DESC']]
+    }).then(rows => {
+        if (rows[0]) {
+            let token = rows[0].value;
+            if (token == req.body.otp) {
+                let authToken = jwt.sign({
+                    id: rows[0].userId
+                }, 'lalasupersecretkey', {
+                    expiresIn: '1h'
+                });
+
+                db.otp.destroy({
+                    where: {
+                        userId: req.body.id
+                    }
+                })
+                res.json({ status: 200, message: 'OTP VErified for Password Reset.', authToken });
+            } else {
+                res.json({ status: 400, message: "OTP did NOT Match" });
+            }
+        }
+        else {
+            res.json({ status: 500, message: "server Error" });
+        }
+    })
+}
+
+exports.prReq = (req, res) => { // password reset request
+    let token = req.body.id;
+    if (!token) {
+        res.status(401).json({ status: 401, message: "No Authorization Token." })
+        return;
+    }
+    let decodedToken;
+    try {
+        decodedToken = jwt.verify(token, 'lalasupersecretkey')
+    }
+    catch (err) {
+        res.status(500).json({ status: 401, message: "Authentication token Expired. Please Login Again." })
+    }
+
+    if (!decodedToken) {
+        res.status(401).json({ status: 401, message: "Unauthenticated" })
+    }
+    let userId = decodedToken.id;
+
+    console.log("USER ID:", userId);
+
+
+    bcrypt.hash(req.body.password, 12).then(hashedPassword => {
+        db.user.update({
+            password: hashedPassword
+        }, {
+            where: {
+                id: userId
+            }
+        }).then(rowsUpdated => {
+            res.json({ status: 200, message: 'Password Reset Successful.' });
+        }).catch(err => {
+            res.json({ status: 500, message: 'Server Error. Cant Update' });
+        })
+    }).catch(err => {
+        res.json({ status: 500, message: 'Server Error. Hashing problem' });
     })
 }
 

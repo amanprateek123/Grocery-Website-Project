@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './Navbar.css';
-import { NavLink, Link } from 'react-router-dom';
+import { NavLink, Link, withRouter } from 'react-router-dom';
 import img from '../../assets/LalaDukaan_nav_logo.png';
 import { connect } from 'react-redux';
 import * as actions from '../../store/actions'
@@ -42,7 +42,7 @@ class Navbar extends Component {
                                     <div className="yop">
                                         <div>
                                             {this.props.idToken ?
-                                                <div onClick={this.props.logout} className="badge badge-secondary p-2 " to="/account/login?ret=/plus">Logout</div>
+                                                <div onClick={() => { this.props.history.push('/'); this.props.logout() }} className="badge badge-secondary p-2 " to="/account/login?ret=/plus">Logout</div>
                                                 :
                                                 <div onClick={this.props.openModal} className="badge bg-white text-dark p-2 px-3" to="/account/login?ret=/plus">Login</div>
                                             }
@@ -97,7 +97,7 @@ class Navbar extends Component {
                         </ul>
                     </div>
                 </div>
-            </React.Fragment>
+            </React.Fragment >
         )
     }
 }
@@ -116,4 +116,4 @@ const mapDispatchToProps = dispatch => {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Navbar)
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Navbar))

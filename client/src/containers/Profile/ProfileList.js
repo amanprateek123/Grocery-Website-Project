@@ -12,14 +12,14 @@ export default function ProfileList(props) {
                                 <span style={{ fontWeight: 'bold' }}>{props.property}</span>
                             </div>
                             <div style={{ width: '100%' }} className="mar">
-                                <input disabled={!props.editing} onChange={props.onChange} type={props.type} className="field" value={props.value ?? ''} />
+                                {!props.notInput ? <input disabled={!props.editing} onChange={props.onChange} type={props.type} className="field" value={props.value ?? ''} /> : null}
                             </div>
                         </div>
                         {props.editable ?
                             !props.editing ?
-                                <button className="btn btn-link btn-sm position-absolute" onClick={props.toggleEdit}>Edit</button>
+                                <button className="btn btn-link btn-sm position-absolute edit" onClick={props.toggleEdit}>{props.editable}</button>
                                 :
-                                <button className="btn btn-link text-success btn-sm position-absolute" onClick={props.toggleEdit}>Done</button>
+                                <button className="btn btn-link text-success btn-sm position-absolute edit" onClick={props.toggleEdit}>Done</button>
                             : null
                         }
                     </div>

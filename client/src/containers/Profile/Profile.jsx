@@ -8,11 +8,13 @@ import Modal from "../../components/Modal/Modal";
 import Address from './Address';
 import AddressEditor from './AddressEditor';
 import { Toast } from "react-bootstrap";
+import ChangePassword from './ChangePassword';
 
 const Profile = (props) => {
 
     const [user, setUser] = useState({});
     const [addingAddress, setAddingAddress] = useState(false);
+    const [changingPassword, setChangingPassword] = useState(false);
     const [modal, setModal] = useState(false);
     const [details, setDetails] = useState({
         name: {
@@ -79,7 +81,10 @@ const Profile = (props) => {
                     ...user,
                     addresses: [
                         ...user.addresses,
-                        address
+                        {
+                            ...address,
+                            id: res.addressId
+                        }
                     ]
                 })
             }
@@ -159,13 +164,37 @@ const Profile = (props) => {
         })
     }
 
+    const changePasswordReq = (passwords) => {
+        fetch('/change-password', {
+            headers: {
+                'Authorization': 'Bearer ' + props.idToken,
+                'Content-Type': 'application/json'
+            },
+            method: 'POST',
+            body: JSON.stringify(passwords)
+        }).then(async res => {
+            res = await res.json();
+            console.log(res);
+            if (res.status == 200) {
+                props.setResponse(res);
+                setChangingPassword(false);
+            }
+            else {
+                props.setResponse(res);
+            }
+
+        }).catch(err => {
+            console.log(err);
+
+        })
+    }
+
 
     return (
         <div className="container">
             <h1>Profile</h1>
             <div className="response">
                 <Toast>
-
                     <Toast.Body>{props.response.message}</Toast.Body>
                 </Toast>
             </div>
@@ -178,15 +207,18 @@ const Profile = (props) => {
                     <Modal visible={addingAddress} closeModal={() => setAddingAddress(false)}>
                         <AddressEditor addAddress={addAddress} closeModal={() => setAddingAddress(false)} />
                     </Modal>
+                    <Modal visible={changingPassword} closeModal={() => setChangingPassword(false)}>
+                        <ChangePassword changePasswordReq={changePasswordReq} closeModal={() => setAddingAddress(false)} />
+                    </Modal>
 
                     <div className="a_sec">
                         <div className="security_box">
                             <div className="inner_box">
                                 <ul className="unorder_box">
-                                    <ProfileList property="Name:" value={user.name} editable type={details.name.type} editing={details.name.editing} onChange={(e) => onChangeHandler('name', e)} toggleEdit={() => toggleEdit('name')} />
+                                    <ProfileList property="Name:" value={user.name} editable="edit" type={details.name.type} editing={details.name.editing} onChange={(e) => onChangeHandler('name', e)} toggleEdit={() => toggleEdit('name')} />
                                     <ProfileList property="Email:" value={user.email} editable={false} type={details.email.type} editing={details.email.editing} onChange={(e) => onChangeHandler('email', e)} toggleEdit={() => toggleEdit('email')} />
-                                    <ProfileList property="Mobile Number:" value={user.mobile} editable type={details.mobile.type} editing={details.mobile.editing} onChange={(e) => onChangeHandler('mobile', e)} toggleEdit={() => toggleEdit('mobile')} />
-                                    <ProfileList property="Password:" value={user.password ?? '********'} editable={false} type={details.password.type} editing={details.password.editing} onChange={(e) => onChangeHandler('password', e)} toggleEdit={() => toggleEdit('password')} />
+                                    <ProfileList property="Mobile Number:" value={user.mobile} editable="edit" type={details.mobile.type} editing={details.mobile.editing} onChange={(e) => onChangeHandler('mobile', e)} toggleEdit={() => toggleEdit('mobile')} />
+                                    <ProfileList property="Password:" notInput editable='Change Password' type={details.password.type} toggleEdit={() => setChangingPassword(true)} />
                                     <div className="sec">
                                         <h6>Addresses</h6>
                                         <div className="actions">
