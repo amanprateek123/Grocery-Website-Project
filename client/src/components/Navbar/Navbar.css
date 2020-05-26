@@ -250,3 +250,10 @@
     display: block;
     cursor: pointer;
 }
+.visible{
+    display: inline-block;
+    color: black;
+}
+.invisible{
+    display: none;
+}
