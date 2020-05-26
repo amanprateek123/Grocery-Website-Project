@@ -5,6 +5,7 @@ import img from '../../assets/LalaDukaan_nav_logo.png';
 import { connect } from 'react-redux';
 import * as actions from '../../store/actions'
 import { logout } from '../../store/actions';
+import CategorySelector from './Category_Model/CategorySelector';
 
 class Navbar extends Component {
     render() {
@@ -73,31 +74,8 @@ class Navbar extends Component {
                         </div>
                     </div>
                 </div>
-                <div className="zi6 container">
-                    <div className="_3zd">
-                        <ul className="_12r">
-                            <li className="Wbt">
-                                <span className="_1QZ">Staples <i className="fa fa-caret-down _34Y" aria-hidden="true" />
-                                </span></li>
-                            <li className="Wbt">
-                                <span className="_1QZ">Snack & Beverages <i className="fa fa-caret-down _34Y" aria-hidden="true" />
-                                </span></li>
-                            <li className="Wbt">
-                                <span className="_1QZ">Packed Food <i className="fa fa-caret-down _34Y" aria-hidden="true" />
-                                </span></li>
-                            <li className="Wbt">
-                                <span className="_1QZ">Personal & Baby Care <i className="fa fa-caret-down _34Y" aria-hidden="true" />
-                                </span></li>
-                            <li className="Wbt">
-                                <span className="_1QZ">Household Care <i className="fa fa-caret-down _34Y" aria-hidden="true" />
-                                </span></li>
-                            <li className="Wbt">
-                                <span className="_1QZ">Dairy & Eggs <i className="fa fa-caret-down _34Y" aria-hidden="true" />
-                                </span></li>
-                        </ul>
-                    </div>
-                </div>
-            </React.Fragment >
+                <CategorySelector />
+            </React.Fragment>
         )
     }
 }
