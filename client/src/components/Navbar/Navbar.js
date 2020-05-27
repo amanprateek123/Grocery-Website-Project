@@ -5,7 +5,8 @@ import img from '../../assets/LalaDukaan_nav_logo.png';
 import { connect } from 'react-redux';
 import * as actions from '../../store/actions'
 import { logout } from '../../store/actions';
-import CategorySelector from './Category_Model/CategorySelector';
+import Categories from './Categories/Categories';
+
 
 class Navbar extends Component {
     render() {
@@ -74,7 +75,7 @@ class Navbar extends Component {
                         </div>
                     </div>
                 </div>
-                <CategorySelector />
+                <Categories />
             </React.Fragment>
         )
     }

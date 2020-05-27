@@ -203,7 +203,7 @@ const SignUp = props => {
                         <label htmlFor="otp">Enter OTP sent to your email</label>
                         <input required type="text" name="otp" id="otp" onChange={handleChangeOTP} value={otp} />
                         {[401].includes(props.response.status) ? <div className="error">{props.response.message}</div> : null}
-                        <button className="btn btn-full btn-primary m-centered" type="submit">Submit OTP</button>
+                        <button className="btn btn-full btn-primary m-centered" type="submit">Verify OTP</button>
                     </form>
                     :
                     formState == 2 ?
@@ -251,7 +251,7 @@ const SignUp = props => {
                         <label htmlFor="otp">Enter OTP sent to your email</label>
                         <input required type="text" name="otp" id="otp" onChange={handleChangeOTP} value={otp} />
                         {[400].includes(props.response.status) ? <div className="error">{props.response.message}</div> : null}
-                        <button className="btn btn-full btn-primary m-centered" type="submit">Submit OTP</button>
+                        <button className="btn btn-full btn-primary m-centered" type="submit">Verify OTP</button>
                     </form>
                     : formState == 2 ?
                         <form onSubmit={PRReq} className="form" style={{ marginBottom: '0' }}>
