@@ -1,6 +1,7 @@
 const crypto = require('crypto');
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
+const { validationResult } = require('express-validator')
 
 const sgMail = require('@sendgrid/mail');
 require('dotenv').config()
@@ -11,12 +12,18 @@ const db = require('../utils/database')
 exports.sendOTP = (req, res) => {
     console.log(req.body);
 
+    const valErrors = validationResult(req);
+
+    if (!valErrors.isEmpty()) {
+        return res.status(422).json({ status: 422, errors: valErrors.array(), message: 'Invalid Values : ' + valErrors.array().map(err => `${err.param} `).join(',') });
+    }
+
     db.user.findAll({
         where: { email: req.body.email }
     }).then(docs => {
         if (docs.length) {
             if (docs[0].dataValues.verified) {
-                res.json({ status: 7, message: "User with this Email Already Exists. " + docs[0].id })
+                return res.json({ status: 7, message: "User with this Email Already Exists. " })
             }
             else {
                 let id = docs[0].id;
@@ -30,30 +37,28 @@ exports.sendOTP = (req, res) => {
                     }, { where: { id: id } }).then(rowsUpdated => {
                         console.log('User UPDATED with ID : ' + id);
                         let authToken = jwt.sign({ id }, 'lalasupersecretkey', { expiresIn: '1h' });
-                        crypto.randomBytes(3, function (err, buffer) {
-                            var token = buffer.toString('hex');
-                            console.log('otp : ' + token);
+                        let token = parseInt(Math.random() * 1000000) % 10000000;
+                        console.log('otp : ' + token);
 
-                            db.otp.create({
-                                userId: id,
-                                value: token
-                            })
-                            const msg = {
-                                to: req.body.email,
-                                from: process.env.MAIL_SENDER,
-                                subject: 'OTP for LalaDukaan',
-                                html: `Welcome to LalaDukaan. <strong>${token}</strong> is your OTP for the registration process. go ahead and complete your registration.`,
-                            };
-                            // sgMail.send(msg).then(success => {
-                            //     console.log(success);
-                            //     res.json({ message: 'OTP has been sent to your email.', id: id });
-                            // }).catch(err => {
-                            //     console.log(err);
-                            //     console.log(err.response.body.errors);
-                            //     res.status(500).json({ message: 'Server Error' });
-                            // });
-                            res.json({ message: 'OTP has been sent to your email.', id: authToken });
-                        });
+                        db.otp.create({
+                            userId: id,
+                            value: token
+                        })
+                        const msg = {
+                            to: req.body.email,
+                            from: process.env.MAIL_SENDER,
+                            subject: 'OTP for LalaDukaan',
+                            html: `Welcome to LalaDukaan. <strong>${token}</strong> is your OTP for the registration process. go ahead and complete your registration.`,
+                        };
+                        // sgMail.send(msg).then(success => {
+                        //     console.log(success);
+                        //     return res.json({ message: 'OTP has been sent to your email.', id: id });
+                        // }).catch(err => {
+                        //     console.log(err);
+                        //     console.log(err.response.body.errors);
+                        //     res.status(500).json({ message: 'Server Error' });
+                        // });
+                        return res.json({ status: 200, message: 'OTP has been sent to your email.', id: authToken });
                     }).catch(err => {
                         console.log(err);
                         res.status(500).json({ message: 'internal Server Error' })
@@ -89,13 +94,13 @@ exports.sendOTP = (req, res) => {
                     };
                     // sgMail.send(msg).then(success => {
                     //     console.log(success);
-                    //     res.json({ message: 'OTP has been sent to your email.', id: id });
+                    //     return res.json({ message: 'OTP has been sent to your email.', id: id });
                     // }).catch(err => {
                     //     console.log(err);
                     //     console.log(err.response.body.errors);
                     //     res.status(500).json({ message: 'Server Error' });
                     // });
-                    res.json({ message: 'OTP has been sent to your email.', id: authToken });
+                    return res.json({ message: 'OTP has been sent to your email.', id: authToken });
 
                 }).catch(err => {
                     console.log(err);
@@ -112,7 +117,7 @@ exports.verifyOTP = (req, res) => {
     // console.log(req.body);
     let authToken = req.body.id;
     if (!authToken) {
-        res.json({ status: 401, message: 'NO auth token.' })
+        return res.json({ status: 401, message: 'NO auth token.' })
     }
     let decodedToken;
     try {
@@ -140,7 +145,7 @@ exports.verifyOTP = (req, res) => {
                 { where: { id: userId } }
             ).then(rowsUpdated => {
                 console.log(rowsUpdated);
-                res.json({ status: 200, message: 'Successfully Verified' })
+                return res.json({ status: 200, message: 'Successfully Verified' })
 
                 db.otp.destroy({
                     where: { userId: userId },
@@ -148,7 +153,7 @@ exports.verifyOTP = (req, res) => {
             })
         }
         else
-            res.json({ status: 401, message: 'OTP did NOT Match.!' })
+            return res.json({ status: 401, message: 'OTP did NOT Match.!' })
 
     })
 };
@@ -171,26 +176,35 @@ exports.login = (req, res) => {
                         }, 'lalasupersecretkey', {
                             expiresIn: '1h'
                         });
-                        res.json({ status: 200, message: "Success", userId: user.id, userName: user.dataValues.name, idToken: token })
+                        return res.json({ status: 200, message: "Success", userId: user.id, userName: user.dataValues.name, idToken: token })
                     }
                     else {
-                        res.json({ status: 401, message: "Wrong Password" })
+                        return res.json({ status: 401, message: "Wrong Password" })
                     }
                 })
             }
             else {
-                res.json({ status: 401, message: "Account needs verification. Please complete the registration process again." })
+                return res.json({ status: 401, message: "Account needs verification. Please complete the registration process again." })
             }
 
         }
         else {
-            res.json({ status: 401, message: "No account with this Email." })
+            return res.json({ status: 401, message: "No account with this Email." })
         }
     })
 }
 
 
 exports.changePassword = (req, res) => {
+
+    const valErrors = validationResult(req);
+
+    console.log(req.body)
+
+    if (!valErrors.isEmpty()) {
+        return res.status(422).json({ status: 422, errors: valErrors.array(), message: 'Invalid Values : ' + valErrors.array().map(err => `${err.param} `).join(',') });
+    }
+
     db.user.findAll({
         where: {
             id: req.userId
@@ -208,19 +222,19 @@ exports.changePassword = (req, res) => {
                                 id: req.userId
                             }
                         }).then(rowsUpdated => {
-                            res.json({ status: 200, message: 'Successfully Updated Password.' })
+                            return res.json({ status: 200, message: 'Successfully Updated Password.' })
                         }).catch(err => {
-                            res.json({ status: 500, message: err.message });
+                            return res.json({ status: 500, message: err.message });
                         })
                     }).catch(err => {
-                        res.json({ status: 500, message: err.message });
+                        return res.json({ status: 500, message: err.message });
                     })
                 }
                 else {
-                    res.json({ status: 403, message: 'Wrong Password' })
+                    return res.json({ status: 403, message: 'Wrong Password' })
                 }
             }).catch(err => {
-                res.json({ status: 500, message: err.message })
+                return res.json({ status: 500, message: err.message })
             })
         }
     })
@@ -254,20 +268,20 @@ exports.prOTP = (req, res) => {
                 };
                 // sgMail.send(msg).then(success => {
                 //     console.log(success);
-                //     res.json({ message: 'OTP has been sent to your email.', id: id });
+                //     return res.json({ message: 'OTP has been sent to your email.', id: id });
                 // }).catch(err => {
                 //     console.log(err);
                 //     console.log(err.response.body.errors);
                 //     res.status(500).json({ message: 'Server Error' });
                 // });
-                res.json({ status: 200, message: "OTP has been sent to your email.", id: user.id });
+                return res.json({ status: 200, message: "OTP has been sent to your email.", id: user.id });
             } else {
-                res.json({ status: 400, message: 'No Account with this email' })
+                return res.json({ status: 400, message: 'No Account with this email' })
             }
 
         }
         else {
-            res.json({ status: 400, message: 'No Account with this email' })
+            return res.json({ status: 400, message: 'No Account with this email' })
         }
     })
 }
@@ -294,18 +308,26 @@ exports.prOTPVerify = (req, res) => {
                         userId: req.body.id
                     }
                 })
-                res.json({ status: 200, message: 'OTP VErified for Password Reset.', authToken });
+                return res.json({ status: 200, message: 'OTP VErified for Password Reset.', authToken });
             } else {
-                res.json({ status: 400, message: "OTP did NOT Match" });
+                return res.json({ status: 400, message: "OTP did NOT Match" });
             }
         }
         else {
-            res.json({ status: 500, message: "server Error" });
+            return res.json({ status: 500, message: "server Error" });
         }
     })
 }
 
 exports.prReq = (req, res) => { // password reset request
+
+    const valErrors = validationResult(req);
+
+    if (!valErrors.isEmpty()) {
+        return res.status(422).json({ status: 422, errors: valErrors.array(), message: 'Invalid Values : ' + valErrors.array().map(err => `${err.param} `).join(',') });
+    }
+
+
     let token = req.body.id;
     if (!token) {
         res.status(401).json({ status: 401, message: "No Authorization Token." })
@@ -335,12 +357,12 @@ exports.prReq = (req, res) => { // password reset request
                 id: userId
             }
         }).then(rowsUpdated => {
-            res.json({ status: 200, message: 'Password Reset Successful.' });
+            return res.json({ status: 200, message: 'Password Reset Successful.' });
         }).catch(err => {
-            res.json({ status: 500, message: 'Server Error. Cant Update' });
+            return res.json({ status: 500, message: 'Server Error. Cant Update' });
         })
     }).catch(err => {
-        res.json({ status: 500, message: 'Server Error. Hashing problem' });
+        return res.json({ status: 500, message: 'Server Error. Hashing problem' });
     })
 }
 

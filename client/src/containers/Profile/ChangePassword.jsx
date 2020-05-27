@@ -50,7 +50,7 @@ const AddressEditor = (props) => {
                 <input required type="password" value={passwords.confirm} name="confirm" id="confirm" onChange={handleChange} />
                 {!match ? <div className="error">Passwords Don't Match</div> : null}
 
-
+                {[422].includes(props.response.status) ? <div className="error">{props.response.message}</div> : null}
                 <button className="btn btn-full btn-primary m-centered" type="submit">Change Password</button>
             </form>
         </div>

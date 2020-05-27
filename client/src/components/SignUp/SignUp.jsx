@@ -5,6 +5,7 @@ import * as actions from '../../store/actions'
 import './SignUp.scss'
 import { useHistory, Redirect, withRouter } from 'react-router-dom';
 import { useEffect } from 'react';
+import { Spinner } from 'react-bootstrap'
 
 const SignUp = props => {
 
@@ -16,6 +17,7 @@ const SignUp = props => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('')
     const [resetPassword, setResetPassword] = useState(false);
+    const [loading, setLoading] = useState(false);
 
 
     const handleChangeEmail = e => {
@@ -34,6 +36,7 @@ const SignUp = props => {
 
     const sendOTP = (e) => {
         e.preventDefault();
+        setLoading(true);
         let details = { id, name: userDetails.name, password: userDetails.password, mobile: userDetails.mobile, email: userDetails.email }
         fetch('/otp', {
             method: 'POST',
@@ -46,7 +49,8 @@ const SignUp = props => {
                 console.log(res);
                 props.setResponse({ status: res.status, message: res.message })
                 setId(res.id);
-                if (res.status != 7) setFormState(1)
+                setLoading(false);
+                if (res.status == 200) setFormState(1)
             })
 
         }).catch(err => {
@@ -57,6 +61,7 @@ const SignUp = props => {
 
     const verifyOTP = (e) => {
         e.preventDefault();
+        setLoading(true);
         fetch('/verify-otp', {
             method: 'post',
             headers: {
@@ -74,6 +79,7 @@ const SignUp = props => {
                         setRegMode(false);
                     }, 2000)
                 }
+                setLoading(false);
             })
 
         }).catch(err => {
@@ -84,6 +90,7 @@ const SignUp = props => {
 
     const PROTP = (e) => {
         e.preventDefault();
+        setLoading(true);
         fetch('/pr-otp', {
             method: 'POST',
             headers: {
@@ -96,6 +103,8 @@ const SignUp = props => {
                 props.setResponse({ status: res.status, message: res.message })
                 setId(res.id);
                 if (res.status == 200) setFormState(1)
+
+                setLoading(false);
             })
 
         }).catch(err => {
@@ -107,6 +116,7 @@ const SignUp = props => {
 
     const PRVerifyOTP = (e) => {
         e.preventDefault();
+        setLoading(true);
         fetch('/pr-otp-verify', {
             method: 'POST',
             headers: {
@@ -121,6 +131,7 @@ const SignUp = props => {
                     setId(res.authToken);
                     setFormState(2);
                 }
+                setLoading(false);
             })
 
         }).catch(err => {
@@ -132,6 +143,7 @@ const SignUp = props => {
 
     const PRReq = (e) => {
         e.preventDefault();
+        setLoading(true);
         fetch('/pr-req', {
             method: 'POST',
             headers: {
@@ -151,6 +163,7 @@ const SignUp = props => {
                         setResetPassword(false);
                     }, 2000)
                 }
+                setLoading(false);
             })
 
         }).catch(err => {
@@ -192,18 +205,19 @@ const SignUp = props => {
 
                     <label htmlFor="password">Create Password</label>
                     <input required type="password" name="password" value={userDetails.password} id="password" onChange={handleChange} />
+                    <div className="help-block">should be at least 8 characters long.</div>
 
                     <label htmlFor="confirmPassword">Confirm Password</label>
                     <input required type="password" name="confirmPassword" value={userDetails.confirmPassword} id="confirmPassword" onChange={handleChange} />
-
-                    <button className="btn btn-full btn-primary m-centered" type="submit">Sign Up Using OTP</button>
+                    {[422].includes(props.response.status) ? <div className="error">{props.response.message}</div> : null}
+                    <button className="btn btn-full btn-primary m-centered" type="submit" disabled={loading}>{!loading ? "Sign Up Using OTP" : <Spinner animation="border" />}</button>
                 </form>
                 : formState == 1 ?
                     <form onSubmit={verifyOTP} className="form">
                         <label htmlFor="otp">Enter OTP sent to your email</label>
                         <input required type="text" name="otp" id="otp" onChange={handleChangeOTP} value={otp} />
                         {[401].includes(props.response.status) ? <div className="error">{props.response.message}</div> : null}
-                        <button className="btn btn-full btn-primary m-centered" type="submit">Verify OTP</button>
+                        <button className="btn btn-full btn-primary m-centered" type="submit" disabled={loading}>{!loading ? "Verify OTP" : <Spinner animation="border" />}</button>
                     </form>
                     :
                     formState == 2 ?
@@ -219,14 +233,15 @@ const SignUp = props => {
             {
                 <form onSubmit={login} className="form">
                     <label htmlFor="email">Email</label>
-                    <input required type="text" name="email" id="email" onChange={handleChangeEmail} value={email} />
+                    <input required type="email" name="email" id="email" onChange={handleChangeEmail} value={email} />
+
                     <label htmlFor="email">Password</label>
                     <input type="password" name="password" id="password" onChange={handleChangePassword} value={password} />
                     {[401].includes(props.response.status) ? <div className="error">{props.response.message}</div> : null}
                     <div className="row px-2">
                         <button className="btn btn-link btn-sm" type="button" onClick={() => setResetPassword(true)}>Forgot Password?</button>
                     </div>
-                    <button className="btn btn-full btn-primary m-centered" type="submit">Login</button>
+                    <button className="btn btn-full btn-primary m-centered" type="submit" disabled={loading}>{!loading ? "Login" : <Spinner animation="border" />}</button>
                     <div className="row terms">
                         See our <a href="#" className="link px-1"> Terms </a> and <a href="#" className="link px-1"> Privacy Policy</a>
                     </div>
@@ -242,16 +257,16 @@ const SignUp = props => {
             {formState == 0 ?
                 <form onSubmit={PROTP} className="form">
                     <label htmlFor="email">Your Existing Account Email</label>
-                    <input required type="text" name="email" id="email" onChange={handleChangeEmail} value={email} />
+                    <input required type="email" name="email" id="email" onChange={handleChangeEmail} value={email} />
                     {[400].includes(props.response.status) ? <div className="error">{props.response.message}</div> : null}
-                    <button className="btn btn-full btn-primary m-centered" type="submit">Send OTP</button>
+                    <button className="btn btn-full btn-primary m-centered" type="submit" disabled={loading}>{!loading ? "Send OTP" : <Spinner animation="border" />}</button>
                 </form>
                 : formState == 1 ?
                     <form onSubmit={PRVerifyOTP} className="form">
                         <label htmlFor="otp">Enter OTP sent to your email</label>
                         <input required type="text" name="otp" id="otp" onChange={handleChangeOTP} value={otp} />
                         {[400].includes(props.response.status) ? <div className="error">{props.response.message}</div> : null}
-                        <button className="btn btn-full btn-primary m-centered" type="submit">Verify OTP</button>
+                        <button className="btn btn-full btn-primary m-centered" type="submit" disabled={loading}>{!loading ? "Verify OTP" : <Spinner animation="border" />}</button>
                     </form>
                     : formState == 2 ?
                         <form onSubmit={PRReq} className="form" style={{ marginBottom: '0' }}>
@@ -263,8 +278,8 @@ const SignUp = props => {
                             <input required type="password" value={userDetails.confirmPassword} name="confirmPassword" id="confirm" onChange={handleChange} />
                             {/* {!match ? <div className="error">Passwords Don't Match</div> : null} */}
 
-
-                            <button className="btn btn-full btn-primary m-centered" type="submit">Change Password</button>
+                            {[422].includes(props.response.status) ? <div className="error">{props.response.message}</div> : null}
+                            <button className="btn btn-full btn-primary m-centered" type="submit" disabled={loading}>{!loading ? "Change Password" : <Spinner animation="border" />}</button>
                         </form>
                         : formState == 3 ?
                             <h3 className="text-success text-center">Password Reset Success.</h3>
