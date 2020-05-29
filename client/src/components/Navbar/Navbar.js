@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import * as actions from '../../store/actions'
 import { logout } from '../../store/actions';
 import Categories from './Categories/Categories';
+import CategorySelector from './Category_Model/CategorySelector'
 
 
 class Navbar extends Component {
@@ -75,7 +76,8 @@ class Navbar extends Component {
                         </div>
                     </div>
                 </div>
-                <Categories />
+                {/* <Categories /> */}
+                <CategorySelector />
             </React.Fragment>
         )
     }

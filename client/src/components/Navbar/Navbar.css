@@ -206,7 +206,7 @@
 }
 .zi6{
     position: relative;
-    min-height: 40px;
+    height: 50px;
     color: #000;
     width: 100%;
     z-index: 6;
@@ -229,6 +229,7 @@
 ._12r{
     margin: 0 auto;
     padding: 0 16px;
+    height: 50px;
     max-width: 1248px;
     list-style-type: disc;
     margin-inline-start: 0px;
