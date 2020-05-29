@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './Navbar.css';
 import { NavLink, Link, withRouter } from 'react-router-dom';
-import img from '../../assets/LalaDukaan_nav_logo.png';
+import img from '../../assets/logos/LalaDukaan_nav_logo.png';
 import { connect } from 'react-redux';
 import * as actions from '../../store/actions'
 import { logout } from '../../store/actions';

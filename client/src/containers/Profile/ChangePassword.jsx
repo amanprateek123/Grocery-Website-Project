@@ -45,6 +45,7 @@ const AddressEditor = (props) => {
 
                 <label htmlFor="city">New Password</label>
                 <input required type="password" value={passwords.new} name="new" id="new" onChange={handleChange} />
+                <div className="help-block">at least 8 characters long.</div>
 
                 <label htmlFor="state">Re-Enter New Password</label>
                 <input required type="password" value={passwords.confirm} name="confirm" id="confirm" onChange={handleChange} />

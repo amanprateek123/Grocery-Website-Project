@@ -7,6 +7,11 @@ import { useHistory, Redirect, withRouter } from 'react-router-dom';
 import { useEffect } from 'react';
 import { Spinner } from 'react-bootstrap'
 
+import mail from '../../assets/illustrations/mail.svg'
+import astronaut from '../../assets/illustrations/astronaut.svg'
+import unicorn from '../../assets/illustrations/unicorn.svg'
+import verified from '../../assets/illustrations/verified.svg'
+
 const SignUp = props => {
 
     const [regMode, setRegMode] = useState(false)
@@ -49,8 +54,8 @@ const SignUp = props => {
                 console.log(res);
                 props.setResponse({ status: res.status, message: res.message })
                 setId(res.id);
+                if (res.status == 200) { setFormState(1) }
                 setLoading(false);
-                if (res.status == 200) setFormState(1)
             })
 
         }).catch(err => {
@@ -172,6 +177,17 @@ const SignUp = props => {
         })
     }
 
+
+    const [match, setMatch] = useState(true);
+    useEffect(() => {
+        if (userDetails.password != userDetails.confirmPassword) {
+            setMatch(false);
+        }
+        else {
+            setMatch(true);
+        }
+    }, [userDetails.confirmPassword])
+
     const login = (e) => {
         e.preventDefault();
         props.login(email, password);
@@ -188,9 +204,10 @@ const SignUp = props => {
             {[0, 1].includes(formState) ?
                 <React.Fragment>
                     <h1>SignUp</h1>
+                    <p>{props.response.message || "Create an account for LalaDukaan using your Email Account."}</p>
                 </React.Fragment>
                 : null}
-            <p>{props.response.message || "Create an account for LalaDukaan using your Email Account."}</p>
+
             {formState == 0 ?
                 <form onSubmit={sendOTP} className="form">
                     <label htmlFor="name">Full Name</label>
@@ -209,11 +226,15 @@ const SignUp = props => {
 
                     <label htmlFor="confirmPassword">Confirm Password</label>
                     <input required type="password" name="confirmPassword" value={userDetails.confirmPassword} id="confirmPassword" onChange={handleChange} />
+                    {!match ? <div className="error">Passwords Don't Match</div> : null}
                     {[422].includes(props.response.status) ? <div className="error">{props.response.message}</div> : null}
                     <button className="btn btn-full btn-primary m-centered" type="submit" disabled={loading}>{!loading ? "Sign Up Using OTP" : <Spinner animation="border" />}</button>
                 </form>
                 : formState == 1 ?
                     <form onSubmit={verifyOTP} className="form">
+                        <div className="res-img text-center m-2 w-100">
+                            <img src={mail} alt="" width={100} />
+                        </div>
                         <label htmlFor="otp">Enter OTP sent to your email</label>
                         <input required type="text" name="otp" id="otp" onChange={handleChangeOTP} value={otp} />
                         {[401].includes(props.response.status) ? <div className="error">{props.response.message}</div> : null}
@@ -221,7 +242,12 @@ const SignUp = props => {
                     </form>
                     :
                     formState == 2 ?
-                        <h3 className="text-success text-center">Your Account is Created.</h3>
+                        <div className="msg-box text-center m-2">
+                            <div className="res-img text-center m-2">
+                                <img src={astronaut} alt="" width={200} />
+                            </div>
+                            <h3 className="text-success text-center">Your Account is Created.</h3>
+                        </div>
                         : null
             }
         </React.Fragment>;
@@ -252,8 +278,12 @@ const SignUp = props => {
 
     const resetPasswordForm =
         <React.Fragment>
-            <h1>Reset Password</h1>
-            <p>We will send OTP to your email.</p>
+            {formState != 3 ? <h1>Reset Password</h1> : null}
+            {formState == 0 ? <p>We will send OTP to your email.</p>
+                : formState == 1 ? <p>OTP sent to your email.</p>
+                    : formState == 2 ? <p>Create new password for your account.</p>
+                        : null
+            }
             {formState == 0 ?
                 <form onSubmit={PROTP} className="form">
                     <label htmlFor="email">Your Existing Account Email</label>
@@ -263,6 +293,9 @@ const SignUp = props => {
                 </form>
                 : formState == 1 ?
                     <form onSubmit={PRVerifyOTP} className="form">
+                        <div className="res-img text-center m-2 w-100">
+                            <img src={mail} alt="" width={100} />
+                        </div>
                         <label htmlFor="otp">Enter OTP sent to your email</label>
                         <input required type="text" name="otp" id="otp" onChange={handleChangeOTP} value={otp} />
                         {[400].includes(props.response.status) ? <div className="error">{props.response.message}</div> : null}
@@ -271,18 +304,28 @@ const SignUp = props => {
                     : formState == 2 ?
                         <form onSubmit={PRReq} className="form" style={{ marginBottom: '0' }}>
 
+                            <div className="res-img text-center m-2 w-100">
+                                <img src={verified} alt="" width={100} />
+                            </div>
+
                             <label htmlFor="city">New Password</label>
                             <input required type="password" value={userDetails.password} name="password" id="new" onChange={handleChange} />
+                            <div className="help-block">should be at least 8 characters long.</div>
 
                             <label htmlFor="state">Re-Enter New Password</label>
                             <input required type="password" value={userDetails.confirmPassword} name="confirmPassword" id="confirm" onChange={handleChange} />
-                            {/* {!match ? <div className="error">Passwords Don't Match</div> : null} */}
+                            {!match ? <div className="error">Passwords Don't Match</div> : null}
 
                             {[422].includes(props.response.status) ? <div className="error">{props.response.message}</div> : null}
                             <button className="btn btn-full btn-primary m-centered" type="submit" disabled={loading}>{!loading ? "Change Password" : <Spinner animation="border" />}</button>
                         </form>
                         : formState == 3 ?
-                            <h3 className="text-success text-center">Password Reset Success.</h3>
+                            <div className="msg-box text-center m-2">
+                                <div className="res-img text-center m-2 w-100">
+                                    <img src={unicorn} alt="" width={100} />
+                                </div>
+                                <h3 className="text-success text-center">Password Reset Success.</h3>
+                            </div>
                             : null
             }
         </React.Fragment>

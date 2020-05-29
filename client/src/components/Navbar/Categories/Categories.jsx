@@ -1,4 +1,5 @@
 import React from 'react';
+import { useEffect } from 'react'
 import { TreeView, TreeItem } from '@material-ui/lab';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
@@ -89,6 +90,7 @@ const categories = [
 
 
 const Categories = (props) => {
+
 
     const renderTree = (nodes) => (
         <TreeItem key={nodes.id} nodeId={nodes.id} label={nodes.name} className="category">

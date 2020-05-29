@@ -100,7 +100,7 @@ exports.sendOTP = (req, res) => {
                     //     console.log(err.response.body.errors);
                     //     res.status(500).json({ message: 'Server Error' });
                     // });
-                    return res.json({ message: 'OTP has been sent to your email.', id: authToken });
+                    return res.json({ status: 200, message: 'OTP has been sent to your email.', id: authToken });
 
                 }).catch(err => {
                     console.log(err);
