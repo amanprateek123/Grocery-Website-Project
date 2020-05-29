@@ -7,7 +7,7 @@
     pointer-events: auto;
     border-right: 1px solid black;
     top: 45px;
-    margin-left: 0px;
+    margin-left: -100px;
     position: absolute;
     min-width: 240px;
     color: #212121;
@@ -49,13 +49,13 @@
 }
 .subdept{
     position: relative;
-    
     padding: 12px;
     min-width: 240px;
     .nav_drop{
         padding: 12px;
         display: flex;
         background: #fff;
+        text-transform: uppercase;
         color: #222;
         text-decoration: none;
         justify-content: space-between;
@@ -64,13 +64,15 @@
         color: orange;
         background-color: #f9f9f9;
         font-weight: 500;
+        padding: 10px;
         
     }
 }
 .cata_drop{
     color: #878787;
     font-weight: 500;
-    margin-bottom: 24px;
+    position: absolute;
+    top: 15px;
     font-size: 12px;
     text-transform: uppercase;
 }
@@ -80,6 +82,7 @@
 .sub_nav{
     padding: 12px;
     display: flex;
+    text-transform: uppercase;
     background: #fff;
     color: #222;
     text-decoration: none;
@@ -87,6 +90,7 @@
 }
 .sub_nav:hover{
     color: orange;
+    text-decoration: none;
     background-color: #f9f9f9;
     font-weight: 500;
     

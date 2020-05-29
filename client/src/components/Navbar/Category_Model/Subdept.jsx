@@ -23,7 +23,7 @@ export default class Subdept extends Component {
   }
   render() {
     return (
-
+       
       <div className="drop_down">
         <div className="after">
         </div>
@@ -37,7 +37,6 @@ export default class Subdept extends Component {
             <div className={this.state.isVisible == item.key ? "visible" : "invisible"}>
               <Category cata={item.modules} name={item.key} key={item.key} id={item.key} />
             </div>
-
           </div>
         )}
 
