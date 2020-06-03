@@ -41,7 +41,7 @@ export const logout = () => {
         localStorage.removeItem('userName');
         localStorage.removeItem('expireDate');
         dispatch({ type: actions.LOG_OUT });
-        window.location.reload();
+        window.location = "/";
     }
 
 }

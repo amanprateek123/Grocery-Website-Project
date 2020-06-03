@@ -206,10 +206,14 @@
 }
 .zi6{
     position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     height: 50px;
     color: #000;
-    width: 100%;
+    width: 100vw;
     z-index: 6;
+    box-shadow: 0 0 6px 1px #0003;
 }
 ._3zd{
     background-color: #fff;
@@ -243,6 +247,7 @@
 }
 .Wbt{
     color: #212121;
+    margin: 0 1em;
     white-space: normal;
     list-style: none;
 }
@@ -258,4 +263,9 @@
 }
 .invisible{
     display: none;
+}
+
+
+.username-nav > *{
+    margin-right: 0.2em;
 }

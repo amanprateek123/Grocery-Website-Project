@@ -1,6 +1,6 @@
 
 module.exports = (sequelize, Sequelize = require('sequelize')) => {
-    const Address = sequelize.define('address', {
+    const shippingAddress = sequelize.define('shippingAddress', {
         id: {
             type: Sequelize.UUID,
             defaultValue: Sequelize.UUIDV4,
@@ -10,6 +10,9 @@ module.exports = (sequelize, Sequelize = require('sequelize')) => {
         userId: {
             type: Sequelize.UUID,
             allowNull: false,
+        },
+        name: {
+            type: Sequelize.STRING,
         },
         address: {
             type: Sequelize.STRING,
@@ -28,7 +31,6 @@ module.exports = (sequelize, Sequelize = require('sequelize')) => {
         },
         email: {
             type: Sequelize.STRING,
-            primaryKey: true
         },
         mobile: {
             type: Sequelize.STRING,
@@ -36,7 +38,10 @@ module.exports = (sequelize, Sequelize = require('sequelize')) => {
         additionalInfo: {
             type: Sequelize.STRING,
         },
+        isPrimary: {
+            type: Sequelize.BOOLEAN,
+        }
     })
 
-    return Address;
+    return shippingAddress;
 };

@@ -10,7 +10,7 @@ router.post('/otp', [
     check('email').isEmail().normalizeEmail(),
     check('mobile').isMobilePhone(),
     check('password').isLength({ min: 8 }),
-    check('name').not().isEmpty()
+    check('firstName').not().isEmpty()
 ], authCtrl.sendOTP);
 
 router.post('/verify-otp', authCtrl.verifyOTP);

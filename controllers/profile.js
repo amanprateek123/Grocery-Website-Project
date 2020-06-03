@@ -2,6 +2,8 @@ const crypto = require('crypto');
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 
+const flash = require('../utils/flash')
+
 const sgMail = require('@sendgrid/mail');
 require('dotenv').config()
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
@@ -14,7 +16,7 @@ exports.getProfile = (req, res) => {
 
     db.user.findAll({
         include: {
-            model: db.address
+            model: db.shippingAddress
         },
         where: {
             id: req.userId
@@ -22,7 +24,17 @@ exports.getProfile = (req, res) => {
     }).then(user => {
         user = user[0].dataValues;
         // console.log(user);
-        res.json({ status: 200, message: "fetched user details", user: { name: user.name, email: user.email, mobile: user.mobile, addresses: user.addresses } })
+        res.json({
+            status: 200, message: flash.FETCHED_PROFILE, user: {
+                firstName: user.firstName,
+                lastName: user.lastName,
+                gender: user.gender,
+                dob: user.dob,
+                email: user.email,
+                mobile: user.mobile,
+                addresses: user.shippingAddresses
+            }
+        })
 
     }).catch(err => {
         console.log(err);
@@ -46,20 +58,22 @@ exports.postProfile = (req, res) => {
         bcrypt.compare(req.body.confirmationPassword, user.password).then(match => {
             if (match) {
                 db.user.update({
-                    name: req.body.name,
-                    address: req.body.address,
-                    mobile: req.body.mobile
+                    firstName: req.body.firstName,
+                    lastName: req.body.lastName,
+                    mobile: req.body.mobile,
+                    gender: req.body.gender,
+                    dob: req.body.dob
                 }, {
                     where: {
                         id: req.userId
                     }
                 }).then(rowsUpdated => {
-                    res.json({ status: 200, message: "Successfully Updated Profile" })
+                    res.json({ status: 200, message: flash.PROFILE_UPDATED })
                 }).catch(err => {
-                    res.json({ status: 500, message: "Server Error" })
+                    res.json({ status: 500, message: flash.SERVER_ERROR })
                 })
             } else {
-                res.json({ status: 400, message: "Wrong Password" })
+                res.json({ status: 400, message: flash.WRONG_PASSWORD })
             }
         })
 
@@ -76,15 +90,15 @@ exports.addAddress = (req, res) => {
     console.log(req.body);
     let address = req.body;
 
-    db.address.create({
+    db.shippingAddress.create({
         ...address,
         userId: req.userId
     }).then(rowsUpdated => {
         console.log(rowsUpdated);
 
-        res.json({ status: 200, message: "Address Added Successfully", addressId: rowsUpdated.dataValues.id });
+        res.json({ status: 200, message: flash.ADDRESS_ADDED, addressId: rowsUpdated.dataValues.id });
     }).catch(err => {
-        res.json({ status: 500, message: "Server Error" });
+        res.json({ status: 500, message: flash.SERVER_ERROR });
     })
 
 }
@@ -93,15 +107,15 @@ exports.removeAddress = (req, res) => {
 
     console.log(req.body);
 
-    db.address.destroy({
+    db.shippingAddress.destroy({
         where: {
             id: req.body.id,
             userId: req.userId
         }
     }).then(rowsUpdated => {
-        res.json({ status: 200, message: "Address Removed Successfully" });
+        res.json({ status: 200, message: flash.ADDRESS_REMOVED });
     }).catch(err => {
-        res.json({ status: 500, message: "Server Error" });
+        res.json({ status: 500, message: flash.SERVER_ERROR });
     })
 
 }
@@ -112,7 +126,7 @@ exports.removeAddress = (req, res) => {
 exports.getTest = (req, res) => {
     db.user.findAll({
         include: {
-            model: db.address
+            model: db.shippingAddress
         }
     }).then(user => {
         res.json(user)

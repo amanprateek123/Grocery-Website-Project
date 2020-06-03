@@ -35,7 +35,7 @@ const AddressEditor = (props) => {
     }
 
     return (
-        <div className="form-container" style={{ fontSize: '0.7em' }}>
+        <div className="form-container" >
             <h3>Change Password</h3>
 
             <form onSubmit={changePasswordReq} className="form" style={{ marginBottom: '0' }}>

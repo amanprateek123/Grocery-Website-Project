@@ -30,7 +30,7 @@ export default class CategorySelector extends Component {
     const subcata = subcat;
     return (
       <React.Fragment>
-        <div className="zi6 container">
+        <div className="zi6">
           <div className="_3zd">
             <ul className="_12r">
               {moduleGroups.map(group => {

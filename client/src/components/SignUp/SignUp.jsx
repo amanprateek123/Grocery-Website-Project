@@ -42,7 +42,7 @@ const SignUp = props => {
     const sendOTP = (e) => {
         e.preventDefault();
         setLoading(true);
-        let details = { id, name: userDetails.name, password: userDetails.password, mobile: userDetails.mobile, email: userDetails.email }
+        let details = { id, firstName: userDetails.firstName, lastName: userDetails.lastName, password: userDetails.password, mobile: userDetails.mobile, email: userDetails.email }
         fetch('/otp', {
             method: 'POST',
             headers: {
@@ -210,8 +210,16 @@ const SignUp = props => {
 
             {formState == 0 ?
                 <form onSubmit={sendOTP} className="form">
-                    <label htmlFor="name">Full Name</label>
-                    <input required type="text" value={userDetails.name} name="name" id="name" placeholder="John Doe" onChange={handleChange} />
+                    <div className="form-group mb-n1">
+                        <div className="mr-2">
+                            <label htmlFor="name">First Name</label>
+                            <input required type="text" value={userDetails.firstName} name="firstName" id="firstName" placeholder="John" onChange={handleChange} />
+                        </div>
+                        <div>
+                            <label htmlFor="name">Last Name</label>
+                            <input required type="text" value={userDetails.lastName} name="lastName" id="lastName" placeholder="Doe" onChange={handleChange} />
+                        </div>
+                    </div>
 
                     <label htmlFor="email">Email</label>
                     <input required type="email" name="email" id="email" placeholder="email@example.com" onChange={handleChange} value={userDetails.email} />

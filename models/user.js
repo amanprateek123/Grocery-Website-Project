@@ -1,5 +1,5 @@
 
-module.exports = (sequelize, Sequelize) => {
+module.exports = (sequelize, Sequelize = require('sequelize')) => {
     const User = sequelize.define('user', {
         id: {
             type: Sequelize.UUID,
@@ -7,7 +7,10 @@ module.exports = (sequelize, Sequelize) => {
             allowNull: false,
             primaryKey: true
         },
-        name: {
+        firstName: {
+            type: Sequelize.STRING,
+        },
+        lastName: {
             type: Sequelize.STRING,
         },
         email: {
@@ -24,8 +27,13 @@ module.exports = (sequelize, Sequelize) => {
         verified: {
             type: Sequelize.BOOLEAN,
             default: false
+        },
+        gender: {
+            type: Sequelize.ENUM('M', 'F', 'T')
+        },
+        dob: {
+            type: Sequelize.DATEONLY
         }
-
     })
 
     return User;

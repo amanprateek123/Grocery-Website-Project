@@ -7,6 +7,7 @@ import * as actions from '../../store/actions'
 import { logout } from '../../store/actions';
 import Categories from './Categories/Categories';
 import CategorySelector from './Category_Model/CategorySelector'
+import PersonIcon from '@material-ui/icons/Face';
 
 
 class Navbar extends Component {
@@ -36,7 +37,7 @@ class Navbar extends Component {
                             </div>
                             {this.props.userName
                                 ? <div className="dHG">
-                                    <Link to="/profile"><div className="badge text-white">{this.props.userName}</div></Link>
+                                    <Link to="/profile"><div className="badge text-white username-nav align-items-center"><PersonIcon /> {this.props.userName}</div></Link>
                                 </div>
                                 : null
                             }

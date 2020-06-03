@@ -2,6 +2,7 @@ const crypto = require('crypto');
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 const { validationResult } = require('express-validator')
+const flash = require('../utils/flash')
 
 const sgMail = require('@sendgrid/mail');
 require('dotenv').config()
@@ -23,7 +24,7 @@ exports.sendOTP = (req, res) => {
     }).then(docs => {
         if (docs.length) {
             if (docs[0].dataValues.verified) {
-                return res.json({ status: 7, message: "User with this Email Already Exists. " })
+                return res.json({ status: 7, message: flash.USER_EXISTS })
             }
             else {
                 let id = docs[0].id;
@@ -31,7 +32,8 @@ exports.sendOTP = (req, res) => {
 
                     db.user.update({
                         email: req.body.email,
-                        name: req.body.name,
+                        firstName: req.body.firstName,
+                        lastName: req.body.lastName,
                         password: hashedPassword,
                         mobile: req.body.mobile
                     }, { where: { id: id } }).then(rowsUpdated => {
@@ -47,21 +49,21 @@ exports.sendOTP = (req, res) => {
                         const msg = {
                             to: req.body.email,
                             from: process.env.MAIL_SENDER,
-                            subject: 'OTP for LalaDukaan',
-                            html: `Welcome to LalaDukaan. <strong>${token}</strong> is your OTP for the registration process. go ahead and complete your registration.`,
+                            subject: flash.REG_OTP_SUBJECT,
+                            html: flash.REG_OTP_BODY(token),
                         };
                         // sgMail.send(msg).then(success => {
                         //     console.log(success);
-                        //     return res.json({ message: 'OTP has been sent to your email.', id: id });
+                        //     return res.json({ status: 200, message: flash.OTP_SENT, id: authToken });
                         // }).catch(err => {
                         //     console.log(err);
                         //     console.log(err.response.body.errors);
-                        //     res.status(500).json({ message: 'Server Error' });
+                        //     res.status(500).json({ message: flash.SERVER_ERROR })
                         // });
-                        return res.json({ status: 200, message: 'OTP has been sent to your email.', id: authToken });
+                        return res.json({ status: 200, message: flash.OTP_SENT, id: authToken });
                     }).catch(err => {
                         console.log(err);
-                        res.status(500).json({ message: 'internal Server Error' })
+                        res.status(500).json({ message: flash.SERVER_ERROR })
                     });
                 });
             }
@@ -71,7 +73,8 @@ exports.sendOTP = (req, res) => {
 
                 db.user.create({
                     email: req.body.email,
-                    name: req.body.name,
+                    firstName: req.body.firstName,
+                    lastName: req.body.lastName,
                     password: hashedPassword,
                     mobile: req.body.mobile
                 }).then(user => {
@@ -89,22 +92,22 @@ exports.sendOTP = (req, res) => {
                     const msg = {
                         to: req.body.email,
                         from: process.env.MAIL_SENDER,
-                        subject: 'OTP for LalaDukaan',
-                        html: `Welcome to LalaDukaan. <strong>${token}</strong> is your OTP for the registration process. go ahead and complete your registration.`,
+                        subject: flash.REG_OTP_SUBJECT,
+                        html: flash.REG_OTP_BODY(token),
                     };
                     // sgMail.send(msg).then(success => {
                     //     console.log(success);
-                    //     return res.json({ message: 'OTP has been sent to your email.', id: id });
+                    //     return res.json({ status: 200, message: flash.OTP_SENT, id: authToken });
                     // }).catch(err => {
                     //     console.log(err);
                     //     console.log(err.response.body.errors);
-                    //     res.status(500).json({ message: 'Server Error' });
+                    //     res.status(500).json({ message: flash.SERVER_ERROR })
                     // });
-                    return res.json({ status: 200, message: 'OTP has been sent to your email.', id: authToken });
+                    return res.json({ status: 200, message: flash.OTP_SENT, id: authToken });
 
                 }).catch(err => {
                     console.log(err);
-                    res.status(500).json({ message: 'internal Server Error' })
+                    res.status(500).json({ message: flash.SERVER_ERROR })
                 });
             });
         }
@@ -117,18 +120,18 @@ exports.verifyOTP = (req, res) => {
     // console.log(req.body);
     let authToken = req.body.id;
     if (!authToken) {
-        return res.json({ status: 401, message: 'NO auth token.' })
+        return res.json({ status: 401, message: flash.NO_AUTH_HEADER })
     }
     let decodedToken;
     try {
         decodedToken = jwt.verify(authToken, 'lalasupersecretkey')
     }
     catch (err) {
-        res.status(500).json({ status: 401, message: "Invalid Authentication token." })
+        res.status(500).json({ status: 401, message: flash.INVALID_AUTH })
     }
 
     if (!decodedToken) {
-        res.status(401).json({ status: 401, message: "Unauthenticated" })
+        res.status(401).json({ status: 401, message: flash.INVALID_AUTH })
     }
     let userId = decodedToken.id;
 
@@ -137,23 +140,30 @@ exports.verifyOTP = (req, res) => {
         order: [['createdAt', 'DESC']]
     }).then(doc => {
         doc = doc[0];
-        console.log("OTP FOUND : ");
-        // console.log(doc);
-        if (doc.dataValues.value == req.body.otp) {
-            db.user.update(
-                { verified: true },
-                { where: { id: userId } }
-            ).then(rowsUpdated => {
-                console.log(rowsUpdated);
-                return res.json({ status: 200, message: 'Successfully Verified' })
+        if (doc) {
+            console.log("OTP FOUND : ");
+            // console.log(doc);
+            if (doc.dataValues.value == req.body.otp) {
+                db.user.update(
+                    { verified: true },
+                    { where: { id: userId } }
+                ).then(rowsUpdated => {
+                    console.log(rowsUpdated);
+                    return res.json({ status: 200, message: flash.OTP_VERIFIED })
 
-                db.otp.destroy({
-                    where: { userId: userId },
+                    db.otp.destroy({
+                        where: { userId: userId },
+                    })
                 })
-            })
+            }
+            else {
+                return res.json({ status: 401, message: flash.OTP_MISMATCH })
+            }
+        } else {
+            console.log("NO OTP FOUND.");
+            return res.json({ status: 500, message: flash.SERVER_ERROR })
+
         }
-        else
-            return res.json({ status: 401, message: 'OTP did NOT Match.!' })
 
     })
 };
@@ -176,20 +186,20 @@ exports.login = (req, res) => {
                         }, 'lalasupersecretkey', {
                             expiresIn: '1h'
                         });
-                        return res.json({ status: 200, message: "Success", userId: user.id, userName: user.dataValues.name, idToken: token })
+                        return res.json({ status: 200, message: flash.SUCCESS, userId: user.id, userName: user.dataValues.firstName + ' ' + user.dataValues.lastName, idToken: token })
                     }
                     else {
-                        return res.json({ status: 401, message: "Wrong Password" })
+                        return res.json({ status: 401, message: flash.WRONG_PASSWORD })
                     }
                 })
             }
             else {
-                return res.json({ status: 401, message: "Account needs verification. Please complete the registration process again." })
+                return res.json({ status: 401, message: flash.UNVERIFIED_ACC })
             }
 
         }
         else {
-            return res.json({ status: 401, message: "No account with this Email." })
+            return res.json({ status: 401, message: flash.NO_ACC })
         }
     })
 }
@@ -222,7 +232,7 @@ exports.changePassword = (req, res) => {
                                 id: req.userId
                             }
                         }).then(rowsUpdated => {
-                            return res.json({ status: 200, message: 'Successfully Updated Password.' })
+                            return res.json({ status: 200, message: flash.PASSWORD_CHANGED })
                         }).catch(err => {
                             return res.json({ status: 500, message: err.message });
                         })
@@ -231,7 +241,7 @@ exports.changePassword = (req, res) => {
                     })
                 }
                 else {
-                    return res.json({ status: 403, message: 'Wrong Password' })
+                    return res.json({ status: 403, message: flash.WRONG_PASSWORD })
                 }
             }).catch(err => {
                 return res.json({ status: 500, message: err.message })
@@ -263,8 +273,8 @@ exports.prOTP = (req, res) => {
                 const msg = {
                     to: req.body.email,
                     from: process.env.MAIL_SENDER,
-                    subject: 'OTP for LalaDukaan',
-                    html: `Laladukaan. <strong>${token}</strong> is your OTP for resetting your password.`,
+                    subject: flash.PR_OTP_SUBJECT,
+                    html: flash.PR_OTP_BODY(token),
                 };
                 // sgMail.send(msg).then(success => {
                 //     console.log(success);
@@ -274,14 +284,14 @@ exports.prOTP = (req, res) => {
                 //     console.log(err.response.body.errors);
                 //     res.status(500).json({ message: 'Server Error' });
                 // });
-                return res.json({ status: 200, message: "OTP has been sent to your email.", id: user.id });
+                return res.json({ status: 200, message: flash.OTP_SENT, id: user.id });
             } else {
-                return res.json({ status: 400, message: 'No Account with this email' })
+                return res.json({ status: 400, message: flash.NO_ACC })
             }
 
         }
         else {
-            return res.json({ status: 400, message: 'No Account with this email' })
+            return res.json({ status: 400, message: flash.NO_ACC })
         }
     })
 }
@@ -308,13 +318,13 @@ exports.prOTPVerify = (req, res) => {
                         userId: req.body.id
                     }
                 })
-                return res.json({ status: 200, message: 'OTP VErified for Password Reset.', authToken });
+                return res.json({ status: 200, message: flash.OTP_VERIFIED, authToken });
             } else {
-                return res.json({ status: 400, message: "OTP did NOT Match" });
+                return res.json({ status: 400, message: flash.OTP_MISMATCH });
             }
         }
         else {
-            return res.json({ status: 500, message: "server Error" });
+            return res.json({ status: 500, message: flash.SERVER_ERROR });
         }
     })
 }
@@ -330,7 +340,7 @@ exports.prReq = (req, res) => { // password reset request
 
     let token = req.body.id;
     if (!token) {
-        res.status(401).json({ status: 401, message: "No Authorization Token." })
+        res.status(401).json({ status: 401, message: flash.NO_AUTH_HEADER })
         return;
     }
     let decodedToken;
@@ -338,11 +348,11 @@ exports.prReq = (req, res) => { // password reset request
         decodedToken = jwt.verify(token, 'lalasupersecretkey')
     }
     catch (err) {
-        res.status(500).json({ status: 401, message: "Authentication token Expired. Please Login Again." })
+        res.status(500).json({ status: 401, message: flash.AUTH_EXPIRED })
     }
 
     if (!decodedToken) {
-        res.status(401).json({ status: 401, message: "Unauthenticated" })
+        res.status(401).json({ status: 401, message: flash.INVALID_AUTH })
     }
     let userId = decodedToken.id;
 
@@ -357,12 +367,12 @@ exports.prReq = (req, res) => { // password reset request
                 id: userId
             }
         }).then(rowsUpdated => {
-            return res.json({ status: 200, message: 'Password Reset Successful.' });
+            return res.json({ status: 200, message: flash.PASSWORD_RESET });
         }).catch(err => {
-            return res.json({ status: 500, message: 'Server Error. Cant Update' });
+            return res.json({ status: 500, message: flash.SERVER_ERROR });
         })
     }).catch(err => {
-        return res.json({ status: 500, message: 'Server Error. Hashing problem' });
+        return res.json({ status: 500, message: flash.SERVER_ERROR });
     })
 }
 
@@ -370,7 +380,7 @@ exports.prReq = (req, res) => { // password reset request
 exports.getTest = (req, res) => {
     db.user.findAll({
         include: {
-            model: db.address
+            model: db.shippingAddress
         }
     }).then(user => {
         res.json(user)

@@ -9,6 +9,17 @@ import Address from './Address';
 import AddressEditor from './AddressEditor';
 import { Toast } from "react-bootstrap";
 import ChangePassword from './ChangePassword';
+import {
+    Grid, Card, CardContent, Paper, Typography, CardMedia, Avatar,
+    List, ListItem, ListSubheader, ListItemIcon, ListItemText, Divider,
+    TextField, CardActionArea, CardActions, Button, Select, MenuItem, InputLabel
+}
+    from '@material-ui/core'
+import Alert from '@material-ui/lab/Alert';
+import PersonIcon from '@material-ui/icons/Person';
+import HomeIcon from '@material-ui/icons/Home';
+import SecurityIcon from '@material-ui/icons/Security';
+import PowerSettingsNewIcon from '@material-ui/icons/PowerSettingsNew';
 
 const Profile = (props) => {
 
@@ -16,7 +27,10 @@ const Profile = (props) => {
     const [addingAddress, setAddingAddress] = useState(false);
     const [changingPassword, setChangingPassword] = useState(false);
     const [modal, setModal] = useState(false);
-    const [details, setDetails] = useState({
+    const [addressEditMode, setAddressEditMode] = useState(false);
+    const [editingAddress, setEditingAddress] = useState(null)
+    const [tab, setTab] = useState('profile');
+    const initialDetails = {
         name: {
             editing: false,
             type: 'text'
@@ -28,16 +42,9 @@ const Profile = (props) => {
         mobile: {
             editing: false,
             type: 'text'
-        },
-        password: {
-            editing: false,
-            type: 'password'
-        },
-        address: {
-            editing: false,
-            type: 'textarea'
         }
-    })
+    }
+    const [details, setDetails] = useState(initialDetails)
 
     const toggleEdit = (field) => {
         setDetails({
@@ -61,6 +68,50 @@ const Profile = (props) => {
     }
     const closeModal = () => {
         setModal(false);
+    }
+
+    useEffect(() => {
+        fetch('/profile', {
+            headers: {
+                'Authorization': 'Bearer ' + props.idToken
+            }
+        }).then(res => {
+            res.json().then(res => {
+                props.setResponse(res);
+                setUser(res.user);
+                console.log(res.user);
+
+            })
+        })
+    }, [])
+
+    const postProfile = (e) => {
+        e.preventDefault();
+        fetch('/profile', {
+            headers: {
+                'Authorization': 'Bearer ' + props.idToken,
+                'Content-Type': 'application/json'
+            },
+            method: 'POST',
+            body: JSON.stringify(user)
+        }).then(async res => {
+            res = await res.json();
+            console.log(res);
+            if (res.status == 200) {
+                closeModal();
+                props.setResponse(res);
+                setDetails(initialDetails)
+            }
+            else {
+                props.setResponse(res);
+            }
+
+            setUser({ ...user, confirmationPassword: '' })
+
+        }).catch(err => {
+            console.log(err);
+
+        })
     }
 
     const addAddress = (address) => {
@@ -87,44 +138,6 @@ const Profile = (props) => {
                         }
                     ]
                 })
-            }
-            else {
-                props.setResponse(res);
-            }
-
-        }).catch(err => {
-            console.log(err);
-
-        })
-    }
-
-    useEffect(() => {
-        fetch('/profile', {
-            headers: {
-                'Authorization': 'Bearer ' + props.idToken
-            }
-        }).then(res => {
-            res.json().then(res => {
-                props.setResponse(res);
-                setUser(res.user);
-            })
-        })
-    }, [])
-
-    const postProfile = () => {
-        fetch('/profile', {
-            headers: {
-                'Authorization': 'Bearer ' + props.idToken,
-                'Content-Type': 'application/json'
-            },
-            method: 'POST',
-            body: JSON.stringify(user)
-        }).then(async res => {
-            res = await res.json();
-            console.log(res);
-            if (res.status == 200) {
-                closeModal();
-                props.setResponse(res);
             }
             else {
                 props.setResponse(res);
@@ -164,6 +177,18 @@ const Profile = (props) => {
         })
     }
 
+    const editAddress = (address) => {
+        setAddressEditMode(true);
+        setEditingAddress(address);
+    }
+    const editAddressPost = (address) => {
+        removeAddress(address.id);
+        delete address.id;
+        addAddress(address);
+        setAddressEditMode(false);
+        setEditingAddress(null);
+    }
+
     const changePasswordReq = (passwords) => {
         fetch('/change-password', {
             headers: {
@@ -189,73 +214,188 @@ const Profile = (props) => {
         })
     }
 
-
-    return (
-        <div className="container">
-            <h1>Profile</h1>
-            <div className="response">
-                <Toast>
-                    <Toast.Body>{props.response.message}</Toast.Body>
-                </Toast>
-            </div>
+    const profileInformationPage = (
+        <Paper >
             {user ?
-                <div className="login_security">
-                    <h1 className="login_header">
-                        Login & Security
-                    </h1>
-
-                    <Modal visible={addingAddress} closeModal={() => setAddingAddress(false)}>
-                        <AddressEditor addAddress={addAddress} closeModal={() => setAddingAddress(false)} />
-                    </Modal>
-                    <Modal visible={changingPassword} closeModal={() => setChangingPassword(false)}>
-                        <ChangePassword changePasswordReq={changePasswordReq} closeModal={() => setAddingAddress(false)} />
-                    </Modal>
-
-                    <div className="a_sec">
-                        <div className="security_box">
-                            <div className="inner_box">
-                                <ul className="unorder_box">
-                                    <ProfileList property="Name:" value={user.name} editable="edit" type={details.name.type} editing={details.name.editing} onChange={(e) => onChangeHandler('name', e)} toggleEdit={() => toggleEdit('name')} />
-                                    <ProfileList property="Email:" value={user.email} editable={false} type={details.email.type} editing={details.email.editing} onChange={(e) => onChangeHandler('email', e)} toggleEdit={() => toggleEdit('email')} />
-                                    <ProfileList property="Mobile Number:" value={user.mobile} editable="edit" type={details.mobile.type} editing={details.mobile.editing} onChange={(e) => onChangeHandler('mobile', e)} toggleEdit={() => toggleEdit('mobile')} />
-                                    <ProfileList property="Password:" notInput editable='Change Password' type={details.password.type} toggleEdit={() => setChangingPassword(true)} />
-                                    <div className="sec">
-                                        <h6>Addresses</h6>
-                                        <div className="actions">
-                                            <button className="btn btn-link btn-sm" onClick={() => setAddingAddress(true)}>+Add</button>
-                                        </div>
-                                    </div>
-                                    {user.addresses?.map((address, i) =>
-                                        <Address key={address.id}
-                                            property={`Address ${i + 1} :`}
-                                            value={address}
-                                            removeAddress={() => removeAddress(address.id)}
-                                        />
-                                    )}
-                                </ul>
-                            </div>
-                        </div>
-                        <div className="actions my-3">
-                            <button className="btn btn-danger" onClick={openModal}>Save</button>
-                        </div>
+                <CardContent>
+                    <div className="profile-section">
+                        <header>
+                            <h5 className="heading d-inline-block">Personal Information</h5>
+                            <Button color="secondary" onClick={() => toggleEdit('name')}>{details['name'].editing ? "Cancel" : "Edit"}</Button>
+                        </header>
+                        <section>
+                            <TextField className="text-field" label="First Name" id="firstName" value={user.firstName} onChange={(e) => onChangeHandler('firstName', e)} disabled={!details['name'].editing} />
+                            <TextField className="text-field" label="Last Name" id="lastName" value={user.lastName} onChange={(e) => onChangeHandler('lastName', e)} disabled={!details['name'].editing} />
+                            {details['name'].editing ? <Button color="primary" variant="contained" onClick={openModal}>Save</Button> : null}
+                        </section>
+                        <section>
+                            <InputLabel id="gender" className="external-label">Gender</InputLabel>
+                            <Select className="text-field" labelId="gender" id="gender" value={user.gender} displayEmpty
+                                renderValue={() => user.gender == 'M' ? 'Male' : user.gender == 'F' ? 'Female' : user.gender == 'T' ? 'Other' : 'Not Selected'}
+                                onChange={(e) => onChangeHandler('gender', e)} disabled={!details['name'].editing}>
+                                <MenuItem value={'M'}>Male</MenuItem>
+                                <MenuItem value={'F'}>Female</MenuItem>
+                                <MenuItem value={'T'}>Other</MenuItem>
+                            </Select>
+                            <InputLabel id="dob" className="external-label">Birthday</InputLabel>
+                            <TextField className="text-field" type="date" label="Birthday" id="dob" value={user.dob} onChange={(e) => onChangeHandler('dob', e)} disabled={!details['name'].editing} />
+                        </section>
                     </div>
-                </div>
-                :
-                <div className="danger">Please Login</div>
-            }
+                    <div className="profile-section">
+                        <header>
+                            <h5 className="heading d-inline-block">Email Address</h5>
+                            <Button color="secondary" onClick={() => toggleEdit('email')}>{details['email'].editing ? "Cancel" : "Edit"}</Button>
+                        </header>
+                        <section>
+                            <TextField className="text-field" label="Email" id="email" value={user.email} onChange={(e) => onChangeHandler('email', e)} disabled={!details['email'].editing} />
+                            {details['email'].editing ? <Button color="primary" variant="contained" onClick={openModal}>Save</Button> : null}
+                        </section>
+                    </div>
+                    <div className="profile-section">
+                        <header>
+                            <h5 className="heading d-inline-block">Mobile Number</h5>
+                            <Button color="secondary" onClick={() => toggleEdit('mobile')}>{details['mobile'].editing ? "Cancel" : "Edit"}</Button>
+                        </header>
+                        <section>
+                            <TextField className="text-field" label="Mobile Number" id="mobile" value={user.mobile} onChange={(e) => onChangeHandler('mobile', e)} disabled={!details['mobile'].editing} />
+                            {details['mobile'].editing ? <Button color="primary" variant="contained" onClick={openModal}>Save</Button> : null}
+                        </section>
+                    </div>
+                    <div className="profile-section">
+                        <header>
+                            <h5 className="heading d-inline-block">Account & Security</h5>
+                        </header>
+                        <section style={{ color: '#4caf50', padding: '0 1em' }}>
+                            <Button color="inherit" startIcon={<SecurityIcon />} onClick={() => setChangingPassword(true)}>Change Password</Button>
+                        </section>
+                    </div>
+                </CardContent>
+                : null}
+            {/* <CardActions className="card-actions">
+                <Button color="primary" onClick={() => setChangingPassword(true)}>Change Password</Button>
+            </CardActions> */}
             <Modal visible={modal} closeModal={closeModal}>
                 {user ?
-                    <div className="form">
+                    <form onSubmit={postProfile} className="form-modal">
                         <h3>Confirm</h3>
                         <p className='text-center'>You are about to change your profile information. <br />Enter your Password to confirm.</p>
+
                         <input required placeholder="password" className="field text-center" type="password" name="confirmationPassword" id="confirmationPassword" value={user.confirmationPassword} onChange={(e) => onChangeHandler('confirmationPassword', e)} />
-                        {[400, 401].includes(props.response.status) ? <div className="error">{props.response.message}</div> : null}
-                        <button className="btn btn-danger" onClick={postProfile}>Confirm</button>
-                    </div>
+                        {[400, 401].includes(props.response.status) ? <form className="error">{props.response.message}</form> : null}
+                        <button className="btn btn-danger">Confirm</button>
+
+                    </form>
                     : null
                 }
             </Modal>
+            <Modal visible={changingPassword} closeModal={() => setChangingPassword(false)}>
+                <ChangePassword changePasswordReq={changePasswordReq} closeModal={() => setAddingAddress(false)} />
+            </Modal>
+        </Paper >
+    );
 
+    const manageAddressesPage = (
+        <Paper >
+            {user ?
+                <CardContent>
+                    <header>
+                        <h5 className="text-muted">Manage Addresses</h5>
+                    </header>
+                    <section>
+                        <AddressEditor addAddress={addAddress} editMode={addressEditMode} address={editingAddress} />
+                        {addressEditMode ? <AddressEditor addAddress={editAddressPost} onCancel={() => setAddressEditMode(false)} editMode={addressEditMode} address={editingAddress} /> : null}
+                        {user.addresses?.map((address, i) =>
+                            <Address key={address.id}
+                                property={`Address ${i + 1} :`}
+                                value={address}
+                                removeAddress={() => removeAddress(address.id)}
+                                editAddress={() => editAddress(address)}
+                            />
+                        )}
+                    </section>
+                </CardContent>
+                : null}
+        </Paper >
+    );
+
+
+    return (
+        <div className="container-fluid page">
+            <div className="container">
+                <div className="row">
+                    <div className="col-4">
+                        <div className="side-nav">
+                            <div className="mb-4">
+                                <Card>
+                                    <CardContent>
+                                        <div className="row align-items-center">
+                                            <div className="col-4">
+                                                <Avatar className="dp" src="http://picsum.photos/40/40" />
+                                            </div>
+                                            <div className="col">
+                                                <div><i>Hello,</i></div>
+                                                {user ? <h5>{user.firstName + ' ' + user.lastName}</h5> : 'User'}
+                                            </div>
+                                        </div>
+                                        <div className="row mt-4">
+                                            <div className="col" style={{ fontSize: '0.5em' }}>
+                                                {props.response.status ? <Alert severity={props.response.status == 200 ? "success" : "error"}>{props.response.message}</Alert> : null}
+                                            </div>
+                                        </div>
+                                    </CardContent>
+                                </Card>
+                            </div>
+
+                            <div className="mb-3">
+                                <Card>
+                                    <CardContent>
+
+                                        <List component="nav" aria-label="main"
+                                            subheader={
+                                                <ListSubheader component="div" id="nested-list-subheader">
+                                                    Account Settings
+                                            </ListSubheader>
+                                            }
+                                        >
+                                            <ListItem button onClick={() => setTab('profile')}>
+                                                <ListItemIcon>
+                                                    <PersonIcon />
+                                                </ListItemIcon>
+                                                <ListItemText primary="Profile Information" />
+                                            </ListItem>
+                                            <ListItem button onClick={() => setTab('address')}>
+                                                <ListItemIcon>
+                                                    <HomeIcon />
+                                                </ListItemIcon>
+                                                <ListItemText primary="Manage Addresses" />
+                                            </ListItem>
+                                        </List>
+                                        <Divider />
+                                        <List component="nav" aria-label="secondary">
+                                            <ListItem button onClick={props.logout}>
+                                                <ListItemIcon>
+                                                    <PowerSettingsNewIcon />
+                                                </ListItemIcon>
+                                                <ListItemText primary="Logout" />
+                                            </ListItem>
+                                        </List>
+                                    </CardContent>
+                                </Card>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div className="col-8">
+                        <div className="content">
+                            {tab == 'profile' ?
+                                profileInformationPage
+                                : tab == 'address' ?
+                                    manageAddressesPage
+                                    : null}
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     );
 }
@@ -267,7 +407,8 @@ const mapStateToProps = state => {
 }
 const mapDispatchToProps = dispatch => {
     return {
-        setResponse: (response) => dispatch({ type: actions.SET_RESPONSE, response: response })
+        setResponse: (response) => dispatch({ type: actions.SET_RESPONSE, response: response }),
+        logout: () => dispatch(actions.logout())
     }
 }
 
