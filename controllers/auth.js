@@ -149,15 +149,15 @@ exports.verifyOTP = (req, res) => {
                     { where: { id: userId } }
                 ).then(rowsUpdated => {
                     console.log(rowsUpdated);
-                    return res.json({ status: 200, message: flash.OTP_VERIFIED })
 
                     db.otp.destroy({
                         where: { userId: userId },
                     })
+                    return res.json({ status: 200, message: flash.OTP_VERIFIED })
                 })
             }
             else {
-                return res.json({ status: 401, message: flash.OTP_MISMATCH })
+                return res.json({ status: 417, message: flash.OTP_MISMATCH })
             }
         } else {
             console.log("NO OTP FOUND.");
@@ -320,7 +320,7 @@ exports.prOTPVerify = (req, res) => {
                 })
                 return res.json({ status: 200, message: flash.OTP_VERIFIED, authToken });
             } else {
-                return res.json({ status: 400, message: flash.OTP_MISMATCH });
+                return res.json({ status: 417, message: flash.OTP_MISMATCH });
             }
         }
         else {

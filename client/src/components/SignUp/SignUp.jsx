@@ -245,7 +245,7 @@ const SignUp = props => {
                         </div>
                         <label htmlFor="otp">Enter OTP sent to your email</label>
                         <input required type="text" name="otp" id="otp" onChange={handleChangeOTP} value={otp} />
-                        {[401].includes(props.response.status) ? <div className="error">{props.response.message}</div> : null}
+                        {[417].includes(props.response.status) ? <div className="error">{props.response.message}</div> : null}
                         <button className="btn btn-full btn-primary m-centered" type="submit" disabled={loading}>{!loading ? "Verify OTP" : <Spinner animation="border" />}</button>
                     </form>
                     :
@@ -306,7 +306,7 @@ const SignUp = props => {
                         </div>
                         <label htmlFor="otp">Enter OTP sent to your email</label>
                         <input required type="text" name="otp" id="otp" onChange={handleChangeOTP} value={otp} />
-                        {[400].includes(props.response.status) ? <div className="error">{props.response.message}</div> : null}
+                        {[417].includes(props.response.status) ? <div className="error">{props.response.message}</div> : null}
                         <button className="btn btn-full btn-primary m-centered" type="submit" disabled={loading}>{!loading ? "Verify OTP" : <Spinner animation="border" />}</button>
                     </form>
                     : formState == 2 ?

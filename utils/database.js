@@ -10,7 +10,7 @@ const db = {};
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
-//Models/tables
+// Models/tables
 db.user = require('../models/user')(sequelize, Sequelize);
 db.product = require('../models/product')(sequelize, Sequelize);
 db.otp = require('../models/otp')(sequelize, Sequelize);
@@ -20,7 +20,7 @@ db.department = require('../models/department')(sequelize, Sequelize);
 db.parentCategory = require('../models/parentCategory')(sequelize, Sequelize);
 db.category = require('../models/category')(sequelize, Sequelize);
 
-//Relations
+// Relations - creates respective Foreign Keys as [ownerTable]Id 
 db.otp.belongsTo(db.user);
 db.user.hasMany(db.otp);
 

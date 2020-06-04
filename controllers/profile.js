@@ -85,10 +85,20 @@ exports.postProfile = (req, res) => {
 
 }
 
-exports.addAddress = (req, res) => {
+exports.addAddress = async (req, res) => {
 
     console.log(req.body);
     let address = req.body;
+
+    if (address.isPrimary) {
+        await db.shippingAddress.update({
+            isPrimary: false
+        }, {
+            where: {
+                userId: req.userId
+            }
+        })
+    }
 
     db.shippingAddress.create({
         ...address,
@@ -119,6 +129,154 @@ exports.removeAddress = (req, res) => {
     })
 
 }
+
+
+
+exports.changeEmailOTP = (req, res) => {
+    let token = parseInt(Math.random() * 1000000) % 10000000;
+    console.log('OTP : ' + token);
+
+    let authToken = jwt.sign({ email: req.body.email }, 'lalasupersecretkey', { expiresIn: '1h' });
+
+    db.otp.create({
+        userId: req.userId,
+        value: token
+    })
+    const msg = {
+        to: req.body.email,
+        from: process.env.MAIL_SENDER,
+        subject: flash.MAIL_OTP_SUBJECT,
+        html: flash.MAIL_OTP_BODY(token),
+    };
+    // sgMail.send(msg).then(success => {
+    //     console.log(success);
+    //     return res.json({ status: 200, message: flash.OTP_SENT, id: authToken });
+    // }).catch(err => {
+    //     console.log(err);
+    //     console.log(err.response.body.errors);
+    //     res.status(500).json({ message: flash.SERVER_ERROR })
+    // });
+    return res.json({ status: 200, message: flash.OTP_SENT, authToken: authToken });
+}
+
+exports.changeEmail = (req, res) => {
+    let authToken = req.body.authToken;
+    if (!authToken) {
+        return res.json({ status: 401, message: flash.NO_AUTH_HEADER })
+    }
+    let decodedToken;
+    try {
+        decodedToken = jwt.verify(authToken, 'lalasupersecretkey')
+    }
+    catch (err) {
+        res.status(500).json({ status: 401, message: flash.INVALID_AUTH })
+    }
+
+    if (!decodedToken) {
+        res.status(401).json({ status: 401, message: flash.INVALID_AUTH })
+    }
+
+    db.otp.findAll({
+        where: { userId: req.userId },
+        order: [['createdAt', 'DESC']]
+    }).then(doc => {
+        doc = doc[0];
+        if (doc) {
+            console.log("OTP FOUND : ");
+            // console.log(doc);
+            if (doc.dataValues.value == req.body.otp) {
+                db.user.update(
+                    { email: decodedToken.email },
+                    { where: { id: req.userId } }
+                ).then(rowsUpdated => {
+                    console.log(rowsUpdated);
+
+                    db.otp.destroy({
+                        where: { userId: req.userId },
+                    })
+
+                    return res.json({ status: 200, message: flash.OTP_VERIFIED })
+                })
+            }
+            else {
+                return res.json({ status: 417, message: flash.OTP_MISMATCH })
+            }
+        } else {
+            console.log("NO OTP FOUND.");
+            return res.json({ status: 500, message: flash.SERVER_ERROR })
+
+        }
+
+    })
+}
+
+exports.changeMobileOTP = (req, res) => {
+    let token = parseInt(Math.random() * 1000000) % 10000000;
+    console.log('OTP : ' + token);
+
+    let authToken = jwt.sign({ mobile: req.body.mobile }, 'lalasupersecretkey', { expiresIn: '1h' });
+
+    db.otp.create({
+        userId: req.userId,
+        value: token
+    })
+
+    // ? OTP sent to mobile.
+
+    return res.json({ status: 200, message: flash.OTP_SENT, authToken: authToken });
+}
+
+exports.changeMobile = (req, res) => {
+    let authToken = req.body.authToken;
+    if (!authToken) {
+        return res.json({ status: 401, message: flash.NO_AUTH_HEADER })
+    }
+    let decodedToken;
+    try {
+        decodedToken = jwt.verify(authToken, 'lalasupersecretkey')
+    }
+    catch (err) {
+        res.status(500).json({ status: 401, message: flash.INVALID_AUTH })
+    }
+
+    if (!decodedToken) {
+        res.status(401).json({ status: 401, message: flash.INVALID_AUTH })
+    }
+
+    db.otp.findAll({
+        where: { userId: req.userId },
+        order: [['createdAt', 'DESC']]
+    }).then(doc => {
+        doc = doc[0];
+        if (doc) {
+            console.log("OTP FOUND : ");
+            console.log(doc.dataValues.value + "==" + req.body.otp);
+            if (doc.dataValues.value == req.body.otp) {
+                db.user.update(
+                    { mobile: decodedToken.mobile },
+                    { where: { id: req.userId } }
+                ).then(rowsUpdated => {
+                    console.log(rowsUpdated);
+
+                    db.otp.destroy({
+                        where: { userId: req.userId },
+                    })
+
+                    return res.json({ status: 200, message: flash.OTP_VERIFIED })
+                })
+            }
+            else {
+                return res.json({ status: 417, message: flash.OTP_MISMATCH })
+            }
+        } else {
+            console.log("NO OTP FOUND.");
+            return res.json({ status: 500, message: flash.SERVER_ERROR })
+
+        }
+
+    })
+}
+
 
 
 

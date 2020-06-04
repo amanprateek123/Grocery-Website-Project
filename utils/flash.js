@@ -37,5 +37,8 @@ module.exports = {
     PR_OTP_SUBJECT: "OTP for LalaDukaan",
     PR_OTP_BODY: (token) => `Laladukaan. <strong>${token}</strong> is your OTP for resetting your password.`,
 
+    MAIL_OTP_SUBJECT: "OTP for LalaDukaan to change email.",
+    MAIL_OTP_BODY: (token) => `Laladukaan. <strong>${token}</strong> is your OTP for changing your email ID.`,
+
 
 }

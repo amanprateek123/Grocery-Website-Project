@@ -47,7 +47,7 @@ export default class CategorySelector extends Component {
                 {this.state.departments.map(group => {
                   return (
 
-                    <li className="Wbt" id={group.id} onMouseEnter={() => this.toggleHidden(group.id)} onMouseLeave={this.resetVisible}>
+                    <li className="Wbt" key={group.id} onMouseEnter={() => this.toggleHidden(group.id)} onMouseLeave={this.resetVisible}>
                       <span className="_1QZ">{group.name}<i className="fa fa-caret-down _34Y" aria-hidden="true" />
                       </span>
 

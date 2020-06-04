@@ -20,6 +20,10 @@ import PersonIcon from '@material-ui/icons/Person';
 import HomeIcon from '@material-ui/icons/Home';
 import SecurityIcon from '@material-ui/icons/Security';
 import PowerSettingsNewIcon from '@material-ui/icons/PowerSettingsNew';
+import mail from '../../assets/illustrations/mail.svg'
+import male_avatar from '../../assets/illustrations/male_avatar.svg'
+import female_avatar from '../../assets/illustrations/female_avatar.svg'
+import { Spinner } from 'react-bootstrap'
 
 const Profile = (props) => {
 
@@ -30,6 +34,12 @@ const Profile = (props) => {
     const [addressEditMode, setAddressEditMode] = useState(false);
     const [editingAddress, setEditingAddress] = useState(null)
     const [tab, setTab] = useState('profile');
+
+    const [otp, setOTP] = useState('');
+    const [otpModal, setOTPModal] = useState(null);
+    const [loading, setLoading] = useState(false)
+    let authToken;
+
     const initialDetails = {
         name: {
             editing: false,
@@ -63,6 +73,10 @@ const Profile = (props) => {
         })
     }
 
+    const handleChangeOTP = (e) => {
+        setOTP(e.target.value)
+    }
+
     const openModal = () => {
         setModal(true);
     }
@@ -79,7 +93,7 @@ const Profile = (props) => {
             res.json().then(res => {
                 props.setResponse(res);
                 setUser(res.user);
-                console.log(res.user);
+                // console.log(res.user);
 
             })
         })
@@ -214,6 +228,125 @@ const Profile = (props) => {
         })
     }
 
+    const changeEmailReq = (e) => {
+        e.preventDefault();
+        setLoading(true)
+        fetch('/change-email-otp', {
+            headers: {
+                'Authorization': 'Bearer ' + props.idToken,
+                'Content-Type': 'application/json'
+            },
+            method: 'POST',
+            body: JSON.stringify({ email: user.email })
+        }).then(async res => {
+            res = await res.json();
+            console.log(res);
+            if (res.status == 200) {
+                props.setResponse(res);
+                setOTPModal({ sendTo: changeEmail, contact: "Email" });
+                authToken = res.authToken;
+            }
+            else {
+                props.setResponse(res);
+            }
+
+            setLoading(false);
+
+        }).catch(err => {
+            console.log(err);
+
+        })
+    }
+
+    const changeEmail = (e, otp) => {
+        e.preventDefault();
+        setLoading(true)
+        fetch('/change-email', {
+            headers: {
+                'Authorization': 'Bearer ' + props.idToken,
+                'Content-Type': 'application/json'
+            },
+            method: 'POST',
+            body: JSON.stringify({ otp, authToken })
+        }).then(async res => {
+            res = await res.json();
+            console.log(res);
+            if (res.status == 200) {
+                props.setResponse(res);
+                setOTPModal(false);
+                setDetails(initialDetails)
+            }
+            else {
+                props.setResponse(res);
+            }
+
+            setLoading(false)
+
+        }).catch(err => {
+            console.log(err);
+
+        })
+    }
+
+    const changeMobileReq = (e) => {
+        e.preventDefault();
+        setLoading(true)
+        fetch('/change-mobile-otp', {
+            headers: {
+                'Authorization': 'Bearer ' + props.idToken,
+                'Content-Type': 'application/json'
+            },
+            method: 'POST',
+            body: JSON.stringify({ mobile: user.mobile })
+        }).then(async res => {
+            res = await res.json();
+            console.log(res);
+            if (res.status == 200) {
+                props.setResponse(res);
+                setOTPModal({ sendTo: changeMobile, contact: "Mobile" });
+                authToken = res.authToken;
+            }
+            else {
+                props.setResponse(res);
+            }
+            setLoading(false)
+
+        }).catch(err => {
+            console.log(err);
+
+        })
+    }
+
+    const changeMobile = (e, otp) => {
+        e.preventDefault();
+        setLoading(true)
+        fetch('/change-mobile', {
+            headers: {
+                'Authorization': 'Bearer ' + props.idToken,
+                'Content-Type': 'application/json'
+            },
+            method: 'POST',
+            body: JSON.stringify({ otp, authToken })
+        }).then(async res => {
+            res = await res.json();
+            console.log(res);
+            if (res.status == 200) {
+                props.setResponse(res);
+                setOTPModal(false);
+                setDetails(initialDetails)
+            }
+            else {
+                props.setResponse(res);
+            }
+
+            setLoading(false);
+
+        }).catch(err => {
+            console.log(err);
+
+        })
+    }
+
     const profileInformationPage = (
         <Paper >
             {user ?
@@ -233,12 +366,13 @@ const Profile = (props) => {
                             <Select className="text-field" labelId="gender" id="gender" value={user.gender} displayEmpty
                                 renderValue={() => user.gender == 'M' ? 'Male' : user.gender == 'F' ? 'Female' : user.gender == 'T' ? 'Other' : 'Not Selected'}
                                 onChange={(e) => onChangeHandler('gender', e)} disabled={!details['name'].editing}>
+                                <MenuItem value={undefined}>Not Selected</MenuItem>
                                 <MenuItem value={'M'}>Male</MenuItem>
                                 <MenuItem value={'F'}>Female</MenuItem>
                                 <MenuItem value={'T'}>Other</MenuItem>
                             </Select>
                             <InputLabel id="dob" className="external-label">Birthday</InputLabel>
-                            <TextField className="text-field" type="date" label="Birthday" id="dob" value={user.dob} onChange={(e) => onChangeHandler('dob', e)} disabled={!details['name'].editing} />
+                            <TextField className="text-field" type="date" label="Birthday" id="dob" value={user.dob || ''} onChange={(e) => onChangeHandler('dob', e)} disabled={!details['name'].editing} />
                         </section>
                     </div>
                     <div className="profile-section">
@@ -248,7 +382,7 @@ const Profile = (props) => {
                         </header>
                         <section>
                             <TextField className="text-field" label="Email" id="email" value={user.email} onChange={(e) => onChangeHandler('email', e)} disabled={!details['email'].editing} />
-                            {details['email'].editing ? <Button color="primary" variant="contained" onClick={openModal}>Save</Button> : null}
+                            {details['email'].editing ? <Button color="primary" variant="contained" onClick={changeEmailReq}>Save</Button> : null}
                         </section>
                     </div>
                     <div className="profile-section">
@@ -258,7 +392,7 @@ const Profile = (props) => {
                         </header>
                         <section>
                             <TextField className="text-field" label="Mobile Number" id="mobile" value={user.mobile} onChange={(e) => onChangeHandler('mobile', e)} disabled={!details['mobile'].editing} />
-                            {details['mobile'].editing ? <Button color="primary" variant="contained" onClick={openModal}>Save</Button> : null}
+                            {details['mobile'].editing ? <Button color="primary" variant="contained" onClick={changeMobileReq}>Save</Button> : null}
                         </section>
                     </div>
                     <div className="profile-section">
@@ -318,9 +452,29 @@ const Profile = (props) => {
         </Paper >
     );
 
+    const OTPModal = (
+        otpModal ?
+            <Modal visible={otpModal} closeModal={() => setOTPModal(false)}>
+
+                <div className="form-container">
+                    <h1 className="center">Change {otpModal.contact}</h1>
+                    <form onSubmit={(e) => otpModal.sendTo(e, otp)} className="form">
+                        <div className="res-img text-center m-2 w-100">
+                            <img src={mail} alt="" width={100} />
+                        </div>
+                        <label htmlFor="otp">Enter OTP sent to your {otpModal.contact}</label>
+                        <input required type="text" name="otp" id="otp" value={otp} onChange={handleChangeOTP} />
+                        {[417].includes(props.response.status) ? <div className="error">{props.response.message}</div> : null}
+                        <button className="btn btn-full btn-primary m-centered" type="submit" disabled={loading}>{!loading ? "Verify OTP" : <Spinner animation="border" />}</button>
+                    </form>
+                </div>
+            </Modal>
+            : null
+    )
 
     return (
         <div className="container-fluid page">
+            {OTPModal}
             <div className="container">
                 <div className="row">
                     <div className="col-4">
@@ -330,7 +484,7 @@ const Profile = (props) => {
                                     <CardContent>
                                         <div className="row align-items-center">
                                             <div className="col-4">
-                                                <Avatar className="dp" src="http://picsum.photos/40/40" />
+                                                <Avatar className="dp" src={user.gender == 'F' ? female_avatar : male_avatar} />
                                             </div>
                                             <div className="col">
                                                 <div><i>Hello,</i></div>

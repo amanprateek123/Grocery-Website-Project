@@ -10,7 +10,7 @@ export default function subCategory(props) {
       </span>
       <div style={{ position: 'absolute', top: '30px' }}>
         {props.cata.map(grp =>
-          <NavLink to="/" className="sub_nav">
+          <NavLink to="/" key={grp.id} className="sub_nav">
             {grp.name}
           </NavLink>
 

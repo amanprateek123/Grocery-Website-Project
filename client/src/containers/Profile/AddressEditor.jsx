@@ -43,7 +43,7 @@ const AddressEditor = (props) => {
                     <form onSubmit={addAddress} className="form" style={{ marginBottom: '0' }}>
                         <div className="form-group">
                             <TextField className="text-field address-field" variant="outlined" label="Name" id="name" name="name" value={address.name} onChange={handleChange} required />
-                            <TextField className="text-field address-field" variant="outlined" label="Mobile" id="mobile" name="mobile" value={address.mobile} onChange={handleChange} required />
+                            <TextField className="text-field address-field" variant="outlined" label="Mobile" id="mobile" name="mobile" value={address.mobile} onChange={handleChange} />
                         </div>
                         <div className="form-group">
                             <TextField className="text-field address-field" variant="outlined" label="City" id="city" name="city" value={address.city} onChange={handleChange} required />
@@ -73,8 +73,8 @@ const AddressEditor = (props) => {
                                 label="Primary Address"
                             />
                         </div>
-                        <Button color="primary" variant="contained" className="mx-3" onClick={addAddress}>Add Address</Button>
-                        <Button color="secondary" onClick={props.onCancel ? props.onCancel : () => setEditing(false)}>Cancel</Button>
+                        <Button color="primary" variant="contained" className="mx-3" type="submit">Add Address</Button>
+                        <Button color="secondary" type="button" onClick={props.onCancel ? props.onCancel : () => setEditing(false)}>Cancel</Button>
                     </form>
                 </div>
             }

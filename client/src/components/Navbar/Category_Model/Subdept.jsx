@@ -28,7 +28,7 @@ export default class Subdept extends Component {
         <div className="after">
         </div>
         {this.props.module.map(item =>
-          <div className="drop_content" onMouseEnter={() => this.toggleHidden(item.name)} onMouseLeave={this.resetVisible} >
+          <div className="drop_content" key={item.id} onMouseEnter={() => this.toggleHidden(item.name)} onMouseLeave={this.resetVisible} >
             <div className="subdept">
               <NavLink to="/" id={item.name} className="nav_drop" >
                 {item.name}
