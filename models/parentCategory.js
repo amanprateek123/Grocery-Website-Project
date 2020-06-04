@@ -1,5 +1,4 @@
 
-
 module.exports = (sequelize, Sequelize) => {
     const parentCategory = sequelize.define('parentCategory', {
         id: {
@@ -8,7 +7,7 @@ module.exports = (sequelize, Sequelize) => {
             autoIncrement: true,
             primaryKey: true
         },
-        categoryName: {
+        name: {
             type: Sequelize.STRING,
             allowNull: false
         }

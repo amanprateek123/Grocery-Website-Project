@@ -5,7 +5,6 @@ import img from '../../assets/logos/LalaDukaan_nav_logo.png';
 import { connect } from 'react-redux';
 import * as actions from '../../store/actions'
 import { logout } from '../../store/actions';
-import Categories from './Categories/Categories';
 import CategorySelector from './Category_Model/CategorySelector'
 import PersonIcon from '@material-ui/icons/Face';
 

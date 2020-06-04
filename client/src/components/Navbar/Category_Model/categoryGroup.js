@@ -1,218 +1,218 @@
-export const categoryGroup = [
- {
-   id:1,
-   key:'Stapples',
-   subcat:[
-    {
-      key: 'environment',
-      modules: [
-        {key: 'greenhouse gas'},
-        {key: 'protected species'}]
-    }, {
-      key: 'mobility',
-      color: '#066da0',
-      'icon': 'fa-bus',
-      modules: [
-        {key: 'walk accessibility'},
-        {key: 'transit accessibility'},
-        {key: 'travel patterns'}]
-    }, {
-      key: 'resiliency',
-      color: '#772016',
-      'icon': 'fa-fire',
-      modules: [
-        {key: 'flood'},
-        {key: 'fire'},
-        {key: 'earthquake'}]
-    }
-  ]
- },
- {
-  id:2,
-  key:'Snack & Beverages',
-  subcat:[
-   {
-     key: 'Pepsi',
-     color: '#305b2d',
-     'icon': 'fa-tree',
-     modules: [
-       {key: 'greenhouse gas'},
-       {key: 'protected species'}]
-   }, {
-     key: 'Fruity',
-     color: '#066da0',
-     'icon': 'fa-bus',
-     modules: [
-       {key: 'walk accessibility'},
-       {key: 'transit accessibility'},
-       {key: 'travel patterns'}]
-   }, {
-     key: 'Sprite',
-     color: '#772016',
-     'icon': 'fa-fire',
-     modules: [
-       {key: 'flood'},
-       {key: 'fire'},
-       {key: 'earthquake'}]
-   }
- ]
-},
-{
-  id:3,
-  key:'Packed Food ',
-  subcat:[
-   {
-     key: 'Chips',
-     color: '#305b2d',
-     'icon': 'fa-tree',
-     modules: [
-       {key: 'greenhouse gas'},
-       {key: 'protected species'}]
-   }, {
-     key: 'mobility',
-     color: '#066da0',
-     'icon': 'fa-bus',
-     modules: [
-       {key: 'walk accessibility'},
-       {key: 'transit accessibility'},
-       {key: 'travel patterns'}]
-   }, {
-     key: 'resiliency',
-     color: '#772016',
-     'icon': 'fa-fire',
-     modules: [
-       {key: 'flood'},
-       {key: 'fire'},
-       {key: 'earthquake'}]
-   }
- ]
-},
-{
-  id:4,
-  key:'Personal & Baby Care',
-  subcat:[
-   {
-     key: 'environment',
-     color: '#305b2d',
-     'icon': 'fa-tree',
-     modules: [
-       {key: 'greenhouse gas'},
-       {key: 'protected species'}]
-   }, {
-     key: 'mobility',
-     color: '#066da0',
-     'icon': 'fa-bus',
-     modules: [
-       {key: 'walk accessibility'},
-       {key: 'transit accessibility'},
-       {key: 'travel patterns'}]
-   }, {
-     key: 'resiliency',
-     color: '#772016',
-     'icon': 'fa-fire',
-     modules: [
-       {key: 'flood'},
-       {key: 'fire'},
-       {key: 'earthquake'}]
-   }
- ]
-},
-{
-  id:5,
-  key:'Household Care',
-  subcat:[
-   {
-     key: 'environment',
-     color: '#305b2d',
-     'icon': 'fa-tree',
-     modules: [
-       {key: 'greenhouse gas'},
-       {key: 'protected species'}]
-   }, {
-     key: 'mobility',
-     color: '#066da0',
-     'icon': 'fa-bus',
-     modules: [
-       {key: 'walk accessibility'},
-       {key: 'transit accessibility'},
-       {key: 'travel patterns'}]
-   }, {
-     key: 'resiliency',
-     color: '#772016',
-     'icon': 'fa-fire',
-     modules: [
-       {key: 'flood'},
-       {key: 'fire'},
-       {key: 'earthquake'}]
-   }
- ]
-},
-{
-  id:6,
-  key:'Dairy & Eggs',
-  subcat:[
-   {
-     key: 'environment',
-     color: '#305b2d',
-     'icon': 'fa-tree',
-     modules: [
-       {key: 'greenhouse gas'},
-       {key: 'protected species'}]
-   }, {
-     key: 'mobility',
-     color: '#066da0',
-     'icon': 'fa-bus',
-     modules: [
-       {key: 'walk accessibility'},
-       {key: 'transit accessibility'},
-       {key: 'travel patterns'}]
-   }, {
-     key: 'resiliency',
-     color: '#772016',
-     'icon': 'fa-fire',
-     modules: [
-       {key: 'flood'},
-       {key: 'fire'},
-       {key: 'earthquake'}]
-   }, {
-    key: 'mobility',
-    color: '#066da0',
-    'icon': 'fa-bus',
-    modules: [
-      {key: 'walk accessibility'},
-      {key: 'transit accessibility'},
-      {key: 'travel patterns'}]
+export const departmentGroup = [
+  {
+    id: 1,
+    name: 'Stapples',
+    parentCategories: [
+      {
+        name: 'environment',
+        categories: [
+          { name: 'greenhouse gas' },
+          { name: 'protected species' }]
+      }, {
+        name: 'mobility',
+        color: '#066da0',
+        'icon': 'fa-bus',
+        categories: [
+          { name: 'walk accessibility' },
+          { name: 'transit accessibility' },
+          { name: 'travel patterns' }]
+      }, {
+        name: 'resiliency',
+        color: '#772016',
+        'icon': 'fa-fire',
+        categories: [
+          { name: 'flood' },
+          { name: 'fire' },
+          { name: 'earthquake' }]
+      }
+    ]
+  },
+  {
+    id: 2,
+    name: 'Snack & Beverages',
+    parentCategories: [
+      {
+        name: 'Pepsi',
+        color: '#305b2d',
+        'icon': 'fa-tree',
+        categories: [
+          { name: 'greenhouse gas' },
+          { name: 'protected species' }]
+      }, {
+        name: 'Fruity',
+        color: '#066da0',
+        'icon': 'fa-bus',
+        categories: [
+          { name: 'walk accessibility' },
+          { name: 'transit accessibility' },
+          { name: 'travel patterns' }]
+      }, {
+        name: 'Sprite',
+        color: '#772016',
+        'icon': 'fa-fire',
+        categories: [
+          { name: 'flood' },
+          { name: 'fire' },
+          { name: 'earthquake' }]
+      }
+    ]
+  },
+  {
+    id: 3,
+    name: 'Packed Food ',
+    parentCategories: [
+      {
+        name: 'Chips',
+        color: '#305b2d',
+        'icon': 'fa-tree',
+        categories: [
+          { name: 'greenhouse gas' },
+          { name: 'protected species' }]
+      }, {
+        name: 'mobility',
+        color: '#066da0',
+        'icon': 'fa-bus',
+        categories: [
+          { name: 'walk accessibility' },
+          { name: 'transit accessibility' },
+          { name: 'travel patterns' }]
+      }, {
+        name: 'resiliency',
+        color: '#772016',
+        'icon': 'fa-fire',
+        categories: [
+          { name: 'flood' },
+          { name: 'fire' },
+          { name: 'earthquake' }]
+      }
+    ]
+  },
+  {
+    id: 4,
+    name: 'Personal & Baby Care',
+    parentCategories: [
+      {
+        name: 'environment',
+        color: '#305b2d',
+        'icon': 'fa-tree',
+        categories: [
+          { name: 'greenhouse gas' },
+          { name: 'protected species' }]
+      }, {
+        name: 'mobility',
+        color: '#066da0',
+        'icon': 'fa-bus',
+        categories: [
+          { name: 'walk accessibility' },
+          { name: 'transit accessibility' },
+          { name: 'travel patterns' }]
+      }, {
+        name: 'resiliency',
+        color: '#772016',
+        'icon': 'fa-fire',
+        categories: [
+          { name: 'flood' },
+          { name: 'fire' },
+          { name: 'earthquake' }]
+      }
+    ]
+  },
+  {
+    id: 5,
+    name: 'Household Care',
+    parentCategories: [
+      {
+        name: 'environment',
+        color: '#305b2d',
+        'icon': 'fa-tree',
+        categories: [
+          { name: 'greenhouse gas' },
+          { name: 'protected species' }]
+      }, {
+        name: 'mobility',
+        color: '#066da0',
+        'icon': 'fa-bus',
+        categories: [
+          { name: 'walk accessibility' },
+          { name: 'transit accessibility' },
+          { name: 'travel patterns' }]
+      }, {
+        name: 'resiliency',
+        color: '#772016',
+        'icon': 'fa-fire',
+        categories: [
+          { name: 'flood' },
+          { name: 'fire' },
+          { name: 'earthquake' }]
+      }
+    ]
+  },
+  {
+    id: 6,
+    name: 'Dairy & Eggs',
+    parentCategories: [
+      {
+        name: 'environment',
+        color: '#305b2d',
+        'icon': 'fa-tree',
+        categories: [
+          { name: 'greenhouse gas' },
+          { name: 'protected species' }]
+      }, {
+        name: 'mobility',
+        color: '#066da0',
+        'icon': 'fa-bus',
+        categories: [
+          { name: 'walk accessibility' },
+          { name: 'transit accessibility' },
+          { name: 'travel patterns' }]
+      }, {
+        name: 'resiliency',
+        color: '#772016',
+        'icon': 'fa-fire',
+        categories: [
+          { name: 'flood' },
+          { name: 'fire' },
+          { name: 'earthquake' }]
+      }, {
+        name: 'mobility',
+        color: '#066da0',
+        'icon': 'fa-bus',
+        categories: [
+          { name: 'walk accessibility' },
+          { name: 'transit accessibility' },
+          { name: 'travel patterns' }]
+      }
+    ]
   }
- ]
-}
 ]
 
-export const subcat=[
+export const parentCategories = [
   {
-    key: 'resiliency',
+    name: 'resiliency',
     color: '#772016',
     'icon': 'fa-fire',
-    modules: [
-      {key: 'flood'},
-      {key: 'fire'},
-      {key: 'earthquake'}]
+    categories: [
+      { name: 'flood' },
+      { name: 'fire' },
+      { name: 'earthquake' }]
   },
   {
-    key: 'resiliency',
+    name: 'resiliency',
     color: '#772016',
     'icon': 'fa-fire',
-    modules: [
-      {key: 'flood'},
-      {key: 'fire'},
-      {key: 'earthquake'}]
+    categories: [
+      { name: 'flood' },
+      { name: 'fire' },
+      { name: 'earthquake' }]
   },
   {
-    key: 'resiliency',
+    name: 'resiliency',
     color: '#772016',
     'icon': 'fa-fire',
-    modules: [
-      {key: 'flood'},
-      {key: 'fire'},
-      {key: 'earthquake'}]
+    categories: [
+      { name: 'flood' },
+      { name: 'fire' },
+      { name: 'earthquake' }]
   }
 ]

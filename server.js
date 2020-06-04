@@ -6,7 +6,7 @@ require('dotenv').config()
 
 const authRoutes = require('./routes/auth')
 const profileRoutes = require('./routes/profile')
-
+const shopRoutes = require('./routes/shop')
 
 
 const app = express();
@@ -15,7 +15,7 @@ const PORT = process.env.PORT || 5000;
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use(authRoutes, profileRoutes);
+app.use(authRoutes, profileRoutes, shopRoutes);
 
 if (process.env.NODE_ENV === 'production') {
     // Serve any static files

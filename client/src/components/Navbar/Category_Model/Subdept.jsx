@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import './Subdept.scss'
 import { NavLink } from 'react-router-dom'
-import { categoryGroup, subcat } from './categoryGroup';
+import { categoryGroup } from './categoryGroup';
 import Category from './subCategory'
 
 export default class Subdept extends Component {
@@ -23,19 +23,19 @@ export default class Subdept extends Component {
   }
   render() {
     return (
-       
+
       <div className="drop_down">
         <div className="after">
         </div>
         {this.props.module.map(item =>
-          <div className="drop_content" onMouseEnter={() => this.toggleHidden(item.key)} onMouseLeave={this.resetVisible} >
+          <div className="drop_content" onMouseEnter={() => this.toggleHidden(item.name)} onMouseLeave={this.resetVisible} >
             <div className="subdept">
-              <NavLink to="/" id={item.key} className="nav_drop" >
-                {item.key}
+              <NavLink to="/" id={item.name} className="nav_drop" >
+                {item.name}
               </NavLink>
             </div>
-            <div className={this.state.isVisible == item.key ? "visible" : "invisible"}>
-              <Category cata={item.modules} name={item.key} key={item.key} id={item.key} />
+            <div className={this.state.isVisible == item.name ? "visible" : "invisible"}>
+              <Category cata={item.categories} name={item.name} key={item.name} id={item.name} />
             </div>
           </div>
         )}

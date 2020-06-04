@@ -14,23 +14,25 @@ db.sequelize = sequelize;
 db.user = require('../models/user')(sequelize, Sequelize);
 db.product = require('../models/product')(sequelize, Sequelize);
 db.otp = require('../models/otp')(sequelize, Sequelize);
-db.address = require('../models/address')(sequelize, Sequelize);
+db.shippingAddress = require('../models/shippingAddress')(sequelize, Sequelize);
+
+db.department = require('../models/department')(sequelize, Sequelize);
 db.parentCategory = require('../models/parentCategory')(sequelize, Sequelize);
 db.category = require('../models/category')(sequelize, Sequelize);
-db.subCategory = require('../models/subCategory')(sequelize, Sequelize);
 
 //Relations
 db.otp.belongsTo(db.user);
 db.user.hasMany(db.otp);
 
-db.address.belongsTo(db.user);
-db.user.hasMany(db.address);
+db.shippingAddress.belongsTo(db.user);
+db.user.hasMany(db.shippingAddress);
+
+db.parentCategory.belongsTo(db.department);
+db.department.hasMany(db.parentCategory);
 
 db.category.belongsTo(db.parentCategory);
 db.parentCategory.hasMany(db.category);
 
-db.subCategory.belongsTo(db.category);
-db.category.hasMany(db.subCategory);
 
 
 

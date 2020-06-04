@@ -7,12 +7,8 @@ module.exports = (sequelize, Sequelize) => {
             autoIncrement: true,
             primaryKey: true
         },
-        categoryName: {
+        name: {
             type: Sequelize.STRING,
-            allowNull: false
-        },
-        parentCategoryId: {
-            type: Sequelize.INTEGER,
             allowNull: false
         }
     })
