@@ -1,11 +1,10 @@
 import React, { Component, useEffect } from 'react';
-import { departmentGroup } from './categoryGroup';
+import { temp_departments } from './temp_categories';
 import '../Navbar.css';
-import SubCategory from './subCategory';
-import Subdept from './Subdept';
+import ParentCategory from './ParentCategory';
 
 
-export default class CategorySelector extends Component {
+export default class Department extends Component {
   constructor(props) {
     super(props);
     this.toggleHidden = this.toggleHidden.bind(this);
@@ -44,15 +43,15 @@ export default class CategorySelector extends Component {
           <div className="zi6">
             <div className="_3zd">
               <ul className="_12r">
-                {this.state.departments.map(group => {
+                {this.state.departments.map(department => {
                   return (
 
-                    <li className="Wbt" key={group.id} onMouseEnter={() => this.toggleHidden(group.id)} onMouseLeave={this.resetVisible}>
-                      <span className="_1QZ">{group.name}<i className="fa fa-caret-down _34Y" aria-hidden="true" />
+                    <li className="Wbt" key={department.id} onMouseEnter={() => this.toggleHidden(department.id)} onMouseLeave={this.resetVisible}>
+                      <span className="_1QZ">{department.name}<i className="fa fa-caret-down _34Y" aria-hidden="true" />
                       </span>
 
-                      <div className={this.state.isVisible == group.id ? "visible" : "invisible"}>
-                        <Subdept id={group.name} module={group.parentCategories} item={group.parentCategories.modules} key={group.name} />
+                      <div className={this.state.isVisible == department.id ? "visible" : "invisible"}>
+                        <ParentCategory id={department.name} module={department.parentCategories} item={department.parentCategories.modules} key={department.name} />
                       </div>
                     </li>
                   )

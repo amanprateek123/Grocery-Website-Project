@@ -1,4 +1,4 @@
-export const departmentGroup = [
+export const departments = [
   {
     id: 1,
     name: 'Stapples',
