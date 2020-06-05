@@ -1,6 +1,6 @@
 
 module.exports = (sequelize, Sequelize = require('sequelize')) => {
-    const shippingAddress = sequelize.define('shippingAddress', {
+    const shippingAddress = sequelize.define('db_ld_shippingAddress', {
         id: {
             type: Sequelize.UUID,
             defaultValue: Sequelize.UUIDV4,

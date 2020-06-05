@@ -25,6 +25,5 @@ router.post('/pr-otp', authCtrl.prOTP);
 router.post('/pr-otp-verify', authCtrl.prOTPVerify);
 router.post('/pr-req', [check('password').isLength({ min: 8 })], authCtrl.prReq);
 
-router.get('/test', authCtrl.getTest)
 
 module.exports = router

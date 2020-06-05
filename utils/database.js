@@ -21,17 +21,17 @@ db.parentCategory = require('../models/parentCategory')(sequelize, Sequelize);
 db.category = require('../models/category')(sequelize, Sequelize);
 
 // Relations - creates respective Foreign Keys as [ownerTable]Id 
-db.otp.belongsTo(db.user);
-db.user.hasMany(db.otp);
+db.otp.belongsTo(db.user, { foreignKey: 'userId' });
+db.user.hasMany(db.otp, { as: 'otps', foreignKey: 'userId' });
 
-db.shippingAddress.belongsTo(db.user);
-db.user.hasMany(db.shippingAddress);
+db.shippingAddress.belongsTo(db.user, { foreignKey: 'userId' });
+db.user.hasMany(db.shippingAddress, { as: 'shippingAddresses', foreignKey: 'userId' });
 
-db.parentCategory.belongsTo(db.department);
-db.department.hasMany(db.parentCategory);
+db.parentCategory.belongsTo(db.department, { foreignKey: 'departmentId' });
+db.department.hasMany(db.parentCategory, { as: 'parentCategories', foreignKey: 'departmentId' });
 
-db.category.belongsTo(db.parentCategory);
-db.parentCategory.hasMany(db.category);
+db.category.belongsTo(db.parentCategory, { foreignKey: 'parentCategoryId' });
+db.parentCategory.hasMany(db.category, { as: 'categories', foreignKey: 'parentCategoryId' });
 
 
 

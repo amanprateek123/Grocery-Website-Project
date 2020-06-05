@@ -5,9 +5,11 @@ exports.getCategories = (req, res) => {
       attributes: ['id', 'name'],
       include: {
          model: db.parentCategory,
+         as: 'parentCategories',
          attributes: ['id', 'name'],
          include: {
             model: db.category,
+            as: 'categories',
             attributes: ['id', 'name'],
          }
       }

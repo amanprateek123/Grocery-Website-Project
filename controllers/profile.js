@@ -16,7 +16,8 @@ exports.getProfile = (req, res) => {
 
     db.user.findAll({
         include: {
-            model: db.shippingAddress
+            model: db.shippingAddress,
+            as: 'shippingAddresses'
         },
         where: {
             id: req.userId
@@ -284,13 +285,15 @@ exports.changeMobile = (req, res) => {
 exports.getTest = (req, res) => {
     db.user.findAll({
         include: {
-            model: db.shippingAddress
+            model: db.shippingAddress,
+            as: 'shippingAddresses'
+
         }
     }).then(user => {
         res.json(user)
 
     }).catch(err => {
-
-        res.send('error')
+        console.log(err);
+        res.send(err)
     })
 }

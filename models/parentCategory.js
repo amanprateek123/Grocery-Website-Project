@@ -1,6 +1,6 @@
 
 module.exports = (sequelize, Sequelize) => {
-    const parentCategory = sequelize.define('parentCategory', {
+    const parentCategory = sequelize.define('db_ld_parentCategory', {
         id: {
             type: Sequelize.INTEGER,
             allowNull: false,

@@ -1,6 +1,6 @@
 
 module.exports = (sequelize, Sequelize) => {
-    const category = sequelize.define('category', {
+    const category = sequelize.define('db_ld_category', {
         id: {
             type: Sequelize.INTEGER,
             allowNull: false,
