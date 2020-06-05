@@ -84,7 +84,7 @@ const Profile = (props) => {
         setModal(false);
     }
 
-    useEffect(() => {
+    const fetchProfile = () => {
         fetch('/profile', {
             headers: {
                 'Authorization': 'Bearer ' + props.idToken
@@ -97,6 +97,10 @@ const Profile = (props) => {
 
             })
         })
+    }
+
+    useEffect(() => {
+        fetchProfile();
     }, [])
 
     const postProfile = (e) => {
@@ -201,6 +205,7 @@ const Profile = (props) => {
         addAddress(address);
         setAddressEditMode(false);
         setEditingAddress(null);
+
     }
 
     const changePasswordReq = (passwords) => {

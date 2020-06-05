@@ -20,7 +20,9 @@ class App extends Component {
 
         <Navbar />
 
-        <Modal visible={this.props.authModalVisible || this.props.response.status == 401} closeModal={this.props.closeModal}>
+        <Modal visible={this.props.authModalVisible || this.props.response.status == 401}
+          // closeModal={this.props.closeModal} 
+          closeBtn={this.props.closeModal}>
           <SignUp />
         </Modal>
 
