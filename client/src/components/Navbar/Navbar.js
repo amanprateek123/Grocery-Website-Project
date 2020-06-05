@@ -5,7 +5,7 @@ import img from '../../assets/logos/LalaDukaan_nav_logo.png';
 import { connect } from 'react-redux';
 import * as actions from '../../store/actions'
 import { logout } from '../../store/actions';
-import Department from './Category_Model/Department'
+import Departments from './Category_Model/Department'
 import PersonIcon from '@material-ui/icons/Face';
 
 
@@ -76,7 +76,7 @@ class Navbar extends Component {
                         </div>
                     </div>
                 </div>
-                <Department />
+                <Departments />
             </React.Fragment>
         )
     }

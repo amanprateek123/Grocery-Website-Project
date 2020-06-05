@@ -7,6 +7,7 @@ require('dotenv').config()
 const authRoutes = require('./routes/auth')
 const profileRoutes = require('./routes/profile')
 const shopRoutes = require('./routes/shop')
+const adminRoutes = require('./routes/admin')
 
 
 const app = express();
@@ -16,6 +17,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(authRoutes, profileRoutes, shopRoutes);
+app.use('/admin', adminRoutes)
 
 if (process.env.NODE_ENV === 'production') {
     // Serve any static files

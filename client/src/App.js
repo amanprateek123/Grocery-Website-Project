@@ -29,9 +29,12 @@ class App extends Component {
             <Home {...this.props} />
           </Route>
 
-          <Route path="/profile">
-            <Profile />
-          </Route>
+          {this.props.userId ?
+            <Route path="/profile">
+              <Profile />
+            </Route>
+            : null
+          }
 
 
           <Route component={E404} />

@@ -381,7 +381,7 @@ const Profile = (props) => {
                             <Button color="secondary" onClick={() => toggleEdit('email')}>{details['email'].editing ? "Cancel" : "Edit"}</Button>
                         </header>
                         <section>
-                            <TextField className="text-field" label="Email" id="email" value={user.email} onChange={(e) => onChangeHandler('email', e)} disabled={!details['email'].editing} />
+                            <TextField className="text-field" label="Email" type="email" required id="email" value={user.email} onChange={(e) => onChangeHandler('email', e)} disabled={!details['email'].editing} />
                             {details['email'].editing ? <Button color="primary" variant="contained" onClick={changeEmailReq}>Save</Button> : null}
                         </section>
                     </div>
