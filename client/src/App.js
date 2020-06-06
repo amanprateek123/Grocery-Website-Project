@@ -7,7 +7,7 @@ import Home from './containers/Home/Home';
 import E404 from './containers/E404/E404'
 import Modal from './components/Modal/Modal';
 import SignUp from './components/SignUp/SignUp';
-import { Profile } from './containers'
+import { Profile,Admin } from './containers'
 import { connect } from 'react-redux';
 import * as actions from './store/actions';
 
@@ -37,7 +37,13 @@ class App extends Component {
             </Route>
             : null
           }
-
+          {this.props.userId ?
+            <Route path="/admin">
+              <Admin />
+            </Route>
+            : null
+          }
+        
 
           <Route component={E404} />
         </Switch>

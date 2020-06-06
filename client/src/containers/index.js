@@ -5,8 +5,10 @@ import E404 from './E404/E404'
 import Home from './Home/Home'
 import Orders from './Orders/Orders'
 import Profile from './Profile/Profile'
+import Admin from './Admin/Admin'
 
 export {
+	Admin,
     Checkout,
     Details,
     E404,
