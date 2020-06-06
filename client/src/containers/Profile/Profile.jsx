@@ -516,13 +516,13 @@ const Profile = (props) => {
                                             </ListSubheader>
                                             }
                                         >
-                                            <ListItem button onClick={() => setTab('profile')}>
+                                            <ListItem button selected={tab == 'profile'} onClick={() => setTab('profile')}>
                                                 <ListItemIcon>
                                                     <PersonIcon />
                                                 </ListItemIcon>
                                                 <ListItemText primary="Profile Information" />
                                             </ListItem>
-                                            <ListItem button onClick={() => setTab('address')}>
+                                            <ListItem button selected={tab == 'address'} onClick={() => setTab('address')}>
                                                 <ListItemIcon>
                                                     <HomeIcon />
                                                 </ListItemIcon>

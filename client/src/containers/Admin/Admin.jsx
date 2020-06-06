@@ -2,28 +2,32 @@ import React from 'react';
 import { connect } from 'react-redux';
 import * as actions from '../../store/actions'
 import { useState } from 'react';
-import AdminContent from './AdminContent'
+import AddProductsFile from './AddProductsFile'
 import {
-     Card, CardContent, Avatar,
+    Card, CardContent, Avatar,
     List, ListItem, ListSubheader, ListItemIcon, ListItemText, Divider,
-  
+
 }
     from '@material-ui/core'
 import PersonIcon from '@material-ui/icons/Person';
 import Alert from '@material-ui/lab/Alert';
 import HomeIcon from '@material-ui/icons/Home';
 import PowerSettingsNewIcon from '@material-ui/icons/PowerSettingsNew';
+import CategoryIcon from '@material-ui/icons/Category';
+import FileIcon from '@material-ui/icons/FileCopy';
 import male_avatar from '../../assets/illustrations/male_avatar.svg'
 import female_avatar from '../../assets/illustrations/female_avatar.svg'
+
+import './Admin.scss'
 
 const Profile = (props) => {
 
     const [user, setUser] = useState({});
     const [modal, setModal] = useState(false);
-  
-    const [tab, setTab] = useState('profile');
 
-  
+    const [tab, setTab] = useState('products');
+
+
 
 
     const openModal = () => {
@@ -34,10 +38,10 @@ const Profile = (props) => {
     }
 
 
-    
+
 
     return (
-        <div className="container-fluid page">
+        <div className="container-fluid page admin">
             <div className="container">
                 <div className="row">
                     <div className="col-4">
@@ -54,11 +58,7 @@ const Profile = (props) => {
                                                 <h5>Admin</h5>
                                             </div>
                                         </div>
-                                        <div className="row mt-4">
-                                            <div className="col" style={{ fontSize: '0.5em' }}>
-                                              <Alert severity="success">File Uploaded</Alert>
-                                            </div>
-                                        </div>
+
                                     </CardContent>
                                 </Card>
                             </div>
@@ -70,21 +70,33 @@ const Profile = (props) => {
                                         <List component="nav" aria-label="main"
                                             subheader={
                                                 <ListSubheader component="div" id="nested-list-subheader">
-                                                   Upload
+                                                    Upload
                                             </ListSubheader>
                                             }
                                         >
-                                            <ListItem button onClick={() => setTab('profile')}>
+                                            <ListItem button selected={tab == 'category'} onClick={() => setTab('category')}>
                                                 <ListItemIcon>
-                                                    <PersonIcon />
+                                                    <CategoryIcon />
                                                 </ListItemIcon>
                                                 <ListItemText primary="Departments & Category" />
                                             </ListItem>
-                                            <ListItem button onClick={() => setTab('address')}>
+                                            <ListItem button selected={tab == 'product'} onClick={() => setTab('product')}>
                                                 <ListItemIcon>
-                                                    <HomeIcon />
+                                                    <CategoryIcon />
                                                 </ListItemIcon>
-                                                <ListItemText primary="Products & SKU" />
+                                                <ListItemText primary="Add Product" />
+                                            </ListItem>
+                                            <ListItem button selected={tab == 'products'} onClick={() => setTab('products')}>
+                                                <ListItemIcon>
+                                                    <FileIcon />
+                                                </ListItemIcon>
+                                                <ListItemText primary="Add Products CSV" />
+                                            </ListItem>
+                                            <ListItem button selected={tab == 'sku'} onClick={() => setTab('sku')}>
+                                                <ListItemIcon>
+                                                    <FileIcon />
+                                                </ListItemIcon>
+                                                <ListItemText primary="Post SKU CSV" />
                                             </ListItem>
                                         </List>
                                         <Divider />
@@ -104,11 +116,15 @@ const Profile = (props) => {
                     </div>
                     <div className="col-8">
                         <div className="content">
-                            {tab == 'profile' ?
-                            <AdminContent content="Department & Categories" />
-                                : tab == 'address' ?
-                                    <AdminContent content="Products & SKU"/>
-                                    : null}
+                            {tab == 'category' ?
+                                null
+                                : tab == 'products' ?
+                                    <AddProductsFile />
+                                    : tab == 'product' ?
+                                        null
+                                        : tab == 'sku' ?
+                                            null
+                                            : null}
                         </div>
                     </div>
                 </div>

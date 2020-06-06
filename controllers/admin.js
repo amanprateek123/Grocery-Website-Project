@@ -12,18 +12,29 @@ exports.addProducts = (req, res) => {
             let products = json;
             let promises = [];
 
+            for (prop in products[0]) {
+                if (products[0].hasOwnProperty(prop)) {
+                    console.log(prop);
+
+                    if (!['name', 'categoryId', 'brand', 'image'].includes(prop)) {
+                        res.json({ status: 400, message: `Please Submit a CSV file with fields [name,categoryId,brand,image]. Fields don't match.` })
+                        return;
+                    }
+                }
+            }
+
             products.forEach(product => {
                 promises.push(
                     db.product.create({
                         ...product
                     })
-                    // .then(result => {
-                    //     console.log('a product added.');
+                        .then(result => {
+                            console.log('a product added.');
 
-                    // }).catch(err => {
-                    //     console.log('Cant add: ', err);
+                        }).catch(err => {
+                            console.log('Cant add: ', err);
 
-                    // })
+                        })
                 );
             })
 
