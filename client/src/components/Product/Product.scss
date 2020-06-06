@@ -1,0 +1,31 @@
+.product{
+    font-size: 12.5px;
+    margin: 0.5em;
+    width: 16em;
+
+    .card-image{
+        height: 12em;
+    }
+
+    .company{
+        font-size: 0.7em;
+    }
+    .desc{
+        font-size: 0.8em;   
+    }
+
+    .info{
+        font-size: 0.7em;
+        color: #17a2b8;
+        text-transform: none;
+    }
+    .delivery{
+        font-size: 0.7em;
+        color: #E91E63;
+    }
+    .pack-size{
+        &::before{
+            border-bottom: none !important;
+        }
+    }
+}

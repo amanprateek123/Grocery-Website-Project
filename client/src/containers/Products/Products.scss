@@ -1,0 +1,28 @@
+.chip{
+    margin: 0.2em !important;
+}
+
+.brands,.prices,.pack-sizes{
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.prices,.pack-sizes{
+    flex-wrap: nowrap;
+    flex-direction: column;
+}
+
+.ctrl{
+    height: 2em;
+}
+
+.products-container{
+    display: flex;
+    flex-direction: column;
+
+    .products{
+        margin-top: 2em;
+        display: flex;
+        flex-wrap: wrap;
+    }
+}

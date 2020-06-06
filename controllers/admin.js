@@ -1,50 +1,67 @@
 
 const db = require('../utils/database')
+const csv = require('csvtojson')
 
 exports.addProducts = (req, res) => {
-    // req.body.products  will contain the array of products (json) or csv or xlxs
 
-    // if it is excel make it a javascript array of products. 
+    // if file type is not csv return error.
+    if (req.file.mimetype == 'text/csv') {
+        // fields of every product must match with what is in database.
+        // convert csv to json
+        csv().fromString(req.file.buffer.toString('utf-8')).then(json => {
+            let products = json;
+            let promises = [];
 
+            products.forEach(product => {
+                promises.push(
+                    db.product.create({
+                        ...product
+                    })
+                    // .then(result => {
+                    //     console.log('a product added.');
 
-    let products = [];
-    // let promises = [];
+                    // }).catch(err => {
+                    //     console.log('Cant add: ', err);
 
-    // fields of every product must match with what is in database.
-    products.forEach(product => {
-        db.product.create({
-            ...product
-        }).then(result => {
-            console.log('a product added.');
+                    // })
+                );
+            })
 
-        }).catch(err => {
-            console.log('Cant add: ', err);
+            Promise.all(promises).then(done => {
+                res.json({ status: 200, message: `Added ${promises.length} products.`, products })
+            })
 
         })
-    })
-
-    res.json({ status: 200, message: "Adding Products." })
+    }
+    else {
+        res.json({ status: 400, message: `Please Submit a CSV file with fields [name,categoryId,brand,image].` })
+    }
 
 }
 
 exports.addCategories = (req, res) => {
 
-    // extracts categories
+    if (req.file.mimetype == 'text/csv') {
+        csv().fromString(req.file.buffer.toString('utf-8')).then(json => {
+            let categories = json;
+            let promises = [];
 
-    let categories = []
+            // fields of every product must match with what is in database.
+            categories.forEach(category => {
+                promises.push(
+                    db.category.create({
+                        ...category
+                    })
+                );
+            })
 
-    // fields of every category must match with what is in database.
-    categories.forEach(category => {
-        db.category.create({
-            ...category
-        }).then(result => {
-            console.log('a product added.');
-
-        }).catch(err => {
-            console.log('Cant add: ', err);
+            Promise.all(promises).then(done => {
+                res.json({ status: 200, message: `Added ${promises.length} categories.`, categories })
+            })
 
         })
-    })
-
-    res.json({ status: 200, message: "Adding Categories." })
+    }
+    else {
+        res.json({ status: 400, message: `Please Submit a CSV file with fields [name,parentCategoryId].` })
+    }
 }

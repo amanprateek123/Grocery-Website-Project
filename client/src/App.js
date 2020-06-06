@@ -7,9 +7,11 @@ import Home from './containers/Home/Home';
 import E404 from './containers/E404/E404'
 import Modal from './components/Modal/Modal';
 import SignUp from './components/SignUp/SignUp';
-import { Profile } from './containers'
+import { Profile, Products } from './containers'
 import { connect } from 'react-redux';
 import * as actions from './store/actions';
+
+import AdminTMP from './containers/Admin/Admin_tmp'
 
 
 class App extends Component {
@@ -30,6 +32,15 @@ class App extends Component {
           <Route path='/' exact >
             <Home {...this.props} />
           </Route>
+
+          <Route path='/products' exact >
+            <Products />
+          </Route>
+
+          <Route path='/admin' exact >
+            <AdminTMP />
+          </Route>
+
 
           {this.props.userId ?
             <Route path="/profile">

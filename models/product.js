@@ -7,13 +7,20 @@ module.exports = (sequelize, Sequelize) => {
             autoIncrement: true,
             primaryKey: true
         },
-        productName: {
+        name: {
             type: Sequelize.STRING,
             allowNull: false,
         },
-        category: {
+        categoryId: {
             type: Sequelize.INTEGER,
             default: 0
+        },
+        brand: {
+            type: Sequelize.STRING,
+            allowNull: false,
+        },
+        image: {
+            type: Sequelize.STRING,
         }
     })
 
