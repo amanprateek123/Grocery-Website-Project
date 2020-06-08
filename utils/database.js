@@ -12,7 +12,6 @@ db.sequelize = sequelize;
 
 // Models/tables
 db.user = require('../models/user')(sequelize, Sequelize);
-db.product = require('../models/product')(sequelize, Sequelize);
 db.otp = require('../models/otp')(sequelize, Sequelize);
 db.shippingAddress = require('../models/shippingAddress')(sequelize, Sequelize);
 
@@ -20,19 +19,31 @@ db.department = require('../models/department')(sequelize, Sequelize);
 db.parentCategory = require('../models/parentCategory')(sequelize, Sequelize);
 db.category = require('../models/category')(sequelize, Sequelize);
 
-// Relations - creates respective Foreign Keys as [ownerTable]Id 
-db.otp.belongsTo(db.user, { foreignKey: 'userId' });
-db.user.hasMany(db.otp, { as: 'otps', foreignKey: 'userId' });
+db.product = require('../models/product')(sequelize, Sequelize);
+db.sku = require('../models/sku')(sequelize, Sequelize)
+db.image = require('../models/image')(sequelize, Sequelize)
 
-db.shippingAddress.belongsTo(db.user, { foreignKey: 'userId' });
-db.user.hasMany(db.shippingAddress, { as: 'shippingAddresses', foreignKey: 'userId' });
+// Relations - creates respective Foreign Keys as [ownerModel]Id 
+db.otp.belongsTo(db.user);
+db.user.hasMany(db.otp);
 
-db.parentCategory.belongsTo(db.department, { foreignKey: 'departmentId' });
-db.department.hasMany(db.parentCategory, { as: 'parentCategories', foreignKey: 'departmentId' });
+db.shippingAddress.belongsTo(db.user);
+db.user.hasMany(db.shippingAddress);
 
-db.category.belongsTo(db.parentCategory, { foreignKey: 'parentCategoryId' });
-db.parentCategory.hasMany(db.category, { as: 'categories', foreignKey: 'parentCategoryId' });
+db.parentCategory.belongsTo(db.department);
+db.department.hasMany(db.parentCategory);
 
+db.category.belongsTo(db.parentCategory);
+db.parentCategory.hasMany(db.category);
+
+db.product.belongsTo(db.category);
+db.category.hasMany(db.product);
+
+db.sku.belongsTo(db.product);
+db.product.hasMany(db.sku);
+
+db.image.belongsTo(db.sku);
+db.sku.hasMany(db.image);
 
 
 

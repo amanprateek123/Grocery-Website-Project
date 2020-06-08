@@ -16,8 +16,7 @@ exports.getProfile = (req, res) => {
 
     db.user.findAll({
         include: {
-            model: db.shippingAddress,
-            as: 'shippingAddresses'
+            model: db.shippingAddress
         },
         where: {
             id: req.userId
@@ -285,8 +284,7 @@ exports.changeMobile = (req, res) => {
 exports.getTest = (req, res) => {
     db.user.findAll({
         include: {
-            model: db.shippingAddress,
-            as: 'shippingAddresses'
+            model: db.shippingAddress
 
         }
     }).then(user => {

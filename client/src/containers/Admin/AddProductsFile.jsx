@@ -25,7 +25,7 @@ const AddProductsFile = (props) => {
         e.preventDefault();
         var input = document.querySelector('#products-file');
         if (input.files[0].type != 'text/csv') {
-            props.setResponse({ status: 400, message: 'Please Upload a CSV file with fields [name,categoryId,brand,image]' })
+            props.setResponse({ status: 400, message: 'Please Upload a CSV file with fields [name,categoryId,brand]' })
             return;
         }
 
@@ -47,10 +47,10 @@ const AddProductsFile = (props) => {
         <Paper className="admin-content">
             <div>
                 <h2 className="mb-2 text-muted">Upload Products CSV</h2>
-                <p className="text-muted mb-4" style={{ opacity: 0.7 }}>upload a csv file with fields : [ name | categoryId | brand | image ]</p>
+                <p className="text-muted mb-4" style={{ opacity: 0.7 }}>upload a csv file with fields : [ name | categoryId | brand ]</p>
                 <form encType="multipart/form-data" onSubmit={addProducts}>
                     <div className="form-group">
-                        <input type="file" name="products" id="products-file" style={{ opacity: 0.5 }} />
+                        <input required type="file" name="products" id="products-file" style={{ opacity: 0.5 }} />
                         <Button startIcon={<UploadIcon />} variant="contained" color="primary" type="submit">Upload</Button>
                     </div>
                     {props.response.status ? <Alert severity={props.response.status == 200 ? "success" : "error"}>{props.response.message}</Alert> : null}

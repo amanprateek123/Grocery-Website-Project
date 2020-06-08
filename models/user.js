@@ -1,6 +1,6 @@
 
 module.exports = (sequelize, Sequelize = require('sequelize')) => {
-    const User = sequelize.define('db_ld_user', {
+    const User = sequelize.define('user', {
         id: {
             type: Sequelize.UUID,
             defaultValue: Sequelize.UUIDV4,
@@ -34,7 +34,11 @@ module.exports = (sequelize, Sequelize = require('sequelize')) => {
         dob: {
             type: Sequelize.DATEONLY
         }
-    })
+    },
+        {
+            tableName: 'db_ld_user'
+        }
+    )
 
     return User;
 };

@@ -1,7 +1,7 @@
 
 
 module.exports = (sequelize, Sequelize) => {
-    const department = sequelize.define('db_ld_department', {
+    const department = sequelize.define('department', {
         id: {
             type: Sequelize.INTEGER,
             allowNull: false,
@@ -12,7 +12,11 @@ module.exports = (sequelize, Sequelize) => {
             type: Sequelize.STRING,
             allowNull: false
         }
-    })
+    },
+        {
+            tableName: 'db_ld_department'
+        }
+    )
 
     return department;
 };

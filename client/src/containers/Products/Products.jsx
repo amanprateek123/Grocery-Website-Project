@@ -26,27 +26,85 @@ import './Products.scss'
 
 let sample_product = {
     name: "Product Name",
-    category: "category",
+    category: {
+        id: 1,
+        name: 'category'
+    },
     brand: "company name",
     description: "a very short description",
-    price: "$720",
-    packs: ["12kg", "15kg", '27kg']
+    skus: [
+        {
+            id: 1,
+            type: 'variant',
+            name: 'variant 1',
+            price: 720,
+            images: [
+                {
+                    id: 1,
+                    src: "https://picsum.photos/200/200"
+                },
+                {
+                    id: 1,
+                    src: "https://picsum.photos/200/200"
+                }
+            ]
+        },
+        {
+            id: 2,
+            type: 'variant',
+            name: 'variant 2',
+            price: 420,
+            images: [
+                {
+                    id: 1,
+                    src: "https://picsum.photos/100/100"
+                }
+            ]
+        },
+    ]
 }
 
-const Profile = (props) => {
+const Products = (props) => {
+
+    const [products, setProducts] = useState([])
+    const [visibleProducts, setVisibleProducts] = useState([])
+    const [categories, setCategories] = useState([]);
+    const [brands, setBrands] = useState([]);
+    const [SKUs, setSKUs] = useState([]);
+
+    useEffect(() => {
+        fetch('/get-products').then(res => res.json().then(products => {
+            setProducts(products);
+            setVisibleProducts(products);
+
+            setCategories(products.map(product => product.category.name));
+
+            setBrands(products.map(product => product.brand));
+
+            setSKUs(Array.from(new Set(products.map(product => product.sku ? product.sku.name : 'none'))));
+
+        })).catch(err => {
+            console.log(err);
+        })
 
 
-    const products = (
+    }, [])
+
+    const productsSection = (
         <div className="products-container">
             <h1>Products</h1>
             <Divider />
-            <div className="products">
-                <Product product={sample_product} />
-                <Product product={sample_product} />
-                <Product product={sample_product} />
-                <Product product={sample_product} />
-                <Product product={sample_product} />
-            </div>
+            {products[0] ?
+                <div className="products">
+                    <Product product={sample_product} />
+                    <Product product={sample_product} />
+                    <Product product={sample_product} />
+                    <Product product={sample_product} />
+                    <Product product={sample_product} />
+                    {visibleProducts.map(product => <Product product={product} />)}
+                </div>
+                : null
+            }
         </div>
     )
 
@@ -87,19 +145,15 @@ const Profile = (props) => {
                                         <List dense component="nav" aria-label="main"
                                             subheader={<ListSubheader component="div" id="nested-list-subheader">Categories</ListSubheader>}
                                         >
-                                            <Chip className="chip" clickable size="small" variant="outlined" label="this category" />
-                                            <Chip className="chip" clickable size="small" variant="outlined" label="that category" />
+                                            {categories.map(category => <Chip className="chip" clickable size="small" variant="outlined" label={category} />)}
+
                                         </List>
                                         <Divider />
                                         <List dense component="nav" aria-label="secondary"
                                             subheader={<ListSubheader component="div" id="nested-list-subheader">Brand</ListSubheader>}
                                         >
                                             <div className="brands">
-                                                <FormControlLabel className="d-block ctrl m-0" label="Apple" control={<Checkbox value="apple" />} />
-                                                <FormControlLabel className="d-block ctrl m-0" label="samsung" control={<Checkbox value="samsung" />} />
-                                                <FormControlLabel className="d-block ctrl m-0" label="motorola" control={<Checkbox value="motorola" />} />
-                                                <FormControlLabel className="d-block ctrl m-0" label="haldiram & sons" control={<Checkbox value="haldiram & sons" />} />
-                                                <FormControlLabel className="d-block ctrl m-0" label="a very big company name" control={<Checkbox value="a very big company name" />} />
+                                                {brands.map(brand => <FormControlLabel className="d-block ctrl m-0" label={brand} control={<Checkbox checked={true} value={brand} />} />)}
                                             </div>
                                         </List>
                                         <Divider />
@@ -107,23 +161,16 @@ const Profile = (props) => {
                                             subheader={<ListSubheader component="div" id="nested-list-subheader">Price Range</ListSubheader>}
                                         >
                                             <div className="prices">
-                                                <FormControlLabel className="d-block ctrl m-0" label="120$ - 160$" control={<Checkbox value="" />} />
-                                                <FormControlLabel className="d-block ctrl m-0" label="120$ - 160$" control={<Checkbox value="" />} />
-                                                <FormControlLabel className="d-block ctrl m-0" label="120$ - 160$" control={<Checkbox value="" />} />
-                                                <FormControlLabel className="d-block ctrl m-0" label="120$ - 160$" control={<Checkbox value="" />} />
-                                                <FormControlLabel className="d-block ctrl m-0" label="120$ - 160$" control={<Checkbox value="" />} />
+                                                <FormControlLabel className="d-block ctrl m-0" label="120$ - 160$" control={<Checkbox checked={true} value="" />} />
                                             </div>
                                         </List>
                                         <Divider />
                                         <List dense component="nav" aria-label="secondary"
-                                            subheader={<ListSubheader component="div" id="nested-list-subheader">Pack Size</ListSubheader>}
+                                            subheader={<ListSubheader component="div" id="nested-list-subheader">Variants</ListSubheader>}
                                         >
                                             <div className="pack-sizes">
-                                                <FormControlLabel className="d-block ctrl m-0" label="2kg" control={<Checkbox value="" />} />
-                                                <FormControlLabel className="d-block ctrl m-0" label="2kg" control={<Checkbox value="" />} />
-                                                <FormControlLabel className="d-block ctrl m-0" label="2kg" control={<Checkbox value="" />} />
-                                                <FormControlLabel className="d-block ctrl m-0" label="2kg" control={<Checkbox value="" />} />
-                                                <FormControlLabel className="d-block ctrl m-0" label="2kg" control={<Checkbox value="" />} />
+                                                {SKUs.map(sku => <FormControlLabel className="d-block ctrl m-0" label={sku} control={<Checkbox checked={true} value={sku} />} />)}
+                                                <FormControlLabel className="d-block ctrl m-0" label="2kg" control={<Checkbox checked={true} value="" />} />
                                             </div>
                                         </List>
 
@@ -135,7 +182,7 @@ const Profile = (props) => {
                     </div>
                     <div className="col-9">
                         <div className="content">
-                            {products}
+                            {productsSection}
                         </div>
                     </div>
                 </div>
@@ -156,4 +203,4 @@ const mapDispatchToProps = dispatch => {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Profile);
+export default connect(mapStateToProps, mapDispatchToProps)(Products);

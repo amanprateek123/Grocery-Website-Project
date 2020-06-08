@@ -1,25 +1,21 @@
 
 module.exports = (sequelize, Sequelize) => {
-    const otp = sequelize.define('otp', {
+    const Image = sequelize.define('image', {
         id: {
             type: Sequelize.INTEGER,
             allowNull: false,
             autoIncrement: true,
             primaryKey: true
         },
-        userId: {
-            type: Sequelize.UUID,
-            allowNull: false
-        },
-        value: {
+        src: {
             type: Sequelize.STRING,
-            allowNull: false
+            allowNull: false,
         }
     },
         {
-            tableName: 'db_ld_otp'
+            tableName: 'db_ld_Image'
         }
     )
 
-    return otp;
+    return Image;
 };

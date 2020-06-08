@@ -1,6 +1,6 @@
 
 module.exports = (sequelize, Sequelize) => {
-    const Product = sequelize.define('db_ld_product', {
+    const Product = sequelize.define('product', {
         id: {
             type: Sequelize.INTEGER,
             allowNull: false,
@@ -11,18 +11,18 @@ module.exports = (sequelize, Sequelize) => {
             type: Sequelize.STRING,
             allowNull: false,
         },
-        categoryId: {
-            type: Sequelize.INTEGER,
-            default: 0
-        },
         brand: {
             type: Sequelize.STRING,
             allowNull: false,
         },
-        image: {
+        description: {
             type: Sequelize.STRING,
         }
-    })
+    },
+        {
+            tableName: 'db_ld_product'
+        }
+    )
 
     return Product;
 };

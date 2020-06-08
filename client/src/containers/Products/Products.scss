@@ -3,14 +3,16 @@
 }
 
 .brands,.prices,.pack-sizes{
+    // &::-webkit-scrollbar{
+    //     display: block;
+    // }
+
     display: flex;
-    flex-wrap: wrap;
+    flex-direction: column;
+    max-height: 200px;
+    overflow-y:scroll;
 }
 
-.prices,.pack-sizes{
-    flex-wrap: nowrap;
-    flex-direction: column;
-}
 
 .ctrl{
     height: 2em;
