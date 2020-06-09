@@ -101,7 +101,7 @@ const Products = (props) => {
                     <Product product={sample_product} />
                     <Product product={sample_product} />
                     <Product product={sample_product} />
-                    {visibleProducts.map(product => <Product product={product} />)}
+                    {/* {visibleProducts.map(product => <Product product={product} />)} */}
                 </div>
                 : null
             }
