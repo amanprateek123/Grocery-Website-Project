@@ -7,7 +7,7 @@ import Home from './containers/Home/Home';
 import E404 from './containers/E404/E404'
 import Modal from './components/Modal/Modal';
 import SignUp from './components/SignUp/SignUp';
-import { Profile, Products, Admin } from './containers'
+import { Profile, Products, Admin, Details } from './containers'
 import { connect } from 'react-redux';
 import * as actions from './store/actions';
 
@@ -46,6 +46,10 @@ class App extends Component {
           }
           <Route path="/admin">
             <Admin />
+          </Route>
+
+          <Route path="/details">
+            <Details />
           </Route>
 
           <Route component={E404} />
