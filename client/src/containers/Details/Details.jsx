@@ -188,8 +188,6 @@ const Details = (props) => {
     const changeImg=(i)=>{
           setImg(i)
     }
-
-
     
     
 
