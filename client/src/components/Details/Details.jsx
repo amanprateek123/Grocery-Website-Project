@@ -28,8 +28,8 @@ const Detail = (props)=>{
                          id="demo-simple-select"
                          value={props.size}
                          onClick={props.handleChange}>
-                             {props.product.skus.map(product=>
-                                <MenuItem value={product.size} onClick={()=>props.handle(product.id)} id={product.id}>{product.size} Kg.</MenuItem>
+                             {props.product.skus.map((product,i)=>
+                                <MenuItem value={product.size} onClick={()=>props.handle(i)} id={product.id}>{product.size} Kg.</MenuItem>
                                  )}
                              
                      </Select>
