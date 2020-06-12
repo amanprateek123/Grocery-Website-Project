@@ -20,6 +20,7 @@ class App extends Component {
     return (
       <React.Fragment>
 
+        <Navbar />
         <Modal visible={this.props.authModalVisible || this.props.response.status == 401}
           // closeModal={this.props.closeModal} 
           closeBtn={this.props.closeModal}>
