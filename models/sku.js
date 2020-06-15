@@ -30,10 +30,17 @@ module.exports = (sequelize, Sequelize = require('sequelize')) => {
         description: {
             type: Sequelize.STRING,
         },
-
+        // In Rupees
+        price: {
+            type: Sequelize.INTEGER,
+            defaultValue: 0
+        },
         stockQuantity: {
             type: Sequelize.INTEGER,
             defaultValue: 0
+        },
+        json: {
+            type: Sequelize.STRING,
         }
     },
         {

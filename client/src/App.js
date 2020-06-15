@@ -3,6 +3,7 @@ import React, { useState, Component } from 'react';
 import { Switch, Route } from 'react-router-dom'
 import './App.css';
 import Navbar from './components/Navbar/Navbar'
+import Navm from './components/Navbar/Navm'
 import Home from './containers/Home/Home';
 import E404 from './containers/E404/E404'
 import Modal from './components/Modal/Modal';
@@ -19,7 +20,10 @@ class App extends Component {
   render() {
     return (
       <React.Fragment>
-        <Navbar/>
+
+        {/* <Navbar /> */}
+        <Navm />
+
         <Modal visible={this.props.authModalVisible || this.props.response.status == 401}
           // closeModal={this.props.closeModal} 
           closeBtn={this.props.closeModal}>
@@ -31,10 +35,7 @@ class App extends Component {
             <Home {...this.props} />
           </Route>
 
-          <Route path='/products' exact >
-            <Products />
-          </Route>
-
+          <Route path='/products' exact component={Products} />
 
           {this.props.userId ?
             <Route path="/profile">

@@ -12,6 +12,7 @@
     "@sendgrid/mail": "^7.1.1",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.18.3",
+    "clsx": "^1.1.1",
     "csvtojson": "^2.0.10",
     "dotenv": "^8.2.0",
     "express": "^4.16.4",
