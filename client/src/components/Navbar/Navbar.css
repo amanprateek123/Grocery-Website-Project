@@ -269,3 +269,8 @@
 .username-nav > *{
     margin-right: 0.2em;
 }
+
+
+@media only screen and (max-width: 600px){
+    .appbar{width: 100%;}
+}

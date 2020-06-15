@@ -23,11 +23,67 @@ import './Details.scss'
 let sample_product = {
     name: "Aashirvaad Atta - Whole Wheat",
     image:"https://www.bigbasket.com/media/uploads/p/l/126906_6-aashirvaad-atta-whole-wheat.jpg",
+    json:[
+        {
+            key:"Size & Fit",
+            value:"The model (height 6') is wearing a size M" 
+          },
+          {
+              key:"Material & Care",
+              value:"100% cotton"
+          },
+          {
+              key:"Specification",
+              value:[
+                  {key:"Fabric",
+                  value:"Cotton"
+              },
+                  {
+                  key:"Fit",
+                  value:"Regular Fit"
+                  },
+                 {
+                  key:"Length",
+                  value:"Regular"
+                },
+               {
+                  key:"Main Trend",
+                  value:"Colourblocked"
+               },
+                 {
+                  key:"Multipack Set",
+                  value:"Single"
+                  },
+                {
+                  key:"Neck",
+                  value:"Round Neck"
+               },
+              {
+                  key:"Ocassion",
+                  value:"Casual"
+              },
+              {      
+                  key:"Pattern",
+                  value:"Color Blocked"
+              }
+                              ]
+              }, 
+              {
+                key:"About",
+                value:"Aashirvaad whole wheat atta is made of zero per cent maida and 100% atta, which makes it extremely nutritious since its packed with health benefits. This also means more fluffy and soft rotis at home.",
+            },
+                {    key:"Ingredients",
+                    value:"Apart from whole grain, this product contains important vitamins, minerals and calcium, all of which are good for a healthy body.",
+        },  {  
+             key:"Nutritional facts",
+             value:"Whole wheat atta is comparatively healthier than bleached white flour, which is obtained after processing and 60% extraction from grain. If you are consuming whole wheat atta, you are eating food enriched with vitamin B1, B3, B2, folic acid, calcium, phosphorus, iron, fiber and zinc."
+         } 
+    ],
     category: {
         id: 1,
         name: 'Aashirvaad'
     },
-    description: "Aashirvaad whole wheat atta is made of zero per cent maida and 100% atta, which makes it extremely nutritious since its packed with health benefits. This also means more fluffy and soft rotis at home. ",
+    description: "Aashirvaad whole wheat atta is made of zero per cent maida and 100% atta, which makes it extremely nutritious since its packed with health benefits.",
     skus: [
         {
             id: 0,
@@ -81,6 +137,7 @@ let sample_product = {
             size:'5',
             price: 180,
             json:[
+                
                 {
                 key:"About",
                 value:"Aashirvaad whole wheat atta is made of zero per cent maida and 100% atta, which makes it extremely nutritious since its packed with health benefits. This also means more fluffy and soft rotis at home.",
@@ -168,7 +225,7 @@ let sample_product = {
 const Details = (props) => {
 
     
-    const [quantity,setQuantity]= useState("1")
+    const [quantity,setQuantity]= useState(1)
     const changeQuantity = (event)=>{
         setQuantity(event.target.value)
     }
@@ -195,12 +252,11 @@ const Details = (props) => {
      <div style={{backgroundColor:"#f3f3f3",width:"100%"}}>
           <div className="container"  style={{backgroundColor:"white",paddingTop:'2%'}}>
               <div className="row">
-                  <div className="col-6">
-                      <Paper>
-                          
+                  <div className="colu">
+                      <Paper className="paper" style={{boxShadow:'none'}}>                       
                           <div className="main_img">
                           <Zoom>
-                          <img src={sample_product.skus[pack].images[img].image} alt="pic"/>
+                          <img src={sample_product.skus[pack].images[img].image} className="img12" alt="pic"/>
                           </Zoom>
                           </div>                          
                           <div className="slide_image">
@@ -214,15 +270,15 @@ const Details = (props) => {
                           </div>
                       </Paper>
                   </div>
-                  <div className="col-6">
+                  <div className="colu">
                       <Paper>
                           <Detail product={sample_product} size={size} quantity={quantity} pack={pack} handle={changePack} 
-                                  id={sample_product.skus.id} handleChange={handleChange} handler={changeQuantity}/>
+                                  id={sample_product.skus.id} handleChange={handleChange} handler={changeQuantity} json={sample_product.json}/>
                       </Paper>
                   </div>
               </div>
               <div>
-                 <About head={sample_product.name} about={sample_product.skus[pack].json}/>
+                 <About head={sample_product.name} about={sample_product.skus[pack].json} json={sample_product.json}/>
               </div>
         </div>
         

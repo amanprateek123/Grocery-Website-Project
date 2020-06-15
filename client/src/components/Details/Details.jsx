@@ -1,6 +1,6 @@
 import React from 'react'
 import './Details.scss'
-
+import BookmarkIcon from '@material-ui/icons/Bookmark';
 import ChatIcon from '@material-ui/icons/Chat';
 import LocalShippingSharpIcon from '@material-ui/icons/LocalShippingSharp';
 import {
@@ -9,16 +9,38 @@ import {
     TextField, CardActionArea, CardActions,FormControl, Button, Select, MenuItem, InputLabel, Badge, Chip, Checkbox, FormControlLabel
 } from '@material-ui/core';
 import { useState } from 'react';
+
 const Detail = (props)=>{
+
+const quantity = props.quantity    
+const json = props.json;
+let content=[];
+
+for(let i=0;i<3;i++){
+    content.push(
+        <div className="json">
+            <h5>{json[i].key}</h5>            
+                <div className="lister">
+            {Array.isArray(json[i].value)?
+            json[i].value.map(li =>{
+             return(<li className="list">   
+            <h6>{li.key}</h6>
+            <p>{li.value}</p>
+            </li>)
+            }):
+        <p>{json[i].value}</p>}</div>    
+        </div>
+    )
+}
     return(
-        <Card variant="outlined" style={{height:'570px'}}>
+        <Card variant="outlined" className="card_det">
              <CardContent>
                   <div className="detail_head">
                      <p><u>{props.product.category.name}</u></p>
                      <h3>{props.product.skus[props.pack].name}</h3>    
                   </div>
                   <div className="detail_price">
-                     <h6>MRP:<span><b>Price Rs. {props.product.skus[props.pack].price}</b></span>(inclusive of all taxes)</h6>
+                     <h6>MRP:<span><b>Price Rs.{props.product.skus[props.pack].price*(quantity)}</b></span>(inclusive of all taxes)</h6>
                   </div>
                   <div style={{marginTop:"4%"}}>
                    <FormControl style={{minWidth:"120px"}}>
@@ -36,12 +58,12 @@ const Detail = (props)=>{
                    </FormControl>
                   </div>
                   <div className="detail_cart">
-                      <input type="text" value={props.quantity} onChange={props.handler}/>                                                                                               
+                      <input type="text" value={quantity} onChange={props.handler} className="input12"/>                                                                                               
                       <Button variant="contained" className="detail_btn">
-                          ADD TO BASKET
+                          ADD TO CART
                       </Button>
                       <Button variant="contained" className="detail_save">
-                          SAVE
+                         <BookmarkIcon/><span>Wishlist</span>
                       </Button>
                   </div>
                   <div className="detail_ship">
@@ -51,6 +73,7 @@ const Detail = (props)=>{
                        <h1>PRODUCT DETAILS <span><ChatIcon/></span></h1>
                        <p>{props.product.description}</p>
                   </div>
+                  {content}
              </CardContent>
         </Card>
     )
