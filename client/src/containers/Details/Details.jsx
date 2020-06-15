@@ -2,7 +2,9 @@ import React from 'react';
 import { useEffect } from 'react';
 import { connect } from 'react-redux';
 import * as actions from '../../store/actions'
-import { useState } from 'react';
+import { useState} from 'react';
+import Zoom from 'react-medium-image-zoom'
+import 'react-medium-image-zoom/dist/styles.css'
 
 
 import {
@@ -16,6 +18,7 @@ import Detail from '../../components/Details/Details'
 import About from '../../components/Details/About' 
 
 import './Details.scss'
+
 
 let sample_product = {
     name: "Aashirvaad Atta - Whole Wheat",
@@ -46,12 +49,29 @@ let sample_product = {
             images: [
                 {
                     id: 1,
-                    src: "https://www.bigbasket.com/media/uploads/p/l/126906_6-aashirvaad-atta-whole-wheat.jpg"
+                    image: "https://www.bigbasket.com/media/uploads/p/l/126906_6-aashirvaad-atta-whole-wheat.jpg"
                 },
                 {
-                    id: 1,
-                    src: "https://picsum.photos/200/200"
+                    id:2,
+                    image:"https://www.bigbasket.com/media/uploads/p/l/126906-2_6-aashirvaad-atta-whole-wheat.jpg"
+                },
+                {
+                    id:3,
+                    image:"https://www.bigbasket.com/media/uploads/p/l/126906-3_6-aashirvaad-atta-whole-wheat.jpg"
+                },
+                {
+                    id:4,
+                    image:"https://www.bigbasket.com/media/uploads/p/l/126906-4_6-aashirvaad-atta-whole-wheat.jpg"
+                },
+                {
+                    id:5,
+                    image:"https://www.bigbasket.com/media/uploads/p/l/126906-5_6-aashirvaad-atta-whole-wheat.jpg"
+                },
+                {
+                    id:6,
+                    image:"https://www.bigbasket.com/media/uploads/p/l/126906-6_5-aashirvaad-atta-whole-wheat.jpg"
                 }
+                
             ]
         },
         {
@@ -74,7 +94,27 @@ let sample_product = {
             images: [
                 {
                     id: 1,
-                    src: "https://www.bigbasket.com/media/uploads/p/l/126903_7-aashirvaad-atta-whole-wheat.jpg"
+                    image: "https://www.bigbasket.com/media/uploads/p/l/126903_7-aashirvaad-atta-whole-wheat.jpg"
+                },
+                {
+                    id:2,
+                    image:"https://www.bigbasket.com/media/uploads/p/l/126906-2_6-aashirvaad-atta-whole-wheat.jpg"
+                },
+                {
+                    id:3,
+                    image:"https://www.bigbasket.com/media/uploads/p/l/126903-3_1-aashirvaad-atta-whole-wheat.jpg"
+                },
+                {
+                    id:4,
+                    image:"https://www.bigbasket.com/media/uploads/p/l/126906-4_6-aashirvaad-atta-whole-wheat.jpg"
+                },
+                {
+                    id:5,
+                    image:"https://www.bigbasket.com/media/uploads/p/l/126906-5_6-aashirvaad-atta-whole-wheat.jpg"
+                },
+                {
+                    id:6,
+                    image:"https://www.bigbasket.com/media/uploads/p/l/126906-6_5-aashirvaad-atta-whole-wheat.jpg"
                 }
             ]
         },
@@ -98,7 +138,27 @@ let sample_product = {
             images: [
                 {
                     id: 1,
-                    src: "https://www.bigbasket.com/media/uploads/p/l/30006887_5-aashirvaad-atta-whole-wheat.jpg"
+                    image: "https://www.bigbasket.com/media/uploads/p/l/30006887_5-aashirvaad-atta-whole-wheat.jpg"
+                },
+                {
+                    id:2,
+                    image:"https://www.bigbasket.com/media/uploads/p/l/126906-2_6-aashirvaad-atta-whole-wheat.jpg"
+                },
+                {
+                    id:3,
+                    image:"https://www.bigbasket.com/media/uploads/p/l/30006887-3_6-aashirvaad-atta-whole-wheat.jpg"
+                },
+                {
+                    id:4,
+                    image:"https://www.bigbasket.com/media/uploads/p/l/126906-4_6-aashirvaad-atta-whole-wheat.jpg"
+                },
+                {
+                    id:5,
+                    image:"https://www.bigbasket.com/media/uploads/p/l/126906-5_6-aashirvaad-atta-whole-wheat.jpg"
+                },
+                {
+                    id:6,
+                    image:"https://www.bigbasket.com/media/uploads/p/l/126906-6_5-aashirvaad-atta-whole-wheat.jpg"
                 }
             ]
         }
@@ -123,6 +183,12 @@ const Details = (props) => {
    const changePack = (id)=>{
            setPack(id)
     }
+
+    const[img,setImg]=useState(0)
+    const changeImg=(i)=>{
+          setImg(i)
+    }
+    
     
 
     return (
@@ -131,8 +197,21 @@ const Details = (props) => {
               <div className="row">
                   <div className="col-6">
                       <Paper>
-                          <img src={sample_product.skus[pack].images[0].src} />
                           
+                          <div className="main_img">
+                          <Zoom>
+                          <img src={sample_product.skus[pack].images[img].image} alt="pic"/>
+                          </Zoom>
+                          </div>                          
+                          <div className="slide_image">
+                             {
+                                 sample_product.skus[pack].images.map((item,i)=>{
+                                 return  ( <div className={img===i?"img_det2":"img_det1"} key={item.id} onClick={()=>{changeImg(i)}} >
+                                               <img src={item.image} alt="pic"/>
+                                            </div>)
+                                 })
+                             }
+                          </div>
                       </Paper>
                   </div>
                   <div className="col-6">

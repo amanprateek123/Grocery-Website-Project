@@ -9,7 +9,7 @@ import {
 import { useState } from 'react';
 const Detail = (props) => {
     return (
-        <Card variant="outlined">
+        <Card variant="outlined" style={{ height: '570px' }}>
             <CardContent>
                 <div className="detail_head">
                     <p><u>{props.product.category.name}</u></p>
