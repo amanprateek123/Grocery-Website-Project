@@ -2,9 +2,11 @@
     font-size: 12.5px;
     margin: 0.5em;
     width: 16em;
+    height: fit-content;
 
     .card-image{
         height: 12em;
+        background-size: contain !important;
     }
 
     .company{
@@ -26,6 +28,34 @@
     .pack-size{
         &::before{
             border-bottom: none !important;
+        }
+    }
+
+    .card-actions{
+        display: flex;
+        justify-content: space-between;
+        padding: 0 !important;
+
+        .add-to-cart{
+            width: 100%;
+            background: #107483;
+            border-radius: 0 !important;
+            color: #fff;
+            font-weight: bold;
+            &:hover{
+                background: #17a2b8;
+            }
+        }
+    }
+
+    .variants{
+        display: flex;
+        position: relative;
+        flex-direction: column;
+        #variant-label{
+            position: relative;
+            top: 1em;
+            font-size: 0.7em !important;
         }
     }
 }

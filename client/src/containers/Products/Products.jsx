@@ -24,45 +24,6 @@ import Product from '../../components/Product/Product'
 
 import './Products.scss'
 
-let sample_product = {
-    name: "Product Name",
-    category: {
-        id: 1,
-        name: 'category'
-    },
-    brand: "company name",
-    description: "a very short description",
-    skus: [
-        {
-            id: 1,
-            type: 'variant',
-            name: 'variant 1',
-            price: 720,
-            images: [
-                {
-                    id: 1,
-                    src: "https://picsum.photos/200/200"
-                },
-                {
-                    id: 1,
-                    src: "https://picsum.photos/200/200"
-                }
-            ]
-        },
-        {
-            id: 2,
-            type: 'variant',
-            name: 'variant 2',
-            price: 420,
-            images: [
-                {
-                    id: 1,
-                    src: "https://picsum.photos/100/100"
-                }
-            ]
-        },
-    ]
-}
 
 const Products = (props) => {
 
@@ -71,24 +32,68 @@ const Products = (props) => {
     const [categories, setCategories] = useState([]);
     const [brands, setBrands] = useState([]);
     const [SKUs, setSKUs] = useState([]);
+    const [SKUTypes, setSKUTypes] = useState([]);
+
+    const [page, setPage] = useState(0);
 
     useEffect(() => {
-        fetch('/get-products').then(res => res.json().then(products => {
+        fetch(`/get-products${props.location.search}&page=${page}`).then(res => res.json().then(products => {
             setProducts(products);
             setVisibleProducts(products);
 
-            setCategories(products.map(product => product.category.name));
+            setCategories(Array.from(new Set(products.map(product => product.category.name))));
 
-            setBrands(products.map(product => product.brand));
+            setBrands(Array.from(new Set(products.map(product => ({ name: product.brand, selected: true })))));
 
-            setSKUs(Array.from(new Set(products.map(product => product.sku ? product.sku.name : 'none'))));
+            setSKUs(Array.from(new Set(products.map(product => product.skus.map(sku => ({ name: sku.name, selected: true }))).flat())));
+            setSKUTypes(Array.from(new Set(products.map(product => product.skus.map(sku => sku.type)).flat())));
 
         })).catch(err => {
             console.log(err);
         })
 
 
-    }, [])
+    }, [props.location])
+
+    const updateVisibleProducts = () => {
+        let _products = products.filter(product => {
+            if (
+                brands.filter(brand => brand.selected).map(brand => brand.name).includes(product.brand)
+                && SKUs.filter(sku => sku.selected).map(sku => sku.name).some(item => product.skus.map(sku => sku.name).includes(item))
+            ) {
+                return true;
+            }
+            else {
+                return false;
+            }
+        })
+
+        setVisibleProducts(_products);
+    }
+
+    const changeBrand = (name, e) => {
+        let updatedBrands = brands.map(brand => {
+            if (brand.name == name) {
+                brand.selected = e.target.checked;
+            }
+            return brand;
+        })
+
+        setBrands(updatedBrands);
+        updateVisibleProducts();
+    }
+
+    const changeSKU = (name, e) => {
+        let updatedSKU = SKUs.map(sku => {
+            if (sku.name == name) {
+                sku.selected = e.target.checked;
+            }
+            return sku;
+        })
+
+        setSKUs(updatedSKU);
+        updateVisibleProducts();
+    }
 
     const productsSection = (
         <div className="products-container">
@@ -96,12 +101,7 @@ const Products = (props) => {
             <Divider />
             {products[0] ?
                 <div className="products">
-                    <Product product={sample_product} />
-                    <Product product={sample_product} />
-                    <Product product={sample_product} />
-                    <Product product={sample_product} />
-                    <Product product={sample_product} />
-                    {/* {visibleProducts.map(product => <Product product={product} />)} */}
+                    {visibleProducts.map(product => <Product key={product.id} product={product} />)}
                 </div>
                 : null
             }
@@ -145,7 +145,7 @@ const Products = (props) => {
                                         <List dense component="nav" aria-label="main"
                                             subheader={<ListSubheader component="div" id="nested-list-subheader">Categories</ListSubheader>}
                                         >
-                                            {categories.map(category => <Chip className="chip" clickable size="small" variant="outlined" label={category} />)}
+                                            {categories.map(category => <Chip key={category} className="chip" clickable size="small" variant="outlined" label={category} />)}
 
                                         </List>
                                         <Divider />
@@ -153,7 +153,7 @@ const Products = (props) => {
                                             subheader={<ListSubheader component="div" id="nested-list-subheader">Brand</ListSubheader>}
                                         >
                                             <div className="brands">
-                                                {brands.map(brand => <FormControlLabel className="d-block ctrl m-0" label={brand} control={<Checkbox checked={true} value={brand} />} />)}
+                                                {brands.map(brand => <FormControlLabel key={brand.name} className="d-block ctrl m-0" label={brand.name} control={<Checkbox checked={brand.selected} onChange={(e) => changeBrand(brand.name, e)} value={brand.name} />} />)}
                                             </div>
                                         </List>
                                         <Divider />
@@ -161,16 +161,15 @@ const Products = (props) => {
                                             subheader={<ListSubheader component="div" id="nested-list-subheader">Price Range</ListSubheader>}
                                         >
                                             <div className="prices">
-                                                <FormControlLabel className="d-block ctrl m-0" label="120$ - 160$" control={<Checkbox checked={true} value="" />} />
+                                                <FormControlLabel className="d-block ctrl m-0" label="120$ - 160$" control={<Checkbox value="" />} />
                                             </div>
                                         </List>
                                         <Divider />
                                         <List dense component="nav" aria-label="secondary"
-                                            subheader={<ListSubheader component="div" id="nested-list-subheader">Variants</ListSubheader>}
+                                            subheader={<ListSubheader component="div" id="nested-list-subheader">{SKUTypes.join(', ')}</ListSubheader>}
                                         >
                                             <div className="pack-sizes">
-                                                {SKUs.map(sku => <FormControlLabel className="d-block ctrl m-0" label={sku} control={<Checkbox checked={true} value={sku} />} />)}
-                                                <FormControlLabel className="d-block ctrl m-0" label="2kg" control={<Checkbox checked={true} value="" />} />
+                                                {SKUs.map(sku => <FormControlLabel key={sku.name} className="d-block ctrl m-0" label={sku.name} control={<Checkbox checked={sku.selected} onChange={(e) => changeSKU(sku.name, e)} value={sku.name} />} />)}
                                             </div>
                                         </List>
 

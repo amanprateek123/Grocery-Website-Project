@@ -57,35 +57,7 @@
     max-width: 564px;
     position: relative;
 }
-.app_search{
-    
-    display: flex;
-    justify-content: space-between;
-    flex: auto;
-    border-radius: 2px;
-    background-color: #fff;
-}
-.imputer{
-    
-    padding:20px 16px;
-    border-radius: 2px 0 0 2px;
-    border: 0;
-    outline: 0 none;
-    font-size: 14px;
-    height: 30px;
-    width: 100%;
-}
-.app_btn{
-    justify-content: flex-end;
-    border: 1px solid #fff;
-    background-color: #fff;
-    height: 36px;
-    width: 44px;
-    color: #E35F21;
-    border-radius: 2px;
-    cursor: pointer;
-    padding: 4px 12px 0 8px;
-}
+
 .login_app{
     align-items: center;
     min-width: 112px;
@@ -211,6 +183,7 @@
     align-items: center;
     height: 50px;
     color: #000;
+    font-weight: bold;
     width: 100vw;
     z-index: 6;
     box-shadow: 0 0 6px 1px #0003;
@@ -238,7 +211,7 @@
     list-style-type: disc;
     margin-inline-start: 0px;
     margin-inline-end: 0px;
-    padding-inline-start: 40px;
+    /* padding-inline-start: 40px; */
     display: flex;
     justify-content: space-between;
     position: relative;
