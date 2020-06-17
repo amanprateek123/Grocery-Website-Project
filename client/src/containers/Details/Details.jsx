@@ -104,7 +104,7 @@ let sample_product = {
 const Details = (props) => {
 
 
-    const [quantity, setQuantity] = useState("1")
+    const [quantity, setQuantity] = useState(1)
     const changeQuantity = (event) => {
         setQuantity(event.target.value)
     }

@@ -17,19 +17,19 @@
     }
     span{
         font-size: 16px;
-        margin-left: 2%;
-        margin-right: 2%;
+        margin-left: 1.5%;
+        margin-right: 1.5%;
     }
 }
 .detail_cart{
-    margin-top: 7%;
-    input{
-        width: 40px;
+    margin-top: 4%;
+    .input12{
+        width: 50px;
         border: 1px solid #c8c8c8;
         border-radius: 3px;
         text-align: center;
         color: #666;
-        padding: 11px 25px;
+        padding: 11px 10px;
         font-family: ProximaNova-Regular;
     }
     .detail_btn{
@@ -47,12 +47,17 @@
     .detail_save{
         position: relative;
         background: #fff;
+        border-radius: 3px;
+        text-align: center;
         margin: 0 5px;
         padding: 11px 30px;
+        span{
+            margin-left: 7%;
+        }
     }
 }
 .detail_ship{
-    margin-top: 5.5%;
+    margin-top: 4%;
     color: grey;
     font-size: 13px;
     span{
@@ -60,8 +65,7 @@
     }
 }
 .product_detail{
-    margin-top: 7%;
-    margin-bottom: 5%;
+    margin-top: 4%;
     h1{
         font-size: 18px;
     }
@@ -70,4 +74,65 @@
         color: grey;
     }
 }
-
+.json{
+    h5{
+        font-size: 17px;
+        font-weight: bold;
+    }
+    p{
+        font-size: 14px;
+        font-weight: lighter;
+    }
+    .lister{
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        
+    }
+    .list{
+        position: relative;
+        width: 40%;
+        height: 50px;
+        border-bottom: 1px solid #eaeaec;
+        margin: auto;
+        margin-bottom: 10px;
+        h6{
+            font-size: 12px;
+             color: gray;   
+        }
+        
+    }
+}
+@media only screen and (max-width: 600px){
+    .card_det{
+        width: 100%;
+    }
+    .detail_cart{
+        margin-top: 4%;
+        .input12{
+            width: 40px;
+            border: 1px solid #c8c8c8;
+            border-radius: 3px;
+            text-align: center;
+            color: #666;
+            padding: 8px 10px;
+            font-family: ProximaNova-Regular;
+        }
+        .detail_btn{
+            width: 130px;
+            font-size: 10px;
+            border-radius: 3px;
+            padding: 11px 20px;
+        }
+        .detail_save{
+            width: 110px;
+            margin: 0 3px;
+            padding: 8px 20px;
+            span{
+                margin-left: 1%;
+            }
+        }
+    }
+    
+    
+}

@@ -14,3 +14,33 @@
         color: grey;
     }
 }
+.json1{
+    h5{
+        font-size: 18px;
+        font-weight: bold;
+    }
+    p{
+        font-size: 15px;
+        font-weight: lighter;
+        color: gray;
+    }
+    .lister{
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        
+    }
+    .list{
+        position: relative;
+        width: 40%;
+        height: 50px;
+        border-bottom: 1px solid #eaeaec;
+        margin: auto;
+        margin-bottom: 10px;
+        h6{
+            font-size: 12px;
+             color: gray;   
+        }
+        
+    }
+}
