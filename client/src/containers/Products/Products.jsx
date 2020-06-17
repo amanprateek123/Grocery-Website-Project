@@ -1,5 +1,6 @@
 import React from 'react';
 import { useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import * as actions from '../../store/actions'
 import { useState } from 'react';
@@ -8,19 +9,14 @@ import {
     Grid, Card, CardContent, Paper, Typography, CardMedia, Avatar,
     List, ListItem, ListSubheader, ListItemIcon, ListItemText, Divider,
     TextField, CardActionArea, CardActions, Button, Select, MenuItem, InputLabel, Badge, Chip, Checkbox, FormControlLabel
+    , Slider
 }
     from '@material-ui/core'
-import Alert from '@material-ui/lab/Alert';
-import PersonIcon from '@material-ui/icons/Person';
-import HomeIcon from '@material-ui/icons/Home';
-import SecurityIcon from '@material-ui/icons/Security';
-import PowerSettingsNewIcon from '@material-ui/icons/PowerSettingsNew';
-import mail from '../../assets/illustrations/mail.svg'
-import male_avatar from '../../assets/illustrations/male_avatar.svg'
-import female_avatar from '../../assets/illustrations/female_avatar.svg'
-import { Spinner } from 'react-bootstrap'
+import { Alert, Pagination, PaginationItem } from '@material-ui/lab';
 
 import Product from '../../components/Product/Product'
+
+import emptySvg from '../../assets/illustrations/empty.svg'
 
 import './Products.scss'
 
@@ -33,17 +29,22 @@ const Products = (props) => {
     const [brands, setBrands] = useState([]);
     const [SKUs, setSKUs] = useState([]);
     const [SKUTypes, setSKUTypes] = useState([]);
+    const [priceRange, setPriceRange] = useState([0, 100]);
+    const [maxPrice, setMaxPrice] = useState(100000)
 
-    const [page, setPage] = useState(0);
+    const [totalPages, setTotalPages] = useState(0);
 
     useEffect(() => {
-        fetch(`/get-products${props.location.search}&page=${page}`).then(res => res.json().then(products => {
+        fetch(`/get-products${props.location.search}`).then(res => res.json().then(({ meta, products }) => {
             setProducts(products);
             setVisibleProducts(products);
 
+            setTotalPages(meta.count)
+
             setCategories(Array.from(new Set(products.map(product => product.category.name))));
 
-            setBrands(Array.from(new Set(products.map(product => ({ name: product.brand, selected: true })))));
+            // setBrands(Array.from(new Set(products.map(product => ({ name: product.brand, selected: true })))));
+            setBrands(meta.brands.map(brand => ({ name: brand.name, selected: false })))
 
             setSKUs(Array.from(new Set(products.map(product => product.skus.map(sku => ({ name: sku.name, selected: true }))).flat())));
             setSKUTypes(Array.from(new Set(products.map(product => product.skus.map(sku => sku.type)).flat())));
@@ -103,7 +104,7 @@ const Products = (props) => {
                 <div className="products">
                     {visibleProducts.map(product => <Product key={product.id} product={product} />)}
                 </div>
-                : null
+                : <img src={emptySvg} className="empty" title="No products found" alt="No Products Found" />
             }
         </div>
     )
@@ -161,7 +162,16 @@ const Products = (props) => {
                                             subheader={<ListSubheader component="div" id="nested-list-subheader">Price Range</ListSubheader>}
                                         >
                                             <div className="prices">
-                                                <FormControlLabel className="d-block ctrl m-0" label="120$ - 160$" control={<Checkbox value="" />} />
+                                                <Slider
+                                                    value={priceRange}
+                                                    onChange={(e, newValue) => setPriceRange(newValue)}
+                                                    aria-labelledby="range-slider"
+                                                    step={5}
+                                                />
+                                                <div className="range-text">
+                                                    <Button disabled>{priceRange[0] * maxPrice * 0.01}</Button>
+                                                    <Button disabled>{priceRange[1] * maxPrice * 0.01}</Button>
+                                                </div>
                                             </div>
                                         </List>
                                         <Divider />
@@ -182,6 +192,19 @@ const Products = (props) => {
                     <div className="col-9">
                         <div className="content">
                             {productsSection}
+                        </div>
+                        <div className="pagination mt-4">
+                            <Pagination
+                                page={parseInt(new URLSearchParams(props.location.search).get('page'))}
+                                count={totalPages}
+                                renderItem={(item) => (
+                                    <PaginationItem
+                                        component={Link}
+                                        to={`/products${props.location.search.split('&page')[0] || '?'}${item.page === 0 ? '' : `&page=${item.page}`}`}
+                                        {...item}
+                                    />
+                                )}
+                            />
                         </div>
                     </div>
                 </div>

@@ -3,6 +3,7 @@
     margin: 0.5em;
     width: 16em;
     height: fit-content;
+    position: relative;
 
     .card-image{
         height: 12em;
@@ -14,6 +15,8 @@
     }
     .desc{
         font-size: 0.8em;   
+        max-height: 4em;
+        overflow: hidden;
     }
 
     .info{

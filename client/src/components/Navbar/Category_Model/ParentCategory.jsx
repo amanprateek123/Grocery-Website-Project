@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import './Category.scss'
 import { NavLink } from 'react-router-dom'
-import { temp_departments } from './temp_categories';
 import Category from './Category'
 
 export default class ParentCategory extends Component {
