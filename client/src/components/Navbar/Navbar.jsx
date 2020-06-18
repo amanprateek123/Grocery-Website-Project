@@ -5,6 +5,7 @@ import { NavLink, Link, withRouter, useHistory } from 'react-router-dom';
 import { connect } from 'react-redux';
 import * as actions from '../../store/actions'
 import Checkout from '../../containers/Checkout/Checkout'
+import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import {
@@ -127,7 +128,7 @@ const Navbar = (props) => {
     const cartRem = () => {
         setclassy("cartRem")
     }
-
+  
     return (
         <React.Fragment>
             <div className={classes.root}>
@@ -176,7 +177,11 @@ const Navbar = (props) => {
                                 <Button className="btn btn-more">More</Button>
                             </div>
                             <div className="cart" onMouseEnter={cartShow} >
-                                <Button className="btn btn-cart">Cart</Button>
+                                <ShoppingCartIcon style={{fontSize:'20px'}}/>
+                                <Button className="btn btn-cart" style={{marginLeft:'-20%'}}>Cart</Button>
+                                <div className="cart_value">
+                                         4
+                                </div>
                             </div>
                         </div>
 
