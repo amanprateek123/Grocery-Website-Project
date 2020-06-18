@@ -45,7 +45,7 @@ const reducer = (state = initialState, action) => {
         case actions.SET_RESPONSE: return setResponse(state, action);
         case actions.OPEN_AUTH_MODAL: return openModal(state, action);
         case actions.CLOSE_AUTH_MODAL: return closeModal(state, action);
-
+        
         default:
             return state;
     }

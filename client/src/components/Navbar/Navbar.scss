@@ -112,3 +112,18 @@
         text-decoration: none !important;
     }
 }
+.cart_value{
+    position: absolute;
+    right: 128px;
+    top: 7px;
+    text-align: center;
+    border-radius: 7px;
+    width: 18px;
+    height: 18px;
+    background-color: #E35F21;
+    border: 1px solid #fff;
+    font-weight: 400;
+    color: #f0f0f0;
+    line-height: 16px;
+    font-size: 12px;
+}
