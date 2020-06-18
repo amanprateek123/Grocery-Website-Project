@@ -1,6 +1,6 @@
 import React from 'react';
 import { useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { connect } from 'react-redux';
 import * as actions from '../../store/actions'
 import { useState } from 'react';
@@ -23,23 +23,24 @@ import './Products.scss'
 
 const Products = (props) => {
 
+    const history = useHistory();
+
     const [products, setProducts] = useState([])
     const [visibleProducts, setVisibleProducts] = useState([])
     const [categories, setCategories] = useState([]);
     const [brands, setBrands] = useState([]);
     const [SKUs, setSKUs] = useState([]);
     const [SKUTypes, setSKUTypes] = useState([]);
-    const [priceRange, setPriceRange] = useState([0, 100]);
-    const [maxPrice, setMaxPrice] = useState(100000)
+    const [priceRange, setPriceRange] = useState([null, null]);
 
-    const [totalPages, setTotalPages] = useState(0);
+    const [metaData, setMetaData] = useState({});
 
     useEffect(() => {
         fetch(`/get-products${props.location.search}`).then(res => res.json().then(({ meta, products }) => {
             setProducts(products);
             setVisibleProducts(products);
 
-            setTotalPages(meta.count)
+            setMetaData(meta)
 
             setCategories(Array.from(new Set(products.map(product => product.category.name))));
 
@@ -59,8 +60,7 @@ const Products = (props) => {
     const updateVisibleProducts = () => {
         let _products = products.filter(product => {
             if (
-                brands.filter(brand => brand.selected).map(brand => brand.name).includes(product.brand)
-                && SKUs.filter(sku => sku.selected).map(sku => sku.name).some(item => product.skus.map(sku => sku.name).includes(item))
+                SKUs.filter(sku => sku.selected).map(sku => sku.name).some(item => product.skus.map(sku => sku.name).includes(item))
             ) {
                 return true;
             }
@@ -96,13 +96,39 @@ const Products = (props) => {
         updateVisibleProducts();
     }
 
+    const handlePriceChange = (e, i) => {
+        let val = parseInt(e.target.value);
+
+        if (val < 0) val = 0;
+        if (!i && val > priceRange[1]) val = priceRange[1];
+        if (i && val < priceRange[0]) val = priceRange[0];
+
+        let newPriceRange = [...priceRange];
+        newPriceRange[i] = val;
+        setPriceRange(newPriceRange)
+
+    }
+
+    const applyBrands = () => {
+        let brandQuery = brands.filter(b => b.selected).map(b => b.name).join(',');
+
+        if (props.location.search.indexOf('brand') != -1) {
+            let query = props.location.search.replace(/brand=[\w ,]*&/, `brand=${brandQuery}&`);
+            history.push(`/products${query}`);
+        }
+        else {
+            history.push(`/products?brand=${brandQuery}&${props.location.search.slice(1)}`)
+        }
+    }
+
     const productsSection = (
         <div className="products-container">
             <h1>Products</h1>
+            <p>{metaData.count} products.</p>
             <Divider />
             {products[0] ?
                 <div className="products">
-                    {visibleProducts.map(product => <Product key={product.id} product={product} />)}
+                    {visibleProducts.map(product => <Product key={product.id} product={product} addToCart={() => props.addToCart(product.skus[0].id)} />)}
                 </div>
                 : <img src={emptySvg} className="empty" title="No products found" alt="No Products Found" />
             }
@@ -113,10 +139,10 @@ const Products = (props) => {
 
 
     return (
-        <div className="container-fluid page">
+        <div className="container-fluid page products-page">
             <div className="container-fluid">
                 <div className="row">
-                    <div className="col-3">
+                    <div className="col-2 d-none d-md-block">
                         <div className="side-nav">
                             {/* <div className="mb-4">
                                 <Card>
@@ -140,18 +166,18 @@ const Products = (props) => {
                             </div> */}
 
                             <div className="mb-3">
-                                <Card>
+                                <Card className="side-nav">
                                     <CardContent>
 
                                         <List dense component="nav" aria-label="main"
                                             subheader={<ListSubheader component="div" id="nested-list-subheader">Categories</ListSubheader>}
                                         >
-                                            {categories.map(category => <Chip key={category} className="chip" clickable size="small" variant="outlined" label={category} />)}
+                                            {categories.map(category => <Link to={`/products?category=${category}`}><Chip key={category} className="chip" clickable size="small" variant="outlined" label={category} /></Link>)}
 
                                         </List>
                                         <Divider />
                                         <List dense component="nav" aria-label="secondary"
-                                            subheader={<ListSubheader component="div" id="nested-list-subheader">Brand</ListSubheader>}
+                                            subheader={<ListSubheader component="div" id="nested-list-subheader">Brand <Button size="small" color="primary" onClick={applyBrands}>Apply</Button></ListSubheader>}
                                         >
                                             <div className="brands">
                                                 {brands.map(brand => <FormControlLabel key={brand.name} className="d-block ctrl m-0" label={brand.name} control={<Checkbox checked={brand.selected} onChange={(e) => changeBrand(brand.name, e)} value={brand.name} />} />)}
@@ -159,10 +185,10 @@ const Products = (props) => {
                                         </List>
                                         <Divider />
                                         <List dense component="nav" aria-label="secondary"
-                                            subheader={<ListSubheader component="div" id="nested-list-subheader">Price Range</ListSubheader>}
+                                            subheader={<ListSubheader component="div" id="nested-list-subheader">Price Range <Button size="small" color="primary">Apply</Button></ListSubheader>}
                                         >
                                             <div className="prices">
-                                                <Slider
+                                                {/* <Slider
                                                     value={priceRange}
                                                     onChange={(e, newValue) => setPriceRange(newValue)}
                                                     aria-labelledby="range-slider"
@@ -171,7 +197,11 @@ const Products = (props) => {
                                                 <div className="range-text">
                                                     <Button disabled>{priceRange[0] * maxPrice * 0.01}</Button>
                                                     <Button disabled>{priceRange[1] * maxPrice * 0.01}</Button>
-                                                </div>
+                                                </div> */}
+
+                                                <TextField type="number" label="min" value={priceRange[0]} onChange={(e) => handlePriceChange(e, 0)} />
+                                                <TextField type="number" label="max" value={priceRange[1]} onChange={(e) => handlePriceChange(e, 1)} />
+
                                             </div>
                                         </List>
                                         <Divider />
@@ -189,14 +219,14 @@ const Products = (props) => {
 
                         </div>
                     </div>
-                    <div className="col-9">
+                    <div className="col-md-10 col">
                         <div className="content">
                             {productsSection}
                         </div>
                         <div className="pagination mt-4">
                             <Pagination
                                 page={parseInt(new URLSearchParams(props.location.search).get('page'))}
-                                count={totalPages}
+                                count={metaData.pageCount}
                                 renderItem={(item) => (
                                     <PaginationItem
                                         component={Link}
@@ -221,7 +251,8 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return {
         setResponse: (response) => dispatch({ type: actions.SET_RESPONSE, response: response }),
-        logout: () => dispatch(actions.logout())
+        logout: () => dispatch(actions.logout()),
+        addToCart: (SKUId) => dispatch(actions.addToCart(SKUId))
     }
 }
 

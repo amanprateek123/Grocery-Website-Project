@@ -7,7 +7,7 @@ import Home from './containers/Home/Home';
 import E404 from './containers/E404/E404'
 import Modal from './components/Modal/Modal';
 import SignUp from './components/SignUp/SignUp';
-import { Profile, Products, Admin, Details,Checkout } from './containers'
+import { Profile, Products, Admin, Details, Checkout } from './containers'
 import { connect } from 'react-redux';
 import * as actions from './store/actions';
 
@@ -21,37 +21,39 @@ class App extends Component {
       <React.Fragment>
 
         <Navbar />
+        <div className="app-main-body">
 
-        <Modal visible={this.props.authModalVisible || this.props.response.status == 401}
-          // closeModal={this.props.closeModal} 
-          closeBtn={this.props.closeModal}>
-          <SignUp />
-        </Modal>
+          <Modal visible={this.props.authModalVisible || this.props.response.status == 401}
+            // closeModal={this.props.closeModal} 
+            closeBtn={this.props.closeModal}>
+            <SignUp />
+          </Modal>
 
-        <Switch>
-          <Route path='/' exact >
-            <Home {...this.props} />
-          </Route>
-
-          <Route path='/products' exact component={Products} />
-
-          {this.props.userId ?
-            <Route path="/profile">
-              <Profile />
+          <Switch>
+            <Route path='/' exact >
+              <Home {...this.props} />
             </Route>
-            : null
-          }
-          <Route path="/admin">
-            <Admin />
-          </Route>
 
-          <Route path="/product/:id" component={Details} />
+            <Route path='/products' exact component={Products} />
+
+            {this.props.userId ?
+              <Route path="/profile">
+                <Profile />
+              </Route>
+              : null
+            }
+            <Route path="/admin">
+              <Admin />
+            </Route>
+
+            <Route path="/product/:id" component={Details} />
 
 
-          
 
-          <Route component={E404} />
-        </Switch>
+
+            <Route component={E404} />
+          </Switch>
+        </div>
       </React.Fragment>
     );
   }

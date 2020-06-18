@@ -28,7 +28,7 @@ exports.getProducts = (req, res) => {
    req.query.id ? (where.id = req.query.id) : null;
    req.query.categoryId ? (where.categoryId = req.query.categoryId) : null;
    req.query.category ? (where['$category.name$'] = { [Op.like]: `%${req.query.category}%` }) : null;
-   req.query.brand ? (where['$product.brand$'] = { [Op.like]: `%${req.query.brand}%` }) : null;
+   req.query.brand ? (where['$product.brand$'] = { [Op.in]: req.query.brand.split(',') }) : null;
 
    if (req.query.search) {
       let search = req.query.search.split(' ').join('%');
@@ -88,8 +88,8 @@ exports.getProducts = (req, res) => {
       ],
       raw: true,
    }).then(([total]) => {
-      result.meta.count = Math.ceil(total.count / PAGINATION);
-
+      result.meta.pageCount = Math.ceil(total.count / PAGINATION);
+      result.meta.count = total.count;
       return db.product.findAll({
          where,
          attributes: [[db.Sequelize.literal('DISTINCT `category`.`name`'), 'name'], 'id'],

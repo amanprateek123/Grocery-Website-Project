@@ -1,4 +1,4 @@
-import React,{useState} from 'react';
+import React, { useState } from 'react';
 import clsx from 'clsx';
 
 import { NavLink, Link, withRouter, useHistory } from 'react-router-dom';
@@ -121,10 +121,10 @@ const Navbar = (props) => {
         history.push(`/products?search=${encodeURI(searchText.current.value)}`)
     }
     const [classy, setclassy] = useState("cartRem")
-    const cartShow = ()=>{
+    const cartShow = () => {
         setclassy("cartShow")
     }
-    const cartRem =()=>{
+    const cartRem = () => {
         setclassy("cartRem")
     }
 
@@ -231,11 +231,11 @@ const Navbar = (props) => {
                     </List>
                 </Drawer>
             </div>
-            <div className="categories">
+            <div className="categories d-none d-md-block">
                 <Departments />
             </div>
             <div className={classy} onMouseLeave={cartRem}>
-                   <Checkout/>
+                <Checkout />
             </div>
         </React.Fragment>
     );
@@ -244,7 +244,8 @@ const Navbar = (props) => {
 const mapStateToProps = state => {
     return {
         idToken: state.idToken,
-        userName: state.userName
+        userName: state.userName,
+        cart: state.cart,
     }
 }
 

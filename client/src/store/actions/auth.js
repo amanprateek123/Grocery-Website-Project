@@ -45,3 +45,33 @@ export const logout = () => {
     }
 
 }
+
+
+// Shop
+
+export const addToCart = (SKUId) => {
+    return dispatch => {
+        // update cart in database >> get success response >> dispatch ADD_CART
+
+        let product = { id: SKUId };
+        dispatch({ type: actions.ADD_CART, SKUId, product })
+    }
+}
+
+export const removeFromCart = (SKUId) => {
+    return dispatch => {
+        // update cart in database >> get success response >> dispatch REMOVE_CART
+
+        let product = { id: SKUId };
+        dispatch({ type: actions.REMOVE_CART, SKUId, product })
+    }
+}
+
+export const deleteFromCart = (SKUId) => {
+    return dispatch => {
+        // update cart in database >> get success response >> dispatch DELETE_CART
+
+        let product = { id: SKUId };
+        dispatch({ type: actions.DELETE_CART, SKUId, product })
+    }
+}
