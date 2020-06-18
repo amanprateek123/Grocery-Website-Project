@@ -16,5 +16,5 @@ export {
     Home,
     Orders,
     Profile,
-    Products
+    Products,
 }

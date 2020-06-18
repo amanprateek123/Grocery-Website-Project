@@ -1,9 +1,10 @@
-import React from 'react';
+import React,{useState} from 'react';
 import clsx from 'clsx';
 
 import { NavLink, Link, withRouter, useHistory } from 'react-router-dom';
 import { connect } from 'react-redux';
 import * as actions from '../../store/actions'
+import Checkout from '../../containers/Checkout/Checkout'
 
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import {
@@ -116,6 +117,13 @@ const Navbar = (props) => {
         e.preventDefault();
         history.push(`/products?search=${encodeURI(searchText.current.value)}`)
     }
+    const [classy, setclassy] = useState("cartRem")
+    const cartShow = ()=>{
+        setclassy("cartShow")
+    }
+    const cartRem =()=>{
+        setclassy("cartRem")
+    }
 
     return (
         <React.Fragment>
@@ -164,7 +172,7 @@ const Navbar = (props) => {
                             <div className="more">
                                 <Button className="btn btn-more">More</Button>
                             </div>
-                            <div className="cart">
+                            <div className="cart" onMouseEnter={cartShow} >
                                 <Button className="btn btn-cart">Cart</Button>
                             </div>
                         </div>
@@ -208,6 +216,9 @@ const Navbar = (props) => {
             </div>
             <div className="categories">
                 <Departments />
+            </div>
+            <div className={classy} onMouseLeave={cartRem}>
+                   <Checkout/>
             </div>
         </React.Fragment>
     );
