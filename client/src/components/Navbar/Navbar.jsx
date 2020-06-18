@@ -33,8 +33,11 @@ import img from '../../assets/logos/LalaDukaan_nav_logo.png';
 import { Avatar } from '@material-ui/core';
 
 import Departments from './Category_Model/Department'
-import './Navm.scss'
+import './Navbar.scss'
 import { useRef } from 'react';
+
+import male_avatar from '../../assets/illustrations/male_avatar.svg'
+import female_avatar from '../../assets/illustrations/female_avatar.svg'
 
 const drawerWidth = 240;
 
@@ -165,7 +168,7 @@ const Navbar = (props) => {
                         <div className="navigation d-md-flex d-none">
                             <div className="user">
                                 {props.userName ?
-                                    <Link to="/profile"><div className="badge text-white username-nav align-items-center"><PersonIcon /> {props.userName}</div></Link>
+                                    <Link to="/profile"><div className="username-nav align-items-center MuiButton-root"><PersonIcon /> <span>{props.userName}</span></div></Link>
                                     :
                                     <Button className="btn btn-login" onClick={props.openModal}>Login</Button>}
                             </div>
@@ -196,6 +199,20 @@ const Navbar = (props) => {
                             {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
                         </IconButton>
                     </div>
+                    <Divider />
+
+                    <Link to="/profile">
+                        <div className="row align-items-center my-3 drawer-user">
+                            <div className="col-3 ml-1">
+                                <Avatar className="dp" src={male_avatar} />
+                            </div>
+                            <div className="col">
+                                <div><i>Hello,</i></div>
+                                {props.userName ? <h5>{props.userName}</h5> : 'User'}
+                            </div>
+                        </div>
+                    </Link>
+
                     <Divider />
 
                     <List>

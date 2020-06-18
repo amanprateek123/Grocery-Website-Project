@@ -2,7 +2,7 @@ import React from 'react';
 import { useEffect } from 'react';
 import { connect } from 'react-redux';
 import * as actions from '../../store/actions'
-import { useState} from 'react';
+import { useState } from 'react';
 import Zoom from 'react-medium-image-zoom'
 import 'react-medium-image-zoom/dist/styles.css'
 
@@ -15,274 +15,164 @@ import {
     from '@material-ui/core'
 
 import Detail from '../../components/Details/Details'
-import About from '../../components/Details/About' 
+import About from '../../components/Details/About'
 
 import './Details.scss'
 
 
 let sample_product = {
-    name: "Aashirvaad Atta - Whole Wheat",
-    image:"https://www.bigbasket.com/media/uploads/p/l/126906_6-aashirvaad-atta-whole-wheat.jpg",
-    json:[
-        {
-            key:"Size & Fit",
-            value:"The model (height 6') is wearing a size M" 
-          },
-          {
-              key:"Material & Care",
-              value:"100% cotton"
-          },
-          {
-              key:"Specification",
-              value:[
-                  {key:"Fabric",
-                  value:"Cotton"
-              },
-                  {
-                  key:"Fit",
-                  value:"Regular Fit"
-                  },
-                 {
-                  key:"Length",
-                  value:"Regular"
-                },
-               {
-                  key:"Main Trend",
-                  value:"Colourblocked"
-               },
-                 {
-                  key:"Multipack Set",
-                  value:"Single"
-                  },
-                {
-                  key:"Neck",
-                  value:"Round Neck"
-               },
-              {
-                  key:"Ocassion",
-                  value:"Casual"
-              },
-              {      
-                  key:"Pattern",
-                  value:"Color Blocked"
-              }
-                              ]
-              }, 
-              {
-                key:"About",
-                value:"Aashirvaad whole wheat atta is made of zero per cent maida and 100% atta, which makes it extremely nutritious since its packed with health benefits. This also means more fluffy and soft rotis at home.",
-            },
-                {    key:"Ingredients",
-                    value:"Apart from whole grain, this product contains important vitamins, minerals and calcium, all of which are good for a healthy body.",
-        },  {  
-             key:"Nutritional facts",
-             value:"Whole wheat atta is comparatively healthier than bleached white flour, which is obtained after processing and 60% extraction from grain. If you are consuming whole wheat atta, you are eating food enriched with vitamin B1, B3, B2, folic acid, calcium, phosphorus, iron, fiber and zinc."
-         } 
-    ],
+    id: 20,
+    name: "Xiaomi Redmi Note 5 Pro",
+    brand: "xiaomi",
+    description: "Take photos, make calls or watch videos easily on this Redmi Note 5 Pro mobile phone. Powered by Qualcomm Snapdragon 636 Octa-core Processor, this mobile will provide a lag-free performance even when you’re multitasking. And, the 4000 mAh battery will ensure longer hours of entertainment without any interruption.",
+    keywords: null,
+    json: null,
+    createdAt: "2020-06-08T12:08:44.000Z",
+    updatedAt: "2020-06-08T12:08:44.000Z",
+    categoryId: 2,
     category: {
-        id: 1,
-        name: 'Aashirvaad'
+        id: 2,
+        name: "Smart Phones"
     },
-    description: "Aashirvaad whole wheat atta is made of zero per cent maida and 100% atta, which makes it extremely nutritious since its packed with health benefits.",
     skus: [
         {
-            id: 0,
-            type: 'variant',
-            name: 'Aashirvaad Atta - Whole Wheat, 10 kg Pouch',
-            size:'10',
-            price: 350,
-            json:[
-                {
-                key:"About",
-                value:"Aashirvaad whole wheat atta is made of zero per cent maida and 100% atta, which makes it extremely nutritious since its packed with health benefits. This also means more fluffy and soft rotis at home.",
-            },
-                {    key:"Ingredients",
-                    value:"Apart from whole grain, this product contains important vitamins, minerals and calcium, all of which are good for a healthy body.",
-        },  {  
-             key:"Nutritional facts",
-             value:"Whole wheat atta is comparatively healthier than bleached white flour, which is obtained after processing and 60% extraction from grain. If you are consuming whole wheat atta, you are eating food enriched with vitamin B1, B3, B2, folic acid, calcium, phosphorus, iron, fiber and zinc."
-         } ],
-            images: [
-                {
-                    id: 1,
-                    image: "https://www.bigbasket.com/media/uploads/p/l/126906_6-aashirvaad-atta-whole-wheat.jpg"
-                },
-                {
-                    id:2,
-                    image:"https://www.bigbasket.com/media/uploads/p/l/126906-2_6-aashirvaad-atta-whole-wheat.jpg"
-                },
-                {
-                    id:3,
-                    image:"https://www.bigbasket.com/media/uploads/p/l/126906-3_6-aashirvaad-atta-whole-wheat.jpg"
-                },
-                {
-                    id:4,
-                    image:"https://www.bigbasket.com/media/uploads/p/l/126906-4_6-aashirvaad-atta-whole-wheat.jpg"
-                },
-                {
-                    id:5,
-                    image:"https://www.bigbasket.com/media/uploads/p/l/126906-5_6-aashirvaad-atta-whole-wheat.jpg"
-                },
-                {
-                    id:6,
-                    image:"https://www.bigbasket.com/media/uploads/p/l/126906-6_5-aashirvaad-atta-whole-wheat.jpg"
-                }
-                
-            ]
-        },
-        {
             id: 1,
-            type: 'variant',
-            name: 'Aashirvaad Atta - Whole Wheat, 5 kg Pouch',
-            size:'5',
-            price: 180,
-            json:[
-                
-                {
-                key:"About",
-                value:"Aashirvaad whole wheat atta is made of zero per cent maida and 100% atta, which makes it extremely nutritious since its packed with health benefits. This also means more fluffy and soft rotis at home.",
-            },
-                {    key:"Ingredients",
-                    value:"Apart from whole grain, this product contains important vitamins, minerals and calcium, all of which are good for a healthy body.",
-        },  {  
-             key:"Nutritional facts",
-             value:"Whole wheat atta is comparatively healthier than bleached white flour, which is obtained after processing and 60% extraction from grain. If you are consuming whole wheat atta, you are eating food enriched with vitamin B1, B3, B2, folic acid, calcium, phosphorus, iron, fiber and zinc."
-         } ],
+            code: "1",
+            type: "variant",
+            name: "4gb - 64gb",
+            description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusantium, deleniti!",
+            price: 100,
+            stockQuantity: 5,
+            json: `[{"key":"About","value":"Aashirvaad whole wheat atta is made of zero per cent maida and 100% atta, which makes it extremely nutritious since its packed with health benefits.This also means more fluffy and soft rotis at home."},{"key":"Ingredients","value":"Apart from whole grain, this product contains important vitamins, minerals and calcium, all of which are good for a healthy body."},{"key":"Nutritional facts","value":"Whole wheat atta is comparatively healthier than bleached white flour, which is obtained after processing and 60% extraction from grain.If you are consuming whole wheat atta, you are eating food enriched with vitamin B1, B3, B2, folic acid, calcium, phosphorus, iron, fiber and zinc."}]`,
+            createdAt: "2020-06-08T12:08:44.000Z",
+            updatedAt: "2020-06-08T12:08:44.000Z",
+            productId: 20,
             images: [
                 {
                     id: 1,
-                    image: "https://www.bigbasket.com/media/uploads/p/l/126903_7-aashirvaad-atta-whole-wheat.jpg"
+                    src: "https://assets.gadgets360cdn.com/shop/assets/products/redmi-note-5-pro-4-gb-ram-64-gb_1519626803.jpeg"
                 },
                 {
-                    id:2,
-                    image:"https://www.bigbasket.com/media/uploads/p/l/126906-2_6-aashirvaad-atta-whole-wheat.jpg"
-                },
-                {
-                    id:3,
-                    image:"https://www.bigbasket.com/media/uploads/p/l/126903-3_1-aashirvaad-atta-whole-wheat.jpg"
-                },
-                {
-                    id:4,
-                    image:"https://www.bigbasket.com/media/uploads/p/l/126906-4_6-aashirvaad-atta-whole-wheat.jpg"
-                },
-                {
-                    id:5,
-                    image:"https://www.bigbasket.com/media/uploads/p/l/126906-5_6-aashirvaad-atta-whole-wheat.jpg"
-                },
-                {
-                    id:6,
-                    image:"https://www.bigbasket.com/media/uploads/p/l/126906-6_5-aashirvaad-atta-whole-wheat.jpg"
+                    id: 7,
+                    src: "https://picsum.photos/200/200"
                 }
             ]
         },
         {
             id: 2,
-            type: 'variant',
-            name: 'Aashirvaad Atta - Whole Wheat, 1 kg Pouch',
-            size:'1',
-            price: 57,
-            json:[
-                {
-                key:"About",
-                value:"Aashirvaad whole wheat atta is made of zero per cent maida and 100% atta, which makes it extremely nutritious since its packed with health benefits. This also means more fluffy and soft rotis at home.",
-            },
-                {    key:"Ingredients",
-                    value:"Apart from whole grain, this product contains important vitamins, minerals and calcium, all of which are good for a healthy body.",
-        },  {  
-             key:"Nutritional facts",
-             value:"Whole wheat atta is comparatively healthier than bleached white flour, which is obtained after processing and 60% extraction from grain. If you are consuming whole wheat atta, you are eating food enriched with vitamin B1, B3, B2, folic acid, calcium, phosphorus, iron, fiber and zinc."
-         } ],
+            code: "2",
+            type: "variant",
+            name: "6gb -64gb",
+            description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusantium, deleniti!",
+            price: 200,
+            stockQuantity: 10,
+            json: `[{"key":"About","value":"Aashirvaad whole wheat atta is made of zero per cent maida and 100% atta, which makes it extremely nutritious since its packed with health benefits.This also means more fluffy and soft rotis at home."},{"key":"Ingredients","value":"Apart from whole grain, this product contains important vitamins, minerals and calcium, all of which are good for a healthy body."},{"key":"Nutritional facts","value":"Whole wheat atta is comparatively healthier than bleached white flour, which is obtained after processing and 60% extraction from grain.If you are consuming whole wheat atta, you are eating food enriched with vitamin B1, B3, B2, folic acid, calcium, phosphorus, iron, fiber and zinc."}]`,
+            createdAt: "2020-06-08T12:08:44.000Z",
+            updatedAt: "2020-06-08T12:08:44.000Z",
+            productId: 20,
             images: [
                 {
-                    id: 1,
-                    image: "https://www.bigbasket.com/media/uploads/p/l/30006887_5-aashirvaad-atta-whole-wheat.jpg"
-                },
+                    id: 2,
+                    src: "https://global.appmifile.com/v1/MI_18455B3E4DA706226CF7535A58E875F0267/pms_1518342456.70319411.jpg"
+                }
+            ]
+        },
+        {
+            id: 3,
+            code: "3",
+            type: "variant",
+            name: "6gb - 128gb",
+            description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusantium, deleniti!",
+            price: 300,
+            stockQuantity: 6,
+            json: `[{"key":"About","value":"Aashirvaad whole wheat atta is made of zero per cent maida and 100% atta, which makes it extremely nutritious since its packed with health benefits.This also means more fluffy and soft rotis at home."},{"key":"Ingredients","value":"Apart from whole grain, this product contains important vitamins, minerals and calcium, all of which are good for a healthy body."},{"key":"Nutritional facts","value":"Whole wheat atta is comparatively healthier than bleached white flour, which is obtained after processing and 60% extraction from grain.If you are consuming whole wheat atta, you are eating food enriched with vitamin B1, B3, B2, folic acid, calcium, phosphorus, iron, fiber and zinc."}]`,
+            createdAt: "2020-06-08T12:08:44.000Z",
+            updatedAt: "2020-06-08T12:08:44.000Z",
+            productId: 20,
+            images: [
                 {
-                    id:2,
-                    image:"https://www.bigbasket.com/media/uploads/p/l/126906-2_6-aashirvaad-atta-whole-wheat.jpg"
-                },
-                {
-                    id:3,
-                    image:"https://www.bigbasket.com/media/uploads/p/l/30006887-3_6-aashirvaad-atta-whole-wheat.jpg"
-                },
-                {
-                    id:4,
-                    image:"https://www.bigbasket.com/media/uploads/p/l/126906-4_6-aashirvaad-atta-whole-wheat.jpg"
-                },
-                {
-                    id:5,
-                    image:"https://www.bigbasket.com/media/uploads/p/l/126906-5_6-aashirvaad-atta-whole-wheat.jpg"
-                },
-                {
-                    id:6,
-                    image:"https://www.bigbasket.com/media/uploads/p/l/126906-6_5-aashirvaad-atta-whole-wheat.jpg"
+                    id: 3,
+                    src: "https://assets.gadgets360cdn.com/shop/assets/products/redmi-note-5-pro-4-gb-ram-64-gb_1519626803.jpeg"
                 }
             ]
         }
     ]
-}
+};
+
+
 
 const Details = (props) => {
 
-    
-    const [quantity,setQuantity]= useState(1)
-    const changeQuantity = (event)=>{
+
+    const [quantity, setQuantity] = useState(1)
+    const changeQuantity = (event) => {
         setQuantity(event.target.value)
     }
 
-    const [size,setSize]= useState("10")
+    const [size, setSize] = useState("10")
     const handleChange = (event) => {
-    setSize(event.target.value);
-  };
+        setSize(event.target.value);
+    };
 
-    const [pack,setPack]=useState("0")
+    const [pack, setPack] = useState("0")
 
-   const changePack = (id)=>{
-           setPack(id)
+    const changePack = (id) => {
+        setPack(id)
     }
 
-    const[img,setImg]=useState(0)
-    const changeImg=(i)=>{
-          setImg(i)
+    const [img, setImg] = useState(0)
+    const changeImg = (i) => {
+        setImg(i)
     }
-    
-    
+
+    const [product, setProduct] = useState(sample_product);
+    useEffect(() => {
+        fetch(`/get-products?id=${props.match.params.id}`).then(res => res.json().then(({ products: [product] }) => {
+            setProduct(product)
+        })).catch(err => {
+            console.log(err);
+
+        })
+
+    }, [])
+
 
     return (
-     <div style={{backgroundColor:"#f3f3f3",width:"100%"}}>
-          <div className="container"  style={{backgroundColor:"white",paddingTop:'2%'}}>
-              <div className="row">
-                  <div className="colu">
-                      <Paper className="paper" style={{boxShadow:'none'}}>                       
-                          <div className="main_img">
-                          <Zoom>
-                          <img src={sample_product.skus[pack].images[img].image} className="img12" alt="pic"/>
-                          </Zoom>
-                          </div>                          
-                          <div className="slide_image">
-                             {
-                                 sample_product.skus[pack].images.map((item,i)=>{
-                                 return  ( <div className={img===i?"img_det2":"img_det1"} key={item.id} onClick={()=>{changeImg(i)}} >
-                                               <img src={item.image} alt="pic"/>
-                                            </div>)
-                                 })
-                             }
-                          </div>
-                      </Paper>
-                  </div>
-                  <div className="colu">
-                      <Paper>
-                          <Detail product={sample_product} size={size} quantity={quantity} pack={pack} handle={changePack} 
-                                  id={sample_product.skus.id} handleChange={handleChange} handler={changeQuantity} json={sample_product.json}/>
-                      </Paper>
-                  </div>
-              </div>
-              <div>
-                 <About head={sample_product.name} about={sample_product.skus[pack].json} json={sample_product.json}/>
-              </div>
+        <div style={{ backgroundColor: "#f3f3f3", width: "100%" }}>
+            <div className="container" style={{ backgroundColor: "white", paddingTop: '2%' }}>
+                <div className="row">
+                    <div className="col-6">
+                        <Paper>
+
+                            <div className="main_img">
+                                <Zoom>
+                                    <img src={product.skus[pack].images[img].src} alt="pic" />
+                                </Zoom>
+                            </div>
+                            <div className="slide_image">
+                                {
+                                    product.skus[pack].images.map((item, i) => {
+                                        return (<div className={img === i ? "img_det2" : "img_det1"} key={item.id} onClick={() => { changeImg(i) }} >
+                                            <img src={item.src} alt="pic" />
+                                        </div>)
+                                    })
+                                }
+                            </div>
+                        </Paper>
+                    </div>
+                    <div className="col-6">
+                        <Paper>
+                            <Detail product={product} size={size} quantity={quantity} pack={pack} handle={changePack}
+                                id={product.skus.id} handleChange={handleChange} handler={changeQuantity} />
+                        </Paper>
+                    </div>
+                </div>
+                <div>
+                    {product.skus[pack].json ? <About head={product.name} json={product.skus[pack].json} /> : null}
+                </div>
+            </div>
+
         </div>
-        
-     </div>
     );
 }
 

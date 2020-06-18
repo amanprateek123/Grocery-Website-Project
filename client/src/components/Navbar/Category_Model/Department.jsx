@@ -1,8 +1,7 @@
 import React, { Component, useEffect } from 'react';
-import { temp_departments } from './temp_categories';
-import '../Navbar.css';
 import ParentCategory from './ParentCategory';
 
+import './Category.scss'
 
 export default class Department extends Component {
   constructor(props) {
@@ -40,27 +39,24 @@ export default class Department extends Component {
     return (
       this.state.departments ?
         <React.Fragment>
-          <div className="zi6">
-            <div className="_3zd">
-              <ul className="_12r">
-                {this.state.departments.map(department => {
-                  return (
+          <div className="category-bar">
+            <ul className="departments">
+              {this.state.departments.map(department => {
+                return (
 
-                    <li className="Wbt" key={department.id} onMouseEnter={() => this.toggleHidden(department.id)} onMouseLeave={this.resetVisible}>
-                      <span className="_1QZ">{department.name}<i className="fa fa-caret-down _34Y" aria-hidden="true" />
-                      </span>
+                  <li className="dept" key={department.id} onMouseEnter={() => this.toggleHidden(department.id)} onMouseLeave={this.resetVisible}>
+                    <span className="name">{department.name}<i className="fa fa-caret-down icon" aria-hidden="true" />
+                    </span>
 
-                      <div className={this.state.isVisible == department.id ? "visible" : "invisible"}>
-                        <ParentCategory id={department.name} module={department.parentCategories} item={department.parentCategories.modules} key={department.name} />
-                      </div>
-                    </li>
-                  )
-                }
+                    <div className={this.state.isVisible == department.id ? "visible" : "invisible"}>
+                      <ParentCategory id={department.name} module={department.parentCategories} item={department.parentCategories.modules} key={department.name} />
+                    </div>
+                  </li>
+                )
+              }
 
-                )}
-              </ul>
-            </div>
-
+              )}
+            </ul>
           </div>
         </React.Fragment>
         : null

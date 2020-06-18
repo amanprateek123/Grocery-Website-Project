@@ -2,7 +2,7 @@
     margin: 0.2em !important;
 }
 
-.brands,.prices,.pack-sizes{
+.brands,.pack-sizes{
     // &::-webkit-scrollbar{
     //     display: block;
     // }
@@ -11,6 +11,17 @@
     flex-direction: column;
     max-height: 200px;
     overflow-y:scroll;
+}
+
+.prices{
+    display: flex;
+    flex-direction: column;
+    padding: 0 2em;
+    .range-text{
+        display: flex;
+        margin: 0 -1em;
+        justify-content: space-between;
+    }
 }
 
 
@@ -26,5 +37,12 @@
         margin-top: 2em;
         display: flex;
         flex-wrap: wrap;
+    }
+
+    .empty{
+        max-width: 400px;
+        width: 100%;
+        margin: 5em auto;
+
     }
 }

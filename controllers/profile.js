@@ -282,16 +282,9 @@ exports.changeMobile = (req, res) => {
 
 
 exports.getTest = (req, res) => {
-    db.user.findAll({
-        include: {
-            model: db.shippingAddress
-
-        }
-    }).then(user => {
-        res.json(user)
-
-    }).catch(err => {
-        console.log(err);
-        res.send(err)
-    })
+    db.product.findAll({
+        attributes: [[db.sequelize.fn('COUNT', db.sequelize.col('id')), 'totalProducts']],
+    }).then(([total]) =>
+        res.json(total)
+    )
 }

@@ -45,7 +45,7 @@ const Profile = (props) => {
         <div className="container-fluid page admin">
             <div className="container">
                 <div className="row">
-                    <div className="col-4">
+                    <div className="col-md-4">
                         <div className="side-nav">
                             <div className="mb-4">
                                 <Card>
@@ -132,7 +132,7 @@ const Profile = (props) => {
 
                         </div>
                     </div>
-                    <div className="col-8">
+                    <div className="col-md-8">
                         <div className="content">
                             {tab == 'category' ?
                                 null

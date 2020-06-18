@@ -1,5 +1,5 @@
 
-module.exports = (sequelize, Sequelize) => {
+module.exports = (sequelize, Sequelize = require('sequelize')) => {
     const Product = sequelize.define('product', {
         id: {
             type: Sequelize.INTEGER,
@@ -16,6 +16,12 @@ module.exports = (sequelize, Sequelize) => {
             allowNull: false,
         },
         description: {
+            type: Sequelize.STRING,
+        },
+        keywords: {
+            type: Sequelize.STRING,
+        },
+        json: {
             type: Sequelize.STRING,
         }
     },

@@ -1,6 +1,8 @@
 
 .categories{
-    margin-top: 60px;
+    margin-top: 65px;
+    position: relative;
+    box-shadow: 0 0 6px 1px #0003;
 }
 
 .app-bar{
@@ -37,7 +39,8 @@
             overflow: hidden;
             max-width: 35em;
             @media (min-width: 768px){
-                width: 35em;
+                // width: 120%;
+                min-width: 25em;
             }
             
         }
@@ -70,9 +73,25 @@
         &>*{
             margin: 0 1em;
         }
+        .username-nav{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            text-transform: none !important;
+            
+            span{
+                display: inline-block;
+                height: 1.5em;
+                overflow: hidden;
+                word-wrap: none;
+                margin-left: 0.5em;
+            }
+        }
 
         .btn{
             color: white;
+            text-transform: none !important;
         }
 
         .btn-login{
@@ -86,4 +105,10 @@
 }
 .cartShow{
     display: block;
+}
+.drawer-user{
+    color: black;
+    &:hover{
+        text-decoration: none !important;
+    }
 }
