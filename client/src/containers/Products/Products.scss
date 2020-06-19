@@ -13,7 +13,15 @@
         flex-direction: column;
         max-height: 200px;
         overflow-y:scroll;
-        padding: 1em 0;
+        margin-top: -0.8em;
+        padding: 0 0 0.5em 0;
+    }
+
+    .MuiListSubheader-root{
+        // color: #e35f21;
+        font-size: larger;
+        text-transform: capitalize;
+        padding-left: 0;
     }
     
     .prices{
@@ -52,5 +60,10 @@
     .side-nav{
         background: transparent;
         box-shadow: none;
+    }
+
+    .sku-select{
+        padding-top: 0;
+        margin-bottom: 1em;
     }
 }

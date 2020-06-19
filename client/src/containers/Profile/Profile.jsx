@@ -12,7 +12,7 @@ import ChangePassword from './ChangePassword';
 import {
     Grid, Card, CardContent, Paper, Typography, CardMedia, Avatar,
     List, ListItem, ListSubheader, ListItemIcon, ListItemText, Divider,
-    TextField, CardActionArea, CardActions, Button, Select, MenuItem, InputLabel
+    TextField, CardActionArea, CardActions, Button, Select, MenuItem, InputLabel, Snackbar
 }
     from '@material-ui/core'
 import Alert from '@material-ui/lab/Alert';
@@ -38,6 +38,8 @@ const Profile = (props) => {
     const [otp, setOTP] = useState('');
     const [otpModal, setOTPModal] = useState(null);
     const [loading, setLoading] = useState(false)
+    const [snackbar, setSnackbar] = useState(false);
+
     let authToken;
 
     const initialDetails = {
@@ -54,6 +56,12 @@ const Profile = (props) => {
             type: 'text'
         }
     }
+
+    useEffect(() => {
+        setSnackbar(true);
+    }, [props.response]);
+
+
     const [details, setDetails] = useState(initialDetails)
 
     const toggleEdit = (field) => {
@@ -496,11 +504,10 @@ const Profile = (props) => {
                                                 {user ? <h5>{user.firstName + ' ' + user.lastName}</h5> : 'User'}
                                             </div>
                                         </div>
-                                        <div className="row mt-4">
-                                            <div className="col" style={{ fontSize: '0.5em' }}>
-                                                {props.response.status ? <Alert severity={props.response.status == 200 ? "success" : "error"}>{props.response.message}</Alert> : null}
-                                            </div>
-                                        </div>
+
+                                        <Snackbar open={snackbar} onClose={() => setSnackbar(false)} autoHideDuration={5000} anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}>
+                                            {props.response.status ? <Alert variant="filled" severity={props.response.status == 200 ? "success" : "error"}>{props.response.message}</Alert> : null}
+                                        </Snackbar>
                                     </CardContent>
                                 </Card>
                             </div>

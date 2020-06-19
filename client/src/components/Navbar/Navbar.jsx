@@ -119,7 +119,7 @@ const Navbar = (props) => {
 
     const search = (e) => {
         e.preventDefault();
-        history.push(`/products?search=${encodeURI(searchText.current.value)}`)
+        history.push(`/products?search=${encodeURI(searchText.current.value)}&sr`)
     }
     const [classy, setclassy] = useState("cartRem")
     const cartShow = () => {
@@ -128,7 +128,7 @@ const Navbar = (props) => {
     const cartRem = () => {
         setclassy("cartRem")
     }
-  
+
     return (
         <React.Fragment>
             <div className={classes.root}>
@@ -177,10 +177,10 @@ const Navbar = (props) => {
                                 <Button className="btn btn-more">More</Button>
                             </div>
                             <div className="cart" onMouseEnter={cartShow} >
-                                <ShoppingCartIcon style={{fontSize:'20px'}}/>
-                                <Button className="btn btn-cart" style={{marginLeft:'-20%'}}>Cart</Button>
+                                <ShoppingCartIcon style={{ fontSize: '20px' }} />
+                                <Button className="btn btn-cart" style={{ marginLeft: '-20%' }}>Cart</Button>
                                 <div className="cart_value">
-                                         4
+                                    4
                                 </div>
                             </div>
                         </div>

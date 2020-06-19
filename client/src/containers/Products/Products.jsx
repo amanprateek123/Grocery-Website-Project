@@ -9,14 +9,16 @@ import {
     Grid, Card, CardContent, Paper, Typography, CardMedia, Avatar,
     List, ListItem, ListSubheader, ListItemIcon, ListItemText, Divider,
     TextField, CardActionArea, CardActions, Button, Select, MenuItem, InputLabel, Badge, Chip, Checkbox, FormControlLabel
-    , Slider
+    , Slider, LinearProgress
 }
     from '@material-ui/core'
-import { Alert, Pagination, PaginationItem } from '@material-ui/lab';
+import { Alert, Pagination, PaginationItem, TreeView, TreeItem } from '@material-ui/lab';
 
 import Product from '../../components/Product/Product'
 
 import emptySvg from '../../assets/illustrations/empty.svg'
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 
 import './Products.scss'
 
@@ -32,23 +34,31 @@ const Products = (props) => {
     const [SKUs, setSKUs] = useState([]);
     const [SKUTypes, setSKUTypes] = useState([]);
     const [priceRange, setPriceRange] = useState([null, null]);
+    const [loading, setLoading] = useState(true);
 
     const [metaData, setMetaData] = useState({});
 
     useEffect(() => {
+        setLoading(true);
         fetch(`/get-products${props.location.search}`).then(res => res.json().then(({ meta, products }) => {
             setProducts(products);
             setVisibleProducts(products);
 
             setMetaData(meta)
 
-            setCategories(Array.from(new Set(products.map(product => product.category.name))));
+            // setCategories(Array.from(new Set(products.map(product => product.category.name))));
+            setCategories(meta.categories);
 
             // setBrands(Array.from(new Set(products.map(product => ({ name: product.brand, selected: true })))));
-            setBrands(meta.brands.map(brand => ({ name: brand.name, selected: false })))
+            if (props.location.search.indexOf('&sr') != -1) {
+                setBrands(meta.brands.map(brand => ({ name: brand.name, selected: false })))
+                props.location.search = props.location.search.replace('&sr', '');
+            }
 
-            setSKUs(Array.from(new Set(products.map(product => product.skus.map(sku => ({ name: sku.name, selected: true }))).flat())));
+            setSKUs(Array.from(new Set(products.map(product => product.skus.map(sku => ({ name: sku.name, type: sku.type, selected: true }))).flat())));
             setSKUTypes(Array.from(new Set(products.map(product => product.skus.map(sku => sku.type)).flat())));
+
+            setLoading(false);
 
         })).catch(err => {
             console.log(err);
@@ -81,7 +91,7 @@ const Products = (props) => {
         })
 
         setBrands(updatedBrands);
-        updateVisibleProducts();
+        applyBrands();
     }
 
     const changeSKU = (name, e) => {
@@ -126,11 +136,12 @@ const Products = (props) => {
             <h1>Products</h1>
             <p>{metaData.count} products.</p>
             <Divider />
-            {products[0] ?
+            {!loading ? products[0] ?
                 <div className="products">
                     {visibleProducts.map(product => <Product key={product.id} product={product} addToCart={() => props.addToCart(product.skus[0].id)} />)}
                 </div>
                 : <img src={emptySvg} className="empty" title="No products found" alt="No Products Found" />
+                : <LinearProgress />
             }
         </div>
     )
@@ -172,46 +183,55 @@ const Products = (props) => {
                                         <List dense component="nav" aria-label="main"
                                             subheader={<ListSubheader component="div" id="nested-list-subheader">Categories</ListSubheader>}
                                         >
-                                            {categories.map(category => <Link to={`/products?category=${category}`}><Chip key={category} className="chip" clickable size="small" variant="outlined" label={category} /></Link>)}
+                                            <TreeView
+                                                defaultExpanded={categories.map(c => c.name)}
+                                                defaultCollapseIcon={<ExpandMoreIcon />}
+                                                defaultExpandIcon={<ChevronRightIcon />}
+                                            >
 
+                                                {categories.map(parentCategory => (
+
+                                                    <TreeItem key={parentCategory.name} nodeId={parentCategory.name} size="small" variant="outlined" label={<Link to={`/products?parentCategory=${parentCategory.name}`}>{parentCategory.name}</Link>}>
+                                                        {parentCategory.categories.map(cat => <TreeItem nodeId={cat.name} key={cat.name} label={<Link to={`/products?category=${cat.name}`}>{cat.name}</Link>} />)}
+                                                    </TreeItem>
+                                                ))}
+
+                                            </TreeView>
                                         </List>
                                         <Divider />
                                         <List dense component="nav" aria-label="secondary"
-                                            subheader={<ListSubheader component="div" id="nested-list-subheader">Brand <Button size="small" color="primary" onClick={applyBrands}>Apply</Button></ListSubheader>}
+                                            subheader={<ListSubheader component="div" id="nested-list-subheader">Brand</ListSubheader>}
                                         >
                                             <div className="brands">
-                                                {brands.map(brand => <FormControlLabel key={brand.name} className="d-block ctrl m-0" label={brand.name} control={<Checkbox checked={brand.selected} onChange={(e) => changeBrand(brand.name, e)} value={brand.name} />} />)}
+                                                {brands.map(brand => <FormControlLabel key={brand.name} className="d-block ctrl m-0" label={brand.name} control={<Checkbox color="primary" checked={brand.selected} onChange={(e) => changeBrand(brand.name, e)} value={brand.name} />} />)}
                                             </div>
                                         </List>
-                                        <Divider />
+
+                                        {/* <Divider />
                                         <List dense component="nav" aria-label="secondary"
                                             subheader={<ListSubheader component="div" id="nested-list-subheader">Price Range <Button size="small" color="primary">Apply</Button></ListSubheader>}
                                         >
                                             <div className="prices">
-                                                {/* <Slider
-                                                    value={priceRange}
-                                                    onChange={(e, newValue) => setPriceRange(newValue)}
-                                                    aria-labelledby="range-slider"
-                                                    step={5}
-                                                />
-                                                <div className="range-text">
-                                                    <Button disabled>{priceRange[0] * maxPrice * 0.01}</Button>
-                                                    <Button disabled>{priceRange[1] * maxPrice * 0.01}</Button>
-                                                </div> */}
-
                                                 <TextField type="number" label="min" value={priceRange[0]} onChange={(e) => handlePriceChange(e, 0)} />
                                                 <TextField type="number" label="max" value={priceRange[1]} onChange={(e) => handlePriceChange(e, 1)} />
 
                                             </div>
-                                        </List>
+                                        </List> */}
+
                                         <Divider />
-                                        <List dense component="nav" aria-label="secondary"
-                                            subheader={<ListSubheader component="div" id="nested-list-subheader">{SKUTypes.join(', ')}</ListSubheader>}
-                                        >
-                                            <div className="pack-sizes">
-                                                {SKUs.map(sku => <FormControlLabel key={sku.name} className="d-block ctrl m-0" label={sku.name} control={<Checkbox checked={sku.selected} onChange={(e) => changeSKU(sku.name, e)} value={sku.name} />} />)}
-                                            </div>
-                                        </List>
+                                        {SKUTypes.map(type => (
+                                            <List key={type} dense component="nav" aria-label="secondary"
+                                                subheader={<ListSubheader component="div" id="nested-list-subheader">{type}</ListSubheader>}
+                                            >
+                                                <div className="pack-sizes">
+                                                    {SKUs.map(sku => (
+                                                        sku.type == type ?
+                                                            <FormControlLabel key={sku.name} className="d-block ctrl m-0" label={sku.name} control={<Checkbox color="primary" checked={sku.selected} onChange={(e) => changeSKU(sku.name, e)} value={sku.name} />} />
+                                                            : null
+                                                    ))}
+                                                </div>
+                                            </List>
+                                        ))}
 
                                     </CardContent>
                                 </Card>

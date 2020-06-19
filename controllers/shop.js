@@ -29,6 +29,7 @@ exports.getProducts = (req, res) => {
    req.query.categoryId ? (where.categoryId = req.query.categoryId) : null;
    req.query.category ? (where['$category.name$'] = { [Op.like]: `%${req.query.category}%` }) : null;
    req.query.brand ? (where['$product.brand$'] = { [Op.in]: req.query.brand.split(',') }) : null;
+   req.query.parentCategory ? (where['$category.parentCategory.name$'] = { [Op.like]: `%${req.query.parentCategory}%` }) : null;
 
    if (req.query.search) {
       let search = req.query.search.split(' ').join('%');
@@ -84,6 +85,10 @@ exports.getProducts = (req, res) => {
          {
             model: db.category,
             attributes: [],
+            include: {
+               model: db.parentCategory,
+               attributes: [],
+            }
          },
       ],
       raw: true,
@@ -92,19 +97,39 @@ exports.getProducts = (req, res) => {
       result.meta.count = total.count;
       return db.product.findAll({
          where,
-         attributes: [[db.Sequelize.literal('DISTINCT `category`.`name`'), 'name'], 'id'],
+         attributes: [[db.Sequelize.literal('DISTINCT `category->parentCategory`.`name`'), 'name']],
          include: [
             {
                model: db.category,
                attributes: [],
+               required: true,
+               include: {
+                  model: db.parentCategory,
+                  attributes: [],
+                  required: true,
+               }
             },
+
          ],
          raw: true,
          nest: true
       })
-   }).then(categories => {
-      result.meta.categories = categories;
+   }).then(parentCategories => {
+      return db.parentCategory.findAll({
+         attributes: ['name'],
+         where: {
+            name: {
+               [Op.in]: parentCategories.map(c => c.name)
+            }
+         },
+         include: {
+            model: db.category,
+            attributes: ['name']
+         }
 
+      })
+   }).then(parentCategories => {
+      result.meta.categories = parentCategories;
       return db.product.findAll({
          where,
          attributes: [[db.Sequelize.literal('DISTINCT `product`.`brand`'), 'name'], 'id'],
@@ -112,6 +137,10 @@ exports.getProducts = (req, res) => {
             {
                model: db.category,
                attributes: [],
+               include: {
+                  model: db.parentCategory,
+                  attributes: [],
+               }
             },
          ],
          raw: true,
@@ -127,6 +156,10 @@ exports.getProducts = (req, res) => {
             {
                model: db.category,
                attributes: [],
+               include: {
+                  model: db.parentCategory,
+                  attributes: [],
+               }
             },
             {
                model: db.sku,
@@ -147,7 +180,12 @@ exports.getProducts = (req, res) => {
             {
                model: db.category,
                attributes: ['id', 'name'],
-               required: true
+               required: true,
+               include: {
+                  model: db.parentCategory,
+                  attributes: ['id', 'name'],
+                  required: true,
+               }
             },
             {
                model: db.sku,
