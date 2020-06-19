@@ -60,7 +60,7 @@
             background-color: #fff;
             height: 36px;
             width: 44px;
-            color: #E35F21;
+            color: var(--mainColor);
             border-radius: 2px;
             cursor: pointer;
             padding: 4px 12px 0 8px;
@@ -114,16 +114,38 @@
 }
 .cart_value{
     position: absolute;
-    right: 128px;
-    top: 7px;
+    right: 11.2%;
+    top: 14%;
     text-align: center;
     border-radius: 7px;
     width: 18px;
     height: 18px;
-    background-color: #E35F21;
+    background-color: var(--mainColor);
     border: 1px solid #fff;
     font-weight: 400;
     color: #f0f0f0;
     line-height: 16px;
     font-size: 12px;
+}
+.cart_bg{
+    padding-top: 9px;
+    color: black;
+    background-color: #f2f2f2;
+    height: 50px;
+    padding-left: 20px;
+    .cartbt1{
+        color: black;
+        padding-left: 12px;
+    }
+    
+}
+.cart{
+    float: right;
+    padding-top: 9px;
+    padding-left: 20px;
+    height: 50px;
+    .cartbt1{
+        color: white;
+        padding-left: 12px;
+    }
 }

@@ -35,14 +35,14 @@
     .detail_btn{
         cursor: pointer;
         margin: 0 5px;
-        background: #E35F21;
+        background: var(--mainColor);
         color: #fff;
-        border: 1px solid #E35F21;
+        border: 1px solid var(--mainColor);
         border-radius: 3px;
         padding: 11px 30px;
     }
     .detail_btn:hover{
-        background-color: #E35F21;
+        background-color: var(--mainColor);
     }
     .detail_save{
         position: relative;

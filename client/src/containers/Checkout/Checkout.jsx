@@ -77,7 +77,7 @@ const sub = (id)=> {
            {cart.length>0?(
                <Check cart={cart} add={add} remove={sub} delete = {deleted} total={total}/>
            ):
-           (<div style={{width:'30%',float:'right',backgroundColor:'#f3f3f3',height:'100px',textAlign:'center',position:'fixed',top:'6.9%',right:'22%',zIndex:'20'}}>
+           (<div style={{width:'500px',float:'right',backgroundColor:'#f3f3f3',height:'100px',textAlign:'center',position:'fixed',top:'5.8%',left:'50.6%',zIndex:'20'}}>
                <h1 style={{paddingTop:'4%',color:'#E35F21'}}>Cart is Empty</h1>
             </div>)} 
         </div>

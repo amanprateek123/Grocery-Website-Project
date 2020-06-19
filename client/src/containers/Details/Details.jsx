@@ -145,9 +145,7 @@ const Details = (props) => {
                         <Paper>
 
                             <div className="main_img">
-                                <Zoom>
-                                    <img src={product.skus[pack].images[img].src} alt="pic" />
-                                </Zoom>
+                                    <img src={product.skus[pack].images[img].src} alt="pic" />                                
                             </div>
                             <div className="slide_image">
                                 {

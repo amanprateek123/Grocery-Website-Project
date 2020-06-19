@@ -29,21 +29,21 @@ export default function Checkout(props) {
                                        </div>
                                        <div className="col-md-5">
                                               <div className="row" style={{marginTop:'10%'}}>
-                                                  <div className='col-md-5'>
+                                                  <div className='col-md-6'>
                                                     <div className="add_rem">
                                                          <button className="remove" onClick={()=>props.remove(product.id)} disabled={product.quantity===1?true:false}>-</button>
                                                          <input type="text" value={product.quantity} readOnly="readonly"/>
                                                          <button className="add" onClick={()=>props.add(product.id)}>+</button>
                                                     </div>
                                                   </div>
-                                                  <div className='col-md-5'>
+                                                  <div style={{marginLeft:'-10px',marginTop:'6px',width:'40%'}}>
                                                         <div className="cart_price">
                                                             Rs. <span>{product.price*(product.quantity)} </span>
 
                                                         </div>
                                                   </div>
-                                                  <div className="col-md-2">
-                                                     <DeleteIcon style={{marginTop:'7.5px',color:'#E35F21',cursor:'pointer'}} onClick={()=>props.delete(product.id)}/>
+                                                  <div style={{width:'5%'}}>
+                                                     <DeleteIcon style={{marginTop:'7.5px',marginLeft:'0',color:'#E35F21',cursor:'pointer',fontSize:'20px'}} onClick={()=>props.delete(product.id)}/>
                                                   </div>
 
                                               </div>
@@ -56,10 +56,8 @@ export default function Checkout(props) {
             </li>
             <li>
                 <div >
-                    <div className="check_btn">
-                    <p>Sub Total : <span>Rs. {props.total}</span></p>
-                       <p>Delivery : <span>Rs. 40</span></p>
-                       <p>Total : <span>Rs. {props.total+40}</span></p>
+                    <div className="check_btn col-12">
+                    <p> Total : <span>Rs. {props.total}</span></p>
                        <Button color="inherit" style={{backgroundColor:'#E35F21',color:'white',width:'100%',height:'40px',fontSize:'15px'}}>
                         Proceed To Checkout
                         </Button>

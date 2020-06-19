@@ -44,7 +44,7 @@ const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
     root: {
-        display: 'flex',
+        display: 'flex'
     },
     appBar: {
         transition: theme.transitions.create(['margin', 'width'], {
@@ -122,12 +122,16 @@ const Navbar = (props) => {
         history.push(`/products?search=${encodeURI(searchText.current.value)}`)
     }
     const [classy, setclassy] = useState("cartRem")
+    const [cart_bg, setcart_bg] = useState("cart")
     const cartShow = ()=>{
         setclassy("cartShow")
+        setcart_bg("cart_bg")
     }
     const cartRem =()=>{
         setclassy("cartRem")
+        setcart_bg("cart")
     }
+      
   
     return (
         <React.Fragment>
@@ -138,6 +142,7 @@ const Navbar = (props) => {
                     className={clsx(classes.appBar, {
                         [classes.appBarShift]: open,
                     })}
+                    style={{zIndex:'1'}}
                 >
                     <Toolbar className="app-bar">
 
@@ -165,22 +170,25 @@ const Navbar = (props) => {
                                 </div>
                             </form>
                         </div>
-
+                        
                         <div className="navigation d-md-flex d-none">
-                            <div className="user">
+                            <div className="user" style={{width:'170px',textAlign:'center'}}>
                                 {props.userName ?
                                     <Link to="/profile"><div className="username-nav align-items-center MuiButton-root"><PersonIcon /> <span>{props.userName}</span></div></Link>
                                     :
                                     <Button className="btn btn-login" onClick={props.openModal}>Login</Button>}
                             </div>
-                            <div className="more">
+                            <div className="more" style={{width:'80px'}}>
                                 <Button className="btn btn-more">More</Button>
                             </div>
-                            <div className="cart" onMouseEnter={cartShow} >
+                            <div className={cart_bg} onMouseEnter={cartShow} onMouseLeave={cartRem} >
                                 <ShoppingCartIcon style={{fontSize:'20px'}}/>
-                                <Button className="btn btn-cart" style={{marginLeft:'-20%'}}>Cart</Button>
+                                <Button className="cartbt1" style={{marginLeft:'-15%'}}>Cart</Button>
                                 <div className="cart_value">
                                          4
+                                </div>
+                                <div className={classy} >
+                                 <Checkout/>
                                 </div>
                             </div>
                         </div>
@@ -200,7 +208,7 @@ const Navbar = (props) => {
                     }}
                 >
                     <div className={classes.drawerHeader}>
-                        <IconButton onClick={handleDrawerClose}>
+                        <IconButton onClick={handleDrawerClose} >
                             {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
                         </IconButton>
                     </div>
@@ -236,12 +244,10 @@ const Navbar = (props) => {
                     </List>
                 </Drawer>
             </div>
+            
             <div className="categories">
                 <Departments />
-            </div>
-            <div className={classy} onMouseLeave={cartRem}>
-                   <Checkout/>
-            </div>
+            </div>           
         </React.Fragment>
     );
 }
