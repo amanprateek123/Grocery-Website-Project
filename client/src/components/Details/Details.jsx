@@ -37,21 +37,22 @@ const Detail = (props) => {
             <CardContent>
                 <div className="detail_head">
                     <p><u>{props.product.category.name}</u></p>
-                    <h3>{props.product.skus[props.pack].name}</h3>
+                    <h3>{`${props.product.name} - ${props.product.skus[props.pack].name}`}</h3>
                 </div>
                 <div className="detail_price">
                     <h6>MRP:<span><b>Price Rs.{props.product.skus[props.pack].price * (quantity)}</b></span>(inclusive of all taxes)</h6>
                 </div>
                 <div style={{ marginTop: "4%" }}>
                     <FormControl style={{ minWidth: "120px" }}>
-                        <InputLabel id="demo-simple-select-label">Pack Size</InputLabel>
+                        <InputLabel id="demo-simple-select-label">{props.product.skus[props.pack].type}</InputLabel>
                         <Select
                             labelId="demo-simple-select-label"
                             id="demo-simple-select"
-                            value={props.size}
+                            value={props.product.skus[props.pack].name}
+                            defaultValue={props.product.skus[props.pack].name}
                             onClick={props.handleChange}>
-                            {props.product.skus.map((product, i) =>
-                                <MenuItem value={product.size} onClick={() => props.handle(i)} id={product.id}>{product.size} Kg.</MenuItem>
+                            {props.product.skus.map((sku, i) =>
+                                <MenuItem value={sku.size} onClick={() => props.handle(i)} id={sku.id}>{sku.name}</MenuItem>
                             )}
 
                         </Select>

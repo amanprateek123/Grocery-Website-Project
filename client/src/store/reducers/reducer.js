@@ -1,4 +1,4 @@
-import * as actions from "../actions/";
+import * as actions from "../actions";
 
 let initialState = {
     //auth
@@ -9,6 +9,9 @@ let initialState = {
     authenticating: false,
     response: { status: 0, message: '' },
     authModalVisible: false,
+
+    // Shop
+    cart: []
 
 };
 
@@ -45,7 +48,12 @@ const reducer = (state = initialState, action) => {
         case actions.SET_RESPONSE: return setResponse(state, action);
         case actions.OPEN_AUTH_MODAL: return openModal(state, action);
         case actions.CLOSE_AUTH_MODAL: return closeModal(state, action);
-        
+
+        // Shop
+        case actions.ADD_CART: return addToCart(state, action);
+        case actions.REMOVE_CART: return removeFromCart(state, action);
+        case actions.DELETE_CART: return deleteFromCart(state, action);
+
         default:
             return state;
     }
@@ -118,6 +126,59 @@ const openModal = state => {
         authModalVisible: true,
         response: { status: 0, message: '' }
 
+    }
+}
+
+// Shop
+
+const addToCart = (state, action) => {
+
+    let updatedCart = [...state.cart];
+
+    if (updatedCart.find(p => p.id == action.SKUId)) {
+        updatedCart = updatedCart.map(product => {
+            if (product.id == action.SKUId) {
+                product.quantity++;
+            }
+            return product;
+        })
+    }
+    else {
+        updatedCart.push({ ...action.product, quantity: 1 });
+    }
+
+    return {
+        ...state,
+        cart: updatedCart
+    }
+}
+
+const removeFromCart = (state, action) => {
+
+    let updatedCart = [...state.cart];
+
+    updatedCart = updatedCart.map(product => {
+        if (product.id == action.SKUId) {
+            product.quantity--;
+        }
+        return product;
+    })
+
+    return {
+        ...state,
+        cart: updatedCart
+    }
+}
+
+const deleteFromCart = (state, action) => {
+
+    let updatedCart = [...state.cart];
+
+    updatedCart = updatedCart.filter(product => product.id == action.SKUId)
+
+    return {
+        ...state,
+        cart: updatedCart
     }
 }
 

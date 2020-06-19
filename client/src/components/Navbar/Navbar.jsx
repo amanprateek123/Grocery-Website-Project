@@ -1,4 +1,4 @@
-import React,{useState} from 'react';
+import React, { useState } from 'react';
 import clsx from 'clsx';
 
 import { NavLink, Link, withRouter, useHistory } from 'react-router-dom';
@@ -119,7 +119,7 @@ const Navbar = (props) => {
 
     const search = (e) => {
         e.preventDefault();
-        history.push(`/products?search=${encodeURI(searchText.current.value)}`)
+        history.push(`/products?search=${encodeURI(searchText.current.value)}&sr`)
     }
     const [classy, setclassy] = useState("cartRem")
     const [cart_bg, setcart_bg] = useState("cart")
@@ -127,7 +127,7 @@ const Navbar = (props) => {
         setclassy("cartShow")
         setcart_bg("cart_bg")
     }
-    const cartRem =()=>{
+    const cartRem = () => {
         setclassy("cartRem")
         setcart_bg("cart")
     }
@@ -185,7 +185,7 @@ const Navbar = (props) => {
                                 <ShoppingCartIcon style={{fontSize:'20px'}}/>
                                 <Button className="cartbt1" style={{marginLeft:'-15%'}}>Cart</Button>
                                 <div className="cart_value">
-                                         4
+                                    4
                                 </div>
                                 <div className={classy} >
                                  <Checkout/>
@@ -244,10 +244,9 @@ const Navbar = (props) => {
                     </List>
                 </Drawer>
             </div>
-            
-            <div className="categories">
+            <div className="categories d-none d-md-block">
                 <Departments />
-            </div>           
+            </div>
         </React.Fragment>
     );
 }
@@ -255,7 +254,8 @@ const Navbar = (props) => {
 const mapStateToProps = state => {
     return {
         idToken: state.idToken,
-        userName: state.userName
+        userName: state.userName,
+        cart: state.cart,
     }
 }
 

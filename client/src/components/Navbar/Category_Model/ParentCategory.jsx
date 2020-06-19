@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import './Category.scss'
-import { NavLink } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import Category from './Category'
 
 export default class ParentCategory extends Component {
@@ -29,9 +29,9 @@ export default class ParentCategory extends Component {
         {this.props.module.map(parentCategory =>
           <div className="drop_content" key={parentCategory.id} onMouseEnter={() => this.toggleHidden(parentCategory.name)} onMouseLeave={this.resetVisible} >
             <div className="subdept">
-              <NavLink to="/" id={parentCategory.name} className="nav_drop" >
+              <Link to={`/products?parentCategory=${parentCategory.name}`} id={parentCategory.name} className="nav_drop" >
                 {parentCategory.name}
-              </NavLink>
+              </Link>
             </div>
             <div className={this.state.isVisible == parentCategory.name ? "visible" : "invisible"}>
               <Category cata={parentCategory.categories} name={parentCategory.name} key={parentCategory.name} id={parentCategory.name} />
