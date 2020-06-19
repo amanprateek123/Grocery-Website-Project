@@ -172,22 +172,21 @@ const Navbar = (props) => {
                         </div>
                         
                         <div className="navigation d-md-flex d-none">
-                            <div className="user" style={{width:'170px',textAlign:'center'}}>
+                            <div className="user" style={{width:'180px',textAlign:'center'}}>
                                 {props.userName ?
-                                    <Link to="/profile"><div className="username-nav align-items-center MuiButton-root"><PersonIcon /> <span>{props.userName}</span></div></Link>
+                                    <Link to="/profile"><div className="username-nav align-items-center MuiButton-root"><PersonIcon /> <span style={{fontSize:'16.5px',textAlign:'left',width:'100%'}}>{props.userName}</span></div></Link>
                                     :
-                                    <Button className="btn btn-login" onClick={props.openModal}>Login</Button>}
+                                    <Button className="btn btn-login" style={{fontSize:'16.5px'}} onClick={props.openModal}>Login</Button>}
                             </div>
                             <div className="more" style={{width:'80px'}}>
-                                <Button className="btn btn-more">More</Button>
+                                <Button className="btn btn-more" style={{fontSize:'16.5px',paddingLeft:'20%'}}>More</Button>
                             </div>
                             <div className={cart_bg} onMouseEnter={cartShow} onMouseLeave={cartRem} >
-                                <ShoppingCartIcon style={{fontSize:'20px'}}/>
-                                <Button className="cartbt1" style={{marginLeft:'-15%'}}>Cart</Button>
+                                <ShoppingCartIcon style={{fontSize:'26px'}}/>
                                 <div className="cart_value">
                                     4
                                 </div>
-                                <div className={classy} >
+                                <div className={classy}>
                                  <Checkout/>
                                 </div>
                             </div>

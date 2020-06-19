@@ -20,7 +20,7 @@ export default function Checkout(props) {
                                        <div className="col-md-5">
                                                <div className="row">
                                                    <div className="brand col-12">
-                                                      <p>{product.title} </p> 
+                                                      <p><u>{product.title}</u></p> 
                                                    </div>
                                                    <div className="product_name col-12">
                                                       <p> {product.name} </p>
@@ -57,7 +57,7 @@ export default function Checkout(props) {
             <li>
                 <div >
                     <div className="check_btn col-12">
-                    <p> Total : <span>Rs. {props.total}</span></p>
+                    <p>Sub Total : <span>Rs. {props.total}</span></p>
                        <Button color="inherit" style={{backgroundColor:'#E35F21',color:'white',width:'100%',height:'40px',fontSize:'15px'}}>
                         Proceed To Checkout
                         </Button>
