@@ -52,7 +52,7 @@ const Detail = (props) => {
                             defaultValue={props.product.skus[props.pack].name}
                             onClick={props.handleChange}>
                             {props.product.skus.map((sku, i) =>
-                                <MenuItem value={sku.size} onClick={() => props.handle(i)} id={sku.id}>{sku.name}</MenuItem>
+                                <MenuItem value={sku.name} onClick={() => props.handle(i)} id={sku.id}>{sku.name}</MenuItem>
                             )}
 
                         </Select>
