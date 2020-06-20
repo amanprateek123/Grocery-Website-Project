@@ -3,8 +3,9 @@ import { useEffect } from 'react';
 import { connect } from 'react-redux';
 import * as actions from '../../store/actions'
 import { useState } from 'react';
-import Zoom from 'react-medium-image-zoom'
+import Zoom from './Zoom_box'
 import 'react-medium-image-zoom/dist/styles.css'
+import Modal from '../../components/Modal/Modal';
 
 
 import {
@@ -138,13 +139,17 @@ const Details = (props) => {
 
 
     return (
+        <React.Fragment>
+            <Modal visible={props.authModalVisible}>
+              <Zoom closeModal={props.closeModal} product={product} pack={pack} changeImg={changeImg} img={img}/>
+            </Modal>
         <div style={{ backgroundColor: "#f3f3f3", width: "100%" }}>
             <div className="container" style={{ backgroundColor: "white", paddingTop: '2%' }}>
                 <div className="row">
                     <div className="colu">
                         <Paper>
 
-                            <div className="main_img">
+                            <div className="main_img" onClick={props.openModal}>
                                     <img src={product.skus[pack].images[img].src} alt="pic" />                                
                             </div>
                             <div className="slide_image">
@@ -171,7 +176,20 @@ const Details = (props) => {
             </div>
 
         </div>
+        </React.Fragment>
     );
 }
-
-export default Details;
+const mapStateToProps = state => {
+    return {
+      ...state
+    }
+  }
+  
+  const mapDispatchToProps = dispatch => {
+    return {
+      closeModal: () => dispatch({ type: actions.CLOSE_AUTH_MODAL }),
+      openModal: () => dispatch({ type: actions.OPEN_AUTH_MODAL }),
+    }
+  }
+  
+  export default connect(mapStateToProps, mapDispatchToProps)(Details);

@@ -179,12 +179,12 @@ const Navbar = (props) => {
                                     <Button className="btn btn-login" style={{fontSize:'16.5px'}} onClick={props.openModal}>Login</Button>}
                             </div>
                             <div className="more" style={{width:'80px'}}>
-                                <Button className="btn btn-more" style={{fontSize:'16.5px',paddingLeft:'20%'}}>More</Button>
+                                <Button className="btn btn-more" style={{fontSize:'16.5px',paddingLeft:'35%'}}>More</Button>
                             </div>
                             <div className={cart_bg} onMouseEnter={cartShow} onMouseLeave={cartRem} >
                                 <ShoppingCartIcon style={{fontSize:'26px'}}/>
                                 <div className="cart_value">
-                                    4
+                                    {props.cart.length}
                                 </div>
                                 <div className={classy}>
                                  <Checkout/>
@@ -254,7 +254,7 @@ const mapStateToProps = state => {
     return {
         idToken: state.idToken,
         userName: state.userName,
-        cart: state.cart,
+        cart: state.cart
     }
 }
 
