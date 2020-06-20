@@ -182,8 +182,8 @@ const Navbar = (props) => {
                                 <Button className="btn btn-more" style={{fontSize:'16.5px',paddingLeft:'35%'}}>More</Button>
                             </div>
                             <div className={cart_bg} onMouseEnter={cartShow} onMouseLeave={cartRem} >
-                                <ShoppingCartIcon style={{fontSize:'26px'}}/>
-                                <div className="cart_value">
+                                <ShoppingCartIcon style={{fontSize:'25px',marginLeft:'8px'}}/>
+                                <div className={props.cart.length===0?"cart1":"cart_value"}>
                                     {props.cart.length}
                                 </div>
                                 <div className={classy}>
