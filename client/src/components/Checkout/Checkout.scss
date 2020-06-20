@@ -1,13 +1,12 @@
 .checkout{
     margin: -1px 0 0;
     padding: 8px 10px;
-    min-width: 550px;
-    width: 30%;
-    z-index: 17;
+    min-width: 500px;
+    width: 25%;
+    z-index: 2;
     border-top-left-radius: 4px;
     box-shadow: 0 3px 5px rgba(0,0,0,.175);
-    font: 16px ProximaNovaA-Regular;
-    color: #4d4d4d;
+    font-size: 16px ;
     background: #f2f2f2;
     border-radius: 0!important;
     display: block;
@@ -15,23 +14,35 @@
     text-align: left;
     list-style: none;
     border: 1px solid #ccc;
+    border-top: none;
     position: fixed;
-    top: 6.9%;
-    right: 22%;
+    top: 6.78%;
+    left: 50.33%;
+   @media(max-width:1520px){
+        left: 50.4%;
+   }
+   
+    @media(max-width:600px){
+        width: 100%;
+        right: 0;
+        min-width: 100px;
+    }
     li{
         display: list-item;
     }
     .check_btn{
-    font: 17px ProximaNovaA-Regular;
+    font-size: 17px ;
     color: #444;
     padding: 6px 10px;
     background: #fff;
     margin-left: -10px;
     margin-right: 0;
     p{
-        line-height: 18px;
-        margin: 0;
-        span{float: right;}
+        line-height: 20px;
+        text-align: right;
+        span{
+            float: right;
+        }
         margin-bottom: 10px;
         span{
             font-weight: bold;
@@ -42,7 +53,7 @@
 }
 .list_cart{
     min-height: 80px;
-    max-height: 250px;
+    max-height: 220px;
     overflow-y: scroll;
     margin-bottom: 5px;
     ul{
@@ -59,12 +70,13 @@
     }
 }
 .brand{
+    margin-top: 2%;
     margin-bottom: 10px;
     line-height: 0;
     p{
     margin: 0;
     padding-top: 10px;
-    font: 10px ProximaNovaA-Regular;
+    font-size: 10px;
     color: #666;
     font-weight: bold;
     text-transform: uppercase;
@@ -74,12 +86,15 @@
 .product_name{
     line-height: 1;
     p{
-        margin-top: -5px;
+        margin-top: 2px;
         padding: 0;
-        font: 13px ProximaNovaA-Semibold;
+        font-size: 13px;
         color: #222;
         font-weight: bold;
         cursor: pointer;
+    }
+    p:hover{
+        color:var(--mainColor);
     }
 }
 .add_rem{
@@ -87,19 +102,19 @@
     overflow: hidden;
     height: 35px;
     float: left;
-    margin-right: 4px;
-    margin-top: 7.5px;
+    margin-left: -20px;
+    margin-top: 8px;
     .remove{
-        border: 1px solid gray;
-        border-radius: 15px;
+        border: 1px solid black;
+        border-radius: 100%;
         padding: 0;
         text-align: center;
         float: left;
         cursor: pointer;
-        width: 15px;
-        height: 15px;
-        color: #989898;
-        font: 14px ProximaNovaA-Bold;
+        width: 18px;
+        height: 18px;
+        color: black;
+        font-size: 11px ;
         background: #fff;
         transition-duration: .3s;
         transition-property: color,background-color;
@@ -107,38 +122,39 @@
     input{
     border: 0;
     float: left;
+    margin-top: 0px;
     width: 20px;
     height: 20px;
     background: #fff;
-    font: 400 14px ProximaNovaA-Regular;
+    font-size: 16px;
     color: #000;
     text-align: center;
     }
     .add{
-        border: 1px solid gray;
-        border-radius: 15px;
+        border: 1px solid black;
+        border-radius: 100%;
         text-align: center;
         padding: 0;
         float: left;
         cursor: pointer;
-        width: 15px;
-        height: 15px;
-        color: #989898;
-        font: 14px ProximaNovaA-Bold;
+        width: 18px;
+        height: 18px;
+        color: black;
+        font-size: 11px ;
         background: #fff;
         transition-duration: .3s;
         transition-property: color,background-color;
     }
     button:hover{
-        background-color: #E35F21;
+        background-color: var(--mainColor);
         color: white;
         border: 1px solid white;
     }
 }
 .cart_price{
     font-size: 13px;
-    line-height: 2;
+    line-height: 1;
     margin-top: 5px;
-    text-align: center;
+    text-align: left;
     color: #444;
 }

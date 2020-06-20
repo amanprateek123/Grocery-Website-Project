@@ -141,13 +141,11 @@ const Details = (props) => {
         <div style={{ backgroundColor: "#f3f3f3", width: "100%" }}>
             <div className="container" style={{ backgroundColor: "white", paddingTop: '2%' }}>
                 <div className="row">
-                    <div className="col-6">
+                    <div className="colu">
                         <Paper>
 
                             <div className="main_img">
-                                <Zoom>
-                                    <img src={product.skus[pack].images[img].src} alt="pic" />
-                                </Zoom>
+                                    <img src={product.skus[pack].images[img].src} alt="pic" />                                
                             </div>
                             <div className="slide_image">
                                 {
@@ -160,7 +158,7 @@ const Details = (props) => {
                             </div>
                         </Paper>
                     </div>
-                    <div className="col-6">
+                    <div className="colu">
                         <Paper>
                             <Detail product={product} size={size} quantity={quantity} pack={pack} handle={changePack}
                                 id={product.skus.id} handleChange={handleChange} handler={changeQuantity} />
