@@ -49,6 +49,26 @@ export const logout = () => {
 
 // Shop
 
+export const fetchCart = () => {
+    return dispatch => {
+        // update cart in database >> get success response >> dispatch ADD_CART
+        let idToken = localStorage.getItem('idToken');
+
+        fetch('/cart', {
+            headers: {
+                'Authorization': 'Bearer ' + idToken,
+                'Content-Type': 'application/json'
+            },
+            method: 'GET',
+        }).then(async cart => {
+            cart = await cart.json();
+            dispatch({ type: actions.SET_CART, cart })
+        }).catch(err => {
+            console.log(err);
+        })
+    }
+}
+
 export const addToCart = (skuId) => {
     return dispatch => {
         // update cart in database >> get success response >> dispatch ADD_CART

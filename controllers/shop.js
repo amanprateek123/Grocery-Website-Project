@@ -206,9 +206,6 @@ exports.cart = (req, res) => {
    // Expects {skuId, action: (add,remove,delete)}
    // User has to be authenticated in middleware isAuth >> req.userId is available at this point.
 
-   console.log(req.body);
-
-
    switch (req.body.action) {
       case 'add':
          db.cart.findAll({
@@ -245,7 +242,7 @@ exports.cart = (req, res) => {
                      }
                   })
                   return res.json(result)
-               }).catch(err => res.json(err)) // ! don't send error report to user  
+               }).catch(err => res.status(500).json(err)) // ! don't send error report to user  
             } else {
                // new product in the cart
                db.cart.create({
@@ -270,9 +267,9 @@ exports.cart = (req, res) => {
                      }
                   })
                   return res.json(response)
-               }).catch(err => res.json(err)) // ! don't send error report to user
+               }).catch(err => res.status(500).json(err)) // ! don't send error report to user
             }
-         }).catch(err => res.json(err)) // ! don't send error report to user
+         }).catch(err => res.status(500).json(err)) // ! don't send error report to user
          break;
 
       case 'remove':
@@ -311,21 +308,21 @@ exports.cart = (req, res) => {
                         }
                      })
                      return res.json(result);
-                  }).catch(err => res.json(err)) // ! don't send error report to user  
+                  }).catch(err => res.status(500).json(err)) // ! don't send error report to user  
                } else {
                   // only One product in the cart
                   db.cart.destroy({
                      where: {
                         id: cartItem.id,
                      }
-                  }).then(result => res.json({ status: 200, message: "Deleted Successfully" })).catch(err => res.json(err)) // ! don't send error report to user
+                  }).then(result => res.json({ status: 200, message: "Deleted Successfully" })).catch(err => res.status(500).json(err)) // ! don't send error report to user
                }
             } else {
                // NO product in the cart BAD REQUEST
                res.json({ status: 400, message: 'NO Such Product in User Cart' })
 
             }
-         }).catch(err => res.json(err)) // ! don't send error report to user
+         }).catch(err => res.status(500).json(err)) // ! don't send error report to user
          break;
 
       case 'delete':
@@ -344,13 +341,13 @@ exports.cart = (req, res) => {
                   where: {
                      id: cartItem.id,
                   }
-               }).then(result => res.json({ status: 200, message: "Deleted Successfully" })).catch(err => res.json(err)) // ! don't send error report to user
+               }).then(result => res.json({ status: 200, message: "Deleted Successfully" })).catch(err => res.status(500).json(err)) // ! don't send error report to user
             } else {
                // NO product in the cart BAD REQUEST
                res.json({ status: 400, message: 'NO Such Product in User Cart' })
 
             }
-         }).catch(err => res.json(err)) // ! don't send error report to user
+         }).catch(err => res.status(500).json(err)) // ! don't send error report to user
          break;
 
       default:
@@ -383,6 +380,6 @@ exports.getCart = (req, res) => {
    }).then(cart => {
       return res.json(cart);
    }).catch(err => {
-      return res.json(err);
+      return res.status(500).json(err);
    })
 }

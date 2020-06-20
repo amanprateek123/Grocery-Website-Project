@@ -7,6 +7,7 @@ export const OPEN_AUTH_MODAL = 'OPEN_AUTH_MODAL'
 export const CLOSE_AUTH_MODAL = 'CLOSE_AUTH_MODAL'
 
 // Shop
+export const SET_CART = 'SET_CART'
 export const ADD_CART = 'ADD_CART'
 export const REMOVE_CART = 'REMOVE_CART'
 export const DELETE_CART = 'DELETE_CART'

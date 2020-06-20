@@ -123,7 +123,7 @@ const Navbar = (props) => {
     }
     const [classy, setclassy] = useState("cartRem")
     const [cart_bg, setcart_bg] = useState("cart")
-    const cartShow = ()=>{
+    const cartShow = () => {
         setclassy("cartShow")
         setcart_bg("cart_bg")
     }
@@ -131,8 +131,8 @@ const Navbar = (props) => {
         setclassy("cartRem")
         setcart_bg("cart")
     }
-      
-  
+
+
     return (
         <React.Fragment>
             <div className={classes.root}>
@@ -142,7 +142,7 @@ const Navbar = (props) => {
                     className={clsx(classes.appBar, {
                         [classes.appBarShift]: open,
                     })}
-                    style={{zIndex:'1'}}
+                    style={{ zIndex: '1' }}
                 >
                     <Toolbar className="app-bar">
 
@@ -170,26 +170,29 @@ const Navbar = (props) => {
                                 </div>
                             </form>
                         </div>
-                        
+
                         <div className="navigation d-md-flex d-none">
-                            <div className="user" style={{width:'180px',textAlign:'center'}}>
+                            <div className="user" style={{ width: '180px', textAlign: 'center' }}>
                                 {props.userName ?
-                                    <Link to="/profile"><div className="username-nav align-items-center MuiButton-root"><PersonIcon /> <span style={{fontSize:'16.5px',textAlign:'left',width:'100%'}}>{props.userName}</span></div></Link>
+                                    <Link to="/profile"><div className="username-nav align-items-center MuiButton-root"><PersonIcon /> <span style={{ fontSize: '16.5px', textAlign: 'left', width: '100%' }}>{props.userName}</span></div></Link>
                                     :
-                                    <Button className="btn btn-login" style={{fontSize:'16.5px'}} onClick={props.openModal}>Login</Button>}
+                                    <Button className="btn btn-login" style={{ fontSize: '16.5px' }} onClick={props.openModal}>Login</Button>}
                             </div>
-                            <div className="more" style={{width:'80px'}}>
-                                <Button className="btn btn-more" style={{fontSize:'16.5px',paddingLeft:'35%'}}>More</Button>
+                            <div className="more" style={{ width: '80px' }}>
+                                <Button className="btn btn-more" style={{ fontSize: '16.5px', paddingLeft: '35%' }}>More</Button>
                             </div>
-                            <div className={cart_bg} onMouseEnter={cartShow} onMouseLeave={cartRem} >
-                                <ShoppingCartIcon style={{fontSize:'25px',marginLeft:'8px'}}/>
-                                <div className={props.cart.length===0?"cart1":"cart_value"}>
-                                    {props.cart.length}
+                            {props.userName ?
+                                <div className={cart_bg} onMouseEnter={cartShow} onMouseLeave={cartRem} >
+                                    <ShoppingCartIcon style={{ fontSize: '25px', marginLeft: '8px' }} />
+                                    <div className={props.cart.length === 0 ? "cart1" : "cart_value"}>
+                                        {props.cart.length}
+                                    </div>
+                                    <div className={classy}>
+                                        <Checkout />
+                                    </div>
                                 </div>
-                                <div className={classy}>
-                                 <Checkout/>
-                                </div>
-                            </div>
+                                : null
+                            }
                         </div>
 
 

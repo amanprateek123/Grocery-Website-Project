@@ -50,6 +50,7 @@ const reducer = (state = initialState, action) => {
         case actions.CLOSE_AUTH_MODAL: return closeModal(state, action);
 
         // Shop
+        case actions.SET_CART: return setCart(state, action);
         case actions.ADD_CART: return addToCart(state, action);
         case actions.REMOVE_CART: return removeFromCart(state, action);
         case actions.DELETE_CART: return deleteFromCart(state, action);
@@ -131,6 +132,13 @@ const openModal = state => {
 
 // Shop
 
+const setCart = (state, action) => {
+    return {
+        ...state,
+        cart: action.cart
+    }
+}
+
 const addToCart = (state, action) => {
 
     let updatedCart = [...state.cart];
@@ -178,7 +186,7 @@ const deleteFromCart = (state, action) => {
 
     let updatedCart = [...state.cart];
 
-    updatedCart = updatedCart.filter(product => product.id == action.skuId)
+    updatedCart = updatedCart.filter(product => product.skuId != action.skuId)
 
     return {
         ...state,

@@ -52,7 +52,7 @@ const Product = (props) => {
             <CardActions className="card-actions">
                 {/* <div className="btn btn-full add-to-cart"><CartIcon /> Add to Cart</div> */}
                 <Link to={`/product/${product.id}`} ><Button style={{ color: '#aaa' }}>Details</Button></Link>
-                <Fab size="small" title="Add to Cart" variant="round" style={{ background: '#e35f21', color: 'white', boxShadow: '-1px 2px 10px 0 #e35f2199' }} onClick={() => props.addToCart(selectedSKU.id)}><CartIcon /></Fab>
+                <Fab size="small" title={"Add to Cart"} variant="round" style={{ background: '#e35f21', color: 'white', boxShadow: '-1px 2px 10px 0 #e35f2199' }} onClick={() => props.addToCart(selectedSKU.id)}><CartIcon /></Fab>
 
             </CardActions>
 
