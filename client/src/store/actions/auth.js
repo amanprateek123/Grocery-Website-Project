@@ -49,29 +49,64 @@ export const logout = () => {
 
 // Shop
 
-export const addToCart = (SKUId) => {
+export const addToCart = (skuId) => {
     return dispatch => {
         // update cart in database >> get success response >> dispatch ADD_CART
+        let idToken = localStorage.getItem('idToken');
 
-        let product = { id: SKUId };
-        dispatch({ type: actions.ADD_CART, SKUId, product })
+        fetch('/cart', {
+            headers: {
+                'Authorization': 'Bearer ' + idToken,
+                'Content-Type': 'application/json'
+            },
+            method: 'POST',
+            body: JSON.stringify({ skuId: skuId, action: 'add' })
+        }).then(async product => {
+            product = await product.json();
+            dispatch({ type: actions.ADD_CART, skuId, product })
+        }).catch(err => {
+            console.log(err);
+        })
     }
 }
 
-export const removeFromCart = (SKUId) => {
+export const removeFromCart = (skuId) => {
     return dispatch => {
         // update cart in database >> get success response >> dispatch REMOVE_CART
-
-        let product = { id: SKUId };
-        dispatch({ type: actions.REMOVE_CART, SKUId, product })
+        let idToken = localStorage.getItem('idToken');
+        fetch('/cart', {
+            headers: {
+                'Authorization': 'Bearer ' + idToken,
+                'Content-Type': 'application/json'
+            },
+            method: 'POST',
+            body: JSON.stringify({ skuId: skuId, action: 'remove' })
+        }).then(async product => {
+            product = await product.json();
+            dispatch({ type: actions.REMOVE_CART, skuId, product })
+        }).catch(err => {
+            console.log(err);
+        })
     }
 }
 
-export const deleteFromCart = (SKUId) => {
+export const deleteFromCart = (skuId) => {
     return dispatch => {
         // update cart in database >> get success response >> dispatch DELETE_CART
 
-        let product = { id: SKUId };
-        dispatch({ type: actions.DELETE_CART, SKUId, product })
+        let idToken = localStorage.getItem('idToken');
+        fetch('/cart', {
+            headers: {
+                'Authorization': 'Bearer ' + idToken,
+                'Content-Type': 'application/json'
+            },
+            method: 'POST',
+            body: JSON.stringify({ skuId: skuId, action: 'delete' })
+        }).then(async product => {
+            product = await product.json();
+            dispatch({ type: actions.DELETE_CART, skuId, product })
+        }).catch(err => {
+            console.log(err);
+        })
     }
 }

@@ -23,12 +23,16 @@ db.product = require('../models/product')(sequelize, Sequelize);
 db.sku = require('../models/sku')(sequelize, Sequelize)
 db.image = require('../models/image')(sequelize, Sequelize)
 
+db.cart = require('../models/cart')(sequelize, Sequelize)
+
 // Relations - creates respective Foreign Keys as [ownerModel]Id 
+
 db.otp.belongsTo(db.user);
 db.user.hasMany(db.otp);
 
 db.shippingAddress.belongsTo(db.user);
 db.user.hasMany(db.shippingAddress);
+
 
 db.parentCategory.belongsTo(db.department);
 db.department.hasMany(db.parentCategory);
@@ -45,6 +49,12 @@ db.product.hasMany(db.sku);
 db.image.belongsTo(db.sku);
 db.sku.hasMany(db.image);
 
+
+db.cart.belongsTo(db.user);
+db.user.hasMany(db.cart);
+
+db.cart.belongsTo(db.sku);
+db.sku.hasMany(db.cart);
 
 
 module.exports = db;
