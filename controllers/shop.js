@@ -201,3 +201,188 @@ exports.getProducts = (req, res) => {
       res.json(result);
    })
 }
+
+exports.cart = (req, res) => {
+   // Expects {skuId, action: (add,remove,delete)}
+   // User has to be authenticated in middleware isAuth >> req.userId is available at this point.
+
+   console.log(req.body);
+
+
+   switch (req.body.action) {
+      case 'add':
+         db.cart.findAll({
+            where: {
+               userId: req.userId,
+               skuId: req.body.skuId
+            },
+            raw: true,
+            nest: true,
+         }).then(([cartItem]) => {
+            if (cartItem) {
+               // if the product is already in the user cart
+               db.cart.update({
+                  quantity: cartItem.quantity + 1,
+               }, {
+                  where: {
+                     id: cartItem.id
+                  },
+               }).then(async result => {
+                  result = await db.cart.findByPk(cartItem.id, {
+                     include: {
+                        model: db.sku,
+                        attributes: ['type', 'name', "description", 'price'],
+                        include: [
+                           {
+                              model: db.product,
+                              attributes: ['name', 'brand'],
+                           },
+                           {
+                              model: db.image,
+                              attributes: ['src'],
+                           }
+                        ]
+                     }
+                  })
+                  return res.json(result)
+               }).catch(err => res.json(err)) // ! don't send error report to user  
+            } else {
+               // new product in the cart
+               db.cart.create({
+                  userId: req.userId,
+                  skuId: req.body.skuId,
+                  quantity: 1,
+               }).then(async result => {
+                  let response = await db.cart.findByPk(result.id, {
+                     include: {
+                        model: db.sku,
+                        attributes: ['type', 'name', "description", 'price'],
+                        include: [
+                           {
+                              model: db.product,
+                              attributes: ['name', 'brand'],
+                           },
+                           {
+                              model: db.image,
+                              attributes: ['src'],
+                           }
+                        ]
+                     }
+                  })
+                  return res.json(response)
+               }).catch(err => res.json(err)) // ! don't send error report to user
+            }
+         }).catch(err => res.json(err)) // ! don't send error report to user
+         break;
+
+      case 'remove':
+         db.cart.findAll({
+            where: {
+               userId: req.userId,
+               skuId: req.body.skuId
+            },
+            raw: true,
+            nest: true,
+         }).then(([cartItem]) => {
+            if (cartItem) {
+               // if the product is in the user cart
+               if (cartItem.quantity > 1) {
+                  db.cart.update({
+                     quantity: cartItem.quantity - 1,
+                  }, {
+                     where: {
+                        id: cartItem.id
+                     }
+                  }).then(async result => {
+                     result = await db.cart.findByPk(cartItem.id, {
+                        include: {
+                           model: db.sku,
+                           attributes: ['type', 'name', "description", 'price'],
+                           include: [
+                              {
+                                 model: db.product,
+                                 attributes: ['name', 'brand'],
+                              },
+                              {
+                                 model: db.image,
+                                 attributes: ['src'],
+                              }
+                           ]
+                        }
+                     })
+                     return res.json(result);
+                  }).catch(err => res.json(err)) // ! don't send error report to user  
+               } else {
+                  // only One product in the cart
+                  db.cart.destroy({
+                     where: {
+                        id: cartItem.id,
+                     }
+                  }).then(result => res.json({ status: 200, message: "Deleted Successfully" })).catch(err => res.json(err)) // ! don't send error report to user
+               }
+            } else {
+               // NO product in the cart BAD REQUEST
+               res.json({ status: 400, message: 'NO Such Product in User Cart' })
+
+            }
+         }).catch(err => res.json(err)) // ! don't send error report to user
+         break;
+
+      case 'delete':
+         db.cart.findAll({
+            where: {
+               userId: req.userId,
+               skuId: req.body.skuId
+            },
+            raw: true,
+            nest: true,
+         }).then(([cartItem]) => {
+            if (cartItem) {
+
+               // Delete the cart Item
+               db.cart.destroy({
+                  where: {
+                     id: cartItem.id,
+                  }
+               }).then(result => res.json({ status: 200, message: "Deleted Successfully" })).catch(err => res.json(err)) // ! don't send error report to user
+            } else {
+               // NO product in the cart BAD REQUEST
+               res.json({ status: 400, message: 'NO Such Product in User Cart' })
+
+            }
+         }).catch(err => res.json(err)) // ! don't send error report to user
+         break;
+
+      default:
+         return res.json({ status: 400, message: 'Invalid Cart Action' });
+
+   }
+
+}
+
+exports.getCart = (req, res) => {
+   // expects authenticated user >> req.useId
+   db.cart.findAll({
+      where: {
+         userId: req.userId
+      },
+      include: {
+         model: db.sku,
+         attributes: ['type', 'name', "description", 'price'],
+         include: [
+            {
+               model: db.product,
+               attributes: ['name', 'brand'],
+            },
+            {
+               model: db.image,
+               attributes: ['src'],
+            }
+         ]
+      }
+   }).then(cart => {
+      return res.json(cart);
+   }).catch(err => {
+      return res.json(err);
+   })
+}

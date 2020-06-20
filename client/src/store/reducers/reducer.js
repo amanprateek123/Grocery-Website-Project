@@ -135,16 +135,18 @@ const addToCart = (state, action) => {
 
     let updatedCart = [...state.cart];
 
-    if (updatedCart.find(p => p.id == action.SKUId)) {
+    console.log(action.skuId);
+
+    if (updatedCart.find(p => p.skuId == action.skuId)) {
         updatedCart = updatedCart.map(product => {
-            if (product.id == action.SKUId) {
-                product.quantity++;
+            if (product.skuId == action.skuId) {
+                product.quantity += 1;
             }
             return product;
         })
     }
     else {
-        updatedCart.push({ ...action.product, quantity: 1 });
+        updatedCart.push({ ...action.product });
     }
 
     return {
@@ -158,11 +160,13 @@ const removeFromCart = (state, action) => {
     let updatedCart = [...state.cart];
 
     updatedCart = updatedCart.map(product => {
-        if (product.id == action.SKUId) {
-            product.quantity--;
+        if (product.skuId == action.skuId) {
+            product.quantity -= 1;
         }
         return product;
     })
+
+    updatedCart = updatedCart.filter(p => p.quantity > 0);
 
     return {
         ...state,
@@ -174,7 +178,7 @@ const deleteFromCart = (state, action) => {
 
     let updatedCart = [...state.cart];
 
-    updatedCart = updatedCart.filter(product => product.id == action.SKUId)
+    updatedCart = updatedCart.filter(product => product.id == action.skuId)
 
     return {
         ...state,

@@ -138,7 +138,7 @@ const Products = (props) => {
             <Divider />
             {!loading ? products[0] ?
                 <div className="products">
-                    {visibleProducts.map(product => <Product key={product.id} product={product} addToCart={() => props.addToCart(product.skus[0].id)} />)}
+                    {visibleProducts.map(product => <Product key={product.id} product={product} addToCart={props.addToCart} />)}
                 </div>
                 : <img src={emptySvg} className="empty" title="No products found" alt="No Products Found" />
                 : <LinearProgress />
