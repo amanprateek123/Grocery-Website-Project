@@ -9,7 +9,7 @@ import {
     Grid, Card, CardContent, Paper, Typography, CardMedia, Avatar,
     List, ListItem, ListSubheader, ListItemIcon, ListItemText, Divider,
     TextField, CardActionArea, CardActions, Button, Select, MenuItem, InputLabel, Badge, Chip, Checkbox, FormControlLabel
-    , Slider, LinearProgress
+    , Slider, LinearProgress, Snackbar
 }
     from '@material-ui/core'
 import { Alert, Pagination, PaginationItem, TreeView, TreeItem } from '@material-ui/lab';
@@ -34,7 +34,9 @@ const Products = (props) => {
     const [SKUs, setSKUs] = useState([]);
     const [SKUTypes, setSKUTypes] = useState([]);
     const [priceRange, setPriceRange] = useState([null, null]);
+
     const [loading, setLoading] = useState(true);
+    const [snackbar, setSnackbar] = useState(false);
 
     const [metaData, setMetaData] = useState({});
 
@@ -134,7 +136,7 @@ const Products = (props) => {
     const productsSection = (
         <div className="products-container">
             <h1>Products</h1>
-            <p>{metaData.count} products.</p>
+            {/* <p>{metaData.count} products.</p> */}
             <Divider />
             {!loading ? products[0] ?
                 <div className="products">
@@ -181,24 +183,23 @@ const Products = (props) => {
                                     <CardContent>
 
                                         <List dense component="nav" aria-label="main"
-                                            subheader={<ListSubheader component="div" id="nested-list-subheader">Categories</ListSubheader>}
+                                            subheader={<ListSubheader component="div" id="categories-fetched">Categories</ListSubheader>}
                                         >
-                                            <TreeView
-                                                defaultExpanded={categories.map(c => c.name)}
-                                                defaultCollapseIcon={<ExpandMoreIcon />}
-                                                defaultExpandIcon={<ChevronRightIcon />}
-                                            >
+                                            <ul>
 
                                                 {categories.map(parentCategory => (
 
-                                                    <TreeItem key={parentCategory.name} nodeId={parentCategory.name} size="small" variant="outlined" label={<Link to={`/products?parentCategory=${parentCategory.name}`}>{parentCategory.name}</Link>}>
-                                                        {parentCategory.categories.map(cat => <TreeItem nodeId={cat.name} key={cat.name} label={<Link to={`/products?category=${cat.name}`}>{cat.name}</Link>} />)}
-                                                    </TreeItem>
+                                                    <li key={parentCategory.name}>
+                                                        <Link to={`/products?parentCategory=${parentCategory.name}`}>{parentCategory.name}</Link>
+                                                        <ul>
+                                                            {parentCategory.categories.map(cat => <li key={cat.name} ><Link to={`/products?category=${cat.name}`}>{cat.name}</Link></li>)}
+                                                        </ul>
+                                                    </li>
                                                 ))}
 
-                                            </TreeView>
+                                            </ul>
                                         </List>
-                                        <Divider />
+
                                         <List dense component="nav" aria-label="secondary"
                                             subheader={<ListSubheader component="div" id="nested-list-subheader">Brand</ListSubheader>}
                                         >

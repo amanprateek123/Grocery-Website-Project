@@ -47,7 +47,7 @@ const AddProductsFile = (props) => {
         <Paper className="admin-content">
             <div>
                 <h2 className="mb-2 text-muted">Upload Products CSV</h2>
-                <p className="text-muted mb-4" style={{ opacity: 0.7 }}>upload a csv file with fields : [ name | categoryId | brand ]</p>
+                <p className="text-muted mb-4" style={{ opacity: 0.7 }}>upload a csv file with fields : [ name | categoryId | brand | description | keywords | json]</p>
                 <form encType="multipart/form-data" onSubmit={addProducts}>
                     <div className="form-group">
                         <input required type="file" name="products" id="products-file" style={{ opacity: 0.5 }} />

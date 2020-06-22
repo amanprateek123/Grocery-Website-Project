@@ -70,9 +70,9 @@ exports.getProducts = (req, res) => {
    }
 
    let page = Math.max(parseInt(req.query.page) - 1, 0) || 0;
-   let offset = page * PAGINATION;
-   offset += (parseInt(req.query.skip) || 0);
    let limit = parseInt(req.query.limit) || PAGINATION;
+   let offset = page * limit;
+   offset += (parseInt(req.query.skip) || 0);
    let order = req.query.order || 'createdAt';
    let dir = req.query.dir || 'DESC';
 
@@ -93,7 +93,7 @@ exports.getProducts = (req, res) => {
       ],
       raw: true,
    }).then(([total]) => {
-      result.meta.pageCount = Math.ceil(total.count / PAGINATION);
+      result.meta.pageCount = Math.ceil(total.count / limit);
       result.meta.count = total.count;
       return db.product.findAll({
          where,

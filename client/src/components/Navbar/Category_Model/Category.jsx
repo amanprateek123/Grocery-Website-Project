@@ -8,7 +8,7 @@ export default function Category(props) {
       <span className="cata_drop">
         more in  {props.name}
       </span>
-      <div style={{ position: 'absolute', top: '30px' }}>
+      <div style={{ position: 'absolute', top: '30px', height: '100%' }}>
         {props.cata.map(category =>
           <Link to={`/products?category=${category.name}`} key={category.id} className="sub_nav">
             {category.name}

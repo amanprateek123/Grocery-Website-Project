@@ -13,6 +13,7 @@ const Product = (props) => {
 
     return (
         <Card className="product" variant="outlined">
+            <Link to={`/product/${product.id}`} className="stretched-link"></Link>
             <CardMedia
                 className="card-image"
                 title="Product"
