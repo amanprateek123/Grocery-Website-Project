@@ -40,6 +40,9 @@
         border: 1px solid var(--mainColor);
         border-radius: 3px;
         padding: 11px 30px;
+        &.added{
+            background: #da0000 !important;
+        }
     }
     .detail_btn:hover{
         background-color: var(--mainColor);

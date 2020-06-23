@@ -69,6 +69,16 @@ exports.getProducts = (req, res) => {
 
    }
 
+   if (req.query.filter) {
+      let filter = req.query.filter.split(' ').join('%');
+
+      where.keywords = {
+         [Op.like]: `%${filter}%`
+      }
+
+   }
+
+
    let page = Math.max(parseInt(req.query.page) - 1, 0) || 0;
    let limit = parseInt(req.query.limit) || PAGINATION;
    let offset = page * limit;
@@ -151,7 +161,7 @@ exports.getProducts = (req, res) => {
 
       return db.product.findAll({
          where,
-         attributes: [db.Sequelize.literal('DISTINCT `skus`.`name`'), 'id'],
+         attributes: [db.Sequelize.literal('DISTINCT `skus`.`name`'), 'id', 'skus.type'],
          include: [
             {
                model: db.category,
