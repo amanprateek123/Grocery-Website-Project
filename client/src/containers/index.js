@@ -1,5 +1,5 @@
 // import Cart from './Cart/Cart'
-import Checkout from './Checkout/Checkout'
+import Cart from './Cart/Cart'
 import Details from './Details/Details.jsx'
 import E404 from './E404/E404'
 import Home from './Home/Home'
@@ -10,7 +10,7 @@ import Admin from './Admin/Admin'
 
 export {
     Admin,
-    Checkout,
+    Cart,
     Details,
     E404,
     Home,

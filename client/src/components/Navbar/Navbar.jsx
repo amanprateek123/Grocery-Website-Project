@@ -4,7 +4,7 @@ import clsx from 'clsx';
 import { NavLink, Link, withRouter, useHistory } from 'react-router-dom';
 import { connect } from 'react-redux';
 import * as actions from '../../store/actions'
-import Checkout from '../../containers/Checkout/Checkout'
+import Cart from '../../containers/Cart/Cart'
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 
 import { makeStyles, useTheme } from '@material-ui/core/styles';
@@ -188,7 +188,7 @@ const Navbar = (props) => {
                                         {props.cart.length}
                                     </div>
                                     <div className={classy}>
-                                        <Checkout />
+                                        <Cart />
                                     </div>
                                 </div>
                                 : null

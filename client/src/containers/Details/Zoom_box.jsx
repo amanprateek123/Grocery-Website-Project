@@ -1,4 +1,4 @@
-import React from 'react'
+import React,{useState} from 'react'
 import './Zoom_box.scss'
 import CloseIcon from '@material-ui/icons/Close';
 

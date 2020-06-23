@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react'
-import './Checkout.scss'
+import './Cart.scss'
 import { Button } from '@material-ui/core'
 import DeleteIcon from '@material-ui/icons/Delete';
 import { connect } from 'react-redux';
 import * as actions from '../../store/actions'
 
-function Checkout(props) {
+function Cart(props) {
     let total = 0
     props.cart.forEach(itm => {
         total += itm.quantity * (itm.sku.price)
@@ -89,4 +89,4 @@ const mapDispatchToProps = dispatch => {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Checkout)
+export default connect(mapStateToProps, mapDispatchToProps)(Cart)
