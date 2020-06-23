@@ -8,6 +8,9 @@ import {
 } from '@material-ui/core';
 import { useState } from 'react';
 
+import { connect } from 'react-redux'
+import * as actions from '../../store/actions'
+
 const Detail = (props) => {
 
     const quantity = props.quantity
@@ -52,7 +55,7 @@ const Detail = (props) => {
                             defaultValue={props.product.skus[props.pack].name}
                             onClick={props.handleChange}>
                             {props.product.skus.map((sku, i) =>
-                                <MenuItem value={sku.name} onClick={() => props.handle(i)} id={sku.id}>{sku.name}</MenuItem>
+                                <MenuItem key={sku.id} value={sku.name} onClick={() => props.handle(i)} id={sku.id}>{sku.name}</MenuItem>
                             )}
 
                         </Select>
@@ -60,7 +63,7 @@ const Detail = (props) => {
                 </div>
                 <div className="detail_cart">
                     <input type="text" value={quantity} onChange={props.handler} className="input12" />
-                    <Button variant="contained" className="detail_btn">
+                    <Button variant="contained" className="detail_btn" onClick={() => props.addToCart(props.product.skus[props.pack].id)}>
                         ADD TO CART
                       </Button>
                     <Button variant="contained" className="detail_save">
@@ -79,4 +82,18 @@ const Detail = (props) => {
         </Card>
     )
 }
-export default Detail
+
+
+const mapStateToProps = state => {
+    return {
+
+    }
+}
+const mapDispatchToProps = dispatch => {
+    return {
+        setResponse: (response) => dispatch({ type: actions.SET_RESPONSE, response: response }),
+        addToCart: (SKUId) => dispatch(actions.addToCart(SKUId))
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Detail);

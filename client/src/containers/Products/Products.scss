@@ -60,6 +60,10 @@
     .side-nav{
         background: transparent;
         box-shadow: none;
+
+        ul{
+            padding-left: 1em !important; 
+        }
     }
 
     .sku-select{

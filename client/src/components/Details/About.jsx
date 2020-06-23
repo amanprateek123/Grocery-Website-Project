@@ -3,19 +3,18 @@ import './About.scss'
 
 export default function About(props) {
     let json = JSON.parse(props.json);
-    console.log(json);
 
     let content = []
 
     for (let i = 0; i < 3; i++) {
         if (json && json[i]) {
             content.push(
-                <div className="json1">
+                <div key={json[i].key} className="json1">
                     <h5>{json[i].key}</h5>
                     <div className="lister">
                         {Array.isArray(json[i].value) ?
                             json[i].value.map(li => {
-                                return (<li className="list">
+                                return (<li key={li.key} className="list">
                                     <h6>{li.key}</h6>
                                     <p>{li.value}</p>
                                 </li>)

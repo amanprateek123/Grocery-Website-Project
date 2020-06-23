@@ -16,8 +16,8 @@ exports.addProducts = (req, res) => {
                 if (products[0].hasOwnProperty(prop)) {
                     console.log(prop);
 
-                    if (!['name', 'categoryId', 'brand'].includes(prop)) {
-                        res.json({ status: 400, message: `Please Submit a CSV file with fields [name,categoryId,brand]. Fields don't match.` })
+                    if (!['name', 'categoryId', 'brand', 'description', 'keywords', 'json'].includes(prop)) {
+                        res.json({ status: 400, message: `Please Submit a CSV file with fields [name,categoryId,brand,description,keywords,json]. Fields don't match.` })
                         return;
                     }
                 }

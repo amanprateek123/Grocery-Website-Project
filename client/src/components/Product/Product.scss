@@ -15,6 +15,12 @@
         
     }
 
+    .stretched-link{
+        &::after{
+            z-index: 0;
+        }
+    }
+
     .space{
         height: 4em;
     }
