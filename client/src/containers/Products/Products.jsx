@@ -52,13 +52,14 @@ const Products = (props) => {
             setCategories(meta.categories);
 
             // setBrands(Array.from(new Set(products.map(product => ({ name: product.brand, selected: true })))));
-            if (props.location.search.indexOf('&sr') != -1) {
+            if (['category', 'parentCategory', '&sr'].map(str => props.location.search.indexOf(str) != -1).reduce((acc, cur) => acc || cur, false)) {
                 setBrands(meta.brands.map(brand => ({ name: brand.name, selected: false })))
                 props.location.search = props.location.search.replace('&sr', '');
             }
 
-            setSKUs(Array.from(new Set(products.map(product => product.skus.map(sku => ({ name: sku.name, type: sku.type, selected: true }))).flat())));
-            setSKUTypes(Array.from(new Set(products.map(product => product.skus.map(sku => sku.type)).flat())));
+            // setSKUs(Array.from(new Set(products.map(product => product.skus.map(sku => ({ name: sku.name, type: sku.type, selected: true }))).flat())));
+            setSKUs(meta.skus.map(s => ({ ...s, selected: (new URLSearchParams(props.location.search).get('filter')) && ((new URLSearchParams(props.location.search).get('filter')).indexOf(s.name) != -1) })));
+            setSKUTypes(Array.from(new Set(meta.skus.map(sku => sku.type))));
 
             setLoading(false);
 
@@ -105,7 +106,22 @@ const Products = (props) => {
         })
 
         setSKUs(updatedSKU);
-        updateVisibleProducts();
+        applyFilter(updatedSKU);
+    }
+    const applyFilter = (SKUs) => {
+        let filter = SKUs.filter(s => s.selected).map(s => s.name).join(' ');
+        console.log(filter);
+
+        if (props.location.search.indexOf('filter') != -1) {
+            let query = props.location.search.replace(/filter=[a-zA-z\-\+\d %]*&/, `filter=${filter}&`);
+
+            console.log(query);
+
+            history.push(`/products${query}`);
+        }
+        else {
+            history.push(`/products?filter=${filter}&${props.location.search.slice(1)}`)
+        }
     }
 
     const handlePriceChange = (e, i) => {
@@ -135,12 +151,12 @@ const Products = (props) => {
 
     const productsSection = (
         <div className="products-container">
-            <h1>Products</h1>
+            {/* <h1>Products</h1> */}
             {/* <p>{metaData.count} products.</p> */}
-            <Divider />
+            {/* <Divider /> */}
             {!loading ? products[0] ?
                 <div className="products">
-                    {visibleProducts.map(product => <Product key={product.id} product={product} addToCart={props.addToCart} />)}
+                    {visibleProducts.map(product => <Product key={product.id} product={product} addToCart={props.addToCart} feedback={() => setSnackbar(true)} />)}
                 </div>
                 : <img src={emptySvg} className="empty" title="No products found" alt="No Products Found" />
                 : <LinearProgress />
@@ -226,8 +242,9 @@ const Products = (props) => {
                                             >
                                                 <div className="pack-sizes">
                                                     {SKUs.map(sku => (
-                                                        sku.type == type ?
-                                                            <FormControlLabel key={sku.name} className="d-block ctrl m-0" label={sku.name} control={<Checkbox color="primary" checked={sku.selected} onChange={(e) => changeSKU(sku.name, e)} value={sku.name} />} />
+                                                        sku.type == type && sku.name ?
+                                                            <FormControlLabel key={sku.name + sku.id + sku.type} className="d-block ctrl m-0" label={sku.name} control={<Checkbox color="primary"
+                                                                checked={sku.selected} onChange={(e) => changeSKU(sku.name, e)} value={sku.name} />} />
                                                             : null
                                                     ))}
                                                 </div>
@@ -241,6 +258,9 @@ const Products = (props) => {
                         </div>
                     </div>
                     <div className="col-md-10 col">
+                        <Snackbar open={snackbar} onClose={() => setSnackbar(false)} autoHideDuration={2000} anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}>
+                            {true ? <Alert variant="filled" severity={"success"}>{"Item Added to Cart"}</Alert> : null}
+                        </Snackbar>
                         <div className="content">
                             {productsSection}
                         </div>

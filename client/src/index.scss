@@ -15,3 +15,17 @@ code {
 #root{
   position: relative;
 }
+
+::-webkit-scrollbar{
+  width: 7px;
+}
+
+::-webkit-scrollbar-thumb{
+  background: #2224;
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-track{
+  background: transparent;
+
+}

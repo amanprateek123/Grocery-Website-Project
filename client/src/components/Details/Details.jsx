@@ -14,27 +14,31 @@ import * as actions from '../../store/actions'
 const Detail = (props) => {
 
     const quantity = props.quantity
-    let json = JSON.parse(props.product.json);
     let content = [];
+    const [added, setAdded] = useState(false);
 
-    for (let i = 0; i < 3; i++) {
-        if (json && json[i]) {
-            content.push(
-                <div className="json">
-                    < h5 > {json[i].key}</h5 >
-                    <div className="lister">
-                        {Array.isArray(json[i].value) ?
-                            json[i].value.map(li => {
-                                return (<li className="list">
-                                    <h6>{li.key}</h6>
-                                    <p>{li.value}</p>
-                                </li>)
-                            }) :
-                            <p>{json[i].value}</p>}</div>
-                </div >
-            )
+    if (props.product.json) {
+        let json = JSON.parse(props.product.json);
+        for (let i = 0; i < 3; i++) {
+            if (json && json[i]) {
+                content.push(
+                    <div className="json">
+                        < h5 > {json[i].key}</h5 >
+                        <div className="lister">
+                            {Array.isArray(json[i].value) ?
+                                json[i].value.map(li => {
+                                    return (<li className="list">
+                                        <h6>{li.key}</h6>
+                                        <p>{li.value}</p>
+                                    </li>)
+                                }) :
+                                <p>{json[i].value}</p>}</div>
+                    </div >
+                )
+            }
         }
     }
+
     return (
         <Card variant="outlined" className="card_det" style={{height:'800px'}}>
             <CardContent>
@@ -63,9 +67,14 @@ const Detail = (props) => {
                 </div>
                 <div className="detail_cart">
                     <input type="text" value={quantity} onChange={props.handler} className="input12" />
-                    <Button variant="contained" className="detail_btn" onClick={() => props.addToCart(props.product.skus[props.pack].id)}>
-                        ADD TO CART
-                      </Button>
+                    <Button variant="contained" className={`detail_btn ${added ? 'added' : ''}`}
+                        onClick={() => {
+                            props.addToCart(props.product.skus[props.pack].id)
+                            setAdded(true);
+                            setTimeout(() => setAdded(false), 2000)
+                        }}>
+                        {added ? "ADDED TO CART" : "ADD TO CART"}
+                    </Button>
                     <Button variant="contained" className="detail_save">
                         <BookmarkIcon /><span>Wishlist</span>
                     </Button>

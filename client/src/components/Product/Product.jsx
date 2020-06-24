@@ -17,7 +17,7 @@ const Product = (props) => {
             <CardMedia
                 className="card-image"
                 title="Product"
-                image={selectedSKU ? selectedSKU.images ? selectedSKU.images[0].src : null : null}
+                image={selectedSKU ? selectedSKU.images[0] ? selectedSKU.images[0].src : null : null}
             />
             <CardContent>
                 <div className="badge badge-info pb-1">{product.category.name}</div>
@@ -36,7 +36,7 @@ const Product = (props) => {
             </CardContent>
             <CardContent className="sku-select">
                 {product.skus ?
-                    product.skus[0] ?
+                    product.skus[1] ?
                         <div className="variants">
                             <InputLabel id="variant-label" >{selectedSKU.type}</InputLabel>
                             <Select defaultValue={product.skus[0]} labelId="variant" className="pack-size" onChange={(e) => setSelectedSKU(e.target.value)}>
@@ -53,7 +53,7 @@ const Product = (props) => {
             <CardActions className="card-actions">
                 {/* <div className="btn btn-full add-to-cart"><CartIcon /> Add to Cart</div> */}
                 <Link to={`/product/${product.id}`} ><Button style={{ color: '#aaa' }}>Details</Button></Link>
-                <Fab size="small" title={"Add to Cart"} variant="round" style={{ background: '#e35f21', color: 'white', boxShadow: '-1px 2px 10px 0 #e35f2199' }} onClick={() => props.addToCart(selectedSKU.id)}><CartIcon /></Fab>
+                <Fab size="small" className="add-to-cart-btn" title={"Add to Cart"} variant="round" style={{ background: '#e35f21', color: 'white', boxShadow: '-1px 2px 10px 0 #e35f2199' }} onClick={() => { props.addToCart(selectedSKU.id); props.feedback() }}><CartIcon /></Fab>
 
             </CardActions>
 
