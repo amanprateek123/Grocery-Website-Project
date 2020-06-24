@@ -9,6 +9,7 @@ let initialState = {
     authenticating: false,
     response: { status: 0, message: '' },
     authModalVisible: false,
+    zoomVisible:false,
 
     // Shop
     cart: []
@@ -129,6 +130,8 @@ const openModal = state => {
 
     }
 }
+
+
 
 // Shop
 

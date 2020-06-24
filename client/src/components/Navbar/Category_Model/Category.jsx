@@ -6,7 +6,7 @@ export default function Category(props) {
   return (
     <div style={{ padding: '12px', minWidth: '240px', height: "100%" }}>
       <span className="cata_drop">
-        more in  {props.name}
+        More in  {props.name}
       </span>
       <div style={{ position: 'absolute', top: '30px', height: '100%' }}>
         {props.cata.map(category =>

@@ -36,7 +36,7 @@ const Detail = (props) => {
         }
     }
     return (
-        <Card variant="outlined" className="card_det">
+        <Card variant="outlined" className="card_det" style={{height:'800px'}}>
             <CardContent>
                 <div className="detail_head">
                     <p><u>{props.product.category.name}</u></p>

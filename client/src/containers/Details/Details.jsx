@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import { connect } from 'react-redux';
 import * as actions from '../../store/actions'
 import { useState } from 'react';
-import Zoom from './Zoom_box'
+import Zoom from './Zoom'
 import 'react-medium-image-zoom/dist/styles.css'
 import Modal from '../../components/Modal/Modal';
 
@@ -147,8 +147,7 @@ const Details = (props) => {
             <div className="container" style={{ backgroundColor: "white", paddingTop: '2%' }}>
                 <div className="row">
                     <div className="colu">
-                        <Paper>
-
+                        <Paper style={{boxShadow:'none',height:'800px'}}>
                             <div className="main_img" onClick={props.openModal}>
                                     <img src={product.skus[pack].images[img].src} alt="pic" />                                
                             </div>
@@ -164,7 +163,7 @@ const Details = (props) => {
                         </Paper>
                     </div>
                     <div className="colu">
-                        <Paper>
+                        <Paper style={{height:'800px'}}>
                             <Detail product={product} size={size} quantity={quantity} pack={pack} handle={changePack}
                                 id={product.skus.id} handleChange={handleChange} handler={changeQuantity} />
                         </Paper>

@@ -174,9 +174,9 @@ const Navbar = (props) => {
                         <div className="navigation d-md-flex d-none">
                             <div className="user" style={{ width: '180px', textAlign: 'center' }}>
                                 {props.userName ?
-                                    <Link to="/profile"><div className="username-nav align-items-center MuiButton-root"><PersonIcon /> <span style={{ fontSize: '16.5px', textAlign: 'left', width: '100%' }}>{props.userName}</span></div></Link>
+                                    <Link to="/profile" style={{textDecoration:'none'}} ><div className="username-nav align-items-center MuiButton-root"><PersonIcon /> <span style={{textAlign: 'left', width: '100%' }}>{props.userName}</span></div></Link>
                                     :
-                                    <Button className="btn btn-login" style={{ fontSize: '16.5px' }} onClick={props.openModal}>Login</Button>}
+                                    <Button className="btn btn-login" onClick={props.openModal}>Login</Button>}
                             </div>
                             <div className="more" style={{ width: '80px' }}>
                                 <Button className="btn btn-more" style={{ fontSize: '16.5px', paddingLeft: '35%' }}>More</Button>
