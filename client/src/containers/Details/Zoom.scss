@@ -1,11 +1,15 @@
 .zoom_1{
-    width: 60%;
+    width: 80%;
     position: relative;
     margin: 0 auto;
-    height: 100%;
+    height: 90%;
     box-shadow: 0 0 5px #d5d6d9;
+    background: #fff;
     .zoom_img1{
     position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     top: 0;
     left: 0;
     bottom: 0;
@@ -13,11 +17,10 @@
     overflow-y: scroll;
     &::-webkit-scrollbar {
     width: 0px;
-    background: transparent;
+    background: white;
   }
     img{
-        width: 100%;
-        height: 1306px;
+        height: 100%;
     }
     }
 }
@@ -68,6 +71,9 @@
     font-weight: 500;
     border-radius: 100%;
     border: 1px solid #d5d6d9;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 .btn_left{
     position: absolute;
@@ -82,6 +88,9 @@
     border: 1px solid #d5d6d9;
     height: 50px;
     width: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 .btn_right{
     position: absolute;
@@ -96,4 +105,7 @@
     font-weight: 500;
     border-radius: 100%;
     border: 1px solid #d5d6d9;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }

@@ -83,7 +83,9 @@ export const addToCart = (skuId) => {
             body: JSON.stringify({ skuId: skuId, action: 'add' })
         }).then(async product => {
             product = await product.json();
-            dispatch({ type: actions.ADD_CART, skuId, product })
+            if (product.status != 401) {
+                dispatch({ type: actions.ADD_CART, skuId, product })
+            }
         }).catch(err => {
             console.log(err);
         })

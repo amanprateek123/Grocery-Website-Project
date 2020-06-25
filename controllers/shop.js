@@ -30,6 +30,29 @@ exports.getProducts = (req, res) => {
    req.query.category ? (where['$category.name$'] = { [Op.like]: `%${req.query.category}%` }) : null;
    req.query.brand ? (where['$product.brand$'] = { [Op.in]: req.query.brand.split(',') }) : null;
    req.query.parentCategory ? (where['$category.parentCategory.name$'] = { [Op.like]: `%${req.query.parentCategory}%` }) : null;
+   req.query.minPrice ? (where['$skus.price$'] = { [Op.gte]: parseInt(req.query.minPrice) }) : null;
+   req.query.maxPrice ? (where['$skus.price$'] = { [Op.lte]: parseInt(req.query.maxPrice) }) : null;
+
+   if (req.query.minPrice && req.query.maxPrice) {
+      where['$skus.price$'] = {
+         [Op.and]: [
+            {
+               [Op.gte]: parseInt(req.query.minPrice)
+            },
+            {
+               [Op.lte]: parseInt(req.query.maxPrice)
+            }
+         ]
+      }
+   }
+
+   if (req.query.filter) {
+      let filter = req.query.filter.split(',');
+      let values = filter.map(f => f.split(':')[1])
+      where['$skus.attributes.value$'] = {
+         [Op.in]: values
+      }
+   }
 
    if (req.query.search) {
       let search = req.query.search.split(' ').join('%');
@@ -65,18 +88,31 @@ exports.getProducts = (req, res) => {
                [Op.like]: `%${search}%`
             }
          },
+         {
+            '$skus.json$': {
+               [Op.like]: `%${search}%`
+            }
+         },
+         {
+            '$skus.name$': {
+               [Op.like]: `%${search}%`
+            }
+         },
+         {
+            '$skus.description$': {
+               [Op.like]: `%${search}%`
+            }
+         },
+         {
+            '$skus.images.src$': {
+               [Op.like]: `%${search}%`
+            }
+         },
       ];
 
    }
 
-   if (req.query.filter) {
-      let filter = req.query.filter.split(' ').join('%');
 
-      where.keywords = {
-         [Op.like]: `%${filter}%`
-      }
-
-   }
 
 
    let page = Math.max(parseInt(req.query.page) - 1, 0) || 0;
@@ -89,8 +125,10 @@ exports.getProducts = (req, res) => {
    let result = { meta: {} };
 
    db.product.findAll({
+      subQuery: false,
+      nest: true,
       where,
-      attributes: [[db.sequelize.fn('COUNT', db.sequelize.col('product.id')), 'count']],
+      attributes: [[db.sequelize.fn('COUNT', db.Sequelize.literal('DISTINCT product.id')), 'count']],
       include: [
          {
             model: db.category,
@@ -100,12 +138,28 @@ exports.getProducts = (req, res) => {
                attributes: [],
             }
          },
+         {
+            model: db.sku,
+            attributes: [],
+            include: [
+               {
+                  model: db.image,
+                  attributes: [],
+               },
+               {
+                  model: db.attribute,
+                  attributes: []
+               },
+            ]
+         }
       ],
       raw: true,
    }).then(([total]) => {
-      result.meta.pageCount = Math.ceil(total.count / limit);
       result.meta.count = total.count;
+      result.meta.pageCount = Math.ceil(total.count / limit);
       return db.product.findAll({
+         subQuery: false,
+         nest: true,
          where,
          attributes: [[db.Sequelize.literal('DISTINCT `category->parentCategory`.`name`'), 'name']],
          include: [
@@ -119,6 +173,20 @@ exports.getProducts = (req, res) => {
                   required: true,
                }
             },
+            {
+               model: db.sku,
+               attributes: [],
+               include: [
+                  {
+                     model: db.image,
+                     attributes: [],
+                  },
+                  {
+                     model: db.attribute,
+                     attributes: []
+                  },
+               ]
+            }
 
          ],
          raw: true,
@@ -126,6 +194,8 @@ exports.getProducts = (req, res) => {
       })
    }).then(parentCategories => {
       return db.parentCategory.findAll({
+         subQuery: false,
+         nest: true,
          attributes: ['name'],
          where: {
             name: {
@@ -141,27 +211,10 @@ exports.getProducts = (req, res) => {
    }).then(parentCategories => {
       result.meta.categories = parentCategories;
       return db.product.findAll({
+         subQuery: false,
+         nest: true,
          where,
          attributes: [[db.Sequelize.literal('DISTINCT `product`.`brand`'), 'name'], 'id'],
-         include: [
-            {
-               model: db.category,
-               attributes: [],
-               include: {
-                  model: db.parentCategory,
-                  attributes: [],
-               }
-            },
-         ],
-         raw: true,
-         nest: true
-      })
-   }).then(brands => {
-      result.meta.brands = brands;
-
-      return db.product.findAll({
-         where,
-         attributes: [db.Sequelize.literal('DISTINCT `skus`.`name`'), 'id', 'skus.type'],
          include: [
             {
                model: db.category,
@@ -174,6 +227,51 @@ exports.getProducts = (req, res) => {
             {
                model: db.sku,
                attributes: [],
+               include: [
+                  {
+                     model: db.image,
+                     attributes: [],
+                  },
+                  {
+                     model: db.attribute,
+                     attributes: []
+                  },
+               ]
+            }
+         ],
+         raw: true,
+         nest: true
+      })
+   }).then(brands => {
+      result.meta.brands = brands;
+
+      return db.product.findAll({
+         subQuery: false,
+         nest: true,
+         where,
+         attributes: [db.Sequelize.literal('DISTINCT `skus->attributes`.`value`'), 'skus->attributes.name'],
+         include: [
+            {
+               model: db.category,
+               attributes: [],
+               include: {
+                  model: db.parentCategory,
+                  attributes: [],
+               }
+            },
+            {
+               model: db.sku,
+               attributes: [],
+               include: [
+                  {
+                     model: db.image,
+                     attributes: [],
+                  },
+                  {
+                     model: db.attribute,
+                     attributes: [],
+                  },
+               ]
             },
          ],
          raw: true,
@@ -185,7 +283,46 @@ exports.getProducts = (req, res) => {
       return db.product.findAll({
          offset, limit, where,
          order: [[order, dir]],
-
+         subQuery: false,
+         nest: true,
+         group: ['id'],
+         attributes: ['id'],
+         include: [
+            {
+               model: db.category,
+               attributes: [],
+               required: true,
+               include: {
+                  model: db.parentCategory,
+                  attributes: ['id', 'name'],
+                  required: true,
+               }
+            },
+            {
+               model: db.sku,
+               attributes: [],
+               required: true,
+               include: [
+                  {
+                     model: db.image,
+                     attributes: [],
+                  },
+                  {
+                     model: db.attribute,
+                     attributes: []
+                  },
+               ]
+            },
+         ]
+      })
+   }).then(products => {
+      let productIds = products.map(p => p.id);
+      return db.product.findAll({
+         where: {
+            id: {
+               [Op.in]: productIds
+            }
+         },
          include: [
             {
                model: db.category,
@@ -199,12 +336,20 @@ exports.getProducts = (req, res) => {
             },
             {
                model: db.sku,
-               include: {
-                  model: db.image,
-                  attributes: ['id', 'src'],
-               }
+               required: true,
+               include: [
+                  {
+                     model: db.image,
+                     attributes: ['id', 'src'],
+                  },
+                  {
+                     model: db.attribute,
+                     attributes: ['name', 'value']
+                  },
+               ]
             },
          ]
+
       })
    }).then(products => {
       result.products = products;
@@ -238,11 +383,11 @@ exports.cart = (req, res) => {
                   result = await db.cart.findByPk(cartItem.id, {
                      include: {
                         model: db.sku,
-                        attributes: ['type', 'name', "description", 'price'],
+                        attributes: ['type', 'name', "description", 'price', 'id'],
                         include: [
                            {
                               model: db.product,
-                              attributes: ['name', 'brand'],
+                              attributes: ['name', 'brand', 'id'],
                            },
                            {
                               model: db.image,
@@ -263,11 +408,11 @@ exports.cart = (req, res) => {
                   let response = await db.cart.findByPk(result.id, {
                      include: {
                         model: db.sku,
-                        attributes: ['type', 'name', "description", 'price'],
+                        attributes: ['type', 'name', "description", 'price', 'id'],
                         include: [
                            {
                               model: db.product,
-                              attributes: ['name', 'brand'],
+                              attributes: ['name', 'brand', 'id'],
                            },
                            {
                               model: db.image,
@@ -304,11 +449,11 @@ exports.cart = (req, res) => {
                      result = await db.cart.findByPk(cartItem.id, {
                         include: {
                            model: db.sku,
-                           attributes: ['type', 'name', "description", 'price'],
+                           attributes: ['type', 'name', "description", 'price', 'id'],
                            include: [
                               {
                                  model: db.product,
-                                 attributes: ['name', 'brand'],
+                                 attributes: ['name', 'brand', 'id'],
                               },
                               {
                                  model: db.image,
@@ -375,11 +520,11 @@ exports.getCart = (req, res) => {
       },
       include: {
          model: db.sku,
-         attributes: ['type', 'name', "description", 'price'],
+         attributes: ['type', 'name', "description", 'price', 'id'],
          include: [
             {
                model: db.product,
-               attributes: ['name', 'brand'],
+               attributes: ['name', 'brand', 'id'],
             },
             {
                model: db.image,

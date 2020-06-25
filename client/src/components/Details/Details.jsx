@@ -40,7 +40,7 @@ const Detail = (props) => {
     }
 
     return (
-        <Card variant="outlined" className="card_det" style={{height:'800px'}}>
+        <Card variant="outlined" className="card_det" >
             <CardContent>
                 <div className="detail_head">
                     <p><u>{props.product.category.name}</u></p>
@@ -50,20 +50,24 @@ const Detail = (props) => {
                     <h6>MRP:<span><b>Price Rs.{props.product.skus[props.pack].price * (quantity)}</b></span>(inclusive of all taxes)</h6>
                 </div>
                 <div style={{ marginTop: "4%" }}>
-                    <FormControl style={{ minWidth: "120px" }}>
-                        <InputLabel id="demo-simple-select-label">{props.product.skus[props.pack].type}</InputLabel>
-                        <Select
-                            labelId="demo-simple-select-label"
-                            id="demo-simple-select"
-                            value={props.product.skus[props.pack].name}
-                            defaultValue={props.product.skus[props.pack].name}
-                            onClick={props.handleChange}>
-                            {props.product.skus.map((sku, i) =>
-                                <MenuItem key={sku.id} value={sku.name} onClick={() => props.handle(i)} id={sku.id}>{sku.name}</MenuItem>
-                            )}
+                    {
+                        props.product.skus[1] ?
+                            <FormControl style={{ minWidth: "120px" }}>
+                                <InputLabel id="demo-simple-select-label">{props.product.skus[props.pack].type}</InputLabel>
+                                <Select
+                                    labelId="demo-simple-select-label"
+                                    id="demo-simple-select"
+                                    value={props.product.skus[props.pack].name}
+                                    defaultValue={props.product.skus[props.pack].name}
+                                    onClick={props.handleChange}>
+                                    {props.product.skus.map((sku, i) =>
+                                        <MenuItem key={sku.id} value={sku.name} onClick={() => props.handle(i)} id={sku.id}>{sku.name}</MenuItem>
+                                    )}
 
-                        </Select>
-                    </FormControl>
+                                </Select>
+                            </FormControl>
+                            : null
+                    }
                 </div>
                 <div className="detail_cart">
                     <input type="text" value={quantity} onChange={props.handler} className="input12" />
@@ -73,7 +77,7 @@ const Detail = (props) => {
                             setAdded(true);
                             setTimeout(() => setAdded(false), 2000)
                         }}>
-                        {added ? "ADDED TO CART" : "ADD TO CART"}
+                        {added ? props.userName ? "ADDED TO CART" : "Please Login" : "ADD TO CART"}
                     </Button>
                     <Button variant="contained" className="detail_save">
                         <BookmarkIcon /><span>Wishlist</span>
@@ -95,7 +99,7 @@ const Detail = (props) => {
 
 const mapStateToProps = state => {
     return {
-
+        userName: state.userName
     }
 }
 const mapDispatchToProps = dispatch => {

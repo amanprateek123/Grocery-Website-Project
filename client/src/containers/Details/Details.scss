@@ -1,103 +1,122 @@
-.paper{
-    height:830px;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    box-shadow:none;
-    padding-bottom:70px;
-}
-.img12{
-    width:540px;
-    padding-bottom:-10px;
-}
-.colu{
-    position: relative;
-    width: 100%;
-    padding-right: 15px;
-    padding-left: 15px;
-    flex: 0 0 50%;
-    max-width: 50%;
-}
-
-.slide_image{
-    overflow: auto;
-    width: 450px;
-    margin: auto;
-    justify-content: center;
-    display: flex;
-    margin-top: 10%;
-}
-.img_det1{
-    cursor: pointer;
-    height: 5.5rem;
-    width: 5.5rem;
-    margin-left: 1%;
-    border: 1px solid gray;
-    overflow: hidden;
-    align-items: center;
-    justify-content: center;
-   img{
-    padding: 5px;
-    opacity: 1;
-    width: initial;
-    height: initial;
-    max-width: 100%;
-    max-height: 100%;
-    transition: opacity .5s linear;
-   }
-}
-.img_det2{
-    cursor: pointer;
-    height: 5.5rem;
-    width: 5.5rem;
-    margin-left: 1%;
-    border: 1px solid var(--mainColor);
-    overflow: hidden;
-    align-items: center;
-    justify-content: center;
-   img{
-    opacity: 1;
-    padding: 5px;
-    width: initial;
-    height: initial;
-    max-width: 100%;
-    max-height: 100%;
-    transition: opacity .5s linear;
-   }
-}
-.main_img{
-    margin:auto;
-    width: 100%;
-    img{
-        width: 100%;
-        margin: auto;
-    }
-    img:hover{
-        cursor: pointer;
-    }
-}
-@media only screen and (max-width: 600px){
+.detail-page{
     .paper{
-        width: 100%;
-        height: 10%;
-        display: inline-block;
+        // height:830px;
+        display:flex;
+        flex-direction:column;
+        align-items:center;
+        box-shadow:none;
+        padding-bottom:70px;
     }
     .img12{
-        width:100%;
+        // width:540px;
+        padding-bottom:-10px;
     }
-    .colu{
-        max-width: 100%;
-        width: 100%;
-        flex: 0 0 100%;
-    }
-    .slide_image{
-        width: 100%;
-    }
-    .img_det1, .img_det2{
-        width: 4rem;
-        height: 4rem;
-        img{
-            padding-top: 5px;
+    
+    .image-col, .detail-col{
+        overflow: hidden;
+        border-radius: 1em !important;
+        box-shadow: none !important;
+        border: none !important;
+        padding: 1em;
+        &>*{
+            border: none !important;
         }
     }
+
+    .row{
+        align-items: stretch;
+    }
+    
+    .colu{
+        position: relative;
+        width: 100%;
+        padding-right: 15px;
+        padding-left: 15px;
+        flex: 0 0 50%;
+        max-width: 50%;
+    }
+    
+    .slide_image{
+        overflow: auto;
+        width: 450px;
+        margin: auto;
+        justify-content: center;
+        display: flex;
+        margin-top: 10%;
+    }
+    .img_det1{
+        cursor: pointer;
+        height: 5.5rem;
+        width: 5.5rem;
+        margin-left: 1%;
+        border: 1px solid gray;
+        overflow: hidden;
+        align-items: center;
+        justify-content: center;
+       img{
+        padding: 5px;
+        opacity: 1;
+        width: initial;
+        height: initial;
+        max-width: 100%;
+        max-height: 100%;
+        transition: opacity .5s linear;
+       }
+    }
+    .img_det2{
+        cursor: pointer;
+        height: 5.5rem;
+        width: 5.5rem;
+        margin-left: 1%;
+        border: 1px solid var(--mainColor);
+        overflow: hidden;
+        align-items: center;
+        justify-content: center;
+       img{
+        opacity: 1;
+        padding: 5px;
+        width: initial;
+        height: initial;
+        max-width: 100%;
+        max-height: 100%;
+        transition: opacity .5s linear;
+       }
+    }
+    .main_img{
+        margin:auto;
+        width: 100%;
+        img{
+            width: 100%;
+            margin: auto;
+        }
+        img:hover{
+            cursor: pointer;
+        }
+    }
+    @media only screen and (max-width: 600px){
+        .paper{
+            width: 100%;
+            height: 10%;
+            display: inline-block;
+        }
+        .img12{
+            width:100%;
+        }
+        .colu{
+            max-width: 100%;
+            width: 100%;
+            flex: 0 0 100%;
+        }
+        .slide_image{
+            width: 100%;
+        }
+        .img_det1, .img_det2{
+            width: 4rem;
+            height: 4rem;
+            img{
+                padding-top: 5px;
+            }
+        }
+    }
+    
 }

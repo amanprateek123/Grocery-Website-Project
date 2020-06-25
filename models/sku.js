@@ -13,14 +13,14 @@ module.exports = (sequelize, Sequelize = require('sequelize')) => {
             defaultValue: '0'
         },
 
-        // color , variant , size , weight etc.
+        // ! color , variant , size , weight etc.
         type: {
             type: Sequelize.STRING,
             allowNull: false,
             defaultValue: 'variant'
         },
 
-        // 2kg , 3kg ; red, green ; M,L,XL etc.
+        // ! 2kg , 3kg ; red, green ; M,L,XL etc.
         name: {
             type: Sequelize.STRING,
             allowNull: false,
@@ -39,6 +39,8 @@ module.exports = (sequelize, Sequelize = require('sequelize')) => {
             type: Sequelize.INTEGER,
             defaultValue: 0
         },
+
+        // ! ...
         json: {
             type: Sequelize.STRING,
         }

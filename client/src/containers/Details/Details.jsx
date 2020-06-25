@@ -47,13 +47,24 @@ const Details = (props) => {
     const [product, setProduct] = useState(null);
     useEffect(() => {
         fetch(`/get-products?id=${props.match.params.id}`).then(res => res.json().then(({ products: [product] }) => {
-            setProduct(product)
+            setProduct(product);
+            if (props.location.search) {
+                let skuId = new URLSearchParams(props.location.search).get('skuId');
+                let index = 0;
+                product.skus.forEach((s, i) => {
+                    if (s.id == skuId)
+                        index = i
+                })
+                setPack(parseInt(index))
+            }
         })).catch(err => {
             console.log(err);
 
         })
 
-    }, [])
+
+
+    }, [props.location])
 
     const [zoom, setZoom] = useState(false);
 
@@ -62,40 +73,37 @@ const Details = (props) => {
         product ?
             <React.Fragment>
                 <Modal visible={zoom}>
-                    <Zoom closeModal={() => setZoom(false)} product={product} pack={pack} changeImg={changeImg} img={img}/>
+                    <Zoom closeModal={() => setZoom(false)} product={product} pack={pack} changeImg={changeImg} img={img} />
                 </Modal>
-                <div style={{ backgroundColor: "#f3f3f3", width: "100%",margin:'0 auto'}}>
-                    <div className="container" style={{ backgroundColor: "white", paddingTop: '2%' }}>
-                        <div className="row">
-                            <div className="colu">
-                                <Paper style={{boxShadow:'none',height:'800px'}}>
+                <div className="container detail-page" style={{ backgroundColor: "#eef9", padding: '3em 2em', marginTop: "1em", borderRadius: "1em" }}>
+                    <div className="row">
+                        <div className="col">
+                            <Paper className="image-col">
 
-                                    <div className="main_img">
-                                        {product.skus[pack].images[img] ? <img src={product.skus[pack].images[img].src} alt="pic" onClick={() => setZoom(true)} /> : null}
-                                    </div>
-                                    <div className="slide_image">
-                                        {
-                                            product.skus[pack].images.map((item, i) => {
-                                                return (<div className={img === i ? "img_det2" : "img_det1"} key={item.id} onClick={() => { changeImg(i) }} >
-                                                    <img src={item.src} alt="pic" />
-                                                </div>)
-                                            })
-                                        }
-                                    </div>
-                                </Paper>
-                            </div>
-                            <div className="colu">
-                                <Paper>
-                                    <Detail product={product} size={size} quantity={quantity} pack={pack} handle={changePack}
-                                        id={product.skus.id} handleChange={handleChange} handler={changeQuantity} />
-                                </Paper>
-                            </div>
+                                <div className="main_img">
+                                    {product.skus[pack].images[img] ? <img src={product.skus[pack].images[img].src} alt="pic" onClick={() => setZoom(true)} /> : null}
+                                </div>
+                                <div className="slide_image">
+                                    {
+                                        product.skus[pack].images.map((item, i) => {
+                                            return (<div className={img === i ? "img_det2" : "img_det1"} key={item.id} onClick={() => { changeImg(i) }} >
+                                                <img src={item.src} alt="pic" />
+                                            </div>)
+                                        })
+                                    }
+                                </div>
+                            </Paper>
                         </div>
-                        <div>
-                            {product.skus[pack].json ? <About head={product.name} json={product.skus[pack].json} /> : null}
+                        <div className="col">
+                            <Paper className="detail-col">
+                                <Detail product={product} size={size} quantity={quantity} pack={pack} handle={changePack}
+                                    id={product.skus.id} handleChange={handleChange} handler={changeQuantity} />
+                            </Paper>
                         </div>
                     </div>
-
+                    <div>
+                        {product.skus[pack].json ? <About head={product.name} json={product.skus[pack].json} /> : null}
+                    </div>
                 </div>
             </React.Fragment >
             : <div className="row mt-4"><LinearProgress /></div>

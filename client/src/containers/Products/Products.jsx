@@ -17,8 +17,7 @@ import { Alert, Pagination, PaginationItem, TreeView, TreeItem } from '@material
 import Product from '../../components/Product/Product'
 
 import emptySvg from '../../assets/illustrations/empty.svg'
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import ChevronRightIcon from '@material-ui/icons/ChevronRight';
+
 
 import './Products.scss'
 
@@ -48,18 +47,15 @@ const Products = (props) => {
 
             setMetaData(meta)
 
-            // setCategories(Array.from(new Set(products.map(product => product.category.name))));
             setCategories(meta.categories);
 
-            // setBrands(Array.from(new Set(products.map(product => ({ name: product.brand, selected: true })))));
-            if (['category', 'parentCategory', '&sr'].map(str => props.location.search.indexOf(str) != -1).reduce((acc, cur) => acc || cur, false)) {
-                setBrands(meta.brands.map(brand => ({ name: brand.name, selected: false })))
+            if (['?category', '?parentCategory', '&sr'].map(str => props.location.search.indexOf(str) != -1).reduce((acc, cur) => acc || cur, false)) {
+                setBrands(meta.brands.map(brand => ({ name: brand.name, selected: (new URLSearchParams(props.location.search).get('brand')) && ((new URLSearchParams(props.location.search).get('brand')).indexOf(brand.name) != -1) })))
+                setSKUs(meta.skus.map(s => ({ ...s, selected: (new URLSearchParams(props.location.search).get('filter')) && ((new URLSearchParams(props.location.search).get('filter')).indexOf(s.value) != -1) })));
+                setSKUTypes(Array.from(new Set(meta.skus.map(sku => sku.name))));
                 props.location.search = props.location.search.replace('&sr', '');
             }
 
-            // setSKUs(Array.from(new Set(products.map(product => product.skus.map(sku => ({ name: sku.name, type: sku.type, selected: true }))).flat())));
-            setSKUs(meta.skus.map(s => ({ ...s, selected: (new URLSearchParams(props.location.search).get('filter')) && ((new URLSearchParams(props.location.search).get('filter')).indexOf(s.name) != -1) })));
-            setSKUTypes(Array.from(new Set(meta.skus.map(sku => sku.type))));
 
             setLoading(false);
 
@@ -70,20 +66,6 @@ const Products = (props) => {
 
     }, [props.location])
 
-    const updateVisibleProducts = () => {
-        let _products = products.filter(product => {
-            if (
-                SKUs.filter(sku => sku.selected).map(sku => sku.name).some(item => product.skus.map(sku => sku.name).includes(item))
-            ) {
-                return true;
-            }
-            else {
-                return false;
-            }
-        })
-
-        setVisibleProducts(_products);
-    }
 
     const changeBrand = (name, e) => {
         let updatedBrands = brands.map(brand => {
@@ -97,9 +79,9 @@ const Products = (props) => {
         applyBrands();
     }
 
-    const changeSKU = (name, e) => {
+    const changeSKU = (value, e) => {
         let updatedSKU = SKUs.map(sku => {
-            if (sku.name == name) {
+            if (sku.value == value) {
                 sku.selected = e.target.checked;
             }
             return sku;
@@ -109,11 +91,11 @@ const Products = (props) => {
         applyFilter(updatedSKU);
     }
     const applyFilter = (SKUs) => {
-        let filter = SKUs.filter(s => s.selected).map(s => s.name).join(' ');
+        let filter = SKUs.filter(s => s.selected).map(s => `${s.name}:${s.value}`).join(',');
         console.log(filter);
 
         if (props.location.search.indexOf('filter') != -1) {
-            let query = props.location.search.replace(/filter=[a-zA-z\-\+\d %]*&/, `filter=${filter}&`);
+            let query = props.location.search.replace(/filter=[a-zA-z\-\+\d : ,%]*&/, `filter=${filter}&`);
 
             console.log(query);
 
@@ -128,13 +110,27 @@ const Products = (props) => {
         let val = parseInt(e.target.value);
 
         if (val < 0) val = 0;
-        if (!i && val > priceRange[1]) val = priceRange[1];
-        if (i && val < priceRange[0]) val = priceRange[0];
+        // if (!i && val > priceRange[1]) val = priceRange[1];
+        // if (i && val < priceRange[0]) val = priceRange[0];
 
         let newPriceRange = [...priceRange];
+
         newPriceRange[i] = val;
+        !i && (newPriceRange[1] = Math.max(newPriceRange[0], newPriceRange[1]))
+        i && (newPriceRange[0] = Math.min(newPriceRange[0], newPriceRange[1]))
         setPriceRange(newPriceRange)
 
+    }
+    const applyPrice = () => {
+        let priceQuery = `minPrice=${priceRange[0]}&maxPrice=${priceRange[1]}`;
+
+        if (props.location.search.indexOf('minPrice') != -1) {
+            let query = props.location.search.replace(/minPrice=[\w\d .,]*&maxPrice=[\w\d .,]*&/, `${priceQuery}&`);
+            history.push(`/products${query}`);
+        }
+        else {
+            history.push(`/products?${priceQuery}&${props.location.search.slice(1)}`)
+        }
     }
 
     const applyBrands = () => {
@@ -224,27 +220,27 @@ const Products = (props) => {
                                             </div>
                                         </List>
 
-                                        {/* <Divider />
+                                        <Divider />
                                         <List dense component="nav" aria-label="secondary"
-                                            subheader={<ListSubheader component="div" id="nested-list-subheader">Price Range <Button size="small" color="primary">Apply</Button></ListSubheader>}
+                                            subheader={<ListSubheader component="div" id="nested-list-subheader" className="price-header"><span>Price</span><Button size="small" color="primary" onClick={applyPrice}>Apply</Button></ListSubheader>}
                                         >
                                             <div className="prices">
                                                 <TextField type="number" label="min" value={priceRange[0]} onChange={(e) => handlePriceChange(e, 0)} />
                                                 <TextField type="number" label="max" value={priceRange[1]} onChange={(e) => handlePriceChange(e, 1)} />
 
                                             </div>
-                                        </List> */}
+                                        </List>
 
                                         <Divider />
-                                        {SKUTypes.map(type => (
-                                            <List key={type} dense component="nav" aria-label="secondary"
-                                                subheader={<ListSubheader component="div" id="nested-list-subheader">{type}</ListSubheader>}
+                                        {SKUTypes.map(name => (
+                                            <List key={name} dense component="nav" aria-label="secondary"
+                                                subheader={<ListSubheader component="div" id="nested-list-subheader">{name}</ListSubheader>}
                                             >
                                                 <div className="pack-sizes">
                                                     {SKUs.map(sku => (
-                                                        sku.type == type && sku.name ?
-                                                            <FormControlLabel key={sku.name + sku.id + sku.type} className="d-block ctrl m-0" label={sku.name} control={<Checkbox color="primary"
-                                                                checked={sku.selected} onChange={(e) => changeSKU(sku.name, e)} value={sku.name} />} />
+                                                        sku.name == name && sku.value ?
+                                                            <FormControlLabel key={sku.value + sku.id + sku.name} className="d-block ctrl m-0" label={sku.value} control={<Checkbox color="primary"
+                                                                checked={sku.selected} onChange={(e) => changeSKU(sku.value, e)} value={sku.value} />} />
                                                             : null
                                                     ))}
                                                 </div>
@@ -258,9 +254,15 @@ const Products = (props) => {
                         </div>
                     </div>
                     <div className="col-md-10 col">
-                        <Snackbar open={snackbar} onClose={() => setSnackbar(false)} autoHideDuration={2000} anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}>
-                            {true ? <Alert variant="filled" severity={"success"}>{"Item Added to Cart"}</Alert> : null}
-                        </Snackbar>
+                        {props.userName ?
+                            <Snackbar open={snackbar} onClose={() => setSnackbar(false)} autoHideDuration={2000} anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}>
+                                {true ? <Alert variant="filled" severity={"success"}>{"Item Added to Cart"}</Alert> : null}
+                            </Snackbar>
+                            :
+                            <Snackbar open={snackbar} onClose={() => setSnackbar(false)} autoHideDuration={2000} anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}>
+                                {true ? <Alert variant="filled" severity={"error"}>{"Please Login to add items to Cart"}</Alert> : null}
+                            </Snackbar>
+                        }
                         <div className="content">
                             {productsSection}
                         </div>

@@ -22,6 +22,7 @@ db.category = require('../models/category')(sequelize, Sequelize);
 db.product = require('../models/product')(sequelize, Sequelize);
 db.sku = require('../models/sku')(sequelize, Sequelize)
 db.image = require('../models/image')(sequelize, Sequelize)
+db.attribute = require('../models/attribute')(sequelize, Sequelize)
 
 db.cart = require('../models/cart')(sequelize, Sequelize)
 
@@ -48,6 +49,9 @@ db.product.hasMany(db.sku);
 
 db.image.belongsTo(db.sku);
 db.sku.hasMany(db.image);
+
+db.attribute.belongsTo(db.sku);
+db.sku.hasMany(db.attribute);
 
 
 db.cart.belongsTo(db.user);

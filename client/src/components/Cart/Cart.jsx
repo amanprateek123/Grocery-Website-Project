@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react'
 import './Cart.scss'
+import { Link } from 'react-router-dom'
 import { Button } from '@material-ui/core'
 import DeleteIcon from '@material-ui/icons/Delete';
 import { connect } from 'react-redux';
@@ -29,9 +30,11 @@ function Cart(props) {
                                             <div className="brand col-12">
                                                 <p><u>{product.sku.product.brand}</u></p>
                                             </div>
-                                            <div className="product_name col-12">
-                                                <p> {product.sku.product.name} - {product.sku.name} </p>
-                                            </div>
+                                            <Link to={`/product/${product.sku.product.id}?skuId=${product.sku.id}`}>
+                                                <div className="product_name col-12">
+                                                    <p> {product.sku.product.name} - {product.sku.name}</p>
+                                                </div>
+                                            </Link>
                                         </div>
                                     </div>
                                     <div className="col-md-5">
@@ -71,7 +74,7 @@ function Cart(props) {
                     </div>
                 </div>
             </li>
-        </ul>
+        </ul >
     )
 }
 const mapStateToProps = state => {

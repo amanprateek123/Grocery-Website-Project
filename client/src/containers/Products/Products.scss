@@ -20,10 +20,17 @@
         text-transform: capitalize;
         padding-left: 0;
     }
-    
+    .price-header{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        button{
+            height: fit-content;
+        }
+    }
     .prices{
         display: flex;
-        padding: 0 2em;
+        padding: 0 0.2em;
         justify-content: space-around;
     }
     
