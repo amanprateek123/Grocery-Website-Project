@@ -1,5 +1,5 @@
-.zoom1{
-    min-width: 980px;
+.zoom_1{
+    width: 60%;
     position: relative;
     margin: 0 auto;
     height: 100%;
@@ -10,10 +10,13 @@
     left: 0;
     bottom: 0;
     right: 0;
-    overflow-x: hidden;
     overflow-y: scroll;
+    &::-webkit-scrollbar {
+    width: 0px;
+    background: transparent;
+  }
     img{
-        width: 980px;
+        width: 100%;
         height: 1306px;
     }
     }
@@ -58,6 +61,34 @@
     right: 20px;
     padding: 10px;
     cursor: pointer;
+    outline: 0;
+    background-color: #fff;
+    font-size: 20px;
+    color: #3e4152;
+    font-weight: 500;
+    border-radius: 100%;
+    border: 1px solid #d5d6d9;
+}
+.btn_left{
+    position: absolute;
+    top: 45%;
+    left: 10px;
+    outline: 0;
+    background-color: #fff;
+    font-size: 20px;
+    color: #3e4152;
+    font-weight: 500;
+    border-radius: 100%;
+    border: 1px solid #d5d6d9;
+    height: 50px;
+    width: 50px;
+}
+.btn_right{
+    position: absolute;
+    top: 45%;
+    right: 10px;
+    height: 50px;
+    width: 50px;
     outline: 0;
     background-color: #fff;
     font-size: 20px;

@@ -62,16 +62,16 @@ const Details = (props) => {
         product ?
             <React.Fragment>
                 <Modal visible={zoom}>
-                    <Zoom closeModal={() => setZoom(false)} product={product} pack={pack} changeImg={changeImg} img={img} />
+                    <Zoom closeModal={() => setZoom(false)} product={product} pack={pack} changeImg={changeImg} img={img}/>
                 </Modal>
-                <div style={{ backgroundColor: "#f3f3f3", width: "100%" }}>
+                <div style={{ backgroundColor: "#f3f3f3", width: "100%",margin:'0 auto'}}>
                     <div className="container" style={{ backgroundColor: "white", paddingTop: '2%' }}>
                         <div className="row">
                             <div className="colu">
                                 <Paper style={{boxShadow:'none',height:'800px'}}>
 
-                                    <div className="main_img" onClick={() => setZoom(true)}>
-                                        {product.skus[pack].images[img] ? <img src={product.skus[pack].images[img].src} alt="pic" /> : null}
+                                    <div className="main_img">
+                                        {product.skus[pack].images[img] ? <img src={product.skus[pack].images[img].src} alt="pic" onClick={() => setZoom(true)} /> : null}
                                     </div>
                                     <div className="slide_image">
                                         {

@@ -1,16 +1,34 @@
-import React from 'react'
+import React,{useState} from 'react'
 import './Zoom.scss'
 import CloseIcon from '@material-ui/icons/Close';
+import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 
 export default function Zoom(props) {
+
+   const [next, setnext] = useState(props.img)
+   const left_move = ()=>{
+       if(next>0){
+        let index = next-1;
+        setnext(index)
+       }
+   }
+   const right_move = ()=>{
+       if(next<(props.product.skus[props.pack].images.length-1)){
+        let index = next+1;
+        setnext(index)
+       }
+   }
+   const changeImg=(i)=>{
+       setnext(i)
+   }
     return (
-        <div className='zoom1'>
+        <div className='zoom_1'>
             <div className="zoom_img1">
-               <img src="https://assets.myntassets.com/h_1440,q_90,w_1080/v1/assets/images/2477343/2018/2/22/11519301743689-Libas-Women-Green-Woven-Design-Pathani-Kurta-4531519301743438-1.jpg" />
+               <img src={props.product.skus[props.pack].images[next].src} />
             </div>
             <div className="slide_zoom1">
              {props.product.skus[props.pack].images.map((item, i) => {
-                    return (<div className={props.img === i ? "img_det2a" : "img_det1a"} key={item.id} onClick={() => { props.changeImg(i) }} >
+                    return (<div className={(next) === i ? "img_det2a" : "img_det1a"} key={item.id} onClick={() => {changeImg(i) }} >
                                <img src={item.src} alt="pic" />
                             </div>)
                                     })
@@ -18,6 +36,14 @@ export default function Zoom(props) {
             </div>
             <div className="close" onClick={props.closeModal}>
                <CloseIcon/>
+            </div>
+            <div>
+                <button className="btn_left" onClick={left_move}>
+                    <ChevronRightIcon style={{transform:'rotate(180deg'}}/>
+                </button>
+                <button className="btn_right" onClick={right_move}>
+                    <ChevronRightIcon/>
+                </button>
             </div>
         </div>
     )
