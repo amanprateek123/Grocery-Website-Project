@@ -6,7 +6,40 @@ import CartIcon from '@material-ui/icons/AddShoppingCart'
 import './Product.scss'
 
 const Product = (props) => {
-    const product = props.product;
+    let product = props.product;
+
+    if (!product) {
+        product = {
+            name: "Lorem Ipsum",
+            brand: "odor",
+            description: "lorem ipsum odor isit.?",
+            keywords: "",
+            json: "",
+            category: {
+                name: "category"
+            },
+            skus: [
+                {
+                    code: "",
+                    type: "",
+                    name: "",
+                    price: "100",
+                    json: "",
+                    images: [
+                        {
+                            // src: "http://picsum.photos/200/135"
+                        }
+                    ],
+                    attributes: [
+                        {
+                            name: "",
+                            value: ""
+                        }
+                    ]
+                }
+            ]
+        }
+    }
 
     const [selectedSKU, setSelectedSKU] = useState(product.skus ? product.skus[0] : null);
 
@@ -53,7 +86,7 @@ const Product = (props) => {
             <CardActions className="card-actions">
                 {/* <div className="btn btn-full add-to-cart"><CartIcon /> Add to Cart</div> */}
                 <Link to={`/product/${product.id}`} ><Button style={{ color: '#aaa' }}>Details</Button></Link>
-                <Fab size="small" className="add-to-cart-btn" title={"Add to Cart"} variant="round" style={{ background: '#e35f21', color: 'white', boxShadow: '-1px 2px 10px 0 #e35f2199' }} onClick={() => { props.addToCart(selectedSKU.id); props.feedback() }}><CartIcon /></Fab>
+                {props.noCart ? null : <Fab size="small" className="add-to-cart-btn" title={"Add to Cart"} variant="round" style={{ background: '#e35f21', color: 'white', boxShadow: '-1px 2px 10px 0 #e35f2199' }} onClick={() => { props.addToCart(selectedSKU.id); props.feedback() }}><CartIcon /></Fab>}
 
             </CardActions>
 

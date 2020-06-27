@@ -2,6 +2,136 @@
 const db = require('../utils/database')
 const csv = require('csvtojson')
 
+const { validationResult } = require('express-validator')
+
+// *** Single UPLOADS ***
+
+exports.addProduct = (req, res) => {
+    let prod = req.body;
+
+    // Validate product
+    const valErrors = validationResult(req);
+
+    if (!valErrors.isEmpty()) {
+        return res.status(422).json({ status: 422, errors: valErrors.array() });
+    }
+
+    db.product.create({
+        name: prod.name,
+        description: prod.description,
+        brand: prod.brand,
+        keywords: prod.keywords,
+        json: prod.json,
+        categoryId: prod.categoryId
+    }).then(_product => {
+        console.log(" >> ADDED PRODUCT: ", _product.id);
+
+        Promise.all(
+            prod.skus.map(sku => {
+                return db.sku.create({
+                    productId: _product.id,
+                    code: sku.code,
+                    type: sku.type,
+                    name: sku.name,
+                    // description: sku.description,
+                    price: sku.price,
+                    stockQuantity: sku.stockQuantity,
+                    json: sku.json
+                }).then(_sku => {
+                    console.log(" >> ADDED SKU: ", _sku.id);
+                    return Promise.all(
+                        [...sku.images.map(image => {
+                            return db.image.create({
+                                skuId: _sku.id,
+                                src: image.src,
+                            }).then(_img => {
+                                console.log(" >> ADDED IMG: ", _img.id);
+                                return _img
+                            })
+                        }),
+                        ...sku.attributes.map(attr => {
+                            return db.attribute.create({
+                                skuId: _sku.id,
+                                name: attr.name,
+                                value: attr.value,
+                            }).then(_attr => {
+                                console.log(" >> ADDED attr: ", _attr.id);
+                                return _attr
+                            })
+                        })
+                        ]
+                    ).then(imatrr => {
+                        return console.log(" >> IMAGES AND ATTRIBUTES DONE");
+                    })
+                })
+            })
+        ).then(_skus => {
+            console.log(" >> SKUS DONE");
+            res.json({ message: "Product Added", status: 200, product: _product })
+        })
+    })
+
+}
+
+exports.deleteProduct = (req, res) => {
+    let productId = parseInt(req.body.productId);
+
+    console.log('Request to delete product with ID: ' + productId);
+
+
+    db.product.findByPk(productId, {
+        include: [
+            {
+                model: db.sku,
+                include: [
+                    {
+                        model: db.image
+                    },
+                    {
+                        model: db.attribute
+                    }
+                ]
+            }
+        ]
+    }).then(_product => {
+
+        if (_product) {
+            Promise.all(
+                _product.skus.map(sku => {
+                    return Promise.all(
+                        [
+                            ...sku.images.map(img => {
+                                return img.destroy().then(result => console.log('>> DELETED IMG : ', img.id))
+                            }),
+                            ...sku.attributes.map(attr => {
+                                return attr.destroy().then(result => console.log('>> DELETED ATTR : ', attr.id))
+                            })
+                        ]
+                    ).then(result => {
+                        return sku.destroy().then(result => console.log('DELETED SKU', sku.id));
+                    })
+                })
+            ).then(result => {
+                console.log(">> SKU's Deleted ");
+                _product.destroy().then(result => {
+                    console.log(">> DELETED PRODUCT", productId);
+                    res.json({ status: 200, message: "deleted Successfully", product: _product })
+                })
+            })
+        }
+        else {
+            return res.json({ status: 400, message: "NO Such Product" })
+        }
+    }).catch(err => {
+        console.log(err);
+        res.json({ status: 500, message: "Server Error" });
+    })
+
+}
+
+
+
+// *** BULK UPLOADS ***
 exports.addProducts = (req, res) => {
 
     // if file type is not csv return error.

@@ -20,13 +20,16 @@ import female_avatar from '../../assets/illustrations/female_avatar.svg'
 
 import './Admin.scss'
 import AddCategoriesFile from './AddCategoriesFile';
+import AddProduct from './AddProduct';
+import AddProductJSON from './AddProductJSON';
+import DeleteProduct from './DeleteProduct';
 
 const Profile = (props) => {
 
     const [user, setUser] = useState({});
     const [modal, setModal] = useState(false);
 
-    const [tab, setTab] = useState('products');
+    const [tab, setTab] = useState('product');
 
 
 
@@ -87,6 +90,12 @@ const Profile = (props) => {
                                                 </ListItemIcon>
                                                 <ListItemText primary="Add Product" />
                                             </ListItem>
+                                            <ListItem button selected={tab == 'productJSON'} onClick={() => setTab('productJSON')}>
+                                                <ListItemIcon>
+                                                    <CategoryIcon />
+                                                </ListItemIcon>
+                                                <ListItemText primary="Add Product JSON" />
+                                            </ListItem>
                                         </List>
 
 
@@ -117,6 +126,21 @@ const Profile = (props) => {
                                                 <ListItemText primary="Add SKU" />
                                             </ListItem>
                                         </List>
+
+                                        <List component="nav" aria-label="main"
+                                            subheader={
+                                                <ListSubheader component="div" id="nested-list-subheader">
+                                                    Edit
+                                            </ListSubheader>
+                                            }
+                                        >
+                                            <ListItem button selected={tab == 'deleteProduct'} onClick={() => setTab('deleteProduct')}>
+                                                <ListItemIcon>
+                                                    <CategoryIcon />
+                                                </ListItemIcon>
+                                                <ListItemText primary="Delete Product" />
+                                            </ListItem>
+                                        </List>
                                         <Divider />
                                         <List component="nav" aria-label="secondary">
                                             <ListItem button onClick={props.logout}>
@@ -137,16 +161,20 @@ const Profile = (props) => {
                             {tab == 'category' ?
                                 null
                                 : tab == 'product' ?
-                                    null
-                                    : tab == 'sku' ?
-                                        null
-                                        : tab == 'categories' ?
-                                            <AddCategoriesFile />
-                                            : tab == 'products' ?
-                                                <AddProductsFile />
-                                                : tab == 'skus' ?
-                                                    null
-                                                    : null}
+                                    <AddProduct />
+                                    : tab == 'productJSON' ?
+                                        <AddProductJSON />
+                                        : tab == 'sku' ?
+                                            null
+                                            : tab == 'categories' ?
+                                                <AddCategoriesFile />
+                                                : tab == 'products' ?
+                                                    <AddProductsFile />
+                                                    : tab == 'skus' ?
+                                                        null
+                                                        : tab == 'deleteProduct' ?
+                                                            <DeleteProduct />
+                                                            : null}
                         </div>
                     </div>
                 </div>
