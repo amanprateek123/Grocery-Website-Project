@@ -9,7 +9,7 @@ import {
     Grid, Card, CardContent, Paper, Typography, CardMedia, Avatar,
     List, ListItem, ListSubheader, ListItemIcon, ListItemText, Divider,
     TextField, CardActionArea, CardActions, Button, Select, MenuItem, InputLabel, Badge, Chip, Checkbox, FormControlLabel
-    , Slider, LinearProgress, Snackbar
+    , Slider, LinearProgress, Snackbar, InputAdornment
 }
     from '@material-ui/core'
 import { Alert, Pagination, PaginationItem, TreeView, TreeItem } from '@material-ui/lab';
@@ -225,8 +225,12 @@ const Products = (props) => {
                                             subheader={<ListSubheader component="div" id="nested-list-subheader" className="price-header"><span>Price</span><Button size="small" color="primary" onClick={applyPrice}>Apply</Button></ListSubheader>}
                                         >
                                             <div className="prices">
-                                                <TextField type="number" label="min" value={priceRange[0]} onChange={(e) => handlePriceChange(e, 0)} />
-                                                <TextField type="number" label="max" value={priceRange[1]} onChange={(e) => handlePriceChange(e, 1)} />
+                                                <TextField InputProps={{
+                                                    startAdornment: <InputAdornment position="start">$</InputAdornment>,
+                                                }} type="number" label="min" value={priceRange[0]} onChange={(e) => handlePriceChange(e, 0)} />
+                                                <TextField InputProps={{
+                                                    startAdornment: <InputAdornment position="start">$</InputAdornment>,
+                                                }} type="number" label="max" value={priceRange[1]} onChange={(e) => handlePriceChange(e, 1)} />
 
                                             </div>
                                         </List>

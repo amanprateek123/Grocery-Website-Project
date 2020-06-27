@@ -45,4 +45,16 @@
             }
         }
     }
+
+    .full-width{
+        width: 90%;
+    min-height: 100%;
+
+    .row{
+        width: 100%;
+    }
+    .col{
+        width: 100%;
+    }
+    }
 }
