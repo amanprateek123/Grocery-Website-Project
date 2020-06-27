@@ -1,0 +1,46 @@
+.price_list{
+    padding: 0 24px;
+    border-bottom: 1px solid #f0f0f0;
+    font-size: 16px;
+    width: 100%;
+}
+.price_det{
+    display: flex;
+    justify-content: space-between;
+    margin: 20px 0;
+    align-items: flex-start;
+    span{
+        float: right;
+    }
+}
+.hel_price{
+    line-height: 16px;
+    margin-top: 2px;
+    font-size: inherit!important;
+}
+.price_total{
+    border-top: 1px dashed #e0e0e0;
+    font-weight:bold;
+    font-size: 18px;
+}
+.price_foot{
+    margin: 24px 15px 8px;
+    img{
+        width: 29px;
+        height: 36px;
+        margin-right: 20px;
+        float: left;
+        text-decoration: none;
+        color: inherit;
+        border: none;
+        outline: none;
+    }
+    span{
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.29;
+    display: block;
+    margin-left: 49px;
+    color: #878787;
+    }
+}

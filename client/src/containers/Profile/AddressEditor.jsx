@@ -2,6 +2,7 @@ import React from 'react';
 import { useState } from 'react';
 import { connect } from 'react-redux';
 import * as actions from '../../store/actions'
+import AddIcon from '@material-ui/icons/Add';
 
 import { TextField, Button, Paper, Checkbox, FormControlLabel } from '@material-ui/core'
 
@@ -32,14 +33,17 @@ const AddressEditor = (props) => {
 
 
     return (
-        <Paper variant="outlined" className="add-address">
+        <Paper variant="outlined" className="add-address" style={{border:'none',margin:'0'}}>
             {!editing ?
-                <div className="row px-4">
-                    <h6 style={{ color: '#3f51b5', margin: '1em', cursor: 'pointer' }} onClick={() => setEditing(true)}>ADD A NEW ADDRESS</h6>
-                </div>
+                      <div style={{marginTop:'8px',backgroundColor:'white'}}>
+                          <div className="adder" onClick={() => setEditing(true)}>
+                              <AddIcon style={{margin: '0 22px 0 26px',verticalAlign: 'middle'}}/>
+                              Add a new address
+                          </div>
+                      </div>
                 :
                 <div className="address-form" style={{ fontSize: '0.7em' }}>
-                    <h5 style={{ color: '#3f51b5', margin: '1em' }}>ADD A NEW ADDRESS</h5>
+                    <h5 style={{ color: '#3f51b5', padding: '1em' }}>ADD A NEW ADDRESS</h5>
                     <form onSubmit={addAddress} className="form" style={{ marginBottom: '0' }}>
                         <div className="form-group">
                             <TextField className="text-field address-field" variant="outlined" label="Name" id="name" name="name" value={address.name} onChange={handleChange} required />
