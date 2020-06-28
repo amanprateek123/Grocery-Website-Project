@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import './Cart.scss'
-import { Link } from 'react-router-dom'
+import { Link,NavLink } from 'react-router-dom'
 import { Button } from '@material-ui/core'
 import DeleteIcon from '@material-ui/icons/Delete';
 import { connect } from 'react-redux';
@@ -35,7 +35,7 @@ function Cart(props) {
                                             <div className="brand col-12">
                                                 <p><u>{product.sku.product.brand}</u></p>
                                             </div>
-                                            <Link to={`/product/${product.sku.product.id}?skuId=${product.sku.id}`}>
+                                            <Link to={`/product/${product.sku.product.id}?skuId=${product.sku.id}`} style={{textDecoration:'none'}}>
                                                 <div className="product_name col-12">
                                                     <p> {product.sku.product.name} - {product.sku.name}</p>
                                                 </div>
@@ -73,9 +73,11 @@ function Cart(props) {
                 <div >
                     <div className="check_btn col-12">
                         <p>Sub Total : <span>Rs. {total}</span></p>
-                        <Button color="inherit" style={{ backgroundColor: '#E35F21', color: 'white', width: '100%', height: '40px', fontSize: '15px' }}>
+                        <NavLink to='/checkout' style={{textDecoration:'none'}}>
+                          <Button color="inherit" style={{ backgroundColor: '#E35F21', color: 'white', width: '100%', height: '40px', fontSize: '15px' }}>
                             Proceed To Checkout
-                        </Button>
+                          </Button>
+                        </NavLink>
                     </div>
                 </div>
             </li>

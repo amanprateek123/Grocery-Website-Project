@@ -48,7 +48,7 @@ class App extends Component {
 
             <Route path="/product/:id" component={Details} />
 
-
+            <Route path="/checkout" component={Checkout}/>
 
 
             <Route component={E404} />

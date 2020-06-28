@@ -361,9 +361,9 @@ const Profile = (props) => {
     }
 
     const profileInformationPage = (
-        <Paper >
+        <Paper>
             {user ?
-                <CardContent>
+                <CardContent >
                     <div className="profile-section">
                         <header>
                             <h5 className="heading d-inline-block">Personal Information</h5>
