@@ -533,6 +533,11 @@ exports.getCart = (req, res) => {
          ]
       }
    }).then(cart => {
+      // If there are some products in the cart which were DELETED by ADMIN
+      // they need to be deleted from the cart.
+      cart.filter(ci => !ci.sku).map(deleted => deleted.destroy().then(del => console.log(' >> Deleted cartId', del.id, ' as the product was deleted')))
+
+      cart = cart.filter(ci => ci.sku)
       return res.json(cart);
    }).catch(err => {
       return res.status(500).json(err);
