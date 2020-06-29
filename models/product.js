@@ -20,9 +20,6 @@ module.exports = (sequelize, Sequelize = require('sequelize')) => {
         },
         keywords: {
             type: Sequelize.STRING,
-        },
-        json: {
-            type: Sequelize.STRING,
         }
     },
         {

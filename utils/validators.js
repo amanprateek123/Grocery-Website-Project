@@ -77,11 +77,6 @@ exports.productSchema = {
             errorMessage: 'Empty Attribute Value.'
         }
     },
-    json: {
-        isJSON: {
-            errorMessage: "Invalid Product JSON"
-        }
-    },
     'skus.*.json': {
         isJSON: {
             errorMessage: "Invalid SKU JSON"

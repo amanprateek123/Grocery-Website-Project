@@ -86,26 +86,26 @@
         font-size: 14px;
         font-weight: lighter;
     }
-    .lister{
-        display: flex;
-        flex-direction: row;
-        flex-wrap: wrap;
-        
-    }
-    .list{
-        position: relative;
-        width: 40%;
-        height: 50px;
-        border-bottom: 1px solid #eaeaec;
-        margin: auto;
-        margin-bottom: 10px;
-        h6{
-            font-size: 12px;
-             color: gray;   
-        }
-        
-    }
 }
+.lister{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;        
+}
+.list{
+    position: relative;
+    width: 40%;
+    height: 50px;
+    border-bottom: 1px solid #eaeaec;
+    // margin: auto;
+    margin-bottom: 10px;
+    h6{
+        font-size: 12px;
+         color: gray;   
+    }
+    
+}
+
 @media only screen and (max-width: 600px){
     .card_det{
         width: 100%;

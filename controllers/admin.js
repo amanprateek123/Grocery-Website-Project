@@ -21,7 +21,6 @@ exports.addProduct = (req, res) => {
         description: prod.description,
         brand: prod.brand,
         keywords: prod.keywords,
-        json: prod.json,
         categoryId: prod.categoryId
     }).then(_product => {
         console.log(" >> ADDED PRODUCT: ", _product.id);
@@ -146,8 +145,8 @@ exports.addProducts = (req, res) => {
                 if (products[0].hasOwnProperty(prop)) {
                     console.log(prop);
 
-                    if (!['name', 'categoryId', 'brand', 'description', 'keywords', 'json'].includes(prop)) {
-                        res.json({ status: 400, message: `Please Submit a CSV file with fields [name,categoryId,brand,description,keywords,json]. Fields don't match.` })
+                    if (!['name', 'categoryId', 'brand', 'description', 'keywords'].includes(prop)) {
+                        res.json({ status: 400, message: `Please Submit a CSV file with fields [name,categoryId,brand,description,keywords]. Fields don't match.` })
                         return;
                     }
                 }

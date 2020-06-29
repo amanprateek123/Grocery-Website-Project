@@ -94,7 +94,7 @@ const Profile = (props) => {
                                                 <ListItemIcon>
                                                     <CategoryIcon />
                                                 </ListItemIcon>
-                                                <ListItemText primary="Add Product JSON" />
+                                                <ListItemText primary="Add Product (as JSON)" />
                                             </ListItem>
                                         </List>
 

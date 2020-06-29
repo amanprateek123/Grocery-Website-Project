@@ -6,7 +6,7 @@ export default function About(props) {
 
     let content = []
 
-    for (let i = 0; i < 3; i++) {
+    for (let i = 3; i < json.length; i++) {
         if (json && json[i]) {
             content.push(
                 <div key={json[i].key} className="json1">

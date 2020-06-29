@@ -15,7 +15,6 @@ let schema = {
     brand: "",
     description: "",
     keywords: "",
-    json: "",
     categoryId: "",
     skus: [
         {
