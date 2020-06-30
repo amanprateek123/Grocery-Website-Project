@@ -31,18 +31,16 @@ function Checkout(props) {
    }
 
    const [addr,SetAddr]=useState(3)
-   const [show,setShow]=useState(false)
    const [addingAddress, setAddingAddress] = useState(false);
    const [addressEditMode, setAddressEditMode] = useState(false);
    const [editingAddress, setEditingAddress] = useState(null)
 
    const viewAdd = (i)=>{
-    setShow(!show)
-    if(show){
-        SetAddr(i)
+    if(addr===i){
+        SetAddr(3)
     }
     else{
-        SetAddr(3)
+        SetAddr(i)
     }
    }
    const [idx,SetIdx] = useState(0)
@@ -87,8 +85,41 @@ function Checkout(props) {
 
     })
 }
+const removeAddress = (id) => {
+        fetch('/remove-address', {
+            headers: {
+                'Authorization': 'Bearer ' + props.idToken,
+                'Content-Type': 'application/json'
+            },
+            method: 'DELETE',
+            body: JSON.stringify({ id })
+        }).then(async res => {
+            res = await res.json();
+            console.log(res);
+            if (res.status == 200) {
+                props.setResponse(res);
+                setUser({
+                    ...user,
+                    addresses: user.addresses.filter(add => add.id != id)
+                })
+            }
+            else {
+                props.setResponse(res);
+            }
+
+        }).catch(err => {
+            console.log(err);
+
+        })
+    }
+ 
+    const editAddress = (address) => {
+        removeAddress(address.id);
+        delete address.id;
+        setAddressEditMode(true);
+        setEditingAddress(address);
+    }   
 const editAddressPost = (address) => {
-    delete address.id;
     addAddress(address);
     setAddressEditMode(false);
     setEditingAddress(null);
@@ -132,7 +163,7 @@ const editAddressPost = (address) => {
                                           </button>: null}
                                        </div>
                                       {(radio===i)? <div className="user_edit">
-                                          <button>
+                                          <button onClick={() => editAddress(add)}> 
                                               Edit
                                           </button>
                                        </div>:null}
