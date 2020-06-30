@@ -543,3 +543,35 @@ exports.getCart = (req, res) => {
       return res.status(500).json(err);
    })
 }
+
+exports.createOrder = (req, res) => {
+   // AddressId, UserId,
+
+   res.json({ status: 200, message: "Order Placed Successfully" })
+}
+
+
+
+exports.getOrders = (req, res) => {
+   db.order.findAll({
+      where: {
+         userId: req.userId
+      },
+      include: [
+         {
+            model: db.orderItem,
+            include: {
+               model: db.sku,
+               include: {
+                  model: db.product
+               }
+            }
+         },
+         {
+            model: db.shippingAddress
+         }
+      ]
+   }).then(orders => {
+      res.json(orders);
+   })
+}
