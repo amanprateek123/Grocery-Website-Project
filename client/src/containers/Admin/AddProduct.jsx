@@ -15,7 +15,6 @@ let schema = {
     brand: "",
     description: "",
     keywords: "",
-    json: "",
     categoryId: "",
     skus: [
         {
@@ -92,8 +91,9 @@ const AddProduct = (props) => {
     function isURL(str) {
         let picsum = /^https:\/\/picsum.photos\//; // Dummy Img
         let server = /^\/assets\/images\/products\//; // Image on server
+        let image = /(\.jpg|\.png|\.jpeg|\.gif)$/; // Image url
 
-        return picsum.test(str) || server.test(str);
+        return picsum.test(str) || server.test(str) || image.test(str);
     }
 
     const handleChange = (e) => {
@@ -241,9 +241,6 @@ const AddProduct = (props) => {
                                 <TextField required value={product.description} name="description" onChange={handleChange} label="Description" multiline className="w-100" InputLabelProps={{ shrink: Boolean(product.description) }} />
                             </div>
                             <div className="form-group">
-                                <TextField value={product.json} name="json" onChange={handleChange} label="JSON" multiline className="w-100" InputLabelProps={{ shrink: Boolean(product.json) }} />
-                            </div>
-                            <div className="form-group">
                                 <TextField value={product.keywords} name="keywords" onChange={handleChange} label="Keywords" InputLabelProps={{ shrink: Boolean(product.keywords) }} />
                             </div>
                         </div>
@@ -255,7 +252,7 @@ const AddProduct = (props) => {
                                 <Button onClick={addSKU}>Add SKU</Button>
                             </div>
                             {product.skus.map((sku, i) => (
-                                <div key={sku} className="sku">
+                                <div key={sku + i} className="sku">
                                     <div className="d-flex">
                                         <h4>SKU {i}</h4>
                                         <Button color="secondary" onClick={() => removeSKU(i)}>Remove</Button>
@@ -272,7 +269,7 @@ const AddProduct = (props) => {
                                         <TextField required type="number" value={sku.stockQuantity} name="stockQuantity" onChange={(e) => handleChangeSKU(e, i)} label="stockQuantity" InputLabelProps={{ shrink: Boolean(sku.stockQuantity) }} />
                                     </div>
                                     <div className="form-group">
-                                        <TextField value={sku.json} name="json" onChange={(e) => handleChangeSKU(e, i)} label="json" multiline InputLabelProps={{ shrink: Boolean(sku.json) }} />
+                                        <TextField required value={sku.json} name="json" onChange={(e) => handleChangeSKU(e, i)} label="json" multiline InputLabelProps={{ shrink: Boolean(sku.json) }} />
                                     </div>
 
 
@@ -283,12 +280,12 @@ const AddProduct = (props) => {
                                         </div>
                                         <div className="imgs">
                                             {sku.images.map((img, j) => (
-                                                <div key={img} className="row">
+                                                <div key={img + i + j} className="row">
                                                     <div className="col">
                                                         <TextField required value={img.src} name="src" onChange={(e) => handleChangeIMG(e, i, j)} label="image url" type="url" InputLabelProps={{ shrink: Boolean(img.src) }} />
                                                     </div>
                                                     <div className="col">
-                                                        {isURL(img.src) ? <img src={img.src} alt="" /> : null}
+                                                        {isURL(img.src) ? <img width={200} src={img.src} alt="" /> : null}
                                                     </div>
                                                     <Button color="secondary" onClick={() => removeIMG(i, j)}>Remove</Button>
                                                 </div>
@@ -303,9 +300,9 @@ const AddProduct = (props) => {
                                         </div>
                                         <div className="imgs">
                                             {sku.attributes.map((attr, j) => (
-                                                <div key={attr} className="form-group">
-                                                    <TextField required value={attr.name} name="name" onChange={(e) => handleChangeATTR(e, i, j)} label="attribute name" InputLabelProps={{ shrink: Boolean(attr.name) }} />
-                                                    <TextField value={attr.value} name="value" onChange={(e) => handleChangeATTR(e, i, j)} label="value" InputLabelProps={{ shrink: Boolean(attr.value) }} />
+                                                <div key={attr + i + j} className="form-group">
+                                                    <TextField required value={attr.name} name="name" onChange={(e) => handleChangeATTR(e, i, j)} label="name" InputLabelProps={{ shrink: Boolean(attr.name) }} />
+                                                    <TextField required value={attr.value} name="value" onChange={(e) => handleChangeATTR(e, i, j)} label="value" InputLabelProps={{ shrink: Boolean(attr.value) }} />
                                                     <Button color="secondary" onClick={() => removeATTR(i, j)}>Remove</Button>
                                                 </div>
                                             ))}

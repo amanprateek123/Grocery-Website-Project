@@ -533,8 +533,45 @@ exports.getCart = (req, res) => {
          ]
       }
    }).then(cart => {
+      // If there are some products in the cart which were DELETED by ADMIN
+      // they need to be deleted from the cart.
+      cart.filter(ci => !ci.sku).map(deleted => deleted.destroy().then(del => console.log(' >> Deleted cartId', del.id, ' as the product was deleted')))
+
+      cart = cart.filter(ci => ci.sku)
       return res.json(cart);
    }).catch(err => {
       return res.status(500).json(err);
+   })
+}
+
+exports.createOrder = (req, res) => {
+   // AddressId, UserId,
+
+   res.json({ status: 200, message: "Order Placed Successfully" })
+}
+
+
+
+exports.getOrders = (req, res) => {
+   db.order.findAll({
+      where: {
+         userId: req.userId
+      },
+      include: [
+         {
+            model: db.orderItem,
+            include: {
+               model: db.sku,
+               include: {
+                  model: db.product
+               }
+            }
+         },
+         {
+            model: db.shippingAddress
+         }
+      ]
+   }).then(orders => {
+      res.json(orders);
    })
 }

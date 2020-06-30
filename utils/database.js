@@ -26,6 +26,9 @@ db.attribute = require('../models/attribute')(sequelize, Sequelize)
 
 db.cart = require('../models/cart')(sequelize, Sequelize)
 
+db.order = require('../models/order')(sequelize, Sequelize);
+db.orderItem = require('../models/orderItem')(sequelize, Sequelize);
+
 // Relations - creates respective Foreign Keys as [ownerModel]Id 
 
 db.otp.belongsTo(db.user);
@@ -53,12 +56,25 @@ db.sku.hasMany(db.image);
 db.attribute.belongsTo(db.sku);
 db.sku.hasMany(db.attribute);
 
-
+// Cart
 db.cart.belongsTo(db.user);
 db.user.hasMany(db.cart);
 
 db.cart.belongsTo(db.sku);
 db.sku.hasMany(db.cart);
 
+
+// Orders
+db.orderItem.belongsTo(db.order);
+db.order.hasMany(db.orderItem);
+
+db.order.belongsTo(db.user);
+db.user.hasMany(db.order);
+
+db.order.belongsTo(db.shippingAddress)
+db.shippingAddress.hasMany(db.order)
+
+db.orderItem.belongsTo(db.sku)
+db.sku.hasMany(db.orderItem)
 
 module.exports = db;

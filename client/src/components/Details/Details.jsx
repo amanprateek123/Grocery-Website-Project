@@ -13,18 +13,19 @@ import * as actions from '../../store/actions'
 
 const Detail = (props) => {
 
+    let json = props.product.skus[props.pack].json;
     const quantity = props.quantity
     let content = [];
     const [added, setAdded] = useState(false);
 
-    if (props.product.json) {
-        let json = JSON.parse(props.product.json);
+    if (json) {
+        json = JSON.parse(json);
         for (let i = 0; i < 3; i++) {
             if (json && json[i]) {
                 content.push(
                     <div className="json">
                         < h5 > {json[i].key}</h5 >
-                        <div className="lister">
+                        <div className="lister attr">
                             {Array.isArray(json[i].value) ?
                                 json[i].value.map(li => {
                                     return (<li className="list">
@@ -90,6 +91,17 @@ const Detail = (props) => {
                     <h1>PRODUCT DETAILS <span><ChatIcon /></span></h1>
                     <p>{props.product.description}</p>
                 </div>
+                {props.product.skus[props.pack].attributes ?
+                    <div className="lister">
+                        {props.product.skus[props.pack].attributes.map(attr => (
+                            <li className="list">
+                                <h6>{attr.name}</h6>
+                                <p>{attr.value}</p>
+                            </li>
+                        ))}
+                    </div>
+                    : null
+                }
                 {content}
             </CardContent>
         </Card>

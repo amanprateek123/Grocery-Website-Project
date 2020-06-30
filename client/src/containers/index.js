@@ -8,6 +8,7 @@ import Profile from './Profile/Profile'
 import Products from './Products/Products'
 import Admin from './Admin/Admin'
 import Checkout from './Checkout/Checkout'
+import Test from './test'
 
 export {
     Admin,
@@ -18,5 +19,6 @@ export {
     Orders,
     Profile,
     Products,
-    Checkout
+    Checkout,
+    Test
 }

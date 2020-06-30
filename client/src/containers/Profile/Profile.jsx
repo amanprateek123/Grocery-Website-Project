@@ -370,8 +370,8 @@ const Profile = (props) => {
                             <Button color="secondary" onClick={() => toggleEdit('name')}>{details['name'].editing ? "Cancel" : "Edit"}</Button>
                         </header>
                         <section>
-                            <TextField className="text-field" label="First Name" id="firstName" value={user.firstName} onChange={(e) => onChangeHandler('firstName', e)} disabled={!details['name'].editing} />
-                            <TextField className="text-field" label="Last Name" id="lastName" value={user.lastName} onChange={(e) => onChangeHandler('lastName', e)} disabled={!details['name'].editing} />
+                            <TextField className="text-field" label="First Name" id="firstName" value={user.firstName} onChange={(e) => onChangeHandler('firstName', e)} disabled={!details['name'].editing} InputLabelProps={{ shrink: Boolean(user.firstName) }} />
+                            <TextField className="text-field" label="Last Name" id="lastName" value={user.lastName} onChange={(e) => onChangeHandler('lastName', e)} disabled={!details['name'].editing} InputLabelProps={{ shrink: Boolean(user.lastName) }} />
                             {details['name'].editing ? <Button color="primary" variant="contained" onClick={openModal}>Save</Button> : null}
                         </section>
                         <section>
@@ -394,7 +394,7 @@ const Profile = (props) => {
                             <Button color="secondary" onClick={() => toggleEdit('email')}>{details['email'].editing ? "Cancel" : "Edit"}</Button>
                         </header>
                         <section>
-                            <TextField className="text-field" label="Email" type="email" required id="email" value={user.email} onChange={(e) => onChangeHandler('email', e)} disabled={!details['email'].editing} />
+                            <TextField className="text-field" label="Email" type="email" required id="email" value={user.email} onChange={(e) => onChangeHandler('email', e)} disabled={!details['email'].editing} InputLabelProps={{ shrink: Boolean(user.email) }} />
                             {details['email'].editing ? <Button color="primary" variant="contained" onClick={changeEmailReq}>Save</Button> : null}
                         </section>
                     </div>
@@ -404,7 +404,7 @@ const Profile = (props) => {
                             <Button color="secondary" onClick={() => toggleEdit('mobile')}>{details['mobile'].editing ? "Cancel" : "Edit"}</Button>
                         </header>
                         <section>
-                            <TextField className="text-field" label="Mobile Number" id="mobile" value={user.mobile} onChange={(e) => onChangeHandler('mobile', e)} disabled={!details['mobile'].editing} />
+                            <TextField className="text-field" label="Mobile Number" id="mobile" value={user.mobile} onChange={(e) => onChangeHandler('mobile', e)} disabled={!details['mobile'].editing} InputLabelProps={{ shrink: Boolean(user.mobile) }} />
                             {details['mobile'].editing ? <Button color="primary" variant="contained" onClick={changeMobileReq}>Save</Button> : null}
                         </section>
                     </div>

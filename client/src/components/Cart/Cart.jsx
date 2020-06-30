@@ -8,9 +8,13 @@ import * as actions from '../../store/actions'
 
 function Cart(props) {
     let total = 0
-    props.cart.forEach(itm => {
-        total += itm.quantity * (itm.sku.price)
-    })
+    if (props.cart[0]) {
+        props.cart.forEach(itm => {
+            total += itm.sku ? itm.quantity * (itm.sku.price) : 0
+        })
+    }
+
+    console.log(props.cart);
 
     return (
         <ul className="checkout">
@@ -18,11 +22,12 @@ function Cart(props) {
                 <div className="list_cart">
                     <ul style={{ maxWidth: '700px' }}>
                         {props.cart.map((product, i) => {
+                            if (!product.sku) return null;
                             return <li key={i} style={{ backgroundColor: '#fff', marginBottom: '1.5%' }}>
                                 <div className="container-fluid item-wrap" style={{ position: 'relative', display: 'flex', flexDirection: 'row' }}>
                                     <div className="col-md-2 ">
                                         <div className="row">
-                                            <img src={product.sku.images[0].src} />
+                                            {product.sku.images[0] ? <img src={product.sku.images[0].src} /> : null}
                                         </div>
                                     </div>
                                     <div className="col-md-5">
