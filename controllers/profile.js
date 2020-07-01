@@ -32,7 +32,8 @@ exports.getProfile = (req, res) => {
                 dob: user.dob,
                 email: user.email,
                 mobile: user.mobile,
-                addresses: user.shippingAddresses
+                addresses: user.shippingAddresses,
+                createdAt: user.createdAt
             }
         })
 

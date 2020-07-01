@@ -553,18 +553,26 @@ exports.createOrder = (req, res) => {
 
 
 exports.getOrders = (req, res) => {
+   let where = {}
+   req.query.id ? (where.id = req.query.id):null
    db.order.findAll({
       where: {
-         userId: req.userId
+         userId: req.userId,
+         ...where
       },
       include: [
          {
             model: db.orderItem,
             include: {
                model: db.sku,
-               include: {
-                  model: db.product
-               }
+               include: [
+                  {
+                     model: db.product,
+                  },
+                  {
+                     model:db.image
+                  }
+               ]
             }
          },
          {

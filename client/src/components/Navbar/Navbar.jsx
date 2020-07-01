@@ -29,6 +29,12 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import InboxIcon from '@material-ui/icons/MoveToInbox';
 import MailIcon from '@material-ui/icons/Mail';
 import PersonIcon from '@material-ui/icons/Person';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import LocalMallIcon from '@material-ui/icons/LocalMall';
+import LocalOfferIcon from '@material-ui/icons/LocalOffer';
+import FavoriteIcon from '@material-ui/icons/Favorite';
+import NotificationsIcon from '@material-ui/icons/Notifications';
+import PowerSettingsNewIcon from '@material-ui/icons/PowerSettingsNew';
 
 import img from '../../assets/logos/LalaDukaan_nav_logo.png';
 import { Avatar } from '@material-ui/core';
@@ -132,6 +138,14 @@ const Navbar = (props) => {
         setcart_bg("cart")
     }
 
+    const [more,setMore]=useState('cart1')
+    const more_dis = () =>{
+        setMore("more_option")
+    }
+    const more_hide = () =>{
+        setMore('cart1')
+    }
+
 
     return (
         <React.Fragment>
@@ -178,11 +192,30 @@ const Navbar = (props) => {
                                     :
                                     <Button className="btn btn-login" onClick={props.openModal}>Login</Button>}
                             </div>
-                            <div className="more" style={{ width: '80px' }}>
-                                <Button className="btn btn-more" style={{ fontSize: '16.5px', paddingLeft: '35%' }}>More</Button>
+                            {props.userName?
+                            <div className="more" style={{ width: '80px',height:'64px',paddingTop:'3.3%'}} onMouseEnter={more_dis} onMouseLeave={more_hide}>
+                            <Button className="btn btn-more" style={{ fontSize: '16.5px', paddingLeft: '35%' }}>More
+                            <div className={more}>
+                                <div style={{border:'solid transparent',position:'absolute',bottom:'100%',left:'50%',borderWidth:'10px',transform:'translateX(-10px)',borderBottomColor: '#fff'}}>
+
+                                </div>
+                               <div className="more_cont">
+                                  <div style={{margin:'-16px'}}>
+                                     <ul>
+                                         <li><NavLink to="/orders"><LocalMallIcon style={{width:'16px',height:'16px',color:'var(--mainColor)'}}/><div style={{marginLeft:'12px'}}>My Orders</div></NavLink></li>
+                                         <li><NavLink to="/"><LocalOfferIcon style={{width:'16px',height:'16px',color:'var(--mainColor)'}}/><div style={{marginLeft:'12px'}}>Offers</div></NavLink></li>
+                                         <li><NavLink to="/"><FavoriteIcon style={{width:'16px',height:'16px',color:'var(--mainColor)'}}/><div style={{marginLeft:'12px'}}>WishList</div></NavLink></li>
+                                         <li><NavLink to="/"><NotificationsIcon style={{width:'16px',height:'16px',color:'var(--mainColor)'}}/><div style={{marginLeft:'12px'}}>Notification</div></NavLink></li>
+                                         <li onClick={props.logout}><NavLink to="/"><PowerSettingsNewIcon style={{width:'16px',height:'16px',color:'var(--mainColor)'}}/><div style={{marginLeft:'12px'}}>Logout</div></NavLink></li>
+                                     </ul>
+                                  </div>
+                               </div>
                             </div>
+                             <span><ExpandMoreIcon/></span></Button>
+                            
+                        </div>:null}
                             {props.userName ?
-                                <div className={cart_bg} onMouseEnter={cartShow} onMouseLeave={cartRem} >
+                                <div className={cart_bg} onMouseEnter={cartShow} onMouseLeave={cartRem}>
                                     <ShoppingCartIcon style={{ fontSize: '25px', marginLeft: '8px' }} />
                                     <div className={props.cart.length === 0 ? "cart1" : "cart_value"}>
                                         {props.cart.length}

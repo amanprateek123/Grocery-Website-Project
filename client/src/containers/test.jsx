@@ -25,7 +25,7 @@ const Test = (props) => {
     return (
         res ?
             <pre>
-                {JSON.stringify(res, undefined, 4)}
+                {JSON.stringify(res, undefined,4)}
             </pre>
             : null
     );
