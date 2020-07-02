@@ -2,6 +2,7 @@ import React from 'react'
 import { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { useState } from 'react';
+import {useInfiniteQuery} from 'react-query'
 
 import {
     Grid, Card ,CardContent, Paper, Typography,FormControl, CardMedia, Avatar,
@@ -28,11 +29,16 @@ function Orders(props) {
     month[10] = "November";
     month[11] = "December";
 
-    const [res, setRes] = useState();
-
+    const [res, setRes] = useState([]);
+    const [page,setPage] = useState(1)
+    const load = ()=>{
+        let _page = page+1
+        setPage(_page)
+    }
+    const [len,setLen] = useState(0)
     useEffect(() => {
 
-        fetch('/get-orders', {
+        fetch(`/get-orders?page=${page}`, {
             headers: {
                 'Authorization': 'Bearer ' + props.idToken,
                 'Content-Type': 'application/json'
@@ -40,11 +46,13 @@ function Orders(props) {
             method: 'GET',
         }).then(res => res.json())
             .then(data => {
-                setRes(data)
+               let  _res = JSON.parse(JSON.stringify(res))
+                   _res = [...res,...data]
+                setRes(_res)
+                setLen(data.length)
             })
 
-    }, [])
-
+    }, [page])
     const [user, setUser] = useState({});
    useEffect(()=>
     {
@@ -75,7 +83,7 @@ function Orders(props) {
            <Paper>
                <Card>
                   <CardContent>
-                    <Typography variant="h4" component="h1" style={{color:'grey'}}>
+                    <Typography variant="h3" component="h1" style={{color:'grey'}}>
                        My Orders
                     </Typography>
                     <FormControl className="mt-2" style={{minWidth:'250px'}}>
@@ -94,7 +102,7 @@ function Orders(props) {
                </Card>
            </Paper>
            <Paper style={{marginTop:'16px',backgroundColor:'transparent',boxShadow:'none'}}>
-               {(res && user) ?(
+               {(res.length!=0) ?(
                    res.map((order,i)=>{
                     let name = ''
                     return(
@@ -149,6 +157,7 @@ function Orders(props) {
                 })
                ):null}
            </Paper>
+           {len<5?<h5 style={{width:'100%',textAlign:'center',fontWeight:'bold',padding:'5px'}}>No data fetched...</h5>:<Button color="secondary" onClick={load} style={{margin:'1% 45%',padding:'5px',width:'150px'}}>LOAD MORE</Button>}
            </div>
        </React.Fragment>
     )

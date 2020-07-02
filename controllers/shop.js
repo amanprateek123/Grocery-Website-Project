@@ -554,12 +554,16 @@ exports.createOrder = (req, res) => {
 
 exports.getOrders = (req, res) => {
    let where = {}
+   let limit = 5
+   let offset = (parseInt(req.query.page)-1)*limit
    req.query.id ? (where.id = req.query.id):null
    db.order.findAll({
       where: {
          userId: req.userId,
          ...where
       },
+      offset:offset,
+      limit:limit,
       include: [
          {
             model: db.orderItem,

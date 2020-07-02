@@ -23,7 +23,7 @@ function OrderItems(props) {
     month[11] = "December";
     const [order, setOrder] = useState(null);    
     useEffect(()=>{
-        fetch(`/get-orders?id=${props.match.params.id}`, {
+        fetch(`/get-orders?page=1&id=${props.match.params.id}`, {
             headers: {
                 'Authorization': 'Bearer ' + props.idToken,
                 'Content-Type': 'application/json'
@@ -35,6 +35,7 @@ function OrderItems(props) {
                 console.log(data)
             })
     },[])
+    console.log(order)
     const progress = [
         {
           value: 0,
@@ -72,67 +73,85 @@ function OrderItems(props) {
        }
        return pro
       }
-
-
        
     return (        
-       order?<React.Fragment>
-             <Paper className="container-fluid mx-auto row mt-2" style={{boxShadow:'none'}}>
-             <Card className="col-3 p-3">
-                <Typography variant="h5" component="h1">
-                    Delivery Address
-                 </Typography>   
-                 <Typography variant="p" component="h6">
-                 <div className="mt-2">
-                 <b>{order[0].shippingAddress.name}</b>
-                 </div>
-                 <div className="mt-2">
-                 {order[0].shippingAddress.address}<br/>
-                 {order[0].shippingAddress.state}, {order[0].shippingAddress.country} - {order[0].shippingAddress.zip}
-                 </div>
-                 <div className="mt-2 mb-2">
-                 Phone Number - <br/>
-                 {order[0].shippingAddress.mobile}
-                 </div>                 
-                 </Typography> 
-                 <Typography variant="h5" component="h6" style={{marginTop:'30px'}}>
-                    Order Date : <p className="ml-1" style={{fontSize:'15px'}}>{Date(order[0].createdAt)}</p>
-                 </Typography>  
-                 <Typography variant="h5" component="h6" style={{marginTop:'30px'}}>
-                    Order Number : <span className="ml-1">{(order[0].id)}</span>
-                 </Typography>    
-                </Card>
-                <Paper className="col-9 row" style={{boxShadow:'none'}}>
-                    <Paper className="col-6">
-                       
-                    </Paper>
-                    <Card className="col-4">
-                    <div style={{width:'300px',margin:'0 auto',marginTop:'10%',color:'green'}}>
-                    <Slider
-                       defaultValue={single(order)}
-                       getAriaValueText={valuetext}
-                       aria-labelledby="discrete-slider-custom"
-                       step={33.33}
-                       valueLabelDisplay="auto"
-                       marks={progress}
-                       disabled
-                       style={{color:'var(--mainColor)'}}
-                       />
-                    </div>
-                    </Card>
-                    <Card className="col-2">
-                    <Typography variant="p" component="h6" style={{textAlign:'center',marginTop:'100px'}}>
-                      <b >
-                      Your Item has been 
-                    <div>
-                    deliverd on {new Date(order[0].deliverOn).getDate()} {month[new Date(order[0].deliverOn).getMonth()]}  {new Date(order[0].deliverOn).getFullYear()}
-                    </div>
-                      </b>
-                 </Typography>
-                    </Card>
-                </Paper>
-             </Paper>
-       </React.Fragment>:null
+        order?<React.Fragment>
+        <Paper className="container-fluid mx-auto row mt-2" style={{boxShadow:'none',backgroundColor:'transparent',}}>
+        <Card className="col-3 p-3">
+           <Typography variant="h5" component="h1">
+               Delivery Address
+            </Typography>   
+            <Typography variant="p" component="h6">
+            <div className="mt-2">
+            <b>{order[0].shippingAddress.name}</b>
+            </div>
+            <div className="mt-2">
+            {order[0].shippingAddress.address}<br/>
+            {order[0].shippingAddress.state}, {order[0].shippingAddress.country} - {order[0].shippingAddress.zip}
+            </div>
+            <div className="mt-2 mb-2">
+            Phone Number - <br/>
+            {order[0].shippingAddress.mobile}
+            </div>                 
+            </Typography> <Typography variant="h5" component="h6" style={{marginTop:'30px'}}>
+               Order Number : <span className="ml-1" style={{color:'blue'}}>{(order[0].id)}</span>
+            </Typography> 
+            <Typography variant="h5" component="h6" style={{marginTop:'30px'}}>
+               Order Date : <span className="ml-1" style={{color:'blue'}}>{new Date(order[0].createdAt).getDate()} {month[new Date(order[0].createdAt).getMonth()]} {new Date(order[0].createdAt).getFullYear()}</span>
+            </Typography>                
+           </Card>
+           <Paper className="col-9 row" style={{boxShadow:'none'}}>
+               <Paper className="col-6">
+                   <h3 style={{textAlign:'center'}}>Items({order[0].orderItems.length})</h3>
+                   {order[0].orderItems.map(itm=>{
+                     return(
+                       <Card style={{margin:'16px 4px',border:'1px solid #f0f0f0', borderRadius:'5px',boxShadow:'none'}}>
+                          <div className="row">
+                             <div className="col-3">
+                                <img src={itm.sku.images[0].src} style={{width:'100px',height:'100px'}}/>
+                             </div>
+                             <div className="col-6" style={{textAlign:'center',marginTop:'6%'}}>
+                              <Typography variant="p" component="h6">
+                               <b> {itm.sku.product.name} - {itm.sku.name} </b>
+                                </Typography>
+                             </div>
+                             <div className="col-3" style={{color:'grey',fontWeight:'bold',marginTop:'6%'}}>
+                             <Typography variant="p" component="h6">
+                                Price: {itm.sku.price}
+                                </Typography>
+                             </div>
+                          </div>
+                       </Card>
+                     )
+                   })}
+               </Paper>
+               <Card className="col-4">
+               <div style={{width:'300px',margin:'0 auto',marginTop:'10%',color:'green'}}>
+               <Slider
+                  defaultValue={single(order)}
+                  getAriaValueText={valuetext}
+                  aria-labelledby="discrete-slider-custom"
+                  step={33.33}
+                  valueLabelDisplay="auto"
+                  marks={progress}
+                  disabled
+                  style={{color:'var(--mainColor)'}}
+                  />
+               </div>
+               </Card>
+               <Card className="col-2">
+               <Typography variant="p" component="h6" style={{textAlign:'center',marginTop:'100px'}}>
+                 <b >
+                 Your Item has been 
+               <div>
+               deliverd on {new Date(order[0].deliverOn).getDate()} {month[new Date(order[0].deliverOn).getMonth()]}  {new Date(order[0].deliverOn).getFullYear()}
+               </div>
+                 </b>
+            </Typography>
+               </Card>
+           </Paper>
+        </Paper>
+  </React.Fragment>:null
     )
 }
 
