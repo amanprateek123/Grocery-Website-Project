@@ -2,7 +2,6 @@ import React from 'react'
 import { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { useState } from 'react';
-import {useInfiniteQuery} from 'react-query'
 
 import {
     Grid, Card ,CardContent, Paper, Typography,FormControl, CardMedia, Avatar,
