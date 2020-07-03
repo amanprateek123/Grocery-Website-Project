@@ -11,6 +11,7 @@ import { useState } from 'react';
 import { connect } from 'react-redux'
 import * as actions from '../../store/actions'
 import { useEffect } from 'react';
+import { isEqual } from 'lodash'
 
 const Detail = (props) => {
 
@@ -27,7 +28,7 @@ const Detail = (props) => {
         for (let i = 0; i < 3; i++) {
             if (json && json[i]) {
                 content.push(
-                    <div className="json">
+                    <div key={json[i].key + i} className="json">
                         < h5 > {json[i].key}</h5 >
                         <div className="lister attr">
                             {Array.isArray(json[i].value) ?
@@ -50,10 +51,9 @@ const Detail = (props) => {
         let _attrs = { ...attrs };
         _attrs[e.target.name] = e.target.value;
         setAttrs(_attrs)
-        // let _sku = product.skus.find((s, i) => (s.attributes.filter(a => Object.keys(_attrs) == (a.name) && Object.values(_attrs).includes(a.value)).length == s.attributes.length) && (index = i));
-        let _sku = product.skus.find((s, i) => JSON.stringify(_attrs) == JSON.stringify(s.attributes.reduce((acc, cur) => { (acc[cur.name] = cur.value); return acc }, {})) && (index = i));
-        index && props.handle(index)
-        // console.log(_attrs, index, _sku);
+        let _sku = product.skus.find((s, i) => Boolean(JSON.stringify(_attrs).trim() == JSON.stringify(s.attributes.reduce((acc, cur) => { (acc[cur.name] = cur.value); return acc }, {})).trim()) && (index = i));
+        // let _sku = product.skus.find((s, i) => isEqual(_attrs, s.attributes.reduce((acc, cur) => { (acc[cur.name] = cur.value); return acc }, {})) ? (index = i) : console.log(isEqual(_attrs, s.attributes.reduce((acc, cur) => { (acc[cur.name] = cur.value); return acc }, {}))));
+        if (index != undefined) { props.handle(index) }
 
     }
 
@@ -63,6 +63,7 @@ const Detail = (props) => {
                 <div key={attr + i} className="d-inline-block attr-sel">
                     <InputLabel className="label-sm" id={'label-' + attr.name}>{attr.name}</InputLabel>
                     <Select
+                        element='select'
                         key={attr.name}
                         id={attr.name}
                         name={attr.name}

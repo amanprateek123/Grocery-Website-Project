@@ -9,12 +9,12 @@ export default function About(props) {
     for (let i = 3; i < json.length; i++) {
         if (json && json[i]) {
             content.push(
-                <div key={json[i].key} className="json1">
+                <div key={json[i].key + i} className="json1">
                     <h5>{json[i].key}</h5>
                     <div className="lister">
                         {Array.isArray(json[i].value) ?
-                            json[i].value.map(li => {
-                                return (<li key={li.key} className="list">
+                            json[i].value.map((li, k) => {
+                                return (<li key={li.key + k} className="list">
                                     <h6>{li.key}</h6>
                                     <p>{li.value}</p>
                                 </li>)

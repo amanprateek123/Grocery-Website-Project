@@ -216,7 +216,7 @@ const Products = (props) => {
                                             subheader={<ListSubheader component="div" id="nested-list-subheader">Brand</ListSubheader>}
                                         >
                                             <div className="brands">
-                                                {brands.map(brand => <FormControlLabel key={brand.name} className="d-block ctrl m-0" label={brand.name} control={<Checkbox color="primary" checked={brand.selected} onChange={(e) => changeBrand(brand.name, e)} value={brand.name} />} />)}
+                                                {brands.map((brand, i) => <FormControlLabel key={brand.name + i} className="d-block ctrl m-0" label={brand.name} control={<Checkbox color="primary" checked={brand.selected} onChange={(e) => changeBrand(brand.name, e)} value={brand.name} />} />)}
                                             </div>
                                         </List>
 

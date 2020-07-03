@@ -80,13 +80,13 @@ const Product = (props) => {
                             </div>
                             : <div className="attrs">
                                 {
-                                    product.skus[0].attributes.map(attr => (
-                                        <div>
+                                    product.skus[0].attributes.map((attr, j) => (
+                                        <div key={attr + j}>
                                             <b>{attr.name} :</b>
                                             <span>
                                                 {
-                                                    Array.from(new Set(product.skus.map(sku => sku.attributes.find(a => a.name == attr.name).value))).map(val => (
-                                                        <span>{val}, </span>
+                                                    Array.from(new Set(product.skus.map(sku => sku.attributes.find(a => a.name == attr.name).value))).map((val, i) => (
+                                                        <span key={val + i}>{val}, </span>
                                                     ))
                                                 }
                                             </span>
