@@ -13,12 +13,12 @@ module.exports = (sequelize, Sequelize = require('sequelize')) => {
             defaultValue: '0'
         },
 
-        // ! ...
-        type: {
-            type: Sequelize.STRING,
-            allowNull: false,
-            defaultValue: 'variant'
-        },
+        // // ! ...
+        // type: {
+        //     type: Sequelize.STRING,
+        //     allowNull: false,
+        //     defaultValue: 'variant'
+        // },
 
         // ! ...
         name: {
