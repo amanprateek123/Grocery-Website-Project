@@ -14,6 +14,23 @@ import { Link } from 'react-router-dom';
 
 function Orders(props) {
 
+    //user
+    const [user, setUser] = useState({});
+    useEffect(()=>
+     {
+         fetch('/profile', {
+             headers: {
+                 'Authorization': 'Bearer ' + props.idToken
+             }
+         }).then(res => {
+             res.json().then(res => {
+                 setUser(res.user)
+ 
+             })
+         })
+     },[]
+    )  
+    //months array
     var month = new Array();
     month[0] = "January";
     month[1] = "February";
@@ -27,7 +44,40 @@ function Orders(props) {
     month[9] = "October";
     month[10] = "November";
     month[11] = "December";
+     
+    //date decision
+    const today = new Date();
+    const created = new Date("2018-09-07")
+    const mon = []
+    let create = created
 
+    //finding last six month
+    const sixMonth = (tod)=>{
+        if(tod.getMonth()>=6){
+            tod.setMonth(tod.getMonth()-6)
+         }
+         else{
+           tod.setMonth(tod.getMonth()+6) 
+           tod.setFullYear(tod.getFullYear()-1)
+         }     
+         return month[tod.getMonth()] + ' ' + tod.getFullYear()
+    }
+
+    //list of duration gapping six month
+    while(create.getFullYear()<=today.getFullYear() ){
+      let c = month[create.getMonth()]
+      let d = create.getFullYear()
+      mon.push(c + ' '+ d)
+      create.setMonth(create.getMonth()+6)
+      if(create.getMonth()>11){
+          create.setFullYear(create.getFullYear()+1)
+          create.setMonth(create.getMonth()-12)
+      }
+      if(create.getFullYear()===today.getFullYear() && create.getMonth()>today.getMonth()){
+          break;
+      }
+  } 
+    
     const [res, setRes] = useState([]);
     const [page,setPage] = useState(1)
     const load = ()=>{
@@ -35,9 +85,27 @@ function Orders(props) {
         setPage(_page)
     }
     const [len,setLen] = useState(0)
+    const[dates,SetDates] = useState(sixMonth(new Date()))
+     
+   
     useEffect(() => {
+        fetch(`/get-orders?page=${page}&date=${dates}`, {
+            headers: {
+                'Authorization': 'Bearer ' + props.idToken,
+                'Content-Type': 'application/json'
+            },
+            method: 'GET',
+        }).then(res => res.json())
+            .then(data => {
+                setPage(1)
+                setRes(data)
+                setLen(data.length)
+            })
+    }, [dates])
 
-        fetch(`/get-orders?page=${page}`, {
+
+    useEffect(() => {
+        fetch(`/get-orders?page=${page}&date=${dates}`, {
             headers: {
                 'Authorization': 'Bearer ' + props.idToken,
                 'Content-Type': 'application/json'
@@ -50,32 +118,13 @@ function Orders(props) {
                 setRes(_res)
                 setLen(data.length)
             })
-
     }, [page])
-    const [user, setUser] = useState({});
-   useEffect(()=>
-    {
-        fetch('/profile', {
-            headers: {
-                'Authorization': 'Bearer ' + props.idToken
-            }
-        }).then(res => {
-            res.json().then(res => {
-                setUser(res.user)
-
-            })
-        })
-    },[]
-   )  
-   const [date, setDate] = React.useState('');
+   const [date, setDate] = React.useState(0);
 
   const handleChange = (event) => {
     setDate(event.target.value);
   };
-
-  const today = new Date();
-  const created = new Date(user.createdAt)
- 
+  
     return (
        <React.Fragment>
            <div className="container">
@@ -92,9 +141,10 @@ function Orders(props) {
                            id="demo-simple-select"
                            value={date}
                            onChange={handleChange}>
-                                <MenuItem value={10}>{month[created.getMonth()]} {created.getFullYear()}</MenuItem>
-                                <MenuItem value={20}>Twenty</MenuItem>
-                                <MenuItem value={30}>Thirty</MenuItem>
+                                <MenuItem value={0} onClick={()=> SetDates(sixMonth(new Date()))}>Last Six months</MenuItem>
+                               {mon.reverse().map((val,i)=>{
+                                   return <MenuItem value={i+1} onClick={()=> SetDates(val)}>{val}</MenuItem>
+                               })}
                         </Select>
                     </FormControl>
                   </CardContent>
