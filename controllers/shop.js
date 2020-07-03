@@ -79,11 +79,6 @@ exports.getProducts = (req, res) => {
             }
          },
          {
-            json: {
-               [Op.like]: `%${search}%`
-            }
-         },
-         {
             '$category.name$': {
                [Op.like]: `%${search}%`
             }
@@ -145,10 +140,6 @@ exports.getProducts = (req, res) => {
                {
                   model: db.image,
                   attributes: [],
-               },
-               {
-                  model: db.attribute,
-                  attributes: []
                },
             ]
          }
@@ -535,9 +526,11 @@ exports.getCart = (req, res) => {
    }).then(cart => {
       // If there are some products in the cart which were DELETED by ADMIN
       // they need to be deleted from the cart.
-      cart.filter(ci => !ci.sku).map(deleted => deleted.destroy().then(del => console.log(' >> Deleted cartId', del.id, ' as the product was deleted')))
 
-      cart = cart.filter(ci => ci.sku)
+      // cart.filter(ci => !ci.sku).map(deleted => deleted.destroy().then(del => console.log(' >> Deleted cartId', del.id, ' as the product was deleted')))
+
+      // cart = cart.filter(ci => ci.sku)
+
       return res.json(cart);
    }).catch(err => {
       return res.status(500).json(err);
@@ -563,8 +556,8 @@ exports.getOrders = (req, res) => {
          userId: req.userId,
          ...where
       },
-      offset:offset,
-      limit:limit,
+      offset: offset,
+      limit: limit,
       include: [
          {
             model: db.orderItem,
@@ -575,7 +568,7 @@ exports.getOrders = (req, res) => {
                      model: db.product,
                   },
                   {
-                     model:db.image
+                     model: db.image
                   }
                ]
             }

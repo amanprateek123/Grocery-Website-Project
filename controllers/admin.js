@@ -30,7 +30,7 @@ exports.addProduct = (req, res) => {
                 return db.sku.create({
                     productId: _product.id,
                     code: sku.code,
-                    type: sku.type,
+                    // type: sku.type,
                     name: sku.name,
                     // description: sku.description,
                     price: sku.price,

@@ -10,10 +10,14 @@ import { useState } from 'react';
 
 import { connect } from 'react-redux'
 import * as actions from '../../store/actions'
+import { useEffect } from 'react';
 
 const Detail = (props) => {
 
     let json = props.product.skus[props.pack].json;
+
+    let [attrs, setAttrs] = useState(props.product.skus[props.pack].attributes.reduce((acc, cur) => { (acc[cur.name] = cur.value); return acc }, {}));
+
     const quantity = props.quantity
     let content = [];
     const [added, setAdded] = useState(false);
@@ -39,6 +43,46 @@ const Detail = (props) => {
             }
         }
     }
+    let product = props.product;
+
+    const attrChangeHandler = (e) => {
+        let index;
+        let _attrs = { ...attrs };
+        _attrs[e.target.name] = e.target.value;
+        setAttrs(_attrs)
+        // let _sku = product.skus.find((s, i) => (s.attributes.filter(a => Object.keys(_attrs) == (a.name) && Object.values(_attrs).includes(a.value)).length == s.attributes.length) && (index = i));
+        let _sku = product.skus.find((s, i) => JSON.stringify(_attrs) == JSON.stringify(s.attributes.reduce((acc, cur) => { (acc[cur.name] = cur.value); return acc }, {})) && (index = i));
+        index && props.handle(index)
+        // console.log(_attrs, index, _sku);
+
+    }
+
+    let attributes = (
+        <div className="attrs">
+            {product.skus[0].attributes.map((attr, i) => (
+                <div key={attr + i} className="d-inline-block attr-sel">
+                    <InputLabel className="label-sm" id={'label-' + attr.name}>{attr.name}</InputLabel>
+                    <Select
+                        key={attr.name}
+                        id={attr.name}
+                        name={attr.name}
+                        labelId={'label-' + attr.name}
+                        className='attr-select'
+                        value={props.product.skus[props.pack].attributes[i].value}
+                        onChange={attrChangeHandler}
+                    >
+                        {
+                            Array.from(new Set(product.skus.map(sku => sku.attributes.find(a => a.name == attr.name).value))).map(val => (
+                                <MenuItem key={val} value={val}>{val}</MenuItem>
+                            ))
+                        }
+                    </Select>
+
+                </div>
+
+            ))}
+        </div>
+    )
 
     return (
         <Card variant="outlined" className="card_det" >
@@ -53,11 +97,9 @@ const Detail = (props) => {
                 <div style={{ marginTop: "4%" }}>
                     {
                         props.product.skus[1] ?
-                            <FormControl style={{ minWidth: "120px" }}>
-                                <InputLabel id="demo-simple-select-label">{props.product.skus[props.pack].type}</InputLabel>
+                            <div>
                                 <Select
-                                    labelId="demo-simple-select-label"
-                                    id="demo-simple-select"
+                                    id="sku-selected"
                                     value={props.product.skus[props.pack].name}
                                     defaultValue={props.product.skus[props.pack].name}
                                     onClick={props.handleChange}>
@@ -66,7 +108,10 @@ const Detail = (props) => {
                                     )}
 
                                 </Select>
-                            </FormControl>
+                                <div className="position-relative">
+                                    {attributes}
+                                </div>
+                            </div>
                             : null
                     }
                 </div>
@@ -91,7 +136,8 @@ const Detail = (props) => {
                     <h1>PRODUCT DETAILS <span><ChatIcon /></span></h1>
                     <p>{props.product.description}</p>
                 </div>
-                {props.product.skus[props.pack].attributes ?
+
+                {/* {props.product.skus[props.pack].attributes ?
                     <div className="lister">
                         {props.product.skus[props.pack].attributes.map(attr => (
                             <li className="list">
@@ -101,7 +147,7 @@ const Detail = (props) => {
                         ))}
                     </div>
                     : null
-                }
+                } */}
                 {content}
             </CardContent>
         </Card>

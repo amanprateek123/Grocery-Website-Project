@@ -47,7 +47,7 @@ const Products = (props) => {
 
             setMetaData(meta)
 
-            meta.count && setCategories(meta.categories);
+            setCategories(meta.categories);
 
             if (['?category', '?parentCategory', '&sr'].map(str => props.location.search.indexOf(str) != -1).reduce((acc, cur) => acc || cur, false)) {
                 setBrands(meta.brands.map(brand => ({ name: brand.name, selected: (new URLSearchParams(props.location.search).get('brand')) && ((new URLSearchParams(props.location.search).get('brand')).indexOf(brand.name) != -1) })))
