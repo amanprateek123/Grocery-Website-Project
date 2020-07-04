@@ -51,8 +51,8 @@ const Detail = (props) => {
         let _attrs = { ...attrs };
         _attrs[e.target.name] = e.target.value;
         setAttrs(_attrs)
-        let _sku = product.skus.find((s, i) => Boolean(JSON.stringify(_attrs).trim() == JSON.stringify(s.attributes.reduce((acc, cur) => { (acc[cur.name] = cur.value); return acc }, {})).trim()) && (index = i));
-        // let _sku = product.skus.find((s, i) => isEqual(_attrs, s.attributes.reduce((acc, cur) => { (acc[cur.name] = cur.value); return acc }, {})) ? (index = i) : console.log(isEqual(_attrs, s.attributes.reduce((acc, cur) => { (acc[cur.name] = cur.value); return acc }, {}))));
+        // let _sku = product.skus.find((s, i) => Boolean(JSON.stringify(_attrs).trim() == JSON.stringify(s.attributes.reduce((acc, cur) => { (acc[cur.name] = cur.value); return acc }, {})).trim()) && (index = i));
+        let _sku = product.skus.find((s, i) => isEqual(_attrs, s.attributes.reduce((acc, cur) => { (acc[cur.name] = cur.value); return acc }, {})) ? (index = i) : console.log(isEqual(_attrs, s.attributes.reduce((acc, cur) => { (acc[cur.name] = cur.value); return acc }, {}))));
         if (index != undefined) { props.handle(index) }
 
     }
