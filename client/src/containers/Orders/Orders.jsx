@@ -15,16 +15,18 @@ import { Link } from 'react-router-dom';
 function Orders(props) {
 
     //user
-    const [user, setUser] = useState({});
+
+
+    const [user, setUser] = useState(null);
     useEffect(() => {
         fetch('/profile', {
             headers: {
-                'Authorization': 'Bearer ' + props.idToken
+                'Authorization': 'Bearer ' + props.idToken,
+                'Content-Type': 'application/json'
             }
         }).then(res => {
             res.json().then(res => {
                 setUser(res.user)
-
             })
         })
     }, []
@@ -46,9 +48,8 @@ function Orders(props) {
 
     //date decision
     const today = new Date();
-    const created = new Date("2018-09-07")
-    const mon = []
-    let create = created
+    const [mon, setMon] = useState([]);
+    let create;
 
     //finding last six month
     const sixMonth = (tod) => {
@@ -63,22 +64,34 @@ function Orders(props) {
     }
 
     //list of duration gapping six month
-    while (create.getFullYear() <= today.getFullYear()) {
-        let c = month[create.getMonth()]
-        let d = create.getFullYear()
-        mon.push(c + ' ' + d)
-        create.setMonth(create.getMonth() + 6)
-        if (create.getMonth() > 11) {
-            create.setFullYear(create.getFullYear() + 1)
-            create.setMonth(create.getMonth() - 12)
+    useEffect(() => {
+        if (!user) return;
+        console.log(user.createdAt);
+
+        create = new Date(user.createdAt)
+        let _mon = [...mon];
+        while (create.getFullYear() <= today.getFullYear()) {
+            let c = month[create.getMonth()]
+            let d = create.getFullYear()
+            _mon.push(c + ' ' + d)
+            create.setMonth(create.getMonth() + 6)
+            if (create.getMonth() > 11) {
+                create.setFullYear(create.getFullYear() + 1)
+                create.setMonth(create.getMonth() - 12)
+            }
+            if (create.getFullYear() === today.getFullYear() && create.getMonth() > today.getMonth()) {
+                break;
+            }
         }
-        if (create.getFullYear() === today.getFullYear() && create.getMonth() > today.getMonth()) {
-            break;
-        }
-    }
+        _mon = _mon.reverse();
+        setMon(_mon);
+
+    }, [user])
 
     const [res, setRes] = useState([]);
-    const [page, setPage] = useState(1)
+    let [page, setPage] = useState(1)
+    let [prevPage, setPrevPage] = useState(0);
+
     const load = () => {
         let _page = page + 1
         setPage(_page)
@@ -88,7 +101,7 @@ function Orders(props) {
 
 
     useEffect(() => {
-        fetch(`/get-orders?page=${page}&date=${dates}`, {
+        fetch(`/get-orders?page=${1}&date=${dates}`, {
             headers: {
                 'Authorization': 'Bearer ' + props.idToken,
                 'Content-Type': 'application/json'
@@ -96,14 +109,16 @@ function Orders(props) {
             method: 'GET',
         }).then(res => res.json())
             .then(data => {
-                setPage(1)
+                setPage(1);
                 setRes(data)
                 setLen(data.length)
             })
     }, [dates])
 
 
-    useEffect(() => {
+    useEffect((x) => {
+        if (page == 1) return;
+
         fetch(`/get-orders?page=${page}&date=${dates}`, {
             headers: {
                 'Authorization': 'Bearer ' + props.idToken,
@@ -133,19 +148,24 @@ function Orders(props) {
                             <Typography variant="h3" component="h1" style={{ color: 'grey' }}>
                                 My Orders
                     </Typography>
-                            <FormControl className="mt-2" style={{ minWidth: '250px' }}>
-                                <InputLabel id="demo-simple-select-label">Duration</InputLabel>
-                                <Select
-                                    labelId="demo-simple-select-label"
-                                    id="demo-simple-select"
-                                    value={date}
-                                    onChange={handleChange}>
-                                    <MenuItem value={0} onClick={() => SetDates(sixMonth(new Date()))}>Last Six months</MenuItem>
-                                    {mon.reverse().map((val, i) => {
-                                        return <MenuItem value={i + 1} onClick={() => SetDates(val)}>{val}</MenuItem>
-                                    })}
-                                </Select>
-                            </FormControl>
+                            {
+                                user ?
+
+                                    <FormControl className="mt-2" style={{ minWidth: '250px' }}>
+                                        <InputLabel id="demo-simple-select-label">Duration</InputLabel>
+                                        <Select
+                                            labelId="demo-simple-select-label"
+                                            id="demo-simple-select"
+                                            value={date}
+                                            onChange={handleChange}>
+                                            <MenuItem value={0} onClick={() => SetDates(sixMonth(new Date()))}>Last Six months</MenuItem>
+                                            {mon.map((val, i) => {
+                                                return <MenuItem key={val + i} value={val} onClick={() => SetDates(val)}>{val}</MenuItem>
+                                            })}
+                                        </Select>
+                                    </FormControl>
+                                    : null
+                            }
                         </CardContent>
                     </Card>
                 </Paper>
@@ -205,7 +225,7 @@ function Orders(props) {
                         })
                     ) : null}
                 </Paper>
-                {len < 5 ? <h5 style={{ width: '100%', textAlign: 'center', fontWeight: 'bold', padding: '5px' }}>No data fetched...</h5> : <Button color="secondary" onClick={load} style={{ margin: '1% 45%', padding: '5px', width: '150px' }}>LOAD MORE</Button>}
+                {!len ? <h5 style={{ width: '100%', fontSize: '0.7em', textAlign: 'center', padding: '5px' }}>nothing more...</h5> : <Button color="secondary" onClick={load} style={{ margin: '1% 45%', padding: '5px', width: '150px' }}>LOAD MORE</Button>}
             </div>
         </React.Fragment>
     )
