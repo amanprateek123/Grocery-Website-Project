@@ -23,7 +23,7 @@ function OrderItems(props) {
     month[11] = "December";
     const [order, setOrder] = useState(null);    
     useEffect(()=>{
-        fetch(`/get-orders?page=1&id=${props.match.params.id}`, {
+        fetch(`/get-orders?page=1&date=1&id=${props.match.params.id}`, {
             headers: {
                 'Authorization': 'Bearer ' + props.idToken,
                 'Content-Type': 'application/json'
