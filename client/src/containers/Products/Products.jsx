@@ -32,7 +32,7 @@ const Products = (props) => {
     const [brands, setBrands] = useState([]);
     const [SKUs, setSKUs] = useState([]);
     const [SKUTypes, setSKUTypes] = useState([]);
-    const [priceRange, setPriceRange] = useState([null, null]);
+    const [priceRange, setPriceRange] = useState([0, 10000000]);
 
     const [loading, setLoading] = useState(true);
     const [snackbar, setSnackbar] = useState(false);
@@ -51,10 +51,10 @@ const Products = (props) => {
 
             if (['?category', '?parentCategory', '&sr'].map(str => props.location.search.indexOf(str) != -1).reduce((acc, cur) => acc || cur, false)) {
                 setBrands(meta.brands.map(brand => ({ name: brand.name, selected: (new URLSearchParams(props.location.search).get('brand')) && ((new URLSearchParams(props.location.search).get('brand')).indexOf(brand.name) != -1) })))
-                setSKUs(meta.skus.map(s => ({ ...s, selected: (new URLSearchParams(props.location.search).get('filter')) && ((new URLSearchParams(props.location.search).get('filter')).indexOf(s.value) != -1) })));
-                setSKUTypes(Array.from(new Set(meta.skus.map(sku => sku.name))));
                 props.location.search = props.location.search.replace('&sr', '');
             }
+            setSKUs(meta.skus.map(s => ({ ...s, selected: (new URLSearchParams(props.location.search).get('filter')) && ((new URLSearchParams(props.location.search).get('filter')).indexOf(s.value) != -1) })));
+            setSKUTypes(Array.from(new Set(meta.skus.map(sku => sku.name))));
 
 
             setLoading(false);
@@ -194,46 +194,58 @@ const Products = (props) => {
                                 <Card className="side-nav">
                                     <CardContent>
 
-                                        <List dense component="nav" aria-label="main"
-                                            subheader={<ListSubheader component="div" id="categories-fetched">Categories</ListSubheader>}
-                                        >
-                                            <ul>
+                                        {
+                                            categories.length ?
+                                                <List dense component="nav" aria-label="main"
+                                                    subheader={<ListSubheader component="div" id="categories-fetched">Categories</ListSubheader>}
+                                                >
+                                                    <ul>
 
-                                                {categories.map(parentCategory => (
+                                                        {categories.map(parentCategory => (
 
-                                                    <li key={parentCategory.name}>
-                                                        <Link to={`/products?parentCategory=${parentCategory.name}`}>{parentCategory.name}</Link>
-                                                        <ul>
-                                                            {parentCategory.categories.map(cat => <li key={cat.name} ><Link to={`/products?category=${cat.name}`}>{cat.name}</Link></li>)}
-                                                        </ul>
-                                                    </li>
-                                                ))}
+                                                            <li key={parentCategory.name}>
+                                                                <Link to={`/products?parentCategory=${parentCategory.name}`}>{parentCategory.name}</Link>
+                                                                <ul>
+                                                                    {parentCategory.categories.map(cat => <li key={cat.name} ><Link to={`/products?category=${cat.name}`}>{cat.name}</Link></li>)}
+                                                                </ul>
+                                                            </li>
+                                                        ))}
 
-                                            </ul>
-                                        </List>
+                                                    </ul>
+                                                </List>
+                                                : null
+                                        }
 
-                                        <List dense component="nav" aria-label="secondary"
-                                            subheader={<ListSubheader component="div" id="nested-list-subheader">Brand</ListSubheader>}
-                                        >
-                                            <div className="brands">
-                                                {brands.map((brand, i) => <FormControlLabel key={brand.name + i} className="d-block ctrl m-0" label={brand.name} control={<Checkbox color="primary" checked={brand.selected} onChange={(e) => changeBrand(brand.name, e)} value={brand.name} />} />)}
-                                            </div>
-                                        </List>
+                                        {
+                                            brands.length ?
+                                                <List dense component="nav" aria-label="secondary"
+                                                    subheader={<ListSubheader component="div" id="nested-list-subheader">Brand</ListSubheader>}
+                                                >
+                                                    <div className="brands">
+                                                        {brands.map((brand, i) => <FormControlLabel key={brand.name + i} className="d-block ctrl m-0" label={brand.name} control={<Checkbox color="primary" checked={brand.selected} onChange={(e) => changeBrand(brand.name, e)} value={brand.name} />} />)}
+                                                    </div>
+                                                </List>
+                                                : null
+                                        }
 
                                         <Divider />
-                                        <List dense component="nav" aria-label="secondary"
-                                            subheader={<ListSubheader component="div" id="nested-list-subheader" className="price-header"><span>Price</span><Button size="small" color="primary" onClick={applyPrice}>Apply</Button></ListSubheader>}
-                                        >
-                                            <div className="prices">
-                                                <TextField InputProps={{
-                                                    startAdornment: <InputAdornment position="start">$</InputAdornment>,
-                                                }} type="number" label="min" value={priceRange[0]} onChange={(e) => handlePriceChange(e, 0)} />
-                                                <TextField InputProps={{
-                                                    startAdornment: <InputAdornment position="start">$</InputAdornment>,
-                                                }} type="number" label="max" value={priceRange[1]} onChange={(e) => handlePriceChange(e, 1)} />
+                                        {
+                                            categories.length ?
+                                                <List dense component="nav" aria-label="secondary"
+                                                    subheader={<ListSubheader component="div" id="nested-list-subheader" className="price-header"><span>Price</span><Button size="small" color="primary" onClick={applyPrice}>Apply</Button></ListSubheader>}
+                                                >
+                                                    <div className="prices">
+                                                        <TextField InputProps={{
+                                                            startAdornment: <InputAdornment position="start">$</InputAdornment>,
+                                                        }} type="number" label="min" value={priceRange[0]} onChange={(e) => handlePriceChange(e, 0)} />
+                                                        <TextField InputProps={{
+                                                            startAdornment: <InputAdornment position="start">$</InputAdornment>,
+                                                        }} type="number" label="max" value={priceRange[1]} onChange={(e) => handlePriceChange(e, 1)} />
 
-                                            </div>
-                                        </List>
+                                                    </div>
+                                                </List>
+                                                : null
+                                        }
 
                                         <Divider />
                                         {SKUTypes.map(name => (

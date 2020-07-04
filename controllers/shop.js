@@ -21,6 +21,30 @@ exports.getCategories = (req, res) => {
    })
 }
 
+
+db.sku.hasMany(db.attribute, { as: 'A0' })
+db.attribute.belongsTo(db.sku)
+db.sku.hasMany(db.attribute, { as: 'A1' })
+db.attribute.belongsTo(db.sku)
+db.sku.hasMany(db.attribute, { as: 'A2' })
+db.attribute.belongsTo(db.sku)
+db.sku.hasMany(db.attribute, { as: 'A3' })
+db.attribute.belongsTo(db.sku)
+db.sku.hasMany(db.attribute, { as: 'A4' })
+db.attribute.belongsTo(db.sku)
+db.sku.hasMany(db.attribute, { as: 'A5' })
+db.attribute.belongsTo(db.sku)
+db.sku.hasMany(db.attribute, { as: 'A6' })
+db.attribute.belongsTo(db.sku)
+db.sku.hasMany(db.attribute, { as: 'A7' })
+db.attribute.belongsTo(db.sku)
+db.sku.hasMany(db.attribute, { as: 'A8' })
+db.attribute.belongsTo(db.sku)
+db.sku.hasMany(db.attribute, { as: 'A9' })
+db.attribute.belongsTo(db.sku)
+
+
+
 exports.getProducts = (req, res) => {
 
    let where = {};
@@ -46,12 +70,22 @@ exports.getProducts = (req, res) => {
       }
    }
 
+   let selfJoins = []
    if (req.query.filter) {
       let filter = req.query.filter.split(',');
       let values = filter.map(f => f.split(':')[1])
-      where['$skus.attributes.value$'] = {
-         [Op.in]: values
-      }
+      values.forEach((val, i) => {
+         if (i > 9) return;
+         selfJoins.push({
+            model: db.attribute,
+            attributes: [],
+            as: 'A' + i
+         })
+         where[`$skus.A${i}.value$`] = val;
+
+      })
+
+
    }
 
    if (req.query.search) {
@@ -141,6 +175,7 @@ exports.getProducts = (req, res) => {
                   model: db.image,
                   attributes: [],
                },
+               ...selfJoins
             ]
          }
       ],
@@ -176,6 +211,7 @@ exports.getProducts = (req, res) => {
                      model: db.attribute,
                      attributes: []
                   },
+                  ...selfJoins
                ]
             }
 
@@ -227,6 +263,7 @@ exports.getProducts = (req, res) => {
                      model: db.attribute,
                      attributes: []
                   },
+                  ...selfJoins
                ]
             }
          ],
@@ -262,6 +299,7 @@ exports.getProducts = (req, res) => {
                      model: db.attribute,
                      attributes: [],
                   },
+                  ...selfJoins
                ]
             },
          ],
@@ -270,7 +308,7 @@ exports.getProducts = (req, res) => {
       });
    }).then(skus => {
       result.meta.skus = skus;
-
+      console.log('>>> Fetching Product Ids.');
       return db.product.findAll({
          offset, limit, where,
          order: [[order, dir]],
@@ -302,12 +340,15 @@ exports.getProducts = (req, res) => {
                      model: db.attribute,
                      attributes: []
                   },
+                  ...selfJoins
                ]
             },
          ]
       })
    }).then(products => {
       let productIds = products.map(p => p.id);
+      console.log('>>> Getting Products Info.');
+
       return db.product.findAll({
          where: {
             id: {
@@ -337,6 +378,7 @@ exports.getProducts = (req, res) => {
                      model: db.attribute,
                      attributes: ['name', 'value']
                   },
+
                ]
             },
          ]
