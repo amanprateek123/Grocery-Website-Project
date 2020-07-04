@@ -51,10 +51,10 @@ const Products = (props) => {
 
             if (['?category', '?parentCategory', '&sr'].map(str => props.location.search.indexOf(str) != -1).reduce((acc, cur) => acc || cur, false)) {
                 setBrands(meta.brands.map(brand => ({ name: brand.name, selected: (new URLSearchParams(props.location.search).get('brand')) && ((new URLSearchParams(props.location.search).get('brand')).indexOf(brand.name) != -1) })))
+                setSKUs(meta.skus.map(s => ({ ...s, selected: (new URLSearchParams(props.location.search).get('filter')) && ((new URLSearchParams(props.location.search).get('filter')).indexOf(s.value) != -1) })));
+                setSKUTypes(Array.from(new Set(meta.skus.map(sku => sku.name))));
                 props.location.search = props.location.search.replace('&sr', '');
             }
-            setSKUs(meta.skus.map(s => ({ ...s, selected: (new URLSearchParams(props.location.search).get('filter')) && ((new URLSearchParams(props.location.search).get('filter')).indexOf(s.value) != -1) })));
-            setSKUTypes(Array.from(new Set(meta.skus.map(sku => sku.name))));
 
 
             setLoading(false);
@@ -92,7 +92,6 @@ const Products = (props) => {
     }
     const applyFilter = (SKUs) => {
         let filter = SKUs.filter(s => s.selected).map(s => `${s.name}:${s.value}`).join(',');
-        console.log(filter);
 
         if (props.location.search.indexOf('filter') != -1) {
             let query = props.location.search.replace(/filter=[a-zA-z\-\+\d : ,%]*&/, `filter=${filter}&`);

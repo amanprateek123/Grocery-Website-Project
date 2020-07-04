@@ -73,15 +73,20 @@ exports.getProducts = (req, res) => {
    let selfJoins = []
    if (req.query.filter) {
       let filter = req.query.filter.split(',');
+      let keys = Array.from(new Set(filter.map(f => f.split(':')[0])))
       let values = filter.map(f => f.split(':')[1])
-      values.forEach((val, i) => {
+
+      keys.forEach((key, i) => {
          if (i > 9) return;
          selfJoins.push({
             model: db.attribute,
             attributes: [],
             as: 'A' + i
          })
-         where[`$skus.A${i}.value$`] = val;
+         where[`$skus.A${i}.name$`] = key;
+         where[`$skus.A${i}.value$`] = {
+            [Op.in]: filter.filter(f => f.split(':')[0] == key).map(f => f.split(':')[1]) // ? can be improved
+         };
 
       })
 
