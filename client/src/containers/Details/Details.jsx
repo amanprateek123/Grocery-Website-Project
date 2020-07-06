@@ -77,7 +77,7 @@ const Details = (props) => {
                 </Modal>
                 <div className="container detail-page" style={{ backgroundColor: "#eef9", padding: '3em 2em', marginTop: "1em", borderRadius: "1em" }}>
                     <div className="row">
-                        <div className="col">
+                        <div className="col-md-6">
                             <Paper className="image-col">
 
                                 <div className="main_img">
@@ -94,7 +94,7 @@ const Details = (props) => {
                                 </div>
                             </Paper>
                         </div>
-                        <div className="col">
+                        <div className="col-md-6">
                             <Paper className="detail-col">
                                 <Detail product={product} size={size} quantity={quantity} pack={pack} handle={changePack}
                                     id={product.skus.id} handleChange={handleChange} handler={changeQuantity} />
