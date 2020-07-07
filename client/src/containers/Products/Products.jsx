@@ -153,7 +153,11 @@ const Products = (props) => {
                 <div className="products">
                     {visibleProducts.map(product => <Product key={product.id} product={product} addToCart={props.addToCart} feedback={() => setSnackbar(true)} />)}
                 </div>
-                : <img src={emptySvg} className="empty" title="No products found" alt="No Products Found" />
+                :
+                <React.Fragment>
+                    <b className="text-muted">No Products Found</b>
+                    <img src={emptySvg} className="empty" title="No products found" alt="No Products Found" />
+                </React.Fragment>
                 : <LinearProgress />
             }
         </div>
@@ -167,8 +171,10 @@ const Products = (props) => {
             <div className="container-fluid">
                 <div className="row">
                     <div className="col-2 d-none d-md-block">
-                        <div className="side-nav">
-                            {/* <div className="mb-4">
+                        {
+                            categories.length ?
+                                <div className="side-nav">
+                                    {/* <div className="mb-4">
                                 <Card>
                                     <CardContent>
                                         <div className="row align-items-center">
@@ -189,12 +195,10 @@ const Products = (props) => {
                                 </Card>
                             </div> */}
 
-                            <div className="mb-3">
-                                <Card className="side-nav">
-                                    <CardContent>
 
-                                        {
-                                            categories.length ?
+                                    <div className="mb-3">
+                                        <Card className="side-nav">
+                                            <CardContent>
                                                 <List dense component="nav" aria-label="main"
                                                     subheader={<ListSubheader component="div" id="categories-fetched">Categories</ListSubheader>}
                                                 >
@@ -212,61 +216,61 @@ const Products = (props) => {
 
                                                     </ul>
                                                 </List>
-                                                : null
-                                        }
 
-                                        {
-                                            brands.length ?
-                                                <List dense component="nav" aria-label="secondary"
-                                                    subheader={<ListSubheader component="div" id="nested-list-subheader">Brand</ListSubheader>}
-                                                >
-                                                    <div className="brands">
-                                                        {brands.map((brand, i) => <FormControlLabel key={brand.name + i} className="d-block ctrl m-0" label={brand.name} control={<Checkbox color="primary" checked={brand.selected} onChange={(e) => changeBrand(brand.name, e)} value={brand.name} />} />)}
-                                                    </div>
-                                                </List>
-                                                : null
-                                        }
+                                                {
+                                                    brands.length ?
+                                                        <List dense component="nav" aria-label="secondary"
+                                                            subheader={<ListSubheader component="div" id="nested-list-subheader">Brand</ListSubheader>}
+                                                        >
+                                                            <div className="brands">
+                                                                {brands.map((brand, i) => <FormControlLabel key={brand.name + i} className="d-block ctrl m-0" label={brand.name} control={<Checkbox color="primary" checked={brand.selected} onChange={(e) => changeBrand(brand.name, e)} value={brand.name} />} />)}
+                                                            </div>
+                                                        </List>
+                                                        : null
+                                                }
 
-                                        <Divider />
-                                        {
-                                            categories.length ?
-                                                <List dense component="nav" aria-label="secondary"
-                                                    subheader={<ListSubheader component="div" id="nested-list-subheader" className="price-header"><span>Price</span><Button size="small" color="primary" onClick={applyPrice}>Apply</Button></ListSubheader>}
-                                                >
-                                                    <div className="prices">
-                                                        <TextField InputProps={{
-                                                            startAdornment: <InputAdornment position="start">$</InputAdornment>,
-                                                        }} type="number" label="min" value={priceRange[0]} onChange={(e) => handlePriceChange(e, 0)} />
-                                                        <TextField InputProps={{
-                                                            startAdornment: <InputAdornment position="start">$</InputAdornment>,
-                                                        }} type="number" label="max" value={priceRange[1]} onChange={(e) => handlePriceChange(e, 1)} />
+                                                <Divider />
+                                                {
+                                                    categories.length ?
+                                                        <List dense component="nav" aria-label="secondary"
+                                                            subheader={<ListSubheader component="div" id="nested-list-subheader" className="price-header"><span>Price</span><Button size="small" color="primary" onClick={applyPrice}>Apply</Button></ListSubheader>}
+                                                        >
+                                                            <div className="prices">
+                                                                <TextField InputProps={{
+                                                                    startAdornment: <InputAdornment position="start">$</InputAdornment>,
+                                                                }} type="number" label="min" value={priceRange[0]} onChange={(e) => handlePriceChange(e, 0)} />
+                                                                <TextField InputProps={{
+                                                                    startAdornment: <InputAdornment position="start">$</InputAdornment>,
+                                                                }} type="number" label="max" value={priceRange[1]} onChange={(e) => handlePriceChange(e, 1)} />
 
-                                                    </div>
-                                                </List>
-                                                : null
-                                        }
+                                                            </div>
+                                                        </List>
+                                                        : null
+                                                }
 
-                                        <Divider />
-                                        {SKUTypes.map(name => (
-                                            <List key={name} dense component="nav" aria-label="secondary"
-                                                subheader={<ListSubheader component="div" id="nested-list-subheader">{name}</ListSubheader>}
-                                            >
-                                                <div className="pack-sizes">
-                                                    {SKUs.map(sku => (
-                                                        sku.name == name && sku.value ?
-                                                            <FormControlLabel key={sku.value + sku.id + sku.name} className="d-block ctrl m-0" label={sku.value} control={<Checkbox color="primary"
-                                                                checked={sku.selected} onChange={(e) => changeSKU(sku.value, e)} value={sku.value} />} />
-                                                            : null
-                                                    ))}
-                                                </div>
-                                            </List>
-                                        ))}
+                                                <Divider />
+                                                {SKUTypes.map(name => (
+                                                    <List key={name} dense component="nav" aria-label="secondary"
+                                                        subheader={<ListSubheader component="div" id="nested-list-subheader">{name}</ListSubheader>}
+                                                    >
+                                                        <div className="pack-sizes">
+                                                            {SKUs.map(sku => (
+                                                                sku.name == name && sku.value ?
+                                                                    <FormControlLabel key={sku.value + sku.id + sku.name} className="d-block ctrl m-0" label={sku.value} control={<Checkbox color="primary"
+                                                                        checked={sku.selected} onChange={(e) => changeSKU(sku.value, e)} value={sku.value} />} />
+                                                                    : null
+                                                            ))}
+                                                        </div>
+                                                    </List>
+                                                ))}
 
-                                    </CardContent>
-                                </Card>
-                            </div>
+                                            </CardContent>
+                                        </Card>
+                                    </div>
+                                </div>
+                                : null
+                        }
 
-                        </div>
                     </div>
                     <div className="col-md-10 col">
                         {props.userName ?
@@ -281,19 +285,23 @@ const Products = (props) => {
                         <div className="content">
                             {productsSection}
                         </div>
-                        <div className="pagination mt-4">
-                            <Pagination
-                                page={parseInt(new URLSearchParams(props.location.search).get('page'))}
-                                count={metaData.pageCount}
-                                renderItem={(item) => (
-                                    <PaginationItem
-                                        component={Link}
-                                        to={`/products${props.location.search.split('&page')[0] || '?'}${item.page === 0 ? '' : `&page=${item.page}`}`}
-                                        {...item}
+                        {
+                            metaData.pageCount > 1 ?
+                                <div className="pagination mt-4">
+                                    <Pagination
+                                        page={parseInt(new URLSearchParams(props.location.search).get('page'))}
+                                        count={metaData.pageCount}
+                                        renderItem={(item) => (
+                                            <PaginationItem
+                                                component={Link}
+                                                to={`/products${props.location.search.split('&page')[0] || '?'}${item.page === 0 ? '' : `&page=${item.page}`}`}
+                                                {...item}
+                                            />
+                                        )}
                                     />
-                                )}
-                            />
-                        </div>
+                                </div>
+                                : null
+                        }
                     </div>
                 </div>
             </div>

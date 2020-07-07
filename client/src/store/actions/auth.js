@@ -19,9 +19,9 @@ export const login = (email, password) => {
                     localStorage.setItem('idToken', res.idToken);
                     localStorage.setItem('userId', res.userId);
                     localStorage.setItem('userName', res.userName);
-                    localStorage.setItem('expireDate', new Date().getTime() + 3600000);
+                    localStorage.setItem('expireDate', new Date().getTime() + 7200000);
                     if (timer) { clearTimeout(timer) }
-                    timer = setTimeout(() => dispatch(logout()), 3600000)
+                    timer = setTimeout(() => dispatch(logout()), 7200000)
                     dispatch({ type: actions.AUTH_SUCCESS, idToken: res.idToken, userId: res.userId, userName: res.userName });
                     window.location.reload();
                 }
