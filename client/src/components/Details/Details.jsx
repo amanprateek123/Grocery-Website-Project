@@ -99,7 +99,7 @@ const Detail = (props) => {
                     {
                         props.product.skus[1] ?
                             <div>
-                                <Select
+                                {/* <Select
                                     id="sku-selected"
                                     value={props.product.skus[props.pack].name}
                                     defaultValue={props.product.skus[props.pack].name}
@@ -108,7 +108,7 @@ const Detail = (props) => {
                                         <MenuItem key={sku.id} value={sku.name} onClick={() => props.handle(i)} id={sku.id}>{sku.name}</MenuItem>
                                     )}
 
-                                </Select>
+                                </Select> */}
                                 <div className="position-relative">
                                     {attributes}
                                 </div>
@@ -117,7 +117,7 @@ const Detail = (props) => {
                     }
                 </div>
                 <div className="detail_cart">
-                    <input type="text" value={quantity} onChange={props.handler} className="input12" />
+                    {/* <input type="text" value={quantity} onChange={props.handler} className="input12" /> */}
                     <Button variant="contained" className={`detail_btn ${added ? 'added' : ''}`}
                         onClick={() => {
                             props.addToCart(props.product.skus[props.pack].id)

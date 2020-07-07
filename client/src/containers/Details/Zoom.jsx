@@ -8,6 +8,7 @@ import { useRef } from 'react';
 export default function Zoom(props) {
 
     const [next, setnext] = useState(props.img)
+    const [zoomed, setZoomed] = useState(false)
     const left_move = () => {
         if (next > 0) {
             let index = next - 1;
@@ -29,6 +30,13 @@ export default function Zoom(props) {
     useEffect(() => {
         const zooming = new Zooming({
             // options...
+            bgColor: "#000",
+            onBeforeOpen: () => {
+                setZoomed(true)
+            },
+            onClose: () => {
+                setZoomed(false)
+            }
         })
 
         zooming.listen('.zooming')
@@ -48,17 +56,24 @@ export default function Zoom(props) {
                 })
                 }
             </div>
-            <div className="close" onClick={props.closeModal}>
-                <CloseIcon />
-            </div>
-            <div>
-                <button className="btn_left" onClick={left_move}>
-                    <ChevronRightIcon style={{ transform: 'rotate(180deg' }} />
-                </button>
-                <button className="btn_right" onClick={right_move}>
-                    <ChevronRightIcon />
-                </button>
-            </div>
+            {
+                !zoomed ?
+                    <React.Fragment>
+                        <div className="close" onClick={props.closeModal}>
+                            <CloseIcon />
+                        </div>
+                        <div>
+                            <button className="btn_left" onClick={left_move}>
+                                <ChevronRightIcon style={{ transform: 'rotate(180deg' }} />
+                            </button>
+                            <button className="btn_right" onClick={right_move}>
+                                <ChevronRightIcon />
+                            </button>
+                        </div>
+                    </React.Fragment>
+                    : null
+            }
+
         </div>
     )
 }

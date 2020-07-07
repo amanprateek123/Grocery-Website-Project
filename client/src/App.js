@@ -7,10 +7,11 @@ import Home from './containers/Home/Home';
 import E404 from './containers/E404/E404'
 import Modal from './components/Modal/Modal';
 import SignUp from './components/SignUp/SignUp';
-import { Profile, Products, Admin, Details, Checkout, Test ,Orders} from './containers'
+import { Profile, Products, Admin, Details, Checkout, Test, Orders } from './containers'
 import { connect } from 'react-redux';
 import * as actions from './store/actions';
 import AdminTMP from './containers/Admin/Admin_tmp'
+import Footer from './components/Footer/Footer';
 
 
 class App extends Component {
@@ -56,6 +57,7 @@ class App extends Component {
             <Route component={E404} />
           </Switch>
         </div>
+        <Footer />
       </React.Fragment>
     );
   }
