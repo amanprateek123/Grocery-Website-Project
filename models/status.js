@@ -1,26 +1,23 @@
 
 module.exports = (sequelize, Sequelize = require('sequelize')) => {
-    const Order = sequelize.define('order', {
+    const Status = sequelize.define('status', {
         id: {
             type: Sequelize.INTEGER,
             allowNull: false,
             autoIncrement: true,
             primaryKey: true
         },
-        deliverOn: {
-            type: Sequelize.DATEONLY,
-        },
-        price: {
-            type: Sequelize.FLOAT,
-        },
-        shippingAddress: {
+        status: {
             type: Sequelize.STRING
+        },
+        index: {
+            type: Sequelize.INTEGER
         }
     },
         {
-            tableName: 'db_ld_order'
+            tableName: 'db_ld_status'
         }
     )
 
-    return Order;
+    return Status;
 };

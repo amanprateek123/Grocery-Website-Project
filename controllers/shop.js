@@ -1,7 +1,7 @@
 const db = require('../utils/database')
 const Op = require('sequelize').Op;
 
-const PAGINATION = 2;
+const PAGINATION = 7;
 
 exports.getCategories = (req, res) => {
    db.department.findAll({
@@ -23,26 +23,15 @@ exports.getCategories = (req, res) => {
 
 
 db.sku.hasMany(db.attribute, { as: 'A0' })
-db.attribute.belongsTo(db.sku)
 db.sku.hasMany(db.attribute, { as: 'A1' })
-db.attribute.belongsTo(db.sku)
 db.sku.hasMany(db.attribute, { as: 'A2' })
-db.attribute.belongsTo(db.sku)
 db.sku.hasMany(db.attribute, { as: 'A3' })
-db.attribute.belongsTo(db.sku)
 db.sku.hasMany(db.attribute, { as: 'A4' })
-db.attribute.belongsTo(db.sku)
 db.sku.hasMany(db.attribute, { as: 'A5' })
-db.attribute.belongsTo(db.sku)
 db.sku.hasMany(db.attribute, { as: 'A6' })
-db.attribute.belongsTo(db.sku)
 db.sku.hasMany(db.attribute, { as: 'A7' })
-db.attribute.belongsTo(db.sku)
 db.sku.hasMany(db.attribute, { as: 'A8' })
-db.attribute.belongsTo(db.sku)
 db.sku.hasMany(db.attribute, { as: 'A9' })
-db.attribute.belongsTo(db.sku)
-
 
 
 exports.getProducts = (req, res) => {
@@ -592,10 +581,20 @@ exports.createOrder = (req, res) => {
 
 
 
+exports.getStatus = (req, res) => {
+   db.status.findAll({
+      attributes: ['id', 'index', 'status']
+   }).then(status => res.json(status))
+      .catch(err => {
+         console.log(err);
+         res.json([])
+      })
+}
+
 exports.getOrders = (req, res) => {
    let where = {}
    let limit = 5
-   let offset = (parseInt(req.query.page) - 1) * limit
+   let offset = (parseInt(req.query.page) - 1) * limit || 0;
    req.query.id ? (where.id = req.query.id) : null
    req.query.date ? (where.createdAt = { [Op.gt]: new Date(req.query.date) }) : null
    db.order.findAll({
@@ -618,13 +617,20 @@ exports.getOrders = (req, res) => {
                      model: db.image
                   }
                ]
-            }
+            },
+
+
          },
          {
-            model: db.shippingAddress
+            model: db.status,
+            attributes: ['status', 'index']
          }
       ]
    }).then(orders => {
       res.json(orders);
+   }).catch(err => {
+      res.json(err)
+      console.error(err);
+
    })
 }
