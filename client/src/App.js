@@ -10,7 +10,6 @@ import SignUp from './components/SignUp/SignUp';
 import { Profile, Products, Admin, Details, Checkout, Test ,Orders} from './containers'
 import { connect } from 'react-redux';
 import * as actions from './store/actions';
-import OrderItems from './containers/Orders/OrderItems/OrderItems'
 import AdminTMP from './containers/Admin/Admin_tmp'
 
 
@@ -49,7 +48,6 @@ class App extends Component {
             <Route path="/orders">
               <Orders />
             </Route>
-            <Route path="/order/:id" component={OrderItems} />
             <Route path="/product/:id" component={Details} />
 
             <Route path="/checkout" component={Checkout} />

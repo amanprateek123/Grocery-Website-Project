@@ -594,7 +594,7 @@ exports.createOrder = (req, res) => {
 
 exports.getOrders = (req, res) => {
    let where = {}
-   let limit = 2
+   let limit = 5
    let offset = (parseInt(req.query.page) - 1) * limit
    req.query.id ? (where.id = req.query.id) : null
    req.query.date ? (where.createdAt = { [Op.gt]: new Date(req.query.date) }) : null

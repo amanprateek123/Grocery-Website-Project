@@ -10,7 +10,9 @@ import {
 }
     from '@material-ui/core';
 import StarIcon from '@material-ui/icons/Star';
-import { Link } from 'react-router-dom';
+import Modal from '../../components/Modal/Modal'
+
+import OrderItems from './OrderItems/OrderItems'
 
 function Orders(props) {
 
@@ -88,6 +90,8 @@ function Orders(props) {
 
     }, [user])
 
+       
+    //page & dates
     const [res, setRes] = useState([]);
     let [page, setPage] = useState(1)
     let [prevPage, setPrevPage] = useState(0);
@@ -138,9 +142,41 @@ function Orders(props) {
     const handleChange = (event) => {
         setDate(event.target.value);
     };
+    //modal
+    const [show,setShow] = useState(false)
+    const [od,setOd] = useState()
+    const openModal = (id)=>{
+        setShow(true)
+        setOd(id)
+    }
+    const closeModal = ()=>{
+        setShow(false)
+    }
 
+
+    //scroll
+    useEffect(()=>{
+        const element = document.getElementById('scroll')
+        element.addEventListener('scroll',handleScroll)
+    },[])
+    const handleScroll = (e) => {
+       const bottom = e.target.scrollHeight - e.target.scrollTop === e.target.clientHeight;
+       if (bottom) { 
+           load()
+           const element = document.getElementById('scroll')
+             element.removeEventListener('scroll',handleScroll)
+           setTimeout(()=>{
+            const element = document.getElementById('scroll')
+            element.addEventListener('scroll',handleScroll)
+           },5000)
+
+       }
+     }
     return (
         <React.Fragment>
+            <Modal visible={show}>
+                <OrderItems id={od} closeModal={closeModal}/>
+            </Modal>
             <div className="container">
                 <Paper>
                     <Card>
@@ -169,13 +205,12 @@ function Orders(props) {
                         </CardContent>
                     </Card>
                 </Paper>
-                <Paper style={{ marginTop: '16px', backgroundColor: 'transparent', boxShadow: 'none' }}>
+                <Paper style={{ marginTop: '16px', backgroundColor: 'transparent', boxShadow: 'none',overflowY:'scroll' }} id="scroll" >
                     {(res.length != 0) ? (
                         res.map((order, i) => {
                             let name = ''
-                            return (
-                                <Link to={`/order/${order.id}`} style={{ textDecoration: 'none' }}>
-                                    <Card style={{ marginBottom: '16px' }}>
+                            return (                                
+                                    <Card style={{ marginBottom: '16px',cursor:'pointer' }} onClick={()=>openModal(order.id)}>
                                         <div className="row">
                                             <div className="col-5">
                                                 <div className="row">
@@ -220,12 +255,11 @@ function Orders(props) {
 
                                         </div>
                                     </Card>
-                                </Link>
                             )
                         })
                     ) : null}
                 </Paper>
-                {!len ? <h5 style={{ width: '100%', fontSize: '0.7em', textAlign: 'center', padding: '5px' }}>nothing more...</h5> : <Button color="secondary" onClick={load} style={{ margin: '1% 45%', padding: '5px', width: '150px' }}>LOAD MORE</Button>}
+                {/* {!len ? <h5 style={{ width: '100%', fontSize: '0.7em', textAlign: 'center', padding: '5px' }}>nothing more...</h5> : <Button color="secondary" onClick={load} style={{ margin: '1% 45%', padding: '5px', width: '150px' }}>LOAD MORE</Button>} */}
             </div>
         </React.Fragment>
     )

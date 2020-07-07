@@ -6,6 +6,7 @@ import {
     TextField, CardActionArea, CardActions, Button, Select, MenuItem, InputLabel, Snackbar
 }
     from '@material-ui/core';
+import CloseIcon from '@material-ui/icons/Close';
 
 function OrderItems(props) {
     var month = new Array();
@@ -23,7 +24,7 @@ function OrderItems(props) {
     month[11] = "December";
     const [order, setOrder] = useState(null);    
     useEffect(()=>{
-        fetch(`/get-orders?page=1&date=1&id=${props.match.params.id}`, {
+        fetch(`/get-orders?page=1&date=1&id=${props.id}`, {
             headers: {
                 'Authorization': 'Bearer ' + props.idToken,
                 'Content-Type': 'application/json'
@@ -76,7 +77,7 @@ function OrderItems(props) {
        
     return (        
         order?<React.Fragment>
-        <Paper className="container-fluid mx-auto row mt-2" style={{boxShadow:'none',backgroundColor:'transparent',}}>
+        <Paper className="mx-auto row mt-2" style={{boxShadow:'none',backgroundColor:'transparent',width:'70%',minHeight:'400px'}}>
         <Card className="col-3 p-3">
            <Typography variant="h5" component="h1">
                Delivery Address
@@ -101,7 +102,7 @@ function OrderItems(props) {
             </Typography>                
            </Card>
            <Paper className="col-9 row" style={{boxShadow:'none'}}>
-               <Paper className="col-6">
+               <Paper className="col-6" style={{overflowY:'scroll',maxHeight:'400px'}}>
                    <h3 style={{textAlign:'center'}}>Items({order[0].orderItems.length})</h3>
                    {order[0].orderItems.map(itm=>{
                      return(
@@ -125,8 +126,8 @@ function OrderItems(props) {
                      )
                    })}
                </Paper>
-               <Card className="col-4">
-               <div style={{width:'300px',margin:'0 auto',marginTop:'10%',color:'green'}}>
+               <Card className="col-4" >
+               <div style={{width:'250px',margin:'0 auto',marginTop:'10%',color:'green'}}>
                <Slider
                   defaultValue={single(order)}
                   getAriaValueText={valuetext}
@@ -139,7 +140,8 @@ function OrderItems(props) {
                   />
                </div>
                </Card>
-               <Card className="col-2">
+               <Card className="col-2" >
+               <span style={{float:'right',margin:'5px -15px',cursor:'pointer'}}><CloseIcon onClick={props.closeModal}/></span>
                <Typography variant="p" component="h6" style={{textAlign:'center',marginTop:'100px'}}>
                  <b >
                  Your Item has been 
