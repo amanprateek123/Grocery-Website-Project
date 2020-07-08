@@ -259,7 +259,7 @@ function Orders(props) {
                         })
                     ) : null}
                 </Paper>
-                {/* {!len ? <h5 style={{ width: '100%', fontSize: '0.7em', textAlign: 'center', padding: '5px' }}>nothing more...</h5> : <Button color="secondary" onClick={load} style={{ margin: '1% 45%', padding: '5px', width: '150px' }}>LOAD MORE</Button>} */}
+                {!len ? <h5 style={{ width: '100%', fontSize: '0.7em', textAlign: 'center', padding: '5px' }}>nothing more...</h5> : <Button color="secondary" onClick={load} style={{ margin: '1% 45%', padding: '5px', width: '150px' }}>LOAD MORE</Button>}
             </div>
         </React.Fragment>
     )

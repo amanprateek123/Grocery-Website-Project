@@ -6,7 +6,11 @@ import {
     TextField, CardActionArea, CardActions, Button, Select, MenuItem, InputLabel, Snackbar
 }
     from '@material-ui/core';
+    import './OrderItems.scss'
 import CloseIcon from '@material-ui/icons/Close';
+import ReplayIcon from '@material-ui/icons/Replay';
+import HelpIcon from '@material-ui/icons/Help';
+import StarIcon from '@material-ui/icons/Star';
 
 function OrderItems(props) {
     var month = new Array();
@@ -36,6 +40,7 @@ function OrderItems(props) {
                 console.log(data)
             })
     },[])
+
     console.log(order)
     const progress = [
         {
@@ -77,9 +82,15 @@ function OrderItems(props) {
        
     return (        
         order?<React.Fragment>
-        <Paper className="mx-auto row mt-2" style={{boxShadow:'none',backgroundColor:'transparent',width:'70%',minHeight:'400px'}}>
-        <Card className="col-3 p-3">
-           <Typography variant="h5" component="h1">
+        <Paper className="orderItem">
+        <Card className="delivery">
+           <Typography variant="h6" component="h6">
+               Order Number : <span className="text12" style={{color:'blue'}}>{(order[0].id)}</span>
+            </Typography> 
+            <Typography variant="h6" component="h6">
+               Order Date : <span className="text12" style={{color:'blue'}}>{new Date(order[0].createdAt).getDate()}/{new Date(order[0].createdAt).getMonth()+1}/{new Date(order[0].createdAt).getFullYear()}</span>
+            </Typography> 
+           <Typography variant="h5" component="h1" style={{marginTop:'15%'}}>
                Delivery Address
             </Typography>   
             <Typography variant="p" component="h6">
@@ -90,35 +101,29 @@ function OrderItems(props) {
             {order[0].shippingAddress.address}<br/>
             {order[0].shippingAddress.state}, {order[0].shippingAddress.country} - {order[0].shippingAddress.zip}
             </div>
-            <div className="mt-2 mb-2">
+            <div className="mt-2">
             Phone Number - <br/>
             {order[0].shippingAddress.mobile}
             </div>                 
-            </Typography> <Typography variant="h5" component="h6" style={{marginTop:'30px'}}>
-               Order Number : <span className="ml-1" style={{color:'blue'}}>{(order[0].id)}</span>
-            </Typography> 
-            <Typography variant="h5" component="h6" style={{marginTop:'30px'}}>
-               Order Date : <span className="ml-1" style={{color:'blue'}}>{new Date(order[0].createdAt).getDate()} {month[new Date(order[0].createdAt).getMonth()]} {new Date(order[0].createdAt).getFullYear()}</span>
-            </Typography>                
+            </Typography>               
            </Card>
-           <Paper className="col-9 row" style={{boxShadow:'none'}}>
-               <Paper className="col-6" style={{overflowY:'scroll',maxHeight:'400px'}}>
-                   <h3 style={{textAlign:'center'}}>Items({order[0].orderItems.length})</h3>
+           <Paper className="listItems" style={{boxShadow:'none'}}>
+               <Paper className="q1" style={{overflowY:'scroll',maxHeight:'400px',boxShadow:'none'}}>
                    {order[0].orderItems.map(itm=>{
                      return(
-                       <Card style={{margin:'16px 4px',border:'1px solid #f0f0f0', borderRadius:'5px',boxShadow:'none'}}>
+                       <Card className="cardl" style={{border:'1px solid #f0f0f0', borderRadius:'5px',boxShadow:'none'}}>
                           <div className="row">
-                             <div className="col-3">
+                             <div className="q2">
                                 <img src={itm.sku.images[0].src} style={{width:'100px',height:'100px'}}/>
                              </div>
-                             <div className="col-6" style={{textAlign:'center',marginTop:'6%'}}>
-                              <Typography variant="p" component="h6">
-                               <b> {itm.sku.product.name} - {itm.sku.name} </b>
+                             <div className="q4" style={{textAlign:'center',marginTop:'6%'}}>
+                              <Typography variant="p" component="h6" style={{fontWeight:'600',fontSize:'12px'}}>
+                              {itm.sku.product.name} <br/> {itm.sku.name}
                                 </Typography>
                              </div>
-                             <div className="col-3" style={{color:'grey',fontWeight:'bold',marginTop:'6%'}}>
+                             <div className="q2" style={{color:'grey',fontWeight:'bold',marginTop:'6%'}}>
                              <Typography variant="p" component="h6">
-                                Price: {itm.sku.price}
+                             ₹ {itm.sku.price}
                                 </Typography>
                              </div>
                           </div>
@@ -126,8 +131,8 @@ function OrderItems(props) {
                      )
                    })}
                </Paper>
-               <Card className="col-4" >
-               <div style={{width:'250px',margin:'0 auto',marginTop:'10%',color:'green'}}>
+               <Card className="status_slide" style={{boxShadow:'none'}}>
+               <div style={{width:'80%',margin:'0 auto',marginTop:'10%',paddingTop:'1%',color:'green'}}>
                <Slider
                   defaultValue={single(order)}
                   getAriaValueText={valuetext}
@@ -140,10 +145,9 @@ function OrderItems(props) {
                   />
                </div>
                </Card>
-               <Card className="col-2" >
-               <span style={{float:'right',margin:'5px -15px',cursor:'pointer'}}><CloseIcon onClick={props.closeModal}/></span>
-               <Typography variant="p" component="h6" style={{textAlign:'center',marginTop:'100px'}}>
-                 <b >
+               <Card className="date" style={{boxShadow:'none'}} >
+               <Typography variant="p" component="h6" style={{textAlign:'center'}}>
+                 <b style={{fontSize:'13px'}}>
                  Your Item has been 
                <div>
                deliverd on {new Date(order[0].deliverOn).getDate()} {month[new Date(order[0].deliverOn).getMonth()]}  {new Date(order[0].deliverOn).getFullYear()}
@@ -152,7 +156,14 @@ function OrderItems(props) {
             </Typography>
                </Card>
            </Paper>
+           <span className="cross_order"><CloseIcon onClick={props.closeModal}/></span>
         </Paper>
+        <div>
+              <p className="return_pol">
+                Return policy valid till Today,{(new Date()).getDate()}, {month[new Date().getMonth()]} 
+                <span style={{color:'var(--mainColor'}}>  <ReplayIcon/> RETURN  <HelpIcon/> NEED HELP? <StarIcon/>  RATE & REVIEW PRODUCTS</span>
+              </p>
+           </div>
   </React.Fragment>:null
     )
 }
