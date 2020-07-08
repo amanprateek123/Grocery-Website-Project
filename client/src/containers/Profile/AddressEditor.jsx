@@ -34,7 +34,7 @@ const AddressEditor = (props) => {
 
     return (
         <Paper variant="outlined" className="add-address" style={{border:'none',margin:'0'}}>
-            {!editing ?
+            {!editing&&!props.show ?
                       <div style={{marginTop:'8px',backgroundColor:'white'}}>
                           <div className="adder" onClick={() => setEditing(true)}>
                               <AddIcon style={{margin: '0 22px 0 26px',verticalAlign: 'middle'}}/>
