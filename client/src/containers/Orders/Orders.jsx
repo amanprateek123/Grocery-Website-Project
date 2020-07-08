@@ -13,6 +13,7 @@ import StarIcon from '@material-ui/icons/Star';
 import Modal from '../../components/Modal/Modal'
 
 import OrderItems from './OrderItems/OrderItems'
+import './Orders.scss'
 
 function Orders(props) {
 
@@ -90,7 +91,7 @@ function Orders(props) {
 
     }, [user])
 
-       
+
     //page & dates
     const [res, setRes] = useState([]);
     let [page, setPage] = useState(1)
@@ -143,39 +144,43 @@ function Orders(props) {
         setDate(event.target.value);
     };
     //modal
-    const [show,setShow] = useState(false)
-    const [od,setOd] = useState()
-    const openModal = (id)=>{
+    const [show, setShow] = useState(false)
+    const [od, setOd] = useState()
+    const openModal = (id) => {
         setShow(true)
         setOd(id)
     }
-    const closeModal = ()=>{
+    const closeModal = () => {
         setShow(false)
     }
 
 
     //scroll
-    useEffect(()=>{
+    useEffect(() => {
         const element = document.getElementById('scroll')
-        element.addEventListener('scroll',handleScroll)
-    },[])
+        element.addEventListener('scroll', handleScroll)
+    }, [])
     const handleScroll = (e) => {
-       const bottom = e.target.scrollHeight - e.target.scrollTop === e.target.clientHeight;
-       if (bottom) { 
-           load()
-           const element = document.getElementById('scroll')
-             element.removeEventListener('scroll',handleScroll)
-           setTimeout(()=>{
-            const element = document.getElementById('scroll')
-            element.addEventListener('scroll',handleScroll)
-           },5000)
+        const bottom = e.target.scrollHeight - e.target.scrollTop === e.target.clientHeight;
+        console.log(e.target.scrollHeight);
 
-       }
-     }
+        if (bottom) {
+            load()
+            console.log('Loading More');
+
+            const element = document.getElementById('scroll')
+            element.removeEventListener('scroll', handleScroll)
+            setTimeout(() => {
+                const element = document.getElementById('scroll')
+                element.addEventListener('scroll', handleScroll)
+            }, 5000)
+
+        }
+    }
     return (
         <React.Fragment>
             <Modal visible={show}>
-                <OrderItems id={od} closeModal={closeModal}/>
+                <OrderItems id={od} closeModal={closeModal} />
             </Modal>
             <div className="container">
                 <Paper>
@@ -205,56 +210,56 @@ function Orders(props) {
                         </CardContent>
                     </Card>
                 </Paper>
-                <Paper style={{ marginTop: '16px', backgroundColor: 'transparent', boxShadow: 'none',overflowY:'scroll' }} id="scroll" >
+                <Paper style={{ marginTop: '16px', backgroundColor: 'transparent', boxShadow: 'none', overflowY: 'scroll' }} id="scroll" >
                     {(res.length != 0) ? (
                         res.map((order, i) => {
                             let name = ''
-                            return (                                
-                                    <Card style={{ marginBottom: '16px',cursor:'pointer' }} onClick={()=>openModal(order.id)}>
-                                        <div className="row">
-                                            <div className="col-5">
-                                                <div className="row">
-                                                    <div className="col-4 p-2">
-                                                        <img src={order.orderItems[0].sku.images[0].src} style={{ width: '70%' }} className="ml-4" />
-                                                    </div>
-                                                    <div className="col-8">
-                                                        <div className="mt-2">
-                                                            {order.orderItems.forEach(od => {
-                                                                name = name + ' ' + od.sku.name + ','
-                                                            })}
-                                                            <b>{name}</b><br />
+                            return (
+                                <Card style={{ marginBottom: '16px', cursor: 'pointer' }} onClick={() => openModal(order.id)}>
+                                    <div className="row">
+                                        <div className="col-5">
+                                            <div className="row">
+                                                <div className="col-4 p-2">
+                                                    <img src={order.orderItems[0].sku.images[0].src} style={{ width: '70%' }} className="ml-4" />
+                                                </div>
+                                                <div className="col-8">
+                                                    <div className="mt-2">
+                                                        {order.orderItems.forEach(od => {
+                                                            name = name + ' ' + od.sku.name + ','
+                                                        })}
+                                                        <b>{name}</b><br />
 
-                                                        </div>
-                                                        <div className="mt-2" style={{ color: 'grey' }}>
-                                                            Order Date : {month[new Date(order.createdAt).getMonth()]}
-                                                        </div>
-                                                        <div className="mt-1" style={{ color: 'grey' }}>
-                                                            Order ID : {order.id}
-                                                        </div>
-                                                        <div className="mt-1" style={{ color: 'grey' }}>
-                                                            Seller : LalaDukaan
+                                                    </div>
+                                                    <div className="mt-2" style={{ color: 'grey' }}>
+                                                        Order Date : {month[new Date(order.createdAt).getMonth()]}
+                                                    </div>
+                                                    <div className="mt-1" style={{ color: 'grey' }}>
+                                                        Order ID : {order.id}
+                                                    </div>
+                                                    <div className="mt-1" style={{ color: 'grey' }}>
+                                                        Seller : LalaDukaan
                                          </div>
 
-                                                    </div>
                                                 </div>
                                             </div>
-                                            <div className="col-3" style={{ fontSize: '17px', textAlign: 'left', margin: '2% 0' }}>
-                                                ₹{order.price}
-                                            </div>
-                                            <div className="col-4 pt-2" >
-                                                <div style={{ textAlign: 'left', margin: '3% 0' }}>
-                                                    <b>  Delivered on {month[new Date(order.deliverOn).getMonth()]} {new Date(order.deliverOn).getDate()}</b>
-                                                </div>
-                                                <div style={{ textAlign: 'left', margin: '3% 0' }}>
-                                                    Return Policy valid till Tommorow, {month[today.getMonth()]} {today.getDate() + 1}
-                                                </div>
-                                                <div style={{ textAlign: 'left', color: 'var(--mainColor)', margin: '3% 0', cursor: 'pointer' }}>
-                                                    <StarIcon /> <span>RATE & REVIEW PRODUCT</span>
-                                                </div>
-                                            </div>
-
                                         </div>
-                                    </Card>
+                                        <div className="col-3" style={{ fontSize: '17px', textAlign: 'left', margin: '2% 0' }}>
+                                            ₹{order.price}
+                                        </div>
+                                        <div className="col-4 pt-2" >
+                                            <div style={{ textAlign: 'left', margin: '3% 0' }}>
+                                                <b>  Delivered on {month[new Date(order.deliverOn).getMonth()]} {new Date(order.deliverOn).getDate()}</b>
+                                            </div>
+                                            <div style={{ textAlign: 'left', margin: '3% 0' }}>
+                                                Return Policy valid till Tommorow, {month[today.getMonth()]} {today.getDate() + 1}
+                                            </div>
+                                            <div style={{ textAlign: 'left', color: 'var(--mainColor)', margin: '3% 0', cursor: 'pointer' }}>
+                                                <StarIcon /> <span>RATE & REVIEW PRODUCT</span>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </Card>
                             )
                         })
                     ) : null}

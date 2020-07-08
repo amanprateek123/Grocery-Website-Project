@@ -141,6 +141,8 @@ const Profile = (props) => {
     }
 
     const addAddress = (address) => {
+        console.log("ADD ADDRESS");
+
         fetch('/add-address', {
             headers: {
                 'Authorization': 'Bearer ' + props.idToken,
@@ -154,7 +156,7 @@ const Profile = (props) => {
             if (res.status == 200) {
                 setAddingAddress(false);
                 props.setResponse(res);
-                setUser({
+                setUser((user) => ({
                     ...user,
                     addresses: [
                         ...user.addresses,
@@ -163,7 +165,7 @@ const Profile = (props) => {
                             id: res.addressId
                         }
                     ]
-                })
+                }))
             }
             else {
                 props.setResponse(res);
@@ -176,6 +178,7 @@ const Profile = (props) => {
     }
 
     const removeAddress = (id) => {
+        console.log("REMOVE ADDRESS");
         fetch('/remove-address', {
             headers: {
                 'Authorization': 'Bearer ' + props.idToken,
@@ -188,10 +191,10 @@ const Profile = (props) => {
             console.log(res);
             if (res.status == 200) {
                 props.setResponse(res);
-                setUser({
+                setUser((user) => ({
                     ...user,
                     addresses: user.addresses.filter(add => add.id != id)
-                })
+                }))
             }
             else {
                 props.setResponse(res);
@@ -208,8 +211,9 @@ const Profile = (props) => {
         setEditingAddress(address);
     }
     const editAddressPost = (address) => {
+        console.log("EDIT ADDRESS");
         removeAddress(address.id);
-        delete address.id;
+        // delete address.id;
         addAddress(address);
         setAddressEditMode(false);
         setEditingAddress(null);

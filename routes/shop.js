@@ -10,6 +10,7 @@ router.post('/cart', isAuth, shopCtrl.cart)
 router.get('/cart', isAuth, shopCtrl.getCart)
 
 router.get('/get-orders', isAuth, shopCtrl.getOrders)
+router.get('/get-status', shopCtrl.getStatus)
 
 
 module.exports = router
