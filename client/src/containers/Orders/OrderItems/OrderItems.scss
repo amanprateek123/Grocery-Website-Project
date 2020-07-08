@@ -43,11 +43,13 @@
           
     }
     }
-    
-
 }
 .cardl{
-    margin: 10px 2px;
+    margin: 10px 10px;
+    .rows{
+        display: flex;
+        flex-direction: row;
+    }
 }
 .status_slide{
     width: 42%;
@@ -56,7 +58,7 @@
     }
 }
 .date{
-    width: 15%;
+    width: 16%;
     padding-top: 5%;
     margin-left: 3px;
      @media(max-width:600px){
@@ -65,7 +67,8 @@
 }
 }
 .cross_order{
-    width: 4%;
+    width: 3%;
+    margin-right: -10px;
     cursor: pointer;
     @media(max-width:600px){
         position: absolute;
@@ -83,4 +86,10 @@
      font-size: 7px;
      width: 100%;
  } 
+}
+
+.phn{
+    @media(max-width:600px){
+        margin-bottom: 10px;
+    }
 }

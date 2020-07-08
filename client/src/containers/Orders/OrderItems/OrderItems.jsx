@@ -72,39 +72,30 @@ function OrderItems(props) {
        }
       const single = (ord)=>{
         let pro = []
-        let val = status_1(ord[0].status).value
+        let val = status_1(ord[0].status.status).value
        while(val>=0){
            pro.push(val)
            val=val-33.33
        }
        return pro
       }
+      console.log(order)
        
     return (        
         order?<React.Fragment>
         <Paper className="orderItem">
         <Card className="delivery">
            <Typography variant="h6" component="h6">
-               Order Number : <span className="text12" style={{color:'blue'}}>{(order[0].id)}</span>
+               Order Number : <span className="text12" style={{color:'green'}}>{(order[0].id)}</span>
             </Typography> 
             <Typography variant="h6" component="h6">
-               Order Date : <span className="text12" style={{color:'blue'}}>{new Date(order[0].createdAt).getDate()}/{new Date(order[0].createdAt).getMonth()+1}/{new Date(order[0].createdAt).getFullYear()}</span>
+               Order Date : <span className="text12" style={{color:'green'}}>{new Date(order[0].createdAt).getDate()}/{new Date(order[0].createdAt).getMonth()+1}/{new Date(order[0].createdAt).getFullYear()}</span>
             </Typography> 
-           <Typography variant="h5" component="h1" style={{marginTop:'15%'}}>
+           <Typography variant="h5" component="h1" style={{marginTop:'15%',textAlign:'left',marginBottom:'5%'}}>
                Delivery Address
             </Typography>   
-            <Typography variant="p" component="h6">
-            <div className="mt-2">
-            <b>{order[0].shippingAddress.name}</b>
-            </div>
-            <div className="mt-2">
-            {order[0].shippingAddress.address}<br/>
-            {order[0].shippingAddress.state}, {order[0].shippingAddress.country} - {order[0].shippingAddress.zip}
-            </div>
-            <div className="mt-2">
-            Phone Number - <br/>
-            {order[0].shippingAddress.mobile}
-            </div>                 
+            <Typography variant="p" component="h6" style={{textAlign:'left',color:'green'}}>
+              {order[0].shippingAddress}                
             </Typography>               
            </Card>
            <Paper className="listItems" style={{boxShadow:'none'}}>
@@ -112,7 +103,7 @@ function OrderItems(props) {
                    {order[0].orderItems.map(itm=>{
                      return(
                        <Card className="cardl" style={{border:'1px solid #f0f0f0', borderRadius:'5px',boxShadow:'none'}}>
-                          <div className="row">
+                          <div className="rows">
                              <div className="q2">
                                 <img src={itm.sku.images[0].src} style={{width:'100px',height:'100px'}}/>
                              </div>
@@ -141,7 +132,7 @@ function OrderItems(props) {
                   valueLabelDisplay="auto"
                   marks={progress}
                   disabled
-                  style={{color:'var(--mainColor)'}}
+                  style={{color:'green'}}
                   />
                </div>
                </Card>

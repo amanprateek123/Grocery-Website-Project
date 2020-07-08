@@ -24,16 +24,18 @@ function Checkout(props) {
     }, []
     )
 
-    const [radio, setRadio] = useState(0)
-    const radiochange = (i) => {
-        setRadio(i)
-    }
 
     const [addr, SetAddr] = useState(3)
     const [addingAddress, setAddingAddress] = useState(false);
     const [addressEditMode, setAddressEditMode] = useState(false);
     const [editingAddress, setEditingAddress] = useState(null)
+     
 
+    const [radio, setRadio] = useState(0)
+    const radiochange = (i) => {
+        setRadio(i)
+        setAddressEditMode(false)
+    }
     const viewAdd = (i) => {
         if (addr === i) {
             SetAddr(3)
@@ -109,6 +111,10 @@ function Checkout(props) {
 
         })
     }
+    const [show,setShow] = useState(false)
+    const remAdd = ()=>{
+        setShow(false)
+    }
 
     const editAddress = (address) => {
         setAddressEditMode(true);
@@ -140,7 +146,7 @@ function Checkout(props) {
                                         {user.addresses.slice(0, addr).map((add, i) => {
                                             return (
                                                 <label for="radio" className="add_radio">
-                                                    <input type="radio" id="radio" name='address' value={i} checked={radio === i} onChange={() => radiochange(i)} />
+                                                    <input type="radio" id="radio" name='address' value={i} checked={radio == i} onChange={() => radiochange(i)} onClick={remAdd} />
                                                     <div className="user_add">
                                                         <div style={{ width: '100%' }}>
                                                             <div className="user_1">
@@ -158,7 +164,7 @@ function Checkout(props) {
                                                                     Deliver Here
                                           </button> : null}
                                                             </div>
-                                                            {(radio === i && !addressEditMode) ? <div className="user_edit">
+                                                            {(radio === i) ? <div className="user_edit">
                                                                 <button onClick={() => editAddress(add)}>
                                                                     Edit
                                           </button>
@@ -177,8 +183,8 @@ function Checkout(props) {
                       </div>
                                         </div> : null}
                                     <section style={{ marginTop: '8px', backgroundColor: 'white' }}>
-                                        <AddressEditor addAddress={addAddress} editMode={addressEditMode} address={editingAddress} />
-                                        {addressEditMode ? <AddressEditor addAddress={editAddressPost} onCancel={() => setAddressEditMode(false)} editMode={addressEditMode} address={editingAddress} /> : null}
+                                        <AddressEditor addAddress={addAddress} editMode={addressEditMode} address={editingAddress} show={show} />
+                                        {addressEditMode ? <AddressEditor addAddress={editAddressPost} onCancel={() => setAddressEditMode(false)} editMode={addressEditMode} address={editingAddress} show={show}/> : null}
                                     </section>
                                     <div style={{ marginTop: '8px', backgroundColor: 'white' }}>
                                         <div className="order_sum">
