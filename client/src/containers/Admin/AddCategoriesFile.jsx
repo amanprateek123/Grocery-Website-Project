@@ -25,7 +25,7 @@ const AddProductsFile = (props) => {
         e.preventDefault();
         var input = document.querySelector('#departments-file');
         if (input.files[0].type != 'text/csv') {
-            props.setResponse({ status: 400, message: 'Please Upload a CSV file with fields [name]' })
+            props.setResponse({ status: 400, message: `NOT a .csv file. Please Upload a CSV file with fields [name]. ${input.files[0].type} file type not supported.` })
             return;
         }
 

@@ -6,7 +6,8 @@ const flash = require('../utils/flash')
 
 const sgMail = require('@sendgrid/mail');
 require('dotenv').config()
-sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+
+// sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 const db = require('../utils/database')
 

@@ -3,6 +3,22 @@
     .chip{
         margin: 0.2em !important;
     }
+
+    .cart-snackbar{
+        width: 100%;
+        text-align: center;
+        
+        border-radius: 0;
+        padding: 1em;
+        position: fixed;
+        bottom: 0;
+        // left: 0;
+        &>*{
+            text-align: center;
+            justify-content: center;
+            align-items: center;
+        }
+    }
     
     .brands,.pack-sizes{
     
@@ -46,7 +62,7 @@
         background: #fff9;
         border-radius: 1em;
         padding: 1em;
-    
+        position: relative;
         .products{
             display: flex;
             flex-wrap: wrap;
@@ -57,9 +73,19 @@
     
         .empty{
             max-width: 400px;
-            width: 100%;
+            // width: 50%;
+            height: 15em;
             margin: 5em auto;
     
+        }
+        .no-products{
+            text-align: center;
+            margin: -1em auto 5em;
+            color:#665ef3;
+
+            p{
+                color: #57538a;
+            }
         }
     }
 
