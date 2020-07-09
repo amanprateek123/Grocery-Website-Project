@@ -51,10 +51,10 @@ const Products = (props) => {
 
             if (['?category', '?parentCategory', '&sr'].map(str => props.location.search.indexOf(str) != -1).reduce((acc, cur) => acc || cur, false)) {
                 setBrands(meta.brands.map(brand => ({ name: brand.name, selected: (new URLSearchParams(props.location.search).get('brand')) && ((new URLSearchParams(props.location.search).get('brand')).indexOf(brand.name) != -1) })))
-                setSKUs(meta.skus.map(s => ({ ...s, selected: (new URLSearchParams(props.location.search).get('filter')) && ((new URLSearchParams(props.location.search).get('filter')).indexOf(s.value) != -1) })));
-                setSKUTypes(Array.from(new Set(meta.skus.map(sku => sku.name))));
                 props.location.search = props.location.search.replace('&sr', '');
             }
+            setSKUs(meta.skus.map(s => ({ ...s, selected: (new URLSearchParams(props.location.search).get('filter')) && ((new URLSearchParams(props.location.search).get('filter')).indexOf(s.value) != -1) })));
+            setSKUTypes(Array.from(new Set(meta.skus.map(sku => sku.name))));
 
 
             setLoading(false);
@@ -155,8 +155,11 @@ const Products = (props) => {
                 </div>
                 :
                 <React.Fragment>
-                    <b className="text-muted">No Products Found</b>
                     <img src={emptySvg} className="empty" title="No products found" alt="No Products Found" />
+                    <div className="no-products">
+                        <h2>Sorry, No Products Found.</h2>
+                        <p>Please try to search with a different spelling or check out our categories.</p>
+                    </div>
                 </React.Fragment>
                 : <LinearProgress />
             }
@@ -274,12 +277,12 @@ const Products = (props) => {
                     </div>
                     <div className="col-md-10 col">
                         {props.userName ?
-                            <Snackbar open={snackbar} onClose={() => setSnackbar(false)} autoHideDuration={2000} anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}>
-                                {true ? <Alert variant="filled" severity={"success"}>{"Item Added to Cart"}</Alert> : null}
+                            <Snackbar className="cart-snackbar" open={snackbar} onClose={() => setSnackbar(false)} autoHideDuration={2000} anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}>
+                                {true ? <Alert className="cart-snackbar" variant="filled" severity={"success"}>{"Item Added to Cart"}</Alert> : null}
                             </Snackbar>
                             :
-                            <Snackbar open={snackbar} onClose={() => setSnackbar(false)} autoHideDuration={2000} anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}>
-                                {true ? <Alert variant="filled" severity={"error"}>{"Please Login to add items to Cart"}</Alert> : null}
+                            <Snackbar className="cart-snackbar" open={snackbar} onClose={() => setSnackbar(false)} autoHideDuration={2000} anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}>
+                                {true ? <Alert className="cart-snackbar" variant="filled" severity={"error"}>{"Please Login to add items to Cart"}</Alert> : null}
                             </Snackbar>
                         }
                         <div className="content">

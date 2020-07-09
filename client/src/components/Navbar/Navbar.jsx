@@ -138,11 +138,11 @@ const Navbar = (props) => {
         setcart_bg("cart")
     }
 
-    const [more,setMore]=useState('cart1')
-    const more_dis = () =>{
+    const [more, setMore] = useState('cart1')
+    const more_dis = () => {
         setMore("more_option")
     }
-    const more_hide = () =>{
+    const more_hide = () => {
         setMore('cart1')
     }
 
@@ -188,32 +188,32 @@ const Navbar = (props) => {
                         <div className="navigation d-md-flex d-none">
                             <div className="user" style={{ width: '180px', textAlign: 'center' }}>
                                 {props.userName ?
-                                    <Link to="/profile" style={{textDecoration:'none'}} ><div className="username-nav align-items-center MuiButton-root"><PersonIcon /> <span style={{textAlign: 'left', width: '100%' }}>{props.userName}</span></div></Link>
+                                    <Link to="/profile" style={{ textDecoration: 'none' }} ><div className="username-nav align-items-center MuiButton-root"><PersonIcon /> <span style={{ textAlign: 'left', width: '100%' }}>{props.userName}</span></div></Link>
                                     :
                                     <Button className="btn btn-login" onClick={props.openModal}>Login</Button>}
                             </div>
-                            {props.userName?
-                            <div className="more" style={{ width: '80px',height:'64px',paddingTop:'3.3%'}} onMouseEnter={more_dis} onMouseLeave={more_hide}>
-                            <Button className="btn btn-more" style={{ fontSize: '16.5px', paddingLeft: '35%' }}>More
+                            {props.userName ?
+                                <div className="more" style={{ width: '80px', height: '64px', paddingTop: '3.3%' }} onMouseEnter={more_dis} onMouseLeave={more_hide}>
+                                    <Button className="btn btn-more" style={{ fontSize: '16.5px', paddingLeft: '35%' }}>More
                             <div className={more}>
-                                <div style={{border:'solid transparent',position:'absolute',bottom:'100%',left:'50%',borderWidth:'10px',transform:'translateX(-10px)',borderBottomColor: '#fff'}}>
+                                            <div style={{ border: 'solid transparent', position: 'absolute', bottom: '100%', left: '50%', borderWidth: '10px', transform: 'translateX(-10px)', borderBottomColor: '#fff' }}>
 
-                                </div>
-                               <div className="more_cont">
-                                  <div style={{margin:'-16px'}}>
-                                     <ul>
-                                         <li><NavLink to="/orders"><LocalMallIcon style={{width:'16px',height:'16px',color:'var(--mainColor)'}}/><div style={{marginLeft:'12px'}}>My Orders</div></NavLink></li>
-                                         <li><NavLink to="/"><LocalOfferIcon style={{width:'16px',height:'16px',color:'var(--mainColor)'}}/><div style={{marginLeft:'12px'}}>Offers</div></NavLink></li>
-                                         <li><NavLink to="/"><FavoriteIcon style={{width:'16px',height:'16px',color:'var(--mainColor)'}}/><div style={{marginLeft:'12px'}}>WishList</div></NavLink></li>
-                                         <li><NavLink to="/"><NotificationsIcon style={{width:'16px',height:'16px',color:'var(--mainColor)'}}/><div style={{marginLeft:'12px'}}>Notification</div></NavLink></li>
-                                         <li onClick={props.logout}><NavLink to="/"><PowerSettingsNewIcon style={{width:'16px',height:'16px',color:'var(--mainColor)'}}/><div style={{marginLeft:'12px'}}>Logout</div></NavLink></li>
-                                     </ul>
-                                  </div>
-                               </div>
-                            </div>
-                             <span><ExpandMoreIcon/></span></Button>
-                            
-                        </div>:null}
+                                            </div>
+                                            <div className="more_cont">
+                                                <div style={{ margin: '-16px' }}>
+                                                    <ul>
+                                                        <li><NavLink to="/orders"><LocalMallIcon style={{ width: '16px', height: '16px', color: 'var(--mainColor)' }} /><div style={{ marginLeft: '12px' }}>My Orders</div></NavLink></li>
+                                                        <li><NavLink to="/"><LocalOfferIcon style={{ width: '16px', height: '16px', color: 'var(--mainColor)' }} /><div style={{ marginLeft: '12px' }}>Offers</div></NavLink></li>
+                                                        <li><NavLink to="/"><FavoriteIcon style={{ width: '16px', height: '16px', color: 'var(--mainColor)' }} /><div style={{ marginLeft: '12px' }}>WishList</div></NavLink></li>
+                                                        <li><NavLink to="/"><NotificationsIcon style={{ width: '16px', height: '16px', color: 'var(--mainColor)' }} /><div style={{ marginLeft: '12px' }}>Notification</div></NavLink></li>
+                                                        <li onClick={props.logout}><NavLink to="/"><PowerSettingsNewIcon style={{ width: '16px', height: '16px', color: 'var(--mainColor)' }} /><div style={{ marginLeft: '12px' }}>Logout</div></NavLink></li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <span><ExpandMoreIcon /></span></Button>
+
+                                </div> : null}
                             {props.userName ?
                                 <div className={cart_bg} onMouseEnter={cartShow} onMouseLeave={cartRem}>
                                     <ShoppingCartIcon style={{ fontSize: '25px', marginLeft: '8px' }} />
@@ -230,6 +230,9 @@ const Navbar = (props) => {
 
 
                     </Toolbar>
+                    <div className="categories d-none d-md-block">
+                        <Departments />
+                    </div>
                 </AppBar>
 
 
@@ -278,10 +281,9 @@ const Navbar = (props) => {
                         </ListItem>
                     </List>
                 </Drawer>
+
             </div>
-            <div className="categories d-none d-md-block">
-                <Departments />
-            </div>
+
         </React.Fragment>
     );
 }

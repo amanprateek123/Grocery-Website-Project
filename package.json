@@ -20,6 +20,7 @@
     "jsonwebtoken": "^8.5.1",
     "mariadb": "^2.3.1",
     "mariasql": "^0.2.6",
+    "morgan": "^1.10.0",
     "multer": "^1.4.2",
     "mysql2": "^2.1.0",
     "react-medium-image-zoom": "^4.3.1",

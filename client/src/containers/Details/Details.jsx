@@ -75,7 +75,7 @@ const Details = (props) => {
                 <Modal visible={zoom}>
                     <Zoom closeModal={() => setZoom(false)} product={product} pack={pack} changeImg={changeImg} img={img} />
                 </Modal>
-                <div className="container detail-page" style={{ backgroundColor: "#eef9", padding: '3em 2em', marginTop: "1em", borderRadius: "1em" }}>
+                <div className="container-fluid detail-page" style={{ backgroundColor: "#eef9", padding: '3em 2em', marginTop: '-1rem', borderRadius: "1em" }}>
                     <div className="row">
                         <div className="col-md-6">
                             <Paper className="image-col">

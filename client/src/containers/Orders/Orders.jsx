@@ -186,9 +186,9 @@ function Orders(props) {
                 <Paper>
                     <Card>
                         <CardContent>
-                            <Typography variant="h3" component="h1" style={{ color: 'grey' }}>
+                            <Typography variant="h3" component="h1" style={{ color: 'grey', marginBottom: '0.5em' }}>
                                 My Orders
-                    </Typography>
+                            </Typography>
                             {
                                 user ?
                                     <FormControl className="mt-2" style={{ minWidth: '250px' }}>

@@ -23,10 +23,10 @@ function Cart(props) {
                     <ul style={{ maxWidth: '700px' }}>
                         {props.cart.map((product, i) => {
                             if (!product.sku) return null;
-                            return <li key={i} style={{ backgroundColor: '#fff', marginBottom: '1.5%' }}>
+                            return <li key={i} style={{ backgroundColor: '#fff', marginBottom: '1.5%',minHeight:'80px' }}>
                                 <div className="container-fluid item-wrap" style={{ position: 'relative', display: 'flex', flexDirection: 'row' }}>
                                     <div className="col-md-2 ">
-                                        <div className="row">
+                                        <div style={{width:'100%',marginLeft:'-10px'}}>
                                             {product.sku.images[0] ? <img src={product.sku.images[0].src} /> : null}
                                         </div>
                                     </div>
@@ -37,7 +37,7 @@ function Cart(props) {
                                             </div>
                                             <Link to={`/product/${product.sku.product.id}?skuId=${product.sku.id}`} style={{textDecoration:'none'}}>
                                                 <div className="product_name col-12">
-                                                    <p> {product.sku.product.name} - {product.sku.name}</p>
+                                                    <p> {product.sku.product.name}</p>
                                                 </div>
                                             </Link>
                                         </div>

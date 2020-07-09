@@ -1,8 +1,12 @@
+const path = require('path');
+const fs = require('fs')
+
 const express = require('express');
 const bodyParser = require('body-parser');
-const path = require('path');
-const sequelize = require('./utils/database').sequelize
+const morgan = require('morgan')
 require('dotenv').config()
+
+const sequelize = require('./utils/database').sequelize
 
 const authRoutes = require('./routes/auth')
 const profileRoutes = require('./routes/profile')
@@ -16,8 +20,21 @@ const PORT = process.env.PORT || 5000;
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+// Logging
+// log only 4xx and 5xx responses to console
+app.use(morgan('dev', {
+    skip: function (req, res) { return res.statusCode < 400 }
+}))
+// log all requests to access.log
+app.use(morgan('tiny', {
+    stream: fs.createWriteStream(path.join(__dirname, 'access.log'), { flags: 'a' })
+}))
+
+
+// API Routes 
 app.use(authRoutes, profileRoutes, shopRoutes);
 app.use('/admin', adminRoutes)
+
 
 if (process.env.NODE_ENV === 'production') {
     // Serve any static files
@@ -29,13 +46,12 @@ if (process.env.NODE_ENV === 'production') {
     });
 }
 
-sequelize.sync().then(result => {
-    // console.log(result);
-    console.log("database connected...");
 
+//  Database
+sequelize.sync().then(result => {
+    console.log("[+] >> DATABASE Connected");
 }).catch(err => {
     console.log(err);
-
 })
 
-app.listen(PORT, () => console.log(`Listening on PORT ${PORT}`));
+app.listen(PORT, () => console.log(`[-] >> Listening on PORT ${PORT}`));

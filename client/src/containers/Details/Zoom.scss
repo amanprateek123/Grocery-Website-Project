@@ -36,29 +36,29 @@
 }
 .img_det1a{
     cursor: pointer;
-    height: 40px;
-    width: 30px;
+    height: 60px;
+    width: 50px;
     margin-bottom: 5px;
     border: 1px solid gray;
     overflow: hidden;
    img{
     opacity: 1;
-    width: 30px;
-    height: 40px;
+    height: 60px;
+    width: 50px;
     transition: opacity .5s linear;
    }
 }
 .img_det2a{
     cursor: pointer;
-    height: 40px;
-    width: 30px;
+    height: 60px;
+    width: 50px;
     margin-bottom: 5px;
     border: 1px solid var(--mainColor);
     overflow: hidden;
    img{
     opacity: 1;
-    width: 30px;
-    height: 40px;
+    width: 50px;
+    height: 60px;
     transition: opacity .5s linear;
    }
 }
