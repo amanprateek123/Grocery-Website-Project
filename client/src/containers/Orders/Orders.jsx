@@ -191,9 +191,8 @@ function Orders(props) {
                     </Typography>
                             {
                                 user ?
-
                                     <FormControl className="mt-2" style={{ minWidth: '250px' }}>
-                                        <InputLabel id="demo-simple-select-label">Duration</InputLabel>
+                                        <InputLabel id="demo-simple-select-label" style={{fontSize:'20px'}}>Duration</InputLabel>
                                         <Select
                                             labelId="demo-simple-select-label"
                                             id="demo-simple-select"
