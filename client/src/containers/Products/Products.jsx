@@ -98,13 +98,12 @@ const Products = (props) => {
 
         if (props.location.search.indexOf('filter') != -1) {
             let query = props.location.search.replace(/filter=[a-zA-z\-\+\d : ,%]*&/, `filter=${filter}&`);
-
-            console.log(query);
-
+            query = query.replace(/page=[\w\d ,]*/, `page=1`);
             history.push(`/products${query}`);
         }
         else {
-            history.push(`/products?filter=${filter}&${props.location.search.slice(1)}`)
+            let query = props.location.search.replace(/page=[\w\d,]*/, `page=1`);
+            history.push(`/products?filter=${filter}&${query.slice(1)}`)
         }
     }
 
@@ -128,10 +127,12 @@ const Products = (props) => {
 
         if (props.location.search.indexOf('minPrice') != -1) {
             let query = props.location.search.replace(/minPrice=[\w\d .,]*&maxPrice=[\w\d .,]*&/, `${priceQuery}&`);
+            query = query.replace(/page=[\w\d ,]*/, `page=1`);
             history.push(`/products${query}`);
         }
         else {
-            history.push(`/products?${priceQuery}&${props.location.search.slice(1)}`)
+            let query = props.location.search.replace(/page=[\w\d ,]*/, `page=1`);
+            history.push(`/products?${priceQuery}&${query.slice(1)}`)
         }
     }
 
@@ -140,10 +141,12 @@ const Products = (props) => {
 
         if (props.location.search.indexOf('brand') != -1) {
             let query = props.location.search.replace(/brand=[\w ,]*&/, `brand=${brandQuery}&`);
+            query = query.replace(/page=[\w\d ,]*/, `page=1`);
             history.push(`/products${query}`);
         }
         else {
-            history.push(`/products?brand=${brandQuery}&${props.location.search.slice(1)}`)
+            let query = props.location.search.replace(/page=[\w\d ,]*/, `page=1`);
+            history.push(`/products?brand=${brandQuery}&${query.slice(1)}`)
         }
     }
 
