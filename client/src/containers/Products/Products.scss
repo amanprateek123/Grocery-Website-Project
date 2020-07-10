@@ -19,7 +19,11 @@
             align-items: center;
         }
     }
-    
+    #categories-fetched{
+        a{
+            color:inherit;
+        }
+    }
     .brands,.pack-sizes{
     
         display: flex;
@@ -31,10 +35,16 @@
     }
 
     .MuiListSubheader-root{
-        // color: #e35f21;
+        color: #29ce08;
         font-size: larger;
         text-transform: capitalize;
         padding-left: 0;
+        line-height: 1em;
+        margin-bottom: 1em;
+        z-index: 0;
+    }
+    .filter-list{
+        margin-bottom: 1em;
     }
     .price-header{
         display: flex;
@@ -54,6 +64,19 @@
     .ctrl{
         height: 2em;
     }
+
+    .MuiCheckbox-colorPrimary.Mui-checked {
+        color: #29ce08;
+        transform: scale(0.9);
+    }
+    .PrivateSwitchBase-root-322{
+        padding: 0px 5px 0 2px;
+    }
+    .MuiTypography-body1 {
+        font-size: 15px;
+        font-family: "Oswald", "Helvetica", "Arial", sans-serif;
+    }
+
     
     .products-container{
         display: flex;
@@ -62,7 +85,6 @@
         background: #fff9;
         border-radius: 1em;
         padding: 1em;
-        position: relative;
         .products{
             display: flex;
             flex-wrap: wrap;

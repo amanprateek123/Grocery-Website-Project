@@ -20,6 +20,7 @@ import emptySvg from '../../assets/illustrations/empty.svg'
 
 
 import './Products.scss'
+import { useRef } from 'react';
 
 
 const Products = (props) => {
@@ -58,6 +59,8 @@ const Products = (props) => {
 
 
             setLoading(false);
+
+            window.scrollTo(0, 0);
 
         })).catch(err => {
             console.log(err);
@@ -202,8 +205,8 @@ const Products = (props) => {
                                     <div className="mb-3">
                                         <Card className="side-nav">
                                             <CardContent>
-                                                <List dense component="nav" aria-label="main"
-                                                    subheader={<ListSubheader component="div" id="categories-fetched">Categories</ListSubheader>}
+                                                <List className="filter-list" dense component="nav" aria-label="main" id="categories-fetched"
+                                                    subheader={<ListSubheader component="div" >Categories</ListSubheader>}
                                                 >
                                                     <ul>
 
@@ -222,7 +225,7 @@ const Products = (props) => {
 
                                                 {
                                                     brands.length ?
-                                                        <List dense component="nav" aria-label="secondary"
+                                                        <List className="filter-list" dense component="nav" aria-label="secondary"
                                                             subheader={<ListSubheader component="div" id="nested-list-subheader">Brand</ListSubheader>}
                                                         >
                                                             <div className="brands">
@@ -232,10 +235,9 @@ const Products = (props) => {
                                                         : null
                                                 }
 
-                                                <Divider />
                                                 {
                                                     categories.length ?
-                                                        <List dense component="nav" aria-label="secondary"
+                                                        <List className="filter-list" dense component="nav" aria-label="secondary"
                                                             subheader={<ListSubheader component="div" id="nested-list-subheader" className="price-header"><span>Price</span><Button size="small" color="primary" onClick={applyPrice}>Apply</Button></ListSubheader>}
                                                         >
                                                             <div className="prices">
@@ -251,9 +253,8 @@ const Products = (props) => {
                                                         : null
                                                 }
 
-                                                <Divider />
                                                 {SKUTypes.map(name => (
-                                                    <List key={name} dense component="nav" aria-label="secondary"
+                                                    <List className="filter-list" key={name} dense component="nav" aria-label="secondary"
                                                         subheader={<ListSubheader component="div" id="nested-list-subheader">{name}</ListSubheader>}
                                                     >
                                                         <div className="pack-sizes">
@@ -287,24 +288,24 @@ const Products = (props) => {
                         }
                         <div className="content">
                             {productsSection}
+                            {
+                                metaData.pageCount > 1 ?
+                                    <div className="pagination mt-4">
+                                        <Pagination
+                                            page={parseInt(new URLSearchParams(props.location.search).get('page'))}
+                                            count={metaData.pageCount}
+                                            renderItem={(item) => (
+                                                <PaginationItem
+                                                    component={Link}
+                                                    to={`/products${props.location.search.split('&page')[0] || '?'}${item.page === 0 ? '' : `&page=${item.page}`}`}
+                                                    {...item}
+                                                />
+                                            )}
+                                        />
+                                    </div>
+                                    : null
+                            }
                         </div>
-                        {
-                            metaData.pageCount > 1 ?
-                                <div className="pagination mt-4">
-                                    <Pagination
-                                        page={parseInt(new URLSearchParams(props.location.search).get('page'))}
-                                        count={metaData.pageCount}
-                                        renderItem={(item) => (
-                                            <PaginationItem
-                                                component={Link}
-                                                to={`/products${props.location.search.split('&page')[0] || '?'}${item.page === 0 ? '' : `&page=${item.page}`}`}
-                                                {...item}
-                                            />
-                                        )}
-                                    />
-                                </div>
-                                : null
-                        }
                     </div>
                 </div>
             </div>

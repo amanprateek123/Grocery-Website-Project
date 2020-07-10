@@ -39,7 +39,7 @@ exports.sendOTP = (req, res) => {
                         mobile: req.body.mobile
                     }, { where: { id: id } }).then(rowsUpdated => {
                         console.log('User UPDATED with ID : ' + id);
-                        let authToken = jwt.sign({ id }, 'lalasupersecretkey', { expiresIn: '1h' });
+                        let authToken = jwt.sign({ id }, 'lalasupersecretkey', { expiresIn: '2h' });
                         let token = parseInt(Math.random() * 1000000) % 10000000;
                         console.log('otp : ' + token);
 
@@ -81,7 +81,7 @@ exports.sendOTP = (req, res) => {
                 }).then(user => {
                     let id = user.dataValues.id;
                     console.log('User created with ID : ' + id);
-                    let authToken = jwt.sign({ id }, 'lalasupersecretkey', { expiresIn: '1h' });
+                    let authToken = jwt.sign({ id }, 'lalasupersecretkey', { expiresIn: '2h' });
                     let token = parseInt(Math.random() * 1000000) % 10000000;
 
                     console.log('otp : ' + token);
@@ -185,7 +185,7 @@ exports.login = (req, res) => {
                             email: user.dataValues.email,
                             userId: user.dataValues.id
                         }, 'lalasupersecretkey', {
-                            expiresIn: '1h'
+                            expiresIn: '2h'
                         });
                         return res.json({ status: 200, message: flash.SUCCESS, userId: user.id, userName: user.dataValues.firstName + ' ' + user.dataValues.lastName, idToken: token })
                     }
@@ -311,7 +311,7 @@ exports.prOTPVerify = (req, res) => {
                 let authToken = jwt.sign({
                     id: rows[0].userId
                 }, 'lalasupersecretkey', {
-                    expiresIn: '1h'
+                    expiresIn: '2h'
                 });
 
                 db.otp.destroy({

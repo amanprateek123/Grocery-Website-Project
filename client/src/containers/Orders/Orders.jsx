@@ -1,12 +1,11 @@
 import React from 'react'
 import { useEffect } from 'react';
 import { connect } from 'react-redux';
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 
 import {
-    Grid, Card, CardContent, Paper, Typography, FormControl, CardMedia, Avatar,
-    List, ListItem, ListSubheader, ListItemIcon, ListItemText, Divider,
-    TextField, CardActionArea, CardActions, Button, Select, MenuItem, InputLabel, Snackbar
+    Grid, Card, CardContent, Paper, Typography, FormControl,
+    InputLabel, Snackbar, CircularProgress, LinearProgress, Select, MenuItem, Button
 }
     from '@material-ui/core';
 import StarIcon from '@material-ui/icons/Star';
@@ -97,13 +96,11 @@ function Orders(props) {
     let [page, setPage] = useState(1)
     let [prevPage, setPrevPage] = useState(0);
 
-    const load = () => {
-        let _page = page + 1
-        setPage(_page)
-    }
-    const [len, setLen] = useState(0)
-    const [dates, SetDates] = useState(sixMonth(new Date()))
+    const [fetching, setFetching] = useState(false);
 
+
+    const [len, setLen] = useState(0)
+    const [dates, SetDates] = useState('Jan 1971')
 
     useEffect(() => {
         fetch(`/get-orders?page=${1}&date=${dates}`, {
@@ -124,6 +121,7 @@ function Orders(props) {
     useEffect((x) => {
         if (page == 1) return;
 
+        setFetching(true);
         fetch(`/get-orders?page=${page}&date=${dates}`, {
             headers: {
                 'Authorization': 'Bearer ' + props.idToken,
@@ -134,8 +132,11 @@ function Orders(props) {
             .then(data => {
                 let _res = JSON.parse(JSON.stringify(res))
                 _res = [...res, ...data]
-                setRes(_res)
                 setLen(data.length)
+                setFetching(false)
+                if (data.length) {
+                    setRes(_res)
+                }
             })
     }, [page])
     const [date, setDate] = React.useState(0);
@@ -155,28 +156,39 @@ function Orders(props) {
     }
 
 
-    //scroll
-    useEffect(() => {
-        const element = document.getElementById('scroll')
-        element.addEventListener('scroll', handleScroll)
-    }, [])
+
+    const load = () => {
+        console.log(page, len);
+
+        let _page = page + 1
+        if (len) setPage(_page)
+    }
+
+    let loadBtn = useRef();
+    // scroll
     const handleScroll = (e) => {
-        const bottom = e.target.scrollHeight - e.target.scrollTop === e.target.clientHeight;
-        console.log(e.target.scrollHeight);
-
+        const bottom = (e.target.scrollingElement.clientHeight - e.target.scrollingElement.scrollHeight + e.target.scrollingElement.scrollTop) < 3;
         if (bottom) {
-            load()
-            console.log('Loading More');
+            if (loadBtn.current) loadBtn.current.click();
+            console.log('loading more..');
 
-            const element = document.getElementById('scroll')
-            element.removeEventListener('scroll', handleScroll)
+            window.removeEventListener('scroll', handleScroll);
+
             setTimeout(() => {
-                const element = document.getElementById('scroll')
-                element.addEventListener('scroll', handleScroll)
+                window.addEventListener('scroll', handleScroll)
             }, 5000)
-
         }
     }
+
+    useEffect(() => {
+
+        window.addEventListener('scroll', handleScroll)
+
+        return function cleanUp() {
+            window.removeEventListener('scroll', handleScroll);
+        }
+    }, [user])
+
     return (
         <React.Fragment>
             <Modal visible={show}>
@@ -192,7 +204,7 @@ function Orders(props) {
                             {
                                 user ?
                                     <FormControl className="mt-2" style={{ minWidth: '250px' }}>
-                                        <InputLabel id="demo-simple-select-label" style={{fontSize:'20px'}}>Duration</InputLabel>
+                                        <InputLabel id="demo-simple-select-label" style={{ fontSize: '20px' }}>Duration</InputLabel>
                                         <Select
                                             labelId="demo-simple-select-label"
                                             id="demo-simple-select"
@@ -214,7 +226,7 @@ function Orders(props) {
                         res.map((order, i) => {
                             let name = ''
                             return (
-                                <Card style={{ marginBottom: '16px', cursor: 'pointer' }} onClick={() => openModal(order.id)}>
+                                <Card key={order.id + i} style={{ marginBottom: '16px', cursor: 'pointer' }} onClick={() => openModal(order.id)}>
                                     <div className="row">
                                         <div className="col-5">
                                             <div className="row">
@@ -263,7 +275,9 @@ function Orders(props) {
                         })
                     ) : null}
                 </Paper>
-                {!len ? <h5 style={{ width: '100%', fontSize: '0.7em', textAlign: 'center', padding: '5px' }}>nothing more...</h5> : <Button color="secondary" onClick={load} style={{ margin: '1% 45%', padding: '5px', width: '150px' }}>LOAD MORE</Button>}
+                <div className="load-more">
+                    {fetching ? <LinearProgress /> : !len ? <h5>...</h5> : <Button ref={loadBtn} color="secondary" onClick={load} >.</Button>}
+                </div>
             </div>
         </React.Fragment>
     )

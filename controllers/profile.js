@@ -138,7 +138,7 @@ exports.changeEmailOTP = (req, res) => {
     let token = parseInt(Math.random() * 1000000) % 10000000;
     console.log('OTP : ' + token);
 
-    let authToken = jwt.sign({ email: req.body.email }, 'lalasupersecretkey', { expiresIn: '1h' });
+    let authToken = jwt.sign({ email: req.body.email }, 'lalasupersecretkey', { expiresIn: '2h' });
 
     db.otp.create({
         userId: req.userId,
@@ -216,7 +216,7 @@ exports.changeMobileOTP = (req, res) => {
     let token = parseInt(Math.random() * 1000000) % 10000000;
     console.log('OTP : ' + token);
 
-    let authToken = jwt.sign({ mobile: req.body.mobile }, 'lalasupersecretkey', { expiresIn: '1h' });
+    let authToken = jwt.sign({ mobile: req.body.mobile }, 'lalasupersecretkey', { expiresIn: '2h' });
 
     db.otp.create({
         userId: req.userId,

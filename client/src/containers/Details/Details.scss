@@ -25,8 +25,11 @@
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        min-height: 40em;
-        position: relative;
+        min-height: 45em;
+        max-height: 90vh;
+        // position: relative;
+        position: sticky;
+        top: 9em;
         &>*{
             border: none !important;
         }
@@ -34,9 +37,13 @@
             margin:auto;
             width: 100%;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
-            margin-bottom: 5em;
+            &::after{
+                content: '';
+                height: 6em;
+            }
             
             img{
                 max-height: 500px;
@@ -53,7 +60,7 @@
             margin: auto;
             justify-content: center;
             position: absolute;
-            bottom: 0;
+            bottom: 1em;
             margin: auto;
             display: flex;
             margin-top: 10%;
@@ -98,6 +105,11 @@
                }
             }
         }
+    }
+
+    .detail-col{
+        justify-content: flex-start;
+        align-items: flex-start;
     }
 
     .row{
