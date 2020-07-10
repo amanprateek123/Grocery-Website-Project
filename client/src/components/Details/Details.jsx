@@ -25,7 +25,7 @@ const Detail = (props) => {
 
     if (json) {
         json = JSON.parse(json);
-        for (let i = 0; i < 3; i++) {
+        for (let i = 0; i < 1; i++) {
             if (json && json[i]) {
                 content.push(
                     <div key={json[i].key + i} className="json">
@@ -90,7 +90,8 @@ const Detail = (props) => {
             <CardContent>
                 <div className="detail_head">
                     <p><u>{props.product.category.name}</u></p>
-                    <h3>{`${props.product.name} - ${props.product.skus[props.pack].name}`}</h3>
+                    {/* <h3>{`${props.product.name} - ${props.product.skus[props.pack].name}`}</h3> */}
+                    <h3>{`${props.product.name}`}</h3>
                 </div>
                 <div className="detail_price">
                     <h6>MRP:<span><b>Price Rs.{props.product.skus[props.pack].price * (quantity)}</b></span>(inclusive of all taxes)</h6>

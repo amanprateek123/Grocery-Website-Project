@@ -261,7 +261,7 @@ const AddProduct = (props) => {
                                     </div>
                                     <div className="form-group">
                                         {/* <TextField required value={sku.type} name="type" onChange={(e) => handleChangeSKU(e, i)} label="type" InputLabelProps={{ shrink: Boolean(sku.type) }} /> */}
-                                        <TextField required value={sku.name} name="name" onChange={(e) => handleChangeSKU(e, i)} label="name" InputLabelProps={{ shrink: Boolean(sku.name) }} />
+                                        <TextField required value={sku.name} name="name" onChange={(e) => handleChangeSKU(e, i)} label="model" InputLabelProps={{ shrink: Boolean(sku.name) }} />
                                     </div>
                                     <div className="form-group">
                                         <TextField required type="number" value={sku.price} name="price" onChange={(e) => handleChangeSKU(e, i)} label="price" InputLabelProps={{ shrink: Boolean(sku.price) }} />
