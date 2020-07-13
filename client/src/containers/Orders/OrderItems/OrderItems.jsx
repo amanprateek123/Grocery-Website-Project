@@ -110,7 +110,7 @@ function OrderItems(props) {
                     <div>
                       <div className="q4" style={{ textAlign: 'center', marginTop: '6%' }}>
                         <Typography variant="p" component="h6" style={{ fontWeight: '600', fontSize: '12px' }}>
-                          {itm.sku.product.name} <br /> {itm.sku.name}
+                          {itm.sku.product.name}
                         </Typography>
                       </div>
                       <div className="q2" style={{ color: 'grey', fontWeight: 'bold', marginTop: '6%' }}>

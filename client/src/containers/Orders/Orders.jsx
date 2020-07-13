@@ -176,7 +176,7 @@ function Orders(props) {
 
             setTimeout(() => {
                 window.addEventListener('scroll', handleScroll)
-            }, 5000)
+            }, 2000)
         }
     }
 
@@ -222,7 +222,7 @@ function Orders(props) {
                     </Card>
                 </Paper>
                 <Paper style={{ marginTop: '16px', backgroundColor: 'transparent', boxShadow: 'none', overflowY: 'scroll' }} id="scroll" >
-                    {(res.length != 0) ? (
+                    {(res.map) ? (
                         res.map((order, i) => {
                             let name = ''
                             return (
@@ -236,9 +236,9 @@ function Orders(props) {
                                                 <div className="col-8">
                                                     <div className="mt-2">
                                                         {order.orderItems.forEach(od => {
-                                                            name = name + ' ' + od.sku.name + ','
+                                                            name = od.sku.product.name
                                                         })}
-                                                        <b>{name}</b><br />
+                                                        <b>{order.orderItems[0].sku.product.name}</b><br />
 
                                                     </div>
                                                     <div className="mt-2" style={{ color: 'grey' }}>

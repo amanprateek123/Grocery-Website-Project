@@ -8,9 +8,9 @@ import { useEffect } from 'react';
 import { Spinner } from 'react-bootstrap'
 
 import mail from '../../assets/illustrations/mail.svg'
-import astronaut from '../../assets/illustrations/astronaut.svg'
-import unicorn from '../../assets/illustrations/unicorn.svg'
+import successGif from '../../assets/illustrations/success.gif'
 import verified from '../../assets/illustrations/verified.svg'
+import { useRef } from 'react';
 
 const SignUp = props => {
 
@@ -23,6 +23,9 @@ const SignUp = props => {
     const [password, setPassword] = useState('')
     const [resetPassword, setResetPassword] = useState(false);
     const [loading, setLoading] = useState(false);
+
+    const regForm = useRef()
+    const regFormNav = useRef()
 
 
     const handleChangeEmail = e => {
@@ -37,6 +40,17 @@ const SignUp = props => {
 
     const handleChange = (e) => {
         setUserDetails({ ...userDetails, [e.target.name]: e.target.value })
+    }
+
+    const setGreen = () => {
+        regForm.current.style.background = "#12c06a";
+        // regFormNav.current.style.background = "#12c06a";
+        // regFormNav.current.style.color = "#fff";
+    }
+    const resetGreen = () => {
+        regForm.current.style.background = "#fff";
+        // regFormNav.current.style.background = "#eee";
+        // regFormNav.current.style.color = "#0077c7";
     }
 
     const sendOTP = (e) => {
@@ -79,10 +93,12 @@ const SignUp = props => {
                 props.setResponse({ status: res.status, message: res.message })
                 if (res.status == 200) {
                     setFormState(2)
+                    setGreen();
                     setTimeout(() => {
                         setFormState(0);
+                        resetGreen();
                         setRegMode(false);
-                    }, 2000)
+                    }, 4000)
                 }
                 setLoading(false);
             })
@@ -162,11 +178,13 @@ const SignUp = props => {
                 if (res.status == 200) {
                     setId(res.authToken);
                     setFormState(3);
+                    setGreen();
                     setTimeout(() => {
                         setFormState(0);
+                        resetGreen();
                         setRegMode(false);
                         setResetPassword(false);
-                    }, 2000)
+                    }, 4000)
                 }
                 setLoading(false);
             })
@@ -252,9 +270,9 @@ const SignUp = props => {
                     formState == 2 ?
                         <div className="msg-box text-center m-2">
                             <div className="res-img text-center m-2">
-                                <img src={astronaut} alt="" width={200} />
+                                <img src={successGif} alt="" />
                             </div>
-                            <h3 className="text-success text-center">Your Account is Created.</h3>
+                            <h3 className="text-center text-white">Your Account is Created.</h3>
                         </div>
                         : null
             }
@@ -330,9 +348,9 @@ const SignUp = props => {
                         : formState == 3 ?
                             <div className="msg-box text-center m-2">
                                 <div className="res-img text-center m-2 w-100">
-                                    <img src={unicorn} alt="" width={100} />
+                                    <img src={successGif} alt="" width={100} />
                                 </div>
-                                <h3 className="text-success text-center">Password Reset Success.</h3>
+                                <h3 className="text-center text-white">Password Reset Success.</h3>
                             </div>
                             : null
             }
@@ -340,11 +358,11 @@ const SignUp = props => {
 
 
     return (
-        <div className="form-container">
+        <div className="form-container" ref={regForm}>
             {!resetPassword ?
                 <React.Fragment>
 
-                    <div className="form-nav" onClick={changeMode}>
+                    <div className="form-nav" ref={regFormNav} onClick={changeMode}>
                         <div className="tab">{regMode
                             ? "Sign In"
                             : "Register"

@@ -21,7 +21,7 @@ export const login = (email, password) => {
                     localStorage.setItem('userName', res.userName);
                     localStorage.setItem('expireDate', new Date().getTime() + 7200000);
                     if (timer) { clearTimeout(timer) }
-                    timer = setTimeout(() => dispatch(logout()), 7200000) // wont work as I am refreshing the page.
+                    timer = setTimeout(() => dispatch(logout()), 7200000) // ! wont work as I am refreshing the page.
                     dispatch({ type: actions.AUTH_SUCCESS, idToken: res.idToken, userId: res.userId, userName: res.userName });
                     window.location.reload();
                 }

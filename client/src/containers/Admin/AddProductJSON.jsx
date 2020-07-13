@@ -19,7 +19,6 @@ let schema = {
     skus: [
         {
             code: "",
-            type: "",
             name: "",
             price: "",
             stockQuantity: "",

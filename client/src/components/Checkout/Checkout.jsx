@@ -29,7 +29,7 @@ function Checkout(props) {
     const [addingAddress, setAddingAddress] = useState(false);
     const [addressEditMode, setAddressEditMode] = useState(false);
     const [editingAddress, setEditingAddress] = useState(null)
-     
+
 
     const [radio, setRadio] = useState(0)
     const radiochange = (i) => {
@@ -111,8 +111,8 @@ function Checkout(props) {
 
         })
     }
-    const [show,setShow] = useState(false)
-    const remAdd = ()=>{
+    const [show, setShow] = useState(false)
+    const remAdd = () => {
         setShow(false)
     }
 
@@ -136,10 +136,10 @@ function Checkout(props) {
                                 <h3>
                                     <span className="span1">
                                         1
-                        </span>
+                                    </span>
                                     <span className="span2">
                                         Delivery Address
-                        </span>
+                                    </span>
                                 </h3>
                                 <div >
                                     <div>
@@ -162,13 +162,17 @@ function Checkout(props) {
                                                                 </span>
                                                                 {(radio === i) ? <button onClick={() => takeBox(i)}>
                                                                     Deliver Here
-                                          </button> : null}
+                                                                    </button>
+                                                                    : null
+                                                                }
                                                             </div>
                                                             {(radio === i) ? <div className="user_edit">
                                                                 <button onClick={() => editAddress(add)}>
                                                                     Edit
-                                          </button>
-                                                            </div> : null}
+                                                                </button>
+                                                            </div>
+                                                                : null
+                                                            }
                                                         </div>
                                                     </div>
                                                 </label>
@@ -179,29 +183,35 @@ function Checkout(props) {
                                         <div style={{ backgroundColor: 'white' }}>
                                             <div className="adder" onClick={() => viewAdd(user.addresses.length)}>
                                                 <ExpandMoreIcon style={{ margin: '0 22px 0 26px', verticalAlign: 'middle' }} className={(addr === user.addresses.length) ? "uparrow" : null} />
-                          View all {user.addresses.length} addresses
-                      </div>
-                                        </div> : null}
+                                                View all {user.addresses.length} addresses
+                                            </div>
+                                        </div>
+                                        : null
+                                    }
                                     <section style={{ marginTop: '8px', backgroundColor: 'white' }}>
                                         <AddressEditor addAddress={addAddress} editMode={addressEditMode} address={editingAddress} show={show} />
-                                        {addressEditMode ? <AddressEditor addAddress={editAddressPost} onCancel={() => setAddressEditMode(false)} editMode={addressEditMode} address={editingAddress} show={show}/> : null}
+                                        {addressEditMode ? <AddressEditor addAddress={editAddressPost} onCancel={() => setAddressEditMode(false)} editMode={addressEditMode} address={editingAddress} show={show} /> : null}
                                     </section>
+
                                     <div style={{ marginTop: '8px', backgroundColor: 'white' }}>
                                         <div className="order_sum">
                                             <span className="span1" style={{ margin: '0 22px 0 26px', verticalAlign: 'middle' }}>
                                                 2
-                             </span>
-                              ORDER SUMMARY
-                          </div>
+                                            </span>
+                                            ORDER SUMMARY
+                                        </div>
                                     </div>
+
+
                                     <div style={{ marginTop: '8px', marginBottom: '8px', backgroundColor: 'white' }}>
                                         <div className="order_sum">
                                             <span className="span1" style={{ margin: '0 22px 0 26px', verticalAlign: 'middle' }}>
                                                 3
-                             </span>
-                              PAYMENT OPTIONS
-                          </div>
+                                            </span>
+                                            PAYMENT OPTIONS
+                                        </div>
                                     </div>
+
                                 </div>
                             </div>
 

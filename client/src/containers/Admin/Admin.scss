@@ -1,4 +1,11 @@
 .admin{
+    .main-container{
+        max-width: 1400px !important;
+    }
+
+    .MuiListSubheader-root{
+        z-index: 0;
+    }
     .content{
         justify-content: center;
         align-items: center;

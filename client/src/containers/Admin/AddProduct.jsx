@@ -194,6 +194,12 @@ const AddProduct = (props) => {
                                 <h2 className="mb-2 text-muted">Product</h2>
                                 <Button variant="contained" color="primary" type="submit">Add Product</Button>
                             </div>
+                            <div className="info">
+                                <p>
+                                    A complete product along with its corresponding SKU's, their corresponding images and attributes will be added to the database.
+                                </p>
+                                <p>Fill in all the details below.</p>
+                            </div>
                             <div>
                                 {success ? <Alert severity="success">{`Product Added with id ${success.id}`}</Alert> : null}
                             </div>
@@ -246,14 +252,17 @@ const AddProduct = (props) => {
                     </div>
                     <div className="row">
                         <div className="col">
-                            <div className="d-flex">
-                                <h2 className="mb-2 text-muted">SKU</h2>
+                            <div className="d-flex  mt-4">
+                                <h2 className="mb-2 text-muted">SKU <small style={{ fontSize: '0.4em', color: '#000' }}>*total <b>{product.skus.length}</b> sku(s).</small></h2>
                                 <Button onClick={addSKU}>Add SKU</Button>
+                            </div>
+                            <div className="info">
+                                <p>multiple sku(s) an be added for a product.</p>
                             </div>
                             {product.skus.map((sku, i) => (
                                 <div key={sku + i} className="sku">
                                     <div className="d-flex">
-                                        <h4>SKU {i}</h4>
+                                        <h4>SKU {i + 1}</h4>
                                         <Button color="secondary" onClick={() => removeSKU(i)}>Remove</Button>
                                     </div>
                                     <div className="form-group" style={{ width: "50%" }}>

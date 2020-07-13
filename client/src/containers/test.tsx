@@ -9,12 +9,12 @@ const Test = (props) => {
 
     useEffect(() => {
 
-        fetch('/get-orders', {
+        fetch('/post-order', {
             headers: {
                 'Authorization': 'Bearer ' + props.idToken,
                 'Content-Type': 'application/json'
             },
-            method: 'GET',
+            method: 'POST',
         }).then(res => res.json())
             .then(res => {
                 setRes(res)
@@ -25,7 +25,7 @@ const Test = (props) => {
     return (
         res ?
             <pre>
-                {JSON.stringify(res, undefined,4)}
+                {JSON.stringify(res, undefined, 4)}
             </pre>
             : null
     );

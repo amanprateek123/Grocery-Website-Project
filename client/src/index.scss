@@ -18,10 +18,11 @@ code {
 
 ::-webkit-scrollbar{
   width: 7px;
+  // background: #0000;
 }
 
 ::-webkit-scrollbar-thumb{
-  background: #2224;
+  background: #222a;
   border-radius: 5px;
 }
 
@@ -36,4 +37,16 @@ code {
 
 *{
   scroll-behavior: smooth;
+}
+
+li{
+  list-style: none;
+}
+
+.form-group{
+  display: flex;
+  justify-content: space-between;
+  .address-field{
+      width: 100%;
+  }
 }

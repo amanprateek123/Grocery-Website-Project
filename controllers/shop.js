@@ -3,6 +3,8 @@ const Op = require('sequelize').Op;
 
 const PAGINATION = 7;
 
+// *** CATEGORIES
+
 exports.getCategories = (req, res) => {
    db.department.findAll({
       attributes: ['id', 'name'],
@@ -33,6 +35,7 @@ db.sku.hasMany(db.attribute, { as: 'A7' })
 db.sku.hasMany(db.attribute, { as: 'A8' })
 db.sku.hasMany(db.attribute, { as: 'A9' })
 
+// *** PRODUCTS ... SEARCHING
 
 exports.getProducts = (req, res) => {
 
@@ -384,6 +387,9 @@ exports.getProducts = (req, res) => {
    })
 }
 
+
+// *** CART
+
 exports.cart = (req, res) => {
    // Expects {skuId, action: (add,remove,delete)}
    // User has to be authenticated in middleware isAuth >> req.userId is available at this point.
@@ -580,6 +586,7 @@ exports.createOrder = (req, res) => {
 }
 
 
+// *** ORDERS
 
 exports.getStatus = (req, res) => {
    db.status.findAll({
@@ -593,7 +600,7 @@ exports.getStatus = (req, res) => {
 
 exports.getOrders = (req, res) => {
    let where = {}
-   let limit = 5
+   let limit = 5;
    let offset = (parseInt(req.query.page) - 1) * limit || 0;
    req.query.id ? (where.id = req.query.id) : null
    req.query.date ? (where.createdAt = { [Op.gt]: new Date(req.query.date) }) : null
@@ -633,4 +640,127 @@ exports.getOrders = (req, res) => {
       console.error(err);
 
    })
+}
+
+exports.postOrder = (req, res) => {
+   /*
+      Authenticated User : `req.userId` is available.
+      
+      the whole cart will be added as order.
+      total price will be calculated here based on products.
+      order.status = ordered.
+
+      instance order = {
+         shippingAddress : Address,
+         paymentMethod:  'cod' | 'card' ,
+      }
+
+   */
+
+   // Calculate the amount to pay.
+   let price = 0;
+   let order = {};
+   let orderCart
+   // Fetch Cart
+   db.cart.findAll({
+      where: {
+         userId: req.userId
+      },
+      include: {
+         model: db.sku,
+         attributes: ['price', 'id'],
+      }
+   }).then(cart => {
+      // If there are some products in the cart which were DELETED by ADMIN
+      // they need to be deleted from the cart.
+
+      if (!cart.length) {
+         let error = new Error('Your Cart is Empty!');
+         error.status = 400;
+         throw error;
+      }
+
+      // cart.filter(ci => !ci.sku).map(deleted => deleted.destroy().then(del => console.log(' >> Deleted cartId', del.id, ' as the product was deleted')))
+      orderCart = cart.filter(ci => ci.sku)
+
+      price = orderCart.reduce((acc, cur) => acc + cur.sku.price * cur.quantity, 0);
+      console.log('ORDER PRICE >> ', price);
+
+      order.price = price;
+      order.shippingAddress = JSON.stringify(req.body.shippingAddress);
+      order.userId = req.userId;
+      order.statusId = 1;
+
+      let date = new Date();
+      date.setDate(date.getDate() + 2)
+
+      order.deliverOn = date.toISOString();
+
+      return db.order.create({
+         ...order,
+
+      })
+   }).then(_order => {
+
+      order = _order;
+      let orderItems = [];
+
+      orderCart.forEach(ci => {
+         for (let i = 0; i < ci.quantity; i++) {
+            orderItems.push(
+               db.orderItem.create({
+                  orderId: _order.id,
+                  skuId: ci.skuId,
+               })
+            )
+         }
+      })
+
+      return Promise.all(orderItems)
+   }).then(result => {
+      return db.order.findByPk(order.id, {
+         include: [
+            {
+               model: db.orderItem,
+               include: {
+                  model: db.sku,
+                  include: [
+                     {
+                        model: db.product,
+                     }
+                  ]
+               },
+
+
+            },
+            {
+               model: db.status,
+               attributes: ['status', 'index']
+            }
+         ]
+      })
+   }).then(order => {
+      console.log(' >>> ORDER PLACED.');
+
+      // EMPTY CART 
+      db.cart.findAll({
+         where: {
+            userId: req.userId
+         }
+      }).then(cart => {
+         cart.forEach(ci => ci.destroy())
+      })
+
+      res.json(order);
+   })
+      .catch(err => {
+         console.log(err.message);
+         res.json({ message: err.message, status: err.status })
+      })
+
+
+
+   // Use some payment API to proceed the payment which returns a promise on the status of payment.
+   // if payment is Successful
+
 }

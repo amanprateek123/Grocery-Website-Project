@@ -46,7 +46,7 @@ const Profile = (props) => {
 
     return (
         <div className="container-fluid page admin">
-            <div className="container">
+            <div className="container main-container">
                 <div className="row">
                     <div className="col-md-4">
                         <div className="side-nav">

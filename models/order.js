@@ -15,6 +15,15 @@ module.exports = (sequelize, Sequelize = require('sequelize')) => {
         },
         shippingAddress: {
             type: Sequelize.STRING
+        },
+        paymentType: {
+            type: Sequelize.ENUM(['COD', 'CARD', 'NET BANKING'])
+        },
+        transactionId: {
+            type: Sequelize.STRING
+        },
+        transactionStatus: {
+            type: Sequelize.ENUM(['SUCCESS', 'FAILED'])
         }
     },
         {

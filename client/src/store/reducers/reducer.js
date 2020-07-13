@@ -9,7 +9,7 @@ let initialState = {
     authenticating: false,
     response: { status: 0, message: '' },
     authModalVisible: false,
-    zoomVisible:false,
+    zoomVisible: false,
 
     // Shop
     cart: []
@@ -20,7 +20,7 @@ let expireDate = localStorage.getItem('expireDate');
 
 if (expireDate) {
     let remainingTime = expireDate - new Date().getTime();
-    console.log(remainingTime);
+    console.log(remainingTime / 1000 + "s remaining of session.");
     if (remainingTime <= 0) {
         localStorage.removeItem('idToken');
         localStorage.removeItem('userId');

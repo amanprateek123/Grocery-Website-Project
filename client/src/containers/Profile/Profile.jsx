@@ -492,7 +492,7 @@ const Profile = (props) => {
     return (
         <div className="container-fluid page">
             {OTPModal}
-            <div className="container">
+            <div className="container profile-page">
                 <div className="row">
                     <div className="col-md-4">
                         <div className="side-nav">
