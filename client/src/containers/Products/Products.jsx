@@ -51,7 +51,17 @@ const Products = (props) => {
             setCategories(meta.categories);
 
             if (['?category', '?parentCategory', '&sr'].map(str => props.location.search.indexOf(str) != -1).reduce((acc, cur) => acc || cur, false)) {
-                setBrands(meta.brands.map(brand => ({ name: brand.name, selected: (new URLSearchParams(props.location.search).get('brand')) && ((new URLSearchParams(props.location.search).get('brand')).indexOf(brand.name) != -1) })))
+                setBrands(Array.from(
+                    new Set(
+                        meta.brands.map(brand => (
+                            JSON.stringify({
+                                name: brand.name,
+                                selected: (new URLSearchParams(props.location.search).get('brand')) && ((new URLSearchParams(props.location.search).get('brand')).indexOf(brand.name) != -1)
+                            })
+                        ))
+                    )
+                ).map(brand => JSON.parse(brand))
+                )
                 props.location.search = props.location.search.replace('&sr', '');
             }
             setSKUs(meta.skus.map(s => ({ ...s, selected: (new URLSearchParams(props.location.search).get('filter')) && ((new URLSearchParams(props.location.search).get('filter')).indexOf(s.value) != -1) })));

@@ -4,7 +4,7 @@ import BookmarkIcon from '@material-ui/icons/Bookmark';
 import ChatIcon from '@material-ui/icons/Chat';
 import LocalShippingSharpIcon from '@material-ui/icons/LocalShippingSharp';
 import {
-    Card, CardContent, FormControl, Button, Select, MenuItem, InputLabel, Badge, Chip, Checkbox, FormControlLabel
+    Card, CardContent, Divider, FormControl, FormLabel, Button, Select, MenuItem, InputLabel, Badge, Chip, Checkbox, FormControlLabel, Radio, RadioGroup
 } from '@material-ui/core';
 import { useState } from 'react';
 
@@ -61,8 +61,8 @@ const Detail = (props) => {
         <div className="attrs">
             {product.skus[0].attributes.map((attr, i) => (
                 <div key={attr + i} className="d-inline-block attr-sel">
-                    <InputLabel className="label-sm" id={'label-' + attr.name}>{attr.name}</InputLabel>
-                    <Select
+                    <FormLabel className="label-sm" id={'label-' + attr.name}>{attr.name}</FormLabel>
+                    <RadioGroup
                         element='select'
                         key={attr.name}
                         id={attr.name}
@@ -74,10 +74,11 @@ const Detail = (props) => {
                     >
                         {
                             Array.from(new Set(product.skus.map(sku => sku.attributes.find(a => a.name == attr.name).value))).map(val => (
-                                <MenuItem key={val} value={val}>{val}</MenuItem>
+                                // <MenuItem key={val} value={val}>{val}</MenuItem>
+                                <FormControlLabel key={val} value={val} control={<Radio />} label={val} />
                             ))
                         }
-                    </Select>
+                    </RadioGroup>
 
                 </div>
 
@@ -110,6 +111,7 @@ const Detail = (props) => {
                                     )}
 
                                 </Select> */}
+                                {/* <Divider /> */}
                                 <div className="position-relative">
                                     {attributes}
                                 </div>

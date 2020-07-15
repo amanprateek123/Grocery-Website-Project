@@ -29,7 +29,7 @@ const Profile = (props) => {
     const [user, setUser] = useState({});
     const [modal, setModal] = useState(false);
 
-    const [tab, setTab] = useState('categories');
+    const [tab, setTab] = useState('product');
 
 
 

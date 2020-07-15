@@ -18,6 +18,7 @@ import Detail from '../../components/Details/Details'
 import About from '../../components/Details/About'
 
 import './Details.scss'
+import SimilarProducts from '../../components/Details/SimilarProducts';
 
 
 const Details = (props) => {
@@ -103,6 +104,9 @@ const Details = (props) => {
                     </div>
                     <div>
                         {product.skus[pack].json ? <About head={product.name} json={product.skus[pack].json} /> : null}
+                    </div>
+                    <div>
+                        <SimilarProducts category={product.category.name} currentId={product.id} />
                     </div>
                 </div>
             </React.Fragment >

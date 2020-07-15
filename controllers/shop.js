@@ -652,7 +652,7 @@ exports.postOrder = (req, res) => {
 
       instance order = {
          shippingAddress : Address,
-         paymentMethod:  'cod' | 'card' ,
+         paymentType:  'cod' | 'card' ,
       }
 
    */
@@ -688,6 +688,7 @@ exports.postOrder = (req, res) => {
 
       order.price = price;
       order.shippingAddress = JSON.stringify(req.body.shippingAddress);
+      order.paymentType = req.body.paymentType;
       order.userId = req.userId;
       order.statusId = 1;
 
@@ -695,6 +696,9 @@ exports.postOrder = (req, res) => {
       date.setDate(date.getDate() + 2)
 
       order.deliverOn = date.toISOString();
+
+      console.log(order);
+
 
       return db.order.create({
          ...order,

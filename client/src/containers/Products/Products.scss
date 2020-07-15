@@ -22,6 +22,7 @@
     #categories-fetched{
         a{
             color:inherit;
+            font-size: 13px;
         }
     }
     .brands,.pack-sizes{
@@ -62,18 +63,21 @@
     
     
     .ctrl{
-        height: 2em;
+        height: 1.5em;
+        *{
+            text-transform: capitalize;
+        }
     }
 
     .MuiCheckbox-colorPrimary.Mui-checked {
         color: #29ce08;
         transform: scale(0.9);
     }
-    .PrivateSwitchBase-root-322{
+    .PrivateSwitchBase-root-322,.PrivateSwitchBase-root-355{
         padding: 0px 5px 0 2px;
     }
     .MuiTypography-body1 {
-        font-size: 15px;
+        font-size: 14px;
         font-family: "Oswald", "Helvetica", "Arial", sans-serif;
     }
 

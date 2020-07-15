@@ -119,17 +119,23 @@ const AddProduct = (props) => {
 
     const addSKU = () => {
         let _product = JSON.parse(JSON.stringify(product));
-        _product.skus.push(schema.skus[0]);
+        let _len = Math.max(0, _product.skus.length - 1);
+        let _schema = _product.skus[_len] || schema.skus[0];
+        _product.skus.push(_schema);
         setProduct(_product)
     }
     const addIMG = (i) => {
         let _product = JSON.parse(JSON.stringify(product));
-        _product.skus[i].images.push(schema.skus[0].images[0]);
+        let _len = Math.max(0, _product.skus[i].images.length - 1);
+        let _schema = _product.skus[i].images[_len] || schema.skus[0].images[0];
+        _product.skus[i].images.push(_schema);
         setProduct(_product)
     }
     const addATTR = (i) => {
         let _product = JSON.parse(JSON.stringify(product));
-        _product.skus[i].attributes.push(schema.skus[0].attributes[0]);
+        let _len = Math.max(0, _product.skus[i].attributes.length - 1);
+        let _schema = _product.skus[i].attributes[_len] || schema.skus[0].attributes[0];
+        _product.skus[i].attributes.push(_schema);
         setProduct(_product)
     }
 

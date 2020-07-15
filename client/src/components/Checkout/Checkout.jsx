@@ -52,10 +52,10 @@ function Checkout(props) {
         setBox(2)
         SetIdx(i)
     }
-    const setPayment = ()=>{
+    const setPayment = () => {
         setBox(3)
     }
-    const change1 = ()=>{
+    const change1 = () => {
         setBox(2)
     }
 
@@ -122,8 +122,8 @@ function Checkout(props) {
     const remAdd = () => {
         setShow(false)
     }
-    const change = ()=>{
-         setBox(1)
+    const change = () => {
+        setBox(1)
     }
     const editAddress = (address) => {
         setAddressEditMode(true);
@@ -136,7 +136,7 @@ function Checkout(props) {
         setEditingAddress(null);
     }
     return (
-        box===1 ?
+        box === 1 ?
             (
                 (user && user.addresses) ?
                     <Paper style={{ marginTop: '15px', boxShadow: 'none' }}>
@@ -227,9 +227,9 @@ function Checkout(props) {
                         </div>
                     </Paper>
                     : null
-            ) :  box===2?<Order idx={idx} address={user.addresses} takeBox={takeBox} user={user} change={change} payment={setPayment} /> : 
-                 box===3?<Payment  idx={idx} address={user.addresses} takeBox={takeBox} user={user} change={change} cart={props.cart} change1={change1} /> :null
-            
+            ) : box === 2 ? <Order idx={idx} address={user.addresses} takeBox={takeBox} user={user} change={change} payment={setPayment} /> :
+                box === 3 ? <Payment idx={idx} address={user.addresses} addrIndex={radio} takeBox={takeBox} user={user} change={change} cart={props.cart} change1={change1} /> : null
+
     )
 }
 const mapStateToProps = state => {

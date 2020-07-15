@@ -81,6 +81,8 @@ function OrderItems(props) {
   }
   console.log(order)
 
+  let address;
+
   return (
     order ? <React.Fragment>
       <Paper className="orderItem">
@@ -96,7 +98,13 @@ function OrderItems(props) {
               Delivery Address
             </Typography>
             <Typography variant="p" component="h6" style={{ textAlign: 'left', color: 'green' }}>
-              {order[0].shippingAddress}
+              {(address = JSON.parse(order[0].shippingAddress)) ? null : null}
+              <p style={{ width: '100%' }} className="mar">
+                <div>{address.name} - {address.mobile}</div>
+                <div>{address.address},{address.city} </div>
+                <div>{address.state} - {address.zip}, {address.country}</div>
+                <div>{address.email}</div>
+              </p>
             </Typography>
           </div>
           <div className="col-md-5">
