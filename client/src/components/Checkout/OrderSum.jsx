@@ -60,8 +60,7 @@ const Order = (
                                             <span>Remove</span>
                                        </div>   
                                  </div>   
-                             </div>  
-                                
+                             </div>                                  
                     </div> 
                    )  
                })}
@@ -71,7 +70,7 @@ const Order = (
                     Order confirmation email will be sent to <span><p>{props.user.email}</p></span>
                    </span>
                    <span>
-                       <button className="cont_order">Continue</button>
+                       <button className="cont_order" onClick={props.payment}>Continue</button>
                    </span>
                    </div> :null}
              </div>
@@ -108,7 +107,7 @@ const Order = (
                            <br/>
                            <span style={{marginLeft:'3%'}}> {props.address[props.idx].state}, <span> {props.address[props.idx].country} - <span>{props.address[props.idx].zip}</span></span></span>
                      </div>
-                     <button className="del_chng" onClick={props.takeBox}>Change</button>
+                     <button className="del_chng" onClick={props.change}>Change</button>
                </div>
             </div>
         </div>

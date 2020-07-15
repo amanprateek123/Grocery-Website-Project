@@ -1,5 +1,6 @@
 .zoom_1{
     width: 80%;
+    padding: 3%;
     position: relative;
     margin: 0 auto;
     height: 90%;
@@ -10,7 +11,8 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 100%;
+    width: 90%;
+    float: right;
     height: 100%;
     // top: 0;
     // left: 0;
@@ -43,6 +45,8 @@
     overflow: hidden;
    img{
     opacity: 1;
+    width: 100%;
+    padding: 5px;
     transition: opacity .5s linear;
    }
 }
@@ -56,6 +60,8 @@
    img{
     opacity: 1;
     transition: opacity .5s linear;
+    padding: 5px;
+    width: 100%;
    }
 }
 .img_det1a,.img_det2a{
@@ -88,7 +94,7 @@
 .btn_left{
     position: absolute;
     top: 45%;
-    left: 10px;
+    left: 8%;
     outline: 0;
     background-color: #fff;
     font-size: 20px;

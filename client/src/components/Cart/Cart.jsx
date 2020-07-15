@@ -24,25 +24,25 @@ function Cart(props) {
                         {props.cart.map((product, i) => {
                             if (!product.sku) return null;
                             return <li key={i} style={{ backgroundColor: '#fff', marginBottom: '1.5%' }}>
-                                <div className="container-fluid item-wrap" style={{ position: 'relative', display: 'flex', flexDirection: 'row' }}>
+                                <div className="container-fluid item-wrap" style={{ position: 'relative', display: 'flex', flexDirection: 'row',padding:'0' }}>
                                     <div className="col-md-2 ">
                                         <div style={{ width: '100%', marginLeft: '-10px' }}>
                                             {product.sku.images[0] ? <img src={product.sku.images[0].src} /> : null}
                                         </div>
                                     </div>
-                                    <div className="col-md-5">
+                                    <div className="col-md-6">
                                         <div className="row">
-                                            <div className="brand col-12">
+                                            <div className="brand col-md-12">
                                                 <p><u>{product.sku.product.brand}</u></p>
                                             </div>
                                             <Link to={`/product/${product.sku.product.id}?skuId=${product.sku.id}`} style={{ textDecoration: 'none' }}>
-                                                <div className="product_name col-12">
+                                                <div className="product_name col-md-12">
                                                     <p> {product.sku.product.name}</p>
                                                 </div>
                                             </Link>
                                         </div>
                                     </div>
-                                    <div className="col-md-5">
+                                    <div className="col-md-4">
                                         <div className="row" style={{ marginTop: '10%' }}>
                                             <div className='col-md-6'>
                                                 <div className="add_rem">

@@ -1,31 +1,65 @@
 import React from 'react';
 import './Footer.scss'
+import {Link} from 'react-router-dom'
 
 const Footer = (props) => {
     return (
         <div className="footer-main">
-            <div className="container">
+            <div className="container-fluid mx-auto">
                 <div className="row">
-                    <div className="col-md-5">
-                        <h4>LalaDukaan</h4>
-                        <p>
-                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Distinctio veritatis incidunt amet saepe, animi officia dicta delectus aspernatur fuga recusandae reprehenderit dolorum atque nulla provident voluptates rerum, sed magnam aut voluptas quam. Tenetur ipsam facilis officiis quibusdam illo.
-                    </p>
+                <div className="col-md-2">
+                        <div className="foot">
+                            About
+                        </div>
+                        <Link to="/" className="foot_link">Contact Us</Link>
+                        <Link to="/" className="foot_link">About Us</Link>
+                        <Link to="/" className="foot_link">Careers</Link>
+                        <Link to="/" className="foot_link">Laladukaan Stories</Link>
+                        <Link to="/" className="foot_link">News</Link>
                     </div>
-                    <div className="col-md-3">
-                        <h4>Links</h4>
-                        <p>
-                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Animi, reiciendis!
-                        </p>
+                    <div className="col-md-2">
+                        <div className="foot">
+                            Help
+                        </div>
+                        <Link to="/" className="foot_link">Payments</Link>
+                        <Link to="/" className="foot_link">Shippings</Link>
+                        <Link to="/" className="foot_link">Cancellation & Returns</Link>
+                        <Link to="/" className="foot_link">FAQ</Link>
+                        <Link to="/" className="foot_link">Returns</Link>
                     </div>
-                    <div className="col-md-4">
-                        <h4>Contact</h4>
-                        <p>
-                            Lorem ipsum dolor sit amet.
-                        </p>
+                     <div className="col-md-2">
+                        <div className="foot">
+                            Policy
+                        </div>
+                        <Link to="/" className="foot_link">Retun Policies</Link>
+                        <Link to="/" className="foot_link">Terms of use</Link>
+                        <Link to="/" className="foot_link">Security</Link>
+                        <Link to="/" className="foot_link">Privacy</Link>
+                        <Link to="/" className="foot_link">Sitemap</Link>
                     </div>
+                    <div className="col-md-2"  style={{borderRight:'1px solid grey'}}>
+                        <div className="foot">
+                            Social
+                        </div>
+                        <Link to="/" className="foot_link">Facebook</Link>
+                        <Link to="/" className="foot_link">Twitter</Link>
+                        <Link to="/" className="foot_link">Youtube</Link>
+                        <Link to="/" className="foot_link">Instagram</Link>
+                    </div>
+                     <div className="col-md-2">
+                             <div className="foot">
+                               Mail us
+                             </div>
+                             <p className="foot_p">Laladukaan Private Limmited Clove Embassy Tech Village, Outer Ring Road, Devarabeesanahalli Village, Bengaluru, <br/> Karnataka, India<br/> Email: <span>support.laladukaan@gmail.com</span></p>
+                    </div>
+                    <div className="col-md-2">
+                             <div className="foot">
+                               Registered Office address:
+                             </div>
+                             <p className="foot_p">Laladukaan Internet Private Limited,Buildings Alyssa, Begonia & Clove Embassy Tech Village, Outer Ring Road, Devarabeesanahalli Village, Bengaluru, 560103 <br/> Telephone: <span>1800 208 9898</span></p>
+                    </div>  
                 </div>
-                <div className="row">
+                <div className="row mt-2">
                     <div className="copyrights">
                         &copy; 2020. all rights reserved
                     </div>

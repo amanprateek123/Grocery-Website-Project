@@ -31,3 +31,35 @@
         }
     }
 }
+.foot{
+    color: #878787;
+    font-size: 12px;
+    font-weight: 400;
+    margin-bottom: 9px;
+    text-transform: uppercase;
+}
+.foot_link{
+    line-height: 2;
+    font-size: 13px;
+    font-weight: 500;
+    color: #fff;
+    display: block;
+    font-weight: 400;
+    font-size: 12px;
+    text-decoration: none;
+}
+.foot_link:hover{
+    color: var(--mainColor);
+}
+.foot_p{
+    line-height: 2;
+    font-size: 13px;
+    font-weight: 500;
+    color: #fff !important;
+    display: block;
+    font-weight: 400;
+    font-size: 12px;
+    span{
+        color: var(--mainColor);
+    }
+}
