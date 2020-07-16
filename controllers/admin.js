@@ -2,12 +2,17 @@
 const db = require('../utils/database')
 const csv = require('csvtojson')
 
+
 const { validationResult } = require('express-validator')
 
 // *** Single UPLOADS ***
 
-exports.addProduct = (req, res) => {
+exports.addProduct = (req, res, next) => {
     let prod = req.body;
+    console.log(req.body);
+
+    console.log(req.files);
+
 
     // Validate product
     const valErrors = validationResult(req);
@@ -15,6 +20,8 @@ exports.addProduct = (req, res) => {
     if (!valErrors.isEmpty()) {
         return res.status(422).json({ status: 422, errors: valErrors.array() });
     }
+
+
 
     db.product.create({
         name: prod.name,
@@ -26,7 +33,7 @@ exports.addProduct = (req, res) => {
         console.log(" >> ADDED PRODUCT: ", _product.id);
 
         Promise.all(
-            prod.skus.map(sku => {
+            prod.skus.map((sku, i) => {
                 return db.sku.create({
                     productId: _product.id,
                     code: sku.code,
@@ -39,10 +46,10 @@ exports.addProduct = (req, res) => {
                 }).then(_sku => {
                     console.log(" >> ADDED SKU: ", _sku.id);
                     return Promise.all(
-                        [...sku.images.map(image => {
+                        [...req.files[`images${i}`].map(image => {
                             return db.image.create({
                                 skuId: _sku.id,
-                                src: image.src,
+                                src: image.path.replace('public', ''),
                             }).then(_img => {
                                 console.log(" >> ADDED IMG: ", _img.id);
                                 return _img
@@ -95,28 +102,31 @@ exports.deleteProduct = (req, res) => {
     }).then(_product => {
 
         if (_product) {
-            Promise.all(
-                _product.skus.map(sku => {
-                    return Promise.all(
-                        [
-                            ...sku.images.map(img => {
-                                return img.destroy().then(result => console.log('>> DELETED IMG : ', img.id))
-                            }),
-                            ...sku.attributes.map(attr => {
-                                return attr.destroy().then(result => console.log('>> DELETED ATTR : ', attr.id))
-                            })
-                        ]
-                    ).then(result => {
-                        return sku.destroy().then(result => console.log('DELETED SKU', sku.id));
-                    })
-                })
-            ).then(result => {
-                console.log(">> SKU's Deleted ");
-                _product.destroy().then(result => {
-                    console.log(">> DELETED PRODUCT", productId);
-                    res.json({ status: 200, message: "deleted Successfully", product: _product })
-                })
-            })
+            // Promise.all(
+            //     _product.skus.map(sku => {
+            //         return Promise.all(
+            //             [
+            //                 ...sku.images.map(img => {
+            //                     return img.destroy().then(result => console.log('>> DELETED IMG : ', img.id))
+            //                 }),
+            //                 ...sku.attributes.map(attr => {
+            //                     return attr.destroy().then(result => console.log('>> DELETED ATTR : ', attr.id))
+            //                 })
+            //             ]
+            //         ).then(result => {
+            //             return sku.destroy().then(result => console.log('DELETED SKU', sku.id));
+            //         })
+            //     })
+            // ).then(result => {
+            //     console.log(">> SKU's Deleted ");
+            //     _product.destroy().then(result => {
+            //         console.log(">> DELETED PRODUCT", productId);
+            //         res.json({ status: 200, message: "deleted Successfully", product: _product })
+            //     })
+            // })
+            _product.destroy().then(result => {
+                res.json({ status: 200, message: "deleted Successfully", product: _product })
+            });
         }
         else {
             return res.json({ status: 400, message: "NO Such Product" })

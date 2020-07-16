@@ -52,16 +52,6 @@ exports.productSchema = {
             errorMessage: 'Stock Quantity should be integer.'
         }
     },
-    'skus.*.images': {
-        isArray: {
-            errorMessage: 'Images has to be an array.'
-        }
-    },
-    'skus.*.images.*.src': {
-        isURL: {
-            errorMessage: 'Image Source should be an url.'
-        }
-    },
     'skus.*.attributes': {
         isArray: {
             errorMessage: 'Attributes has to be an array.'

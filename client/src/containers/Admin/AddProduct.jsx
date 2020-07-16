@@ -23,12 +23,6 @@ let schema = {
             price: "",
             stockQuantity: "",
             json: "",
-            images: [
-                {
-                    src: ""
-                },
-
-            ],
             attributes: [
                 {
                     name: "",
@@ -53,12 +47,14 @@ const AddProduct = (props) => {
 
     useEffect(() => {
         fetch('/get-categories').then(res => res.json().then(res => {
-            setCategories(res);
-            setSelectedCat({
-                department: res[0],
-                parentCategory: res[0].parentCategories[0],
-                category: res[0].parentCategories[0].categories[0],
-            })
+            if (res.length) {
+                setCategories(res);
+                setSelectedCat({
+                    department: res[0],
+                    parentCategory: res[0].parentCategories[0],
+                    category: res[0].parentCategories[0].categories[0],
+                })
+            }
         }))
     }, [])
 
@@ -89,7 +85,7 @@ const AddProduct = (props) => {
 
     function isURL(str) {
         let picsum = /^https:\/\/picsum.photos\//; // Dummy Img
-        let server = /^\/assets\/images\/products\//; // Image on server
+        let server = /^\/public\/images\/products\//; // Image on server
         let image = /(\.jpg|\.png|\.jpeg|\.gif)$/; // Image url
 
         return picsum.test(str) || server.test(str) || image.test(str);
@@ -161,15 +157,23 @@ const AddProduct = (props) => {
         e.preventDefault();
         try {
             console.log("Adding Product");
+            var data = new FormData()
+            data.append('product', JSON.stringify({
+                ...product,
+                categoryId: selectedCat.category.id
+            }));
+
+            product.skus.forEach((sku, i) => {
+                let input = document.querySelector(`#images${i}`);
+
+                for (let x = 0; x < input.files.length; ++x) {
+                    data.append(`images${i}`, input.files[x]);
+                }
+            })
+
             fetch('/admin/add-product', {
                 method: 'post',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    ...product,
-                    categoryId: selectedCat.category.id
-                })
+                body: data
             })
                 .then(res => res.json())
                 .then(res => {
@@ -185,6 +189,8 @@ const AddProduct = (props) => {
                 })
         } catch (err) {
             console.log('SOMETHING WENT WRONG');
+            console.log(err);
+
 
         }
 
@@ -290,10 +296,10 @@ const AddProduct = (props) => {
                                     <div className="images ml-2">
                                         <div className="d-flex align-items-center">
                                             <h5>Images</h5>
-                                            <Button onClick={() => addIMG(i)}>Add Image</Button>
+                                            {/* <Button onClick={() => addIMG(i)}>Add Image</Button> */}
                                         </div>
                                         <div className="imgs">
-                                            {sku.images.map((img, j) => (
+                                            {/* {sku.images.map((img, j) => (
                                                 <div key={img + i + j} className="row">
                                                     <div className="col">
                                                         <TextField required value={img.src} name="src" onChange={(e) => handleChangeIMG(e, i, j)} label="image url" type="url" InputLabelProps={{ shrink: Boolean(img.src) }} />
@@ -303,7 +309,8 @@ const AddProduct = (props) => {
                                                     </div>
                                                     <Button color="secondary" onClick={() => removeIMG(i, j)}>Remove</Button>
                                                 </div>
-                                            ))}
+                                            ))} */}
+                                            <input type="file" name={`images${i}`} id={`images${i}`} multiple="multiple" style={{ opacity: 0.5 }} />
                                         </div>
                                     </div>
 

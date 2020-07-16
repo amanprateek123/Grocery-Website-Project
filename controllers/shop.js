@@ -125,11 +125,6 @@ exports.getProducts = (req, res) => {
             }
          },
          {
-            '$skus.description$': {
-               [Op.like]: `%${search}%`
-            }
-         },
-         {
             '$skus.images.src$': {
                [Op.like]: `%${search}%`
             }
@@ -416,7 +411,7 @@ exports.cart = (req, res) => {
                   result = await db.cart.findByPk(cartItem.id, {
                      include: {
                         model: db.sku,
-                        attributes: ['name', "description", 'price', 'id'],
+                        attributes: ['name', 'price', 'id'],
                         include: [
                            {
                               model: db.product,
@@ -441,7 +436,7 @@ exports.cart = (req, res) => {
                   let response = await db.cart.findByPk(result.id, {
                      include: {
                         model: db.sku,
-                        attributes: ['name', "description", 'price', 'id'],
+                        attributes: ['name', 'price', 'id'],
                         include: [
                            {
                               model: db.product,
@@ -482,7 +477,7 @@ exports.cart = (req, res) => {
                      result = await db.cart.findByPk(cartItem.id, {
                         include: {
                            model: db.sku,
-                           attributes: ['name', "description", 'price', 'id'],
+                           attributes: ['name', 'price', 'id'],
                            include: [
                               {
                                  model: db.product,
@@ -553,7 +548,7 @@ exports.getCart = (req, res) => {
       },
       include: {
          model: db.sku,
-         attributes: ['name', "description", 'price', 'id'],
+         attributes: ['name', 'price', 'id'],
          include: [
             {
                model: db.product,
@@ -575,7 +570,9 @@ exports.getCart = (req, res) => {
 
       return res.json(cart);
    }).catch(err => {
+      console.log(err);
       return res.status(500).json(err);
+
    })
 }
 

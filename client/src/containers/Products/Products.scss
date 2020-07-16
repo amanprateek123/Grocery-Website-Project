@@ -42,6 +42,7 @@
         padding-left: 0;
         line-height: 1em;
         margin-bottom: 1em;
+        margin-top: 1em;
         z-index: 0;
     }
     .filter-list{
@@ -64,6 +65,7 @@
     
     .ctrl{
         height: 1.5em;
+        display: flex !important;
         *{
             text-transform: capitalize;
         }
@@ -78,6 +80,7 @@
     }
     .MuiTypography-body1 {
         font-size: 14px;
+        white-space: nowrap;
         font-family: "Oswald", "Helvetica", "Arial", sans-serif;
     }
 

@@ -1,4 +1,6 @@
 const jwt = require('jsonwebtoken');
+const db = require('../utils/database')
+
 module.exports = (req, res, next) => {
     let token = req.get('Authorization');
     if (!token) {
@@ -16,6 +18,15 @@ module.exports = (req, res, next) => {
     if (!decodedToken) {
         return res.status(401).json({ status: 401, message: "Unauthenticated" })
     }
+
     req.userId = decodedToken.userId;
-    next();
+
+    db.user.findByPk(req.userId)
+        .then(user => {
+            req.user = user;
+            next();
+        }).catch(err => {
+            console.log(err)
+            next();
+        })
 }

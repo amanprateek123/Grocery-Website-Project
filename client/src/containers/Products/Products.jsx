@@ -236,6 +236,8 @@ const Products = (props) => {
                                                     </ul>
                                                 </List>
 
+                                                <Divider />
+
                                                 {
                                                     brands.length ?
                                                         <List className="filter-list" dense component="nav" aria-label="secondary"
@@ -247,6 +249,7 @@ const Products = (props) => {
                                                         </List>
                                                         : null
                                                 }
+                                                <Divider />
 
                                                 {
                                                     categories.length ?
@@ -267,18 +270,21 @@ const Products = (props) => {
                                                 }
 
                                                 {SKUTypes.map(name => (
-                                                    <List className="filter-list" key={name} dense component="nav" aria-label="secondary"
-                                                        subheader={<ListSubheader component="div" id="nested-list-subheader">{name}</ListSubheader>}
-                                                    >
-                                                        <div className="pack-sizes">
-                                                            {SKUs.map(sku => (
-                                                                sku.name == name && sku.value ?
-                                                                    <FormControlLabel key={sku.value + sku.id + sku.name} className="d-block ctrl m-0" label={sku.value} control={<Checkbox color="primary"
-                                                                        checked={sku.selected} onChange={(e) => changeSKU(sku.value, e)} value={sku.value} />} />
-                                                                    : null
-                                                            ))}
-                                                        </div>
-                                                    </List>
+                                                    <React.Fragment>
+                                                        <List className="filter-list" key={name} dense component="nav" aria-label="secondary"
+                                                            subheader={<ListSubheader component="div" id="nested-list-subheader">{name}</ListSubheader>}
+                                                        >
+                                                            <div className="pack-sizes">
+                                                                {SKUs.map(sku => (
+                                                                    sku.name == name && sku.value ?
+                                                                        <FormControlLabel key={sku.value + sku.id + sku.name} className="d-block ctrl m-0" label={sku.value} control={<Checkbox color="primary"
+                                                                            checked={sku.selected} onChange={(e) => changeSKU(sku.value, e)} value={sku.value} />} />
+                                                                        : null
+                                                                ))}
+                                                            </div>
+                                                        </List>
+                                                        <Divider />
+                                                    </React.Fragment>
                                                 ))}
 
                                             </CardContent>

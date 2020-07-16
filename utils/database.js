@@ -39,33 +39,33 @@ db.status = require('../models/status')(sequelize, Sequelize);
 
 // Relations - creates respective Foreign Keys as [ownerModel]Id 
 
-db.otp.belongsTo(db.user);
+db.otp.belongsTo(db.user, { onDelete: 'CASCADE' });
 db.user.hasMany(db.otp);
 
-db.shippingAddress.belongsTo(db.user);
+db.shippingAddress.belongsTo(db.user, { onDelete: 'CASCADE' });
 db.user.hasMany(db.shippingAddress);
 
 
-db.parentCategory.belongsTo(db.department);
+db.parentCategory.belongsTo(db.department, { onDelete: 'CASCADE' });
 db.department.hasMany(db.parentCategory);
 
-db.category.belongsTo(db.parentCategory);
+db.category.belongsTo(db.parentCategory, { onDelete: 'CASCADE' });
 db.parentCategory.hasMany(db.category);
 
 db.product.belongsTo(db.category);
 db.category.hasMany(db.product);
 
-db.sku.belongsTo(db.product);
+db.sku.belongsTo(db.product, { onDelete: 'CASCADE' });
 db.product.hasMany(db.sku);
 
-db.image.belongsTo(db.sku);
+db.image.belongsTo(db.sku, { onDelete: 'CASCADE' });
 db.sku.hasMany(db.image);
 
-db.attribute.belongsTo(db.sku);
+db.attribute.belongsTo(db.sku, { onDelete: 'CASCADE' });
 db.sku.hasMany(db.attribute);
 
 // Cart
-db.cart.belongsTo(db.user);
+db.cart.belongsTo(db.user, { onDelete: 'CASCADE' });
 db.user.hasMany(db.cart);
 
 db.cart.belongsTo(db.sku);
@@ -73,7 +73,7 @@ db.sku.hasMany(db.cart);
 
 
 // Orders
-db.orderItem.belongsTo(db.order);
+db.orderItem.belongsTo(db.order, { onDelete: 'CASCADE' });
 db.order.hasMany(db.orderItem);
 
 db.order.belongsTo(db.user);
