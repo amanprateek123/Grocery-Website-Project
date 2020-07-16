@@ -16,7 +16,7 @@ module.exports = (sequelize, Sequelize = require('sequelize')) => {
             allowNull: false,
         },
         description: {
-            type: Sequelize.STRING,
+            type: Sequelize.TEXT,
         },
         keywords: {
             type: Sequelize.STRING,

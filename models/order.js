@@ -14,7 +14,7 @@ module.exports = (sequelize, Sequelize = require('sequelize')) => {
             type: Sequelize.FLOAT,
         },
         shippingAddress: {
-            type: Sequelize.STRING
+            type: Sequelize.TEXT
         },
         paymentType: {
             type: Sequelize.ENUM(['COD', 'CARD', 'NET BANKING'])

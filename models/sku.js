@@ -13,26 +13,13 @@ module.exports = (sequelize, Sequelize = require('sequelize')) => {
             defaultValue: '0'
         },
 
-        // // ! ...
-        // type: {
-        //     type: Sequelize.STRING,
-        //     allowNull: false,
-        //     defaultValue: 'variant'
-        // },
-
-        // ! ...
         name: {
             type: Sequelize.STRING,
             allowNull: false,
             defaultValue: '0'
         },
-
-        // description: {
-        //     type: Sequelize.STRING,
-        // },
-        // In Rupees
         price: {
-            type: Sequelize.INTEGER,
+            type: Sequelize.FLOAT,
             defaultValue: 0
         },
         stockQuantity: {
@@ -42,7 +29,7 @@ module.exports = (sequelize, Sequelize = require('sequelize')) => {
 
         // ! ...
         json: {
-            type: Sequelize.STRING,
+            type: Sequelize.TEXT,
         }
     },
         {

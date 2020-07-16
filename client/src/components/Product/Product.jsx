@@ -70,7 +70,7 @@ const Product = (props) => {
             <CardContent className="sku-select">
                 {product.skus ?
                     product.skus[1] ?
-                        product.skus[0].attributes.length == 1 ?
+                        product.skus[0].attributes.length == 100 ? // never show this dropdown
                             <div className="variants">
                                 <Select defaultValue={product.skus[0]} labelId="variant" className="pack-size" onChange={(e) => setSelectedSKU(e.target.value)}>
                                     {

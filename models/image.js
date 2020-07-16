@@ -13,7 +13,7 @@ module.exports = (sequelize, Sequelize) => {
         }
     },
         {
-            tableName: 'db_ld_Image'
+            tableName: 'db_ld_image'
         }
     )
 
