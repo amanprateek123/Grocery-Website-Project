@@ -53,7 +53,7 @@ const Product = (props) => {
                 image={selectedSKU ? selectedSKU.images[0] ? selectedSKU.images[0].src : null : null}
             />
             <CardContent>
-                <div className="badge badge-info pb-1">{product.category.name}</div>
+                {/* <div className="badge badge-info pb-1">{product.category.name}</div> */}
                 <h6 className="mb-0">{product.name}</h6>
                 <Typography variant="body2" color="textSecondary" className="mb-2 company" component="p">{product.brand}</Typography>
                 {/* <Typography variant="body2" color="textSecondary" className="desc" component="p">
@@ -100,9 +100,9 @@ const Product = (props) => {
             </CardContent>
             <div className="space"></div>
             <CardActions className="card-actions">
-                {/* <div className="btn btn-full add-to-cart"><CartIcon /> Add to Cart</div> */}
-                <Link to={`/product/${product.id}`} ><Button style={{ color: '#aaa' }}>Details</Button></Link>
-                {props.noCart || product.skus.length > 1 ? null : <Fab size="small" className="add-to-cart-btn" title={"Add to Cart"} variant="round" style={{ background: '#e35f21', color: 'white', boxShadow: '-1px 2px 10px 0 #e35f2199' }} onClick={() => { props.addToCart(selectedSKU.id); props.feedback() }}><CartIcon /></Fab>}
+                {props.noCart || product.skus.length > 1 ? null : <div className="btn btn-full add-to-cart" onClick={() => { props.addToCart(selectedSKU.id); props.feedback() }}><CartIcon /> Add to Cart</div>}
+                {/* <Link to={`/product/${product.id}`} ><Button style={{ color: '#aaa' }}>Details</Button></Link> */}
+                {/* {props.noCart || product.skus.length > 1 ? null : <Fab size="small" className="add-to-cart-btn" title={"Add to Cart"} variant="round" style={{ background: '#e35f21', color: 'white', boxShadow: '-1px 2px 10px 0 #e35f2199' }} onClick={() => { props.addToCart(selectedSKU.id); props.feedback() }}><CartIcon /></Fab>} */}
 
             </CardActions>
 
