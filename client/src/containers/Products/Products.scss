@@ -29,7 +29,7 @@
     
         display: flex;
         flex-direction: column;
-        max-height: 200px;
+        max-height: 15em;
         overflow-y:scroll;
         margin-top: -0.8em;
         padding: 0 0 0.5em 0;
@@ -75,7 +75,7 @@
         color: #29ce08;
         transform: scale(0.9);
     }
-    .PrivateSwitchBase-root-322,.PrivateSwitchBase-root-355{
+    .PrivateSwitchBase-root-322,.PrivateSwitchBase-root-355,.PrivateSwitchBase-root-344{
         padding: 0px 5px 0 2px;
     }
     .MuiTypography-body1 {
@@ -94,6 +94,9 @@
         padding: 1em;
         .products{
             display: flex;
+            perspective: 400px;
+            transform-style: preserve-3d;
+            transform-origin: center;
             flex-wrap: wrap;
             @media (max-width: 480px){
                 justify-content: center;

@@ -5,6 +5,9 @@ import { connect } from 'react-redux';
 import * as actions from '../../store/actions'
 import { useState } from 'react';
 import Modal from "../../components/Modal/Modal";
+
+import { Transition, config } from 'react-spring/renderprops'
+
 import {
     Grid, Card, CardContent, Paper, Typography, CardMedia, Avatar,
     List, ListItem, ListSubheader, ListItemIcon, ListItemText, Divider,
@@ -41,7 +44,7 @@ const Products = (props) => {
     const [metaData, setMetaData] = useState({});
 
     useEffect(() => {
-        setLoading(true);
+        products.length && null || setLoading(true);
         fetch(`/get-products${props.location.search}`).then(res => res.json().then(({ meta, products }) => {
             setProducts(products);
             setVisibleProducts(products);
@@ -167,7 +170,12 @@ const Products = (props) => {
             {/* <Divider /> */}
             {!loading ? products[0] ?
                 <div className="products">
-                    {visibleProducts.map(product => <Product key={product.id} product={product} addToCart={props.addToCart} feedback={() => setSnackbar(true)} />)}
+                    <Transition items={visibleProducts} keys={item => item.id} config={config.stiff} trail={100}
+                        from={{ transform: 'translate(0,20px) translateZ(30px)', opacity: '0' }}
+                        enter={{ transform: 'translate(0,0px) translateZ(0)', opacity: '1' }}>
+                        {product => styles => <Product style={styles} key={product.id} product={product} addToCart={props.addToCart} feedback={() => setSnackbar(true)} />}
+                    </Transition>
+                    {/* {visibleProducts.map(product => <Product key={product.id} product={product} addToCart={props.addToCart} feedback={() => setSnackbar(true)} />)} */}
                 </div>
                 :
                 <React.Fragment>

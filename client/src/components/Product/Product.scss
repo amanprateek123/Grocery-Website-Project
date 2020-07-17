@@ -6,7 +6,11 @@
     position: relative;
     border-radius: 1em !important;
     // height: 28em;
-
+    transition : all 0.1s;
+    &:hover{
+        box-shadow: 0 4px 12px -1px #0004;
+    }
+    
     .MuiCardContent-root{
         padding-bottom: 0 !important;
     }
@@ -42,6 +46,9 @@
 
     .card-image{
         height: 12em;
+        margin: 0.5em;
+        border-radius: 1em;
+        background-color: #fff;
         background-size: contain !important;
     }
 

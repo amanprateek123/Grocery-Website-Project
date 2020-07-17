@@ -7,7 +7,7 @@ const Address = (props) => {
     return (
         <React.Fragment>
             <Divider />
-            <ListItem>
+            <ListItem style={{...props.style}}>
                 <ListItemText
                     primary={<React.Fragment>{props.value.name} {props.value.isPrimary ? <div className="badge badge-success mb-1 ml-1" style={{ opacity: 0.7 }}>primary</div> : null}</React.Fragment>}
                     secondary={
