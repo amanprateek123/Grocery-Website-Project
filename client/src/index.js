@@ -4,6 +4,7 @@ import './index.scss';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 import "bootstrap/dist/css/bootstrap.min.css";
+import "animate.css"
 import { BrowserRouter as Router } from 'react-router-dom';
 
 import { createStore, applyMiddleware, compose, combineReducers } from "redux";

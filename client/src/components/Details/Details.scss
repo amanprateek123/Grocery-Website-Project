@@ -1,5 +1,19 @@
 .card_det{
     width: 100%;
+    
+
+    &>div{
+        &>div{
+            animation: fadeInLeft 0.5s forwards;
+            opacity:0;
+        }
+        @for $i from 1 through 7{
+            &>div:nth-child(#{$i}){
+                animation-delay: $i*50ms;
+            }
+        }
+    }
+    
     .detail_head{
         width: 100%;
         margin-top: 1%;

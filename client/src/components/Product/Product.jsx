@@ -45,7 +45,7 @@ const Product = (props) => {
 
 
     return (
-        <Card className="product" variant="outlined">
+        <Card className="product" variant="outlined" style={{ ...props.style }}>
             <Link to={`/product/${product.id}`} className="stretched-link"></Link>
             <CardMedia
                 className="card-image"
@@ -54,7 +54,7 @@ const Product = (props) => {
             />
             <CardContent>
                 <div className="badge badge-info pb-1">{product.category.name}</div>
-                <h5 className="mb-0">{product.name}</h5>
+                <h6 className="mb-0">{product.name}</h6>
                 <Typography variant="body2" color="textSecondary" className="mb-2 company" component="p">{product.brand}</Typography>
                 {/* <Typography variant="body2" color="textSecondary" className="desc" component="p">
                         {product.description}
