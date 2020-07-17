@@ -14,14 +14,14 @@ function Cart(props) {
         })
     }
     console.log(props.cart);
-    const trimming = (string)=>{
+
+     const trimming = (string)=>{
         const length=35
         var trimmedString = string.length > length ? 
                     string.substring(0, length) + "..." : 
                     string;
         return trimmedString            
     }
-
     return (
         <ul className="checkout">
             <li>
@@ -29,21 +29,23 @@ function Cart(props) {
                     <ul style={{ maxWidth: '700px' }}>
                         {props.cart.map((product, i) => {
                             if (!product.sku) return null;
-                            return <li key={i} style={{ backgroundColor: '#fff', marginBottom: '1.5%' }}>
+                            return <li key={i} style={{ backgroundColor: '#fff', marginBottom: '1.5%',height:'80px' }}>
                                 <div className="container-fluid item-wrap" style={{ position: 'relative', display: 'flex', flexDirection: 'row',padding:'0' }}>
-                                    <div className="col-md-2 ">
+                                    <div className="col-md-2" style={{height:'80px'}} >
                                         <div style={{ width: '100%', marginLeft: '-10px' }}>
-                                            {product.sku.images[0] ? <img src={product.sku.images[0].src} style={{margin:'2px',border:'1px solid #f3f3f3',padding:'2px'}} /> : null}
+                                            {product.sku.images[0] ? <img src={product.sku.images[0].src} style={{margin:'4px',border:'1px solid #f3f3f3',padding:'2px',height:'72px'}} /> : null}
                                         </div>
                                     </div>
                                     <div className="col-md-6">
-                                        <div className="row">
+                                        <div className="row" style={{marginTop:'-5px'}}>
                                             <div className="brand col-md-12">
                                                 <p><u>{product.sku.product.brand}</u></p>
                                             </div>
                                             <Link to={`/product/${product.sku.product.id}?skuId=${product.sku.id}`} style={{ textDecoration: 'none' }}>
                                                 <div className="product_name col-md-12">
-                                                    <p>{trimming(product.sku.product.name)}</p>
+                                                    <p className="sku_cart p">{trimming(product.sku.product.name)}</p>
+                                                    <span>
+                                                    <p className="tooltips">{product.sku.product.name}</p>  </span>                                          
                                                 </div>
                                             </Link>
                                         </div>
