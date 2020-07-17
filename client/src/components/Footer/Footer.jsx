@@ -1,13 +1,16 @@
 import React from 'react';
 import './Footer.scss'
-import {Link} from 'react-router-dom'
+import { Link } from 'react-router-dom'
+
+import { footer } from '../../site_config';
+// Footer Configuration.
 
 const Footer = (props) => {
     return (
         <div className="footer-main">
             <div className="container-fluid mx-auto">
                 <div className="row">
-                <div className="col-md-2">
+                    <div className="col-md-2">
                         <div className="foot">
                             About
                         </div>
@@ -27,7 +30,7 @@ const Footer = (props) => {
                         <Link to="/" className="foot_link">FAQ</Link>
                         <Link to="/" className="foot_link">Returns</Link>
                     </div>
-                     <div className="col-md-2">
+                    <div className="col-md-2">
                         <div className="foot">
                             Policy
                         </div>
@@ -37,7 +40,7 @@ const Footer = (props) => {
                         <Link to="/" className="foot_link">Privacy</Link>
                         <Link to="/" className="foot_link">Sitemap</Link>
                     </div>
-                    <div className="col-md-2"  style={{borderRight:'1px solid grey'}}>
+                    <div className="col-md-2" style={{ borderRight: '1px solid grey' }}>
                         <div className="foot">
                             Social
                         </div>
@@ -46,18 +49,18 @@ const Footer = (props) => {
                         <Link to="/" className="foot_link">Youtube</Link>
                         <Link to="/" className="foot_link">Instagram</Link>
                     </div>
-                     <div className="col-md-2">
-                             <div className="foot">
-                               Mail us
+                    <div className="col-md-2">
+                        <div className="foot">
+                            Mail us
                              </div>
-                             <p className="foot_p">Laladukaan Private Limmited Clove Embassy Tech Village, Outer Ring Road, Devarabeesanahalli Village, Bengaluru, <br/> Karnataka, India<br/> Email: <span>support.laladukaan@gmail.com</span></p>
+                        <p className="foot_p">Laladukaan Private Limmited Clove Embassy Tech Village, Outer Ring Road, Devarabeesanahalli Village, Bengaluru, <br /> Karnataka, India<br /> Email: <span>support.laladukaan@gmail.com</span></p>
                     </div>
                     <div className="col-md-2">
-                             <div className="foot">
-                               Registered Office address:
+                        <div className="foot">
+                            Registered Office address:
                              </div>
-                             <p className="foot_p">Laladukaan Internet Private Limited,Buildings Alyssa, Begonia & Clove Embassy Tech Village, Outer Ring Road, Devarabeesanahalli Village, Bengaluru, 560103 <br/> Telephone: <span>1800 208 9898</span></p>
-                    </div>  
+                        <p className="foot_p">Laladukaan Internet Private Limited,Buildings Alyssa, Begonia & Clove Embassy Tech Village, Outer Ring Road, Devarabeesanahalli Village, Bengaluru, 560103 <br /> Telephone: <span>1800 208 9898</span></p>
+                    </div>
                 </div>
                 <div className="row mt-2">
                     <div className="copyrights">
