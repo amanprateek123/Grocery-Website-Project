@@ -44,8 +44,8 @@ function Cart(props) {
                                             <Link to={`/product/${product.sku.product.id}?skuId=${product.sku.id}`} style={{ textDecoration: 'none' }}>
                                                 <div className="product_name col-md-12">
                                                     <p className="sku_cart p">{trimming(product.sku.product.name)}</p>
-                                                    <span>
-                                                        <p className="tooltips">{product.sku.product.name}</p>  </span>
+                                                    {product.sku.product.name.length > 35 ? <span>
+                                                        <p className="tooltips">{product.sku.product.name}</p>  </span> : null}
                                                 </div>
                                             </Link>
                                         </div>
