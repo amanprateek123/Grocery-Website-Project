@@ -76,7 +76,7 @@ exports.footer = {
         }
     ],
 
-    address: `Laladukaan Private Limmited Clove Embassy Tech Village, Outer Ring Road, Devarabeesanahalli Village, Bengaluru, Karnataka, India`,
+    address: `Laladukaan Private Limmited Clove Embassy Tech Village, Outer Ring Road, Devarabeesanahalli Village, Varanasi, UP, India`,
 
     email: 'support.laladukaan@gmail.com',
     telephone: '+91 9876543210'
