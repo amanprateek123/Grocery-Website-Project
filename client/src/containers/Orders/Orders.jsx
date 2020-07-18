@@ -242,7 +242,7 @@ function Orders(props) {
 
                                                     </div>
                                                     <div className="mt-2" style={{ color: 'grey' }}>
-                                                        Order Date : {month[new Date(order.createdAt).getMonth()]}
+                                                        Order Date : {month[new Date(order.createdAt).getMonth()]} {new Date(order.createdAt).getDate()}
                                                     </div>
                                                     <div className="mt-1" style={{ color: 'grey' }}>
                                                         Order ID : {order.id}

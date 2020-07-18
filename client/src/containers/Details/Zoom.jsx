@@ -46,7 +46,7 @@ export default function Zoom(props) {
     return (
         <div className='zoom_1'>
             <div className="zoom_img1">
-                <img className="zooming" src={props.product.skus[props.pack].images[next].src} />
+                <img className="zooming"   className="animate__animated animate__slideInRight" src={props.product.skus[props.pack].images[next].src} />
             </div>
             <div className="slide_zoom1">
                 {props.product.skus[props.pack].images.map((item, i) => {
