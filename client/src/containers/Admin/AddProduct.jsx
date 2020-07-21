@@ -45,6 +45,8 @@ const AddProduct = (props) => {
     const [valError, setValError] = useState(null);
     const [success, setSuccess] = useState(null);
 
+    const [imgUrls, setImgUrls] = useState([[]]);
+
     useEffect(() => {
         fetch('/get-categories').then(res => res.json().then(res => {
             if (res.length) {
@@ -118,6 +120,11 @@ const AddProduct = (props) => {
         let _len = Math.max(0, _product.skus.length - 1);
         let _schema = _product.skus[_len] || schema.skus[0];
         _product.skus.push(_schema);
+
+        let _urls = [...imgUrls]
+        _urls.push([]);
+
+        setImgUrls(_urls);
         setProduct(_product)
     }
     const addIMG = (i) => {
@@ -139,6 +146,10 @@ const AddProduct = (props) => {
     const removeSKU = (i) => {
         let _product = JSON.parse(JSON.stringify(product));
         _product.skus.splice(i, 1);
+        let _urls = [...imgUrls]
+        _urls.pop();
+
+        setImgUrls(_urls);
         setProduct(_product)
     }
     const removeIMG = (i, j) => {
@@ -152,6 +163,26 @@ const AddProduct = (props) => {
         setProduct(_product)
     }
 
+    const imgFileChange = (i) => {
+        let input = document.querySelector(`#images${i}`);
+        let _urls = [...imgUrls];
+        _urls[i] = [];
+        for (let j = 0; j < input.files.length; ++j) {
+            _urls[i].push(URL.createObjectURL(input.files[j]))
+        }
+        setImgUrls(_urls);
+    }
+
+    useEffect(() => {
+        return () => {
+            imgUrls.forEach(urlGrp => {
+                urlGrp.forEach(url => {
+                    URL.revokeObjectURL(url);
+                })
+            })
+            console.log('Revoked Image URLS');
+        }
+    }, [imgUrls])
 
     const addProduct = (e) => {
         e.preventDefault();
@@ -310,7 +341,10 @@ const AddProduct = (props) => {
                                                     <Button color="secondary" onClick={() => removeIMG(i, j)}>Remove</Button>
                                                 </div>
                                             ))} */}
-                                            <input type="file" name={`images${i}`} id={`images${i}`} multiple="multiple" style={{ opacity: 0.5 }} />
+                                            <input type="file" name={`images${i}`} id={`images${i}`} onChange={() => imgFileChange(i)} multiple="multiple" style={{ opacity: 0.5 }} />
+                                            <div className="images">
+                                                {imgUrls[i].map(url => <img width={100} src={url} />)}
+                                            </div>
                                         </div>
                                     </div>
 
