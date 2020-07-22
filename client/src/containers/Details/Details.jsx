@@ -39,7 +39,6 @@ const Details = (props) => {
     const changePack = (id) => {
         setPack(id)
     }
-
     const [img, setImg] = useState(0)
     const changeImg = (i) => {
         setImg(i)
@@ -67,8 +66,8 @@ const Details = (props) => {
 
     }, [props.location])
 
-    const [zoom, setZoom] = useState(false);
-
+    const [zoom, setZoom] = useState(false);   
+   
 
     return (
         product ?
@@ -81,14 +80,14 @@ const Details = (props) => {
                         <div className="col-md-6">
                             <Paper className="image-col">
 
-                                <div className="main_img">
+                                <div className="main_img" >
                                     {product.skus[pack].images[img] ? <img src={product.skus[pack].images[img].src} alt="pic" onClick={() => setZoom(true)} /> : null}
                                 </div>
                                 <div className="slide_image">
                                     {
                                         product.skus[pack].images.map((item, i) => {
                                             return (<div className={img === i ? "img_det2" : "img_det1"} key={item.id} onClick={() => { changeImg(i) }} >
-                                                <img src={item.src} alt="pic" />
+                                                <img src={item.src} alt="pic"/>
                                             </div>)
                                         })
                                     }
