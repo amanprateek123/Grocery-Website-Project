@@ -39,6 +39,7 @@ const Payment = (props) => {
             if (res.status == 400) {
                 return 'Cart is Emply';
             }
+            props.emptyCart();
             return 'Order Placed Successfully.';
         }).catch(err => {
             console.log(err);
@@ -161,7 +162,8 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return {
         setResponse: (response) => dispatch({ type: actions.SET_RESPONSE, response: response }),
-        logout: () => dispatch(actions.logout())
+        logout: () => dispatch(actions.logout()),
+        emptyCart: () => dispatch({ type: actions.SET_CART, cart: [] })
     }
 }
 

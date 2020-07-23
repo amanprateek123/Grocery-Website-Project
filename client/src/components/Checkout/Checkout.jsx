@@ -7,6 +7,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Order from './OrderSum'
 import AddressEditor from '../../containers/Profile/AddressEditor'
 import Payment from './Payment/Payment';
+import * as actions from '../../store/actions'
 
 function Checkout(props) {
 
@@ -239,6 +240,7 @@ const mapStateToProps = state => {
 }
 const mapDispatchToProps = dispatch => {
     return {
+        emptyCart: () => dispatch({ type: actions.SET_CART, cart: [] })
 
     }
 }

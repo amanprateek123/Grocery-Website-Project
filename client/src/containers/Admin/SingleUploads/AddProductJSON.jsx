@@ -1,9 +1,9 @@
 import React from 'react';
 import { Paper, Button, TextField, Select, MenuItem } from '@material-ui/core'
 import { Alert } from '@material-ui/lab'
-import './Admin.scss'
+import '../Admin.scss'
 import UploadIcon from '@material-ui/icons/CloudUpload'
-import * as actions from '../../store/actions'
+import * as actions from '../../../store/actions'
 import { connect } from 'react-redux'
 import './AddProduct.scss'
 import { useState } from 'react';

@@ -2,13 +2,13 @@ import React from 'react';
 import { Paper, Button, TextField, Select, MenuItem } from '@material-ui/core'
 import { Alert } from '@material-ui/lab'
 import UploadIcon from '@material-ui/icons/CloudUpload'
-import * as actions from '../../store/actions'
+import * as actions from '../../../store/actions'
 import { connect } from 'react-redux'
 import { useState } from 'react';
 import { useEffect } from 'react';
-import './Admin.scss'
-import './AddProduct.scss'
-import Product from '../../components/Product/Product'
+import '../Admin.scss'
+import '../SingleUploads/AddProduct.scss'
+import Product from '../../../components/Product/Product'
 import { useRef } from 'react';
 
 const DeleteProduct = (props) => {
