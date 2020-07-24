@@ -21,6 +21,15 @@ exports.addProduct = (req, res, next) => {
     const valErrors = validationResult(req);
 
     if (!valErrors.isEmpty()) {
+        let files = { ...req.files };
+        for (fileArray in files) {
+            files[fileArray].forEach(file => {
+                fs.unlink(file.path, (err) => {
+                    if (err) console.log('FAILED TO DELETE ', err);
+                    else console.log('DELETING Due to Validation Error.');
+                })
+            })
+        }
         return res.status(422).json({ status: 422, errors: valErrors.array() });
     }
 
@@ -143,6 +152,15 @@ exports.editProduct = async (req, res, next) => {
     const valErrors = validationResult(req);
 
     if (!valErrors.isEmpty()) {
+        let files = { ...req.files };
+        for (fileArray in files) {
+            files[fileArray].forEach(file => {
+                fs.unlink(file.path, (err) => {
+                    if (err) console.log('FAILED TO DELETE ', err);
+                    else console.log('DELETING Due to Validation Error.');
+                })
+            })
+        }
         return res.status(422).json({ status: 422, errors: valErrors.array() });
     }
 
@@ -217,20 +235,27 @@ exports.editProduct = async (req, res, next) => {
                     return Promise.all(
                         [
                             // New Image Uploads
-                            ...req.files[`images${i}`].map(image => {
-                                return db.image.create({
-                                    skuId: _sku.id,
-                                    src: image.path.replace('public', ''),
-                                }).then(_img => {
-                                    console.log(" >> ADDED IMG: ", _img.id);
-                                    return _img
-                                })
-                            }),
+                            ...(function () {
+                                try {
+                                    return req.files[`images${i}`].map(image => {
+                                        return db.image.create({
+                                            skuId: _sku.id,
+                                            src: image.path.replace('public', ''),
+                                        }).then(_img => {
+                                            console.log(" >> ADDED IMG: ", _img.id);
+                                            return _img
+                                        })
+                                    })
+                                }
+                                catch (e) {
+                                    return []
+                                }
+                            }()),
 
                             // Old Image Paths
                             ...sku.images.map(image => {
                                 return db.image.create({
-                                    ...(image) & { id: image.id },
+                                    ...(image.id) && { id: image.id },
                                     skuId: _sku.id,
                                     src: image.src,
                                 }).then(_image => {
@@ -242,7 +267,7 @@ exports.editProduct = async (req, res, next) => {
                             // Attributes
                             ...sku.attributes.map(attr => {
                                 return db.attribute.create({
-                                    ...(attr) & { id: attr.id },
+                                    ...(attr.id) && { id: attr.id },
                                     skuId: _sku.id,
                                     name: attr.name,
                                     value: attr.value,
@@ -253,7 +278,7 @@ exports.editProduct = async (req, res, next) => {
                             })
                         ]
                     ).then(imatrr => {
-                        return console.log(" >> IMAGES AND ATTRIBUTES DONE");
+                        // return console.log(" >> IMAGES AND ATTRIBUTES DONE");
                     })
                 })
             })

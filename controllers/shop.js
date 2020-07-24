@@ -356,6 +356,10 @@ exports.getProducts = (req, res) => {
                   model: db.parentCategory,
                   attributes: ['id', 'name'],
                   required: true,
+                  include: {
+                     model: db.department,
+                     attributes: ['id', 'name'],
+                  }
                }
             },
             {
@@ -368,7 +372,7 @@ exports.getProducts = (req, res) => {
                   },
                   {
                      model: db.attribute,
-                     attributes: ['name', 'value']
+                     attributes: ['id', 'name', 'value']
                   },
 
                ]
