@@ -54,25 +54,34 @@ exports.addProduct = (req, res, next) => {
                 }).then(_sku => {
                     console.log(" >> ADDED SKU: ", _sku.id);
                     return Promise.all(
-                        [...req.files[`images${i}`].map(image => {
-                            return db.image.create({
-                                skuId: _sku.id,
-                                src: image.path.replace('public', ''),
-                            }).then(_img => {
-                                console.log(" >> ADDED IMG: ", _img.id);
-                                return _img
+                        [
+                            ...(function () {
+                                try {
+                                    return req.files[`images${i}`].map(image => {
+                                        return db.image.create({
+                                            skuId: _sku.id,
+                                            src: image.path.replace('public', ''),
+                                        }).then(_img => {
+                                            console.log(" >> ADDED IMG: ", _img.id);
+                                            return _img
+                                        })
+                                    })
+                                }
+                                catch (e) {
+                                    return []
+                                }
+                            }()),
+
+                            ...sku.attributes.map(attr => {
+                                return db.attribute.create({
+                                    skuId: _sku.id,
+                                    name: attr.name,
+                                    value: attr.value,
+                                }).then(_attr => {
+                                    console.log(" >> ADDED attr: ", _attr.id);
+                                    return _attr
+                                })
                             })
-                        }),
-                        ...sku.attributes.map(attr => {
-                            return db.attribute.create({
-                                skuId: _sku.id,
-                                name: attr.name,
-                                value: attr.value,
-                            }).then(_attr => {
-                                console.log(" >> ADDED attr: ", _attr.id);
-                                return _attr
-                            })
-                        })
                         ]
                     ).then(imatrr => {
                         return console.log(" >> IMAGES AND ATTRIBUTES DONE");
