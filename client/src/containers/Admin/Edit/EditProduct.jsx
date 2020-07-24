@@ -385,7 +385,7 @@ const AddProduct = (props) => {
                                                     {sku.images?.map((img, j) => (
                                                         <div key={img + i + j} className="row">
                                                             <div className="col">
-                                                                <TextField required value={img.src} name="src" onChange={(e) => handleChangeIMG(e, i, j)} label="image url" type="url" InputLabelProps={{ shrink: Boolean(img.src) }} />
+                                                                <TextField required value={img.src} name="src" onChange={(e) => handleChangeIMG(e, i, j)} label="image url" InputLabelProps={{ shrink: Boolean(img.src) }} />
                                                             </div>
                                                             <div className="col">
                                                                 {isURL(img.src) ? <img width={200} src={img.src} alt="" /> : null}
