@@ -1,11 +1,6 @@
 import React, { Component } from 'react'
 import Carousel from '../../components/Carousel/Carousel';
-import Modal from '../../components/Modal/Modal';
-import SignUp from '../../components/SignUp/SignUp';
-import Card from '../../components/Card/Card'
-import { Row, Col } from 'reactstrap'
-import { Container } from '@material-ui/core';
-
+import HomePage from '../../components/HomePage/Home'
 
 export default class Home extends Component {
 
@@ -13,8 +8,7 @@ export default class Home extends Component {
         return (
             <React.Fragment>
                 <Carousel />
-                <div className="container">
-                </div>
+                <HomePage/>
 
             </React.Fragment>
         )

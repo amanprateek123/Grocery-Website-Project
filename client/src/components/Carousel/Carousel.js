@@ -8,14 +8,14 @@ export default class Carousels extends Component {
   <Carousel.Item>
     <img
       className="d-block w-100"
-      src="https://www.bigbasket.com/media/uploads/banner_images/2004225_essentials_400_17thApr.jpg"
+      src="https://www.bigbasket.com/media/uploads/banner_images/2007015_breakfast-store_460.jpg"
       alt="First slide"
     />
   </Carousel.Item>
   <Carousel.Item>
     <img
       className="d-block w-100"
-      src="https://www.bigbasket.com/media/uploads/banner_images/All_Organicstore_DT_5_1130x400_25thApr.jpg"
+      src="https://www.bigbasket.com/media/uploads/banner_images/2007014_tea-time-snacking_460.jpg"
       alt="Third slide"
     />
 
@@ -23,7 +23,7 @@ export default class Carousels extends Component {
   <Carousel.Item>
     <img
       className="d-block w-100"
-      src="https://www.bigbasket.com/media/uploads/banner_images/All_HowtobeaCaringSHopper_DT_2_1130x400_25thApr.jpg"
+      src="https://www.bigbasket.com/media/uploads/banner_images/T1_All_Proteinstore_DT_11_1600x460_17thJuly.jpg"
       alt="Third slide"
     />
 

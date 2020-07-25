@@ -1,0 +1,27 @@
+.facility{
+    width: 80%;
+}
+.individual{
+    border-left: 1px solid #f0f0f0;
+    border-right: 1px solid #f0f0f0;
+    height: 250px;
+}
+.fac_list{
+    text-align: center;
+    h1{
+        font-size: 20px;
+        font-weight: bold;
+    }
+    h6{
+        font-size: 15px;
+        color: grey;
+    }
+}
+.fac_icon{
+    height: 100px;
+    text-align: center;
+    font-size: 40px;
+    padding: 33px 0 0 0;
+    color:var(--mainColor);
+    margin-bottom: 20px;
+}

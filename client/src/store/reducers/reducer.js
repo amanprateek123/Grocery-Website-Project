@@ -76,7 +76,6 @@ function authStart(state, action) {
         ...state,
         authenticating: true,
         authError: false
-
     }
 }
 
