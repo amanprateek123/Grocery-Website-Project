@@ -11,6 +11,9 @@ let initialState = {
     authModalVisible: false,
     zoomVisible: false,
 
+    // Mobile Menu
+    menu: null,
+
     // Shop
     cart: []
 
@@ -49,6 +52,9 @@ const reducer = (state = initialState, action) => {
         case actions.SET_RESPONSE: return setResponse(state, action);
         case actions.OPEN_AUTH_MODAL: return openModal(state, action);
         case actions.CLOSE_AUTH_MODAL: return closeModal(state, action);
+
+        // Mobile Menu
+        case actions.SET_MENU: return setMenu(state, action);
 
         // Shop
         case actions.SET_CART: return setCart(state, action);
@@ -130,6 +136,15 @@ const openModal = state => {
 
     }
 }
+
+// Mobile Menu
+const setMenu = (state, action) => {
+    return {
+        ...state,
+        menu: action.menu
+    }
+}
+
 
 
 

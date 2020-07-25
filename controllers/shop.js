@@ -568,9 +568,9 @@ exports.getCart = (req, res) => {
       // If there are some products in the cart which were DELETED by ADMIN
       // they need to be deleted from the cart.
 
-      // cart.filter(ci => !ci.sku).map(deleted => deleted.destroy().then(del => console.log(' >> Deleted cartId', del.id, ' as the product was deleted')))
+      cart.filter(ci => !ci.sku).map(deleted => deleted.destroy().then(del => console.log(' >> Deleted cartId', del.id, ' as the product was deleted')))
 
-      // cart = cart.filter(ci => ci.sku)
+      cart = cart.filter(ci => ci.sku)
 
       return res.json(cart);
    }).catch(err => {
@@ -610,6 +610,7 @@ exports.getOrders = (req, res) => {
          userId: req.userId,
          ...where
       },
+      order: [['createdAt', 'DESC']],
       offset: offset,
       limit: limit,
       include: [
