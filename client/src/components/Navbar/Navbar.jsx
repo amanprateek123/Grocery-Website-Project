@@ -266,20 +266,39 @@ const Navbar = (props) => {
 
                     <Divider />
 
-                    <List>
+                    {
+                        props.userName ?
+                            null
+                            :
+                            <React.Fragment>
+                                <List>
 
-                        <ListItem button key={1}>
-                            <ListItemIcon>{<InboxIcon />}</ListItemIcon>
-                            <ListItemText primary={"Login"} onClick={props.openModal} />
-                        </ListItem>
-                    </List>
-                    <Divider />
+                                    <ListItem button key={1}>
+                                        <ListItemIcon>{<InboxIcon />}</ListItemIcon>
+                                        <ListItemText primary={"Login"} onClick={props.openModal} />
+                                    </ListItem>
+                                </List>
+                                <Divider />
+                            </React.Fragment>
+                    }
                     <List>
-                        <ListItem button key={1}>
-                            <ListItemIcon>{<MailIcon />}</ListItemIcon>
-                            <ListItemText primary={"Logout"} onClick={() => { props.history.push('/'); props.logout() }} />
+                        <ListItem>
+                            {props.userName ?
+                                <div className="more_cont" style={{ padding: '0' }}>
+                                    <div style={{ margin: '-16px' }}>
+                                        <ul>
+                                            <li><NavLink to="/orders"><LocalMallIcon style={{ width: '16px', height: '16px', color: 'var(--mainColor)' }} /><div style={{ marginLeft: '12px' }}>My Orders</div></NavLink></li>
+                                            <li><NavLink to="/"><LocalOfferIcon style={{ width: '16px', height: '16px', color: 'var(--mainColor)' }} /><div style={{ marginLeft: '12px' }}>Offers</div></NavLink></li>
+                                            <li><NavLink to="/"><FavoriteIcon style={{ width: '16px', height: '16px', color: 'var(--mainColor)' }} /><div style={{ marginLeft: '12px' }}>WishList</div></NavLink></li>
+                                            <li><NavLink to="/"><NotificationsIcon style={{ width: '16px', height: '16px', color: 'var(--mainColor)' }} /><div style={{ marginLeft: '12px' }}>Notification</div></NavLink></li>
+                                            <li onClick={props.logout}><NavLink to="/"><PowerSettingsNewIcon style={{ width: '16px', height: '16px', color: 'var(--mainColor)' }} /><div style={{ marginLeft: '12px' }}>Logout</div></NavLink></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                : null}
                         </ListItem>
                     </List>
+                    {props.menu}
                 </Drawer>
 
             </div>
@@ -292,7 +311,8 @@ const mapStateToProps = state => {
     return {
         idToken: state.idToken,
         userName: state.userName,
-        cart: state.cart
+        cart: state.cart,
+        menu: state.menu
     }
 }
 

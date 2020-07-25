@@ -1,5 +1,11 @@
 
 .products-page{
+    max-width: 1510px;
+    
+    @media (min-width:1200){
+        min-width: 1250px;
+    }
+    
     .chip{
         margin: 0.2em !important;
     }
@@ -37,11 +43,11 @@
 
     .MuiListSubheader-root{
         color: #29ce08;
-        font-size: larger;
+        font-size: normal;
         text-transform: capitalize;
         padding-left: 0;
         line-height: 1em;
-        margin-bottom: 1em;
+        margin-bottom: 1.2em;
         margin-top: 1em;
         z-index: 0;
     }
@@ -75,8 +81,8 @@
         color: #29ce08;
         transform: scale(0.9);
     }
-    .PrivateSwitchBase-root-322,.PrivateSwitchBase-root-355,.PrivateSwitchBase-root-344{
-        padding: 0px 5px 0 2px;
+    input{
+        padding: 0px 5px 0 2px !important;
     }
     .MuiTypography-body1 {
         font-size: 14px;

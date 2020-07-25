@@ -16,10 +16,11 @@ export default function About(props) {
                             json[i].value.map((li, k) => {
                                 return (<li key={li.key + k} className="list">
                                     <h6>{li.key}</h6>
-                                    <p>{li.value}</p>
+                                    <pre>{li.value}</pre>
                                 </li>)
                             }) :
-                            <p>{json[i].value}</p>}</div>
+                            <pre>{json[i].value}</pre>}
+                    </div>
                     <hr />
                 </div>
             )

@@ -244,7 +244,7 @@ const Products = (props) => {
                                                     </ul>
                                                 </List>
 
-                                                <Divider />
+                                                {/* <Divider /> */}
 
                                                 {
                                                     brands.length ?
@@ -257,7 +257,7 @@ const Products = (props) => {
                                                         </List>
                                                         : null
                                                 }
-                                                <Divider />
+                                                {/* <Divider /> */}
 
                                                 {
                                                     categories.length ?
@@ -291,7 +291,7 @@ const Products = (props) => {
                                                                 ))}
                                                             </div>
                                                         </List>
-                                                        <Divider />
+                                                        {/* <Divider /> */}
                                                     </React.Fragment>
                                                 ))}
 

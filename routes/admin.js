@@ -25,6 +25,20 @@ router.post('/add-product',
     },
     [checkSchema(productSchema)],
     adminCtrl.addProduct)
+
+router.post('/edit-product',
+    multerImage.fields([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(i => ({ name: `images${i}`, maxCount: 10 }))),
+    (req, res, next) => {
+        let prod = JSON.parse(req.body.product);
+        req.body = {
+            ...req.body,
+            ...prod
+        }
+        next();
+    },
+    [checkSchema(productSchema)],
+    adminCtrl.editProduct)
+
 router.delete('/delete-product', adminCtrl.deleteProduct)
 
 

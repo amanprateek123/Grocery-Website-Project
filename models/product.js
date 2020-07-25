@@ -23,7 +23,7 @@ module.exports = (sequelize, Sequelize = require('sequelize')) => {
         }
     },
         {
-            tableName: 'db_ld_product'
+            tableName: 'db_ld_product',
         }
     )
 

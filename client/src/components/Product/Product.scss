@@ -1,8 +1,8 @@
 .product{
     font-size: 12.5px;
     font-size: 10.5px;
-    margin: 0.5em;
-    width: 18em;
+    margin: 0.8em;
+    width: 21em;
     // height: fit-content;
     position: relative;
     border-radius: 1em !important;
@@ -47,6 +47,7 @@
     @media (max-width: 480px) {
         font-size: 10px;
         width: 16em;
+        margin: 0.5em;
     }
 
     h6{

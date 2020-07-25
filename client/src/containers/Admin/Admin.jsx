@@ -2,7 +2,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 import * as actions from '../../store/actions'
 import { useState } from 'react';
-import AddProductsFile from './AddProductsFile'
 import {
     Card, CardContent, Avatar,
     List, ListItem, ListSubheader, ListItemIcon, ListItemText, Divider,
@@ -19,10 +18,12 @@ import male_avatar from '../../assets/illustrations/male_avatar.svg'
 import female_avatar from '../../assets/illustrations/female_avatar.svg'
 
 import './Admin.scss'
-import AddCategoriesFile from './AddCategoriesFile';
-import AddProduct from './AddProduct';
-import AddProductJSON from './AddProductJSON';
-import DeleteProduct from './DeleteProduct';
+import AddCategoriesFile from './BulkUploads/AddCategoriesFile';
+import AddProductsFile from './BulkUploads/AddProductsFile'
+import AddProduct from './SingleUploads/AddProduct';
+import AddProductJSON from './SingleUploads/AddProductJSON';
+import DeleteProduct from './Edit/DeleteProduct';
+import EditProduct from './Edit/EditProduct';
 
 const Profile = (props) => {
 
@@ -140,6 +141,12 @@ const Profile = (props) => {
                                                 </ListItemIcon>
                                                 <ListItemText primary="Delete Product" />
                                             </ListItem>
+                                            <ListItem button selected={tab == 'editProduct'} onClick={() => setTab('editProduct')}>
+                                                <ListItemIcon>
+                                                    <CategoryIcon />
+                                                </ListItemIcon>
+                                                <ListItemText primary="Edit Product" />
+                                            </ListItem>
                                         </List>
                                         <Divider />
                                         <List component="nav" aria-label="secondary">
@@ -174,7 +181,9 @@ const Profile = (props) => {
                                                         null
                                                         : tab == 'deleteProduct' ?
                                                             <DeleteProduct />
-                                                            : null}
+                                                            : tab == 'editProduct' ?
+                                                                <EditProduct />
+                                                                : null}
                         </div>
                     </div>
                 </div>

@@ -6,6 +6,9 @@ export const SET_RESPONSE = 'SET_RESPONSE'
 export const OPEN_AUTH_MODAL = 'OPEN_AUTH_MODAL'
 export const CLOSE_AUTH_MODAL = 'CLOSE_AUTH_MODAL'
 
+// Mobile Menu
+export const SET_MENU = 'SET_MENU'
+
 // Shop
 export const SET_CART = 'SET_CART'
 export const ADD_CART = 'ADD_CART'

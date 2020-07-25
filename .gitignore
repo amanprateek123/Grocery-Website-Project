@@ -24,6 +24,9 @@ yarn-debug.log*
 yarn-error.log*
 access.log
 
+# Product Images
+public/images
+
 
 # /client
 
