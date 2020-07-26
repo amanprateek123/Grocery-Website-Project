@@ -11,6 +11,7 @@ import { Profile, Products, Admin, Details, Checkout, Test, Orders } from './con
 import { connect } from 'react-redux';
 import * as actions from './store/actions';
 import Footer from './components/Footer/Footer';
+import OrderConfirmation from './containers/Checkout/OrderConfirm/OrderConfirmation'
 
 
 const App = (props) => {
@@ -58,8 +59,6 @@ const App = (props) => {
           <Route path="/product/:id" component={Details} />
 
           <Route path="/checkout" component={Checkout} />
-
-
           <Route component={E404} />
         </Switch>
       </div>

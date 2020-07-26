@@ -3,6 +3,7 @@ import Check from '../../components/Checkout/Checkout'
 import Price from '../../components/Checkout/PriceDetail'
 import './Checkout.scss'
 import { useEffect } from 'react';
+import OrderConf from './OrderConfirm/OrderConfirmation'
 
 export default function Checkout() {
     const [placedOrder, setPlacedOrder] = useState(false);
@@ -23,8 +24,6 @@ export default function Checkout() {
                 </div>
             </div>
             :
-            <div>
-                <h1>Oder Placed Successfully</h1>
-            </div>
+             <OrderConf data={orderData}/>
     )
 }
