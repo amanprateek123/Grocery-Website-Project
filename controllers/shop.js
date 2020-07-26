@@ -733,6 +733,9 @@ exports.postOrder = (req, res) => {
                   include: [
                      {
                         model: db.product,
+                     },
+                     {
+                        model: db.image,
                      }
                   ]
                },

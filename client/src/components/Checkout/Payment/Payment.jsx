@@ -6,6 +6,7 @@ import { connect } from 'react-redux'
 import * as actions from '../../../store/actions'
 
 import { useMutation } from 'react-query'
+import { useEffect } from 'react';
 
 const Payment = (props) => {
 
@@ -35,11 +36,12 @@ const Payment = (props) => {
             })
         }).then(async res => {
             res = await res.json();
-            console.log(res);
+            props.setOrderData(res);
             if (res.status == 400) {
                 return 'Cart is Emply';
             }
             props.emptyCart();
+
             return 'Order Placed Successfully.';
         }).catch(err => {
             console.log(err);
@@ -48,6 +50,10 @@ const Payment = (props) => {
     }
 
     const [placeOrder, payMeta] = useMutation(placeOrderPOST)
+
+    useEffect(() => {
+        props.setPlacedOrder(payMeta.isSuccess)
+    }, [payMeta])
 
     const pay = (
         <div className="order_det">

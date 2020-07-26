@@ -229,7 +229,7 @@ function Checkout(props) {
                     </Paper>
                     : null
             ) : box === 2 ? <Order idx={idx} address={user.addresses} takeBox={takeBox} user={user} change={change} payment={setPayment} /> :
-                box === 3 ? <Payment idx={idx} address={user.addresses} addrIndex={radio} takeBox={takeBox} user={user} change={change} cart={props.cart} change1={change1} /> : null
+                box === 3 ? <Payment setPlacedOrder={props.setPlacedOrder} setOrderData={props.setOrderData} idx={idx} address={user.addresses} addrIndex={radio} takeBox={takeBox} user={user} change={change} cart={props.cart} change1={change1} /> : null
 
     )
 }
