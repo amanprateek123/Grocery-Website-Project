@@ -1,0 +1,46 @@
+.carousels{
+    height: 150px;
+    width: 150px;
+    img{
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        top: 0;
+        margin: 5px auto;
+        max-width: 100%;
+        max-height: 150px;
+    }
+}
+.text_car{
+    overflow: hidden;
+    display: block;
+    padding-top: 15px;
+    text-align: center;
+    h5{
+        font-size: 15px;
+        color: green;
+    }
+    p{
+        font-size: 15px;
+        text-align: center;
+    }
+}
+.carousels1{
+    height: 350px;
+    width: 150px;
+    img{
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        top: 0;
+        margin: 5px auto;
+        max-width: 100%;
+        max-height: 350px;
+    }
+}
+.multi_car{
+    width: 95%;
+    margin: 0 auto;
+}
