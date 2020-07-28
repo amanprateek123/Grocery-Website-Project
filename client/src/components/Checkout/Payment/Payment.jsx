@@ -144,13 +144,24 @@ const Payment = (props) => {
                        <DoneIcon className="done_del" />
                             </div>
                         </div>
-                        <div className="add_list">
-                            <input type="radio" checked className="del_rad" />
-                            <span className="del_name">
-                                {props.cart.length} Item
-                       </span>
-                        </div>
+                        <input type="radio" checked className="del_rad" />
+                        <span className="add_list_1">
+                               <div className="col-md-6">
+                                   <p style={{fontSize:"16px"}}>Laladukaan Basket <span style={{fontWeight:'bold'}}>({props.cart.length} items)</span></p>
+                               </div>                         
+                               <div className="order_list_sum">
+                                 <div className="row" style={{minHeight:'56px',width:'60%'}}>
+                                     {props.cart.map(itm=>{
+                                         return(
+                                             <div className="lister_img">
+                                                 <img src={itm.sku.images[0].src}/>
+                                              </div>   
+                                         )
+                                     })}
+                                     </div>
+                               </div>
                         <button className="del_chng1" onClick={props.change1}>Change</button>
+                        </span>
                     </div>
                 </div>
             </div>
@@ -162,7 +173,7 @@ const Payment = (props) => {
 
 const mapStateToProps = state => {
     return {
-        ...state
+       ...state
     }
 }
 const mapDispatchToProps = dispatch => {

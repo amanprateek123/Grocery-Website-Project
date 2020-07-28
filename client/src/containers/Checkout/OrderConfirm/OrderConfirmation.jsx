@@ -4,6 +4,7 @@ import img from '../../../assets/logos/LalaDukaan.png';
 import './OrderConf.scss'
 import { connect } from 'react-redux';
 import DoneIcon from '@material-ui/icons/Done';
+import {NavLink} from 'react-router-dom'
 
 function OrderConfirmation(props) {
     const [user, setUser] = useState({});
@@ -21,9 +22,10 @@ function OrderConfirmation(props) {
         })
     }, []
     )
+    const ship = JSON.parse(props.data.shippingAddress)
     return (
         <React.Fragment>
-            <Paper className="container mt-5">
+            <Paper className="container mt-5 mb-5">
                 <div className="order_conf">
                    <img src={img}/><span style={{float:'right',fontWeight:'bold',fontSize:'20px',margin:'40px'}}>{props.data.orderItems.length} items</span>
                 </div>
@@ -36,16 +38,17 @@ function OrderConfirmation(props) {
                 <div className="row" style={{borderBottom:'1px solid #f3f3f3'}}>
                     <div className="col-md-6 pt-3" style={{margin:'20px 40px'}}>
                          <h6 style={{fontSize:'20px'}}>Order: <span style={{color:'blue'}}>#{props.data.id+100000}</span></h6>
-                         <button className="order_btn">View or Manage Order</button>
+                         <p style={{fontWeight:'bold',fontSize:'20px'}}>Your order will have been delivered on the below address:</p>
+    <p style={{color:'blue',fontSize:'16px'}}>{ship.address}<br/>{ship.state}, {ship.country} - {ship.zip} <br/> {ship.email} </p>
                     </div>
-                    <div className="col-md-4">
-                          <div className="price_conf mt-5">
-                              <p>Sub Total - <span>₹ {props.data.price}</span></p>
-                              <p>+Tax - <span>₹ 0</span></p>
-                              <p>Total - <span>₹ {props.data.price}</span></p>
+                    <div className="col-md-4" style={{margin:'20px 40px'}}>
+                          <div className="price_conf pt-3">
+                             Payment Type: <span style={{color:'blue'}}>{props.data.paymentType}</span>
                           </div>
+                         <NavLink to="/orders"><button className="order_btn">View your Orders</button></NavLink>
                     </div>
                 </div>
+                <div style={{borderBottom:'1px solid #f3f3f3'}}>
                 <div style={{fontSize:'20px',margin:'20px 40px'}}>                    
                       {props.data.orderItems.map(itm =>{
                           return(
@@ -62,8 +65,15 @@ function OrderConfirmation(props) {
                             </div>
                        </div>
                           )
-                      })}
-                   
+                      })}                   
+                </div>
+                </div>
+                <div style={{fontSize:'20px',margin:'20px 40px'}}>
+                   <div className="ord_tot">
+                    <p style={{fontWeight:'bold'}}>Sub Total <span style={{color:'blue',fontWeight:'normal'}}>₹ {props.data.price}</span></p>
+                    <p style={{fontWeight:'bold'}}>+Tax<span style={{color:'blue',fontWeight:'normal'}}>₹ 0</span></p>
+                    <p style={{fontWeight:'bold'}}>Total <span style={{color:'blue',fontWeight:'normal'}}>₹ {props.data.price}</span></p>
+                   </div>
                 </div>
             </Paper>
         </React.Fragment>

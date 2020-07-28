@@ -13,6 +13,7 @@
     border-radius: 10px;
     font-weight: 500;
     margin-top: 20px;
+    float: right;
     background: var(--mainColor);
     box-shadow: 0 1px 2px 0 rgba(0,0,0,.2);
     border: none;
@@ -22,4 +23,15 @@
     float: right;
     font-size: 18px;
     color: grey;
+}
+.ord_tot{
+    width:  60%;
+    margin: 0 auto;
+    padding-bottom: 10px;
+    p{
+        font-size: 20px;
+        span{
+            float: right;
+        }
+    }
 }
