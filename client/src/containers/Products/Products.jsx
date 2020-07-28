@@ -349,7 +349,7 @@ const mapDispatchToProps = dispatch => {
     return {
         setResponse: (response) => dispatch({ type: actions.SET_RESPONSE, response: response }),
         logout: () => dispatch(actions.logout()),
-        addToCart: (SKUId) => dispatch(actions.addToCart(SKUId))
+        addToCart: (SKUId, qty = 1) => dispatch(actions.addToCart(SKUId, qty))
     }
 }
 

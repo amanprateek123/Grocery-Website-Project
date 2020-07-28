@@ -699,9 +699,6 @@ exports.postOrder = (req, res) => {
 
       order.deliverOn = date.toISOString();
 
-      console.log(order);
-
-
       return db.order.create({
          ...order,
 
@@ -714,9 +711,21 @@ exports.postOrder = (req, res) => {
       orderCart.forEach(ci => {
          for (let i = 0; i < ci.quantity; i++) {
             orderItems.push(
-               db.orderItem.create({
-                  orderId: _order.id,
-                  skuId: ci.skuId,
+               db.sku.findByPk(ci.skuId).then( async _sku=>{
+                  if(+_sku.stockQuantity>0){
+                     _sku.stockQuantity--;
+                     await _sku.save();
+                     console.log("Stock Decreased.");
+                     return db.orderItem.create({
+                        orderId: _order.id,
+                        skuId: ci.skuId,
+                     })
+                     
+                     
+                  }
+                  else{
+                     console.log(ci.skuId,' Is OUT OF STOCK.!');
+                  }
                })
             )
          }
