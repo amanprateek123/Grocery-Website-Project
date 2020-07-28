@@ -69,26 +69,32 @@ export const fetchCart = () => {
     }
 }
 
-export const addToCart = (skuId) => {
-    return dispatch => {
+export const addToCart = (skuId, qty = 1) => {
+    return async dispatch => {
         // update cart in database >> get success response >> dispatch ADD_CART
         let idToken = localStorage.getItem('idToken');
-
-        fetch('/cart', {
-            headers: {
-                'Authorization': 'Bearer ' + idToken,
-                'Content-Type': 'application/json'
-            },
-            method: 'POST',
-            body: JSON.stringify({ skuId: skuId, action: 'add' })
-        }).then(async product => {
-            product = await product.json();
-            if (product.status != 401) {
-                dispatch({ type: actions.ADD_CART, skuId, product })
+        if (qty < 1) {
+            qty = 0;
+        }
+        try {
+            for (let i = 0; i < qty; ++i) {
+                let response = await fetch('/cart', {
+                    headers: {
+                        'Authorization': 'Bearer ' + idToken,
+                        'Content-Type': 'application/json'
+                    },
+                    method: 'POST',
+                    body: JSON.stringify({ skuId: skuId, action: 'add' })
+                })
+                let product = await response.json();
+                if (product.status != 401) {
+                    dispatch({ type: actions.ADD_CART, skuId, product })
+                }
             }
-        }).catch(err => {
+        }
+        catch (err) {
             console.log(err);
-        })
+        }
     }
 }
 
