@@ -27,29 +27,29 @@ function OrderConfirmation(props) {
         <React.Fragment>
             <Paper className="container mt-5 mb-5">
                 <div className="order_conf">
-                   <img src={img}/><span style={{float:'right',fontWeight:'bold',fontSize:'20px',margin:'40px'}}>{props.data.orderItems.length} items</span>
+                   <img src={img}/><span style={{float:'right',fontWeight:'bold',fontSize:'17px',margin:'40px'}}>{props.data.orderItems.length} items</span>
                 </div>
                 <div className="mt-4" style={{borderBottom:'1px solid #f3f3f3'}}>
-                     <h3 className="pl-5" style={{fontSize:'20px'}}>Hey <span style={{fontWeight:'bold'}}>{user.firstName},</span></h3>
-                     <h2 style={{color:'var(--mainColor',fontSize:'26px',margin:'20px 40px'}}><DoneIcon fontSize='inherit' style={{fontSize:'30px'}}/><span className="ml-3">Your Order is confirmed</span></h2>
-                     <p style={{fontSize:'20px',margin:'20px 40px'}}>Thanks for shopping! Your Order<span style={{color:'blue'}}> {props.data.orderItems[0].sku.product.name}</span> and
-                     <span style={{color:'blue'}}> {props.data.orderItems.length-1} more items</span> hasn't shipped yet, but we'll send you an email while it does.</p>
+                     <h3 className="pl-5" style={{fontSize:'17px'}}>Hey <span style={{fontWeight:'bold'}}>{user.firstName},</span></h3>
+                     <h2 style={{color:'var(--mainColor)',fontSize:'22px',margin:'20px 40px'}}><DoneIcon fontSize='inherit' style={{fontSize:'30px'}}/><span className="ml-3">Your Order is confirmed</span></h2>
+                     <p style={{fontSize:'17px',margin:'20px 40px'}}>Thanks for shopping! Your Order<span style={{color:'var(--mainColor'}}> {props.data.orderItems[0].sku.product.name}</span> and
+                     <span style={{color:'var(--mainColor'}}> {props.data.orderItems.length-1} more items</span> hasn't shipped yet, but we'll send you an email while it does.</p>
                 </div>
                 <div className="row" style={{borderBottom:'1px solid #f3f3f3'}}>
                     <div className="col-md-6 pt-3" style={{margin:'20px 40px'}}>
-                         <h6 style={{fontSize:'20px'}}>Order: <span style={{color:'blue'}}>#{props.data.id+100000}</span></h6>
-                         <p style={{fontWeight:'bold',fontSize:'20px'}}>Your order will have been delivered on the below address:</p>
-    <p style={{color:'blue',fontSize:'16px'}}>{ship.address}<br/>{ship.state}, {ship.country} - {ship.zip} <br/> {ship.email} </p>
+                         <h6 style={{fontSize:'17px',marginBottom:'25px'}}>Order: <span style={{color:'var(--mainColor)'}}>#{props.data.id+100000}</span></h6>
+                         <p style={{fontWeight:'bold',fontSize:'17px'}}>Your order will have been delivered on the below address:</p>
+                         <p style={{fontSize:'16px'}}>{ship.address}<br/>{ship.state}, {ship.country} - {ship.zip} <br/> {ship.email} </p>
                     </div>
                     <div className="col-md-4" style={{margin:'20px 40px'}}>
                           <div className="price_conf pt-3">
-                             Payment Type: <span style={{color:'blue'}}>{props.data.paymentType}</span>
+                             Payment Type: <span style={{color:'var(--mainColor)'}}>{props.data.paymentType}</span>
                           </div>
                          <NavLink to="/orders"><button className="order_btn">View your Orders</button></NavLink>
                     </div>
                 </div>
                 <div style={{borderBottom:'1px solid #f3f3f3'}}>
-                <div style={{fontSize:'20px',margin:'20px 40px'}}>                    
+                <div style={{fontSize:'17px',margin:'20px 40px'}}>                    
                       {props.data.orderItems.map(itm =>{
                           return(
                             <div className = "row" style={{margin:'20px  0'}}>
@@ -57,8 +57,8 @@ function OrderConfirmation(props) {
                                 <img src={itm.sku.images[0].src} style={{width:'70%',margin:'auto',padding:'10px'}} />
                             </div>
                             <div className="col-md-8" style={{padding:'10px 0'}}>
-                               <h4 style={{color:'blue',fontSize:'20px'}}>{itm.sku.product.name}</h4>
-                               <p style={{color:'grey',fontSize:'15px'}}>Seller:<span style={{color:'blue'}}> Laladukaan</span></p>
+                               <h4 style={{color:'black',fontSize:'17px'}}>{itm.sku.product.name}</h4>
+                               <p style={{color:'grey',fontSize:'15px'}}>Seller:<span style={{color:'var(--mainColor'}}> Laladukaan</span></p>
                             </div>
                             <div className="col-md-2" style={{float:'right',color:'grey',textAlign:'center',padding:'10px 0'}}>
                                  ₹{itm.sku.price}
@@ -68,11 +68,11 @@ function OrderConfirmation(props) {
                       })}                   
                 </div>
                 </div>
-                <div style={{fontSize:'20px',margin:'20px 40px'}}>
+                <div style={{fontSize:'17px',margin:'20px 40px'}}>
                    <div className="ord_tot">
-                    <p style={{fontWeight:'bold'}}>Sub Total <span style={{color:'blue',fontWeight:'normal'}}>₹ {props.data.price}</span></p>
-                    <p style={{fontWeight:'bold'}}>+Tax<span style={{color:'blue',fontWeight:'normal'}}>₹ 0</span></p>
-                    <p style={{fontWeight:'bold'}}>Total <span style={{color:'blue',fontWeight:'normal'}}>₹ {props.data.price}</span></p>
+                    <p style={{fontWeight:'bold'}}>Sub Total <span style={{color:'grey',fontWeight:'normal'}}>₹ {props.data.price}</span></p>
+                    <p style={{fontWeight:'bold'}}>+Tax<span style={{color:'grey',fontWeight:'normal'}}>₹ 0</span></p>
+                    <p style={{fontWeight:'bold'}}>Total <span style={{color:'grey',fontWeight:'normal'}}>₹ {props.data.price}</span></p>
                    </div>
                 </div>
             </Paper>
