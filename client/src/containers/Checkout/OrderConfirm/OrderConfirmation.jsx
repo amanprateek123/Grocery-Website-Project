@@ -46,7 +46,7 @@ function OrderConfirmation(props) {
         <React.Fragment>
             <Paper className="container mt-5 mb-5">
                 <div className="order_conf">
-                   <img src={img}/><span style={{float:'right',fontWeight:'bold',fontSize:'17px',margin:'40px'}}>{props.data.orderItems.length} items</span>
+                   <img src={img}/>
                 </div>
                 <div className="mt-4" style={{borderBottom:'1px solid #f3f3f3'}}>
                      <h3 className="pl-5" style={{fontSize:'17px'}}>Hey <span style={{fontWeight:'bold'}}>{user.firstName},</span></h3>

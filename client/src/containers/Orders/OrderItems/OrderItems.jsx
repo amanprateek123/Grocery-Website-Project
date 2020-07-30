@@ -45,43 +45,43 @@ function OrderItems(props) {
   }, [])
 
 
-  // const progress = [
-  //   {
-  //     value: 0,
-  //     label: 'ordered',
-  //   },
-  //   {
-  //     value: 33.33,
-  //     label: 'packed',
-  //   },
-  //   {
-  //     value: 66.66,
-  //     label: 'shipped',
-  //   },
-  //   {
-  //     value: 99.99,
-  //     label: 'delivered',
-  //   },
-  // ];
+  const progress = [
+    {
+      value: 0,
+      label: 'ordered',
+    },
+    {
+      value: 33.33,
+      label: 'packed',
+    },
+    {
+      value: 66.66,
+      label: 'shipped',
+    },
+    {
+      value: 99.99,
+      label: 'delivered',
+    },
+  ];
 
   function valuetext(value) {
     return `${value}`;
   }
-  // const status_1 = (ord) => {
-  //   let status = progress.find((p) => {
-  //     return p.label === ord
-  //   })
-  //   return status
-  // }
-  // const single = (ord) => {
-  //   let pro = []
-  //   let val = status_1(ord[0].status.status).value
-  //   while (val >= 0) {
-  //     pro.push(val)
-  //     val = val - 33.33
-  //   }
-  //   return pro
-  // }
+  const status_1 = (ord) => {
+    let status = progress.find((p) => {
+      return p.label === ord
+    })
+    return status
+  }
+  const single = (ord) => {
+    let pro = []
+    let val = status_1(ord.status.status).value
+    while (val >= 0) {
+      pro.push(val)
+      val = val - 33.33
+    }
+    return pro
+  }
   const cancel_list = [
     {reason:'Order Created by mistake'},
     {reason:'Item(s) would not arrive on time'},
@@ -147,10 +147,24 @@ const cancelling = (
   return (
     order ? <React.Fragment>
       <Paper className="container" style={{marginTop:'2%', paddingBottom:'20px'}}>
-         <div>
-          <h1 style={{padding:'25px 0 5px 0',fontSize:'25px',fontWeight:'bold'}}>Order Summary</h1>
-          <p style={{fontSize:'17px'}}>Ordered on {new Date(order.createdAt).getDate()} {month[new Date(order.createdAt).getMonth()]} {new Date(order.createdAt).getFullYear()} </p>
-          <p style={{fontSize:'17px'}}>Order: <span style={{color:'var(--mainColor)'}}> #{10000+order.id} </span></p>
+         <div className="row">
+           <div className="col-md-5">
+           <h1 style={{padding:'25px 0 5px 0',fontSize:'25px',fontWeight:'bold'}}>Order Summary</h1>
+           <p style={{fontSize:'17px'}}>Ordered on {new Date(order.createdAt).getDate()} {month[new Date(order.createdAt).getMonth()]} {new Date(order.createdAt).getFullYear()} </p>
+           <p style={{fontSize:'17px'}}>Order: <span style={{color:'var(--mainColor)'}}> #{10000+order.id} </span></p>
+           </div>
+           <div className="col-md-6" style={{display:'flex',alignItems:'center'}}>
+           <Slider
+                defaultValue={single(order)}
+                getAriaValueText={valuetext}
+                aria-labelledby="discrete-slider-custom"
+                step={33.33}
+                valueLabelDisplay="auto"
+                marks={progress}
+                disabled
+                style={{ color: 'green'}}
+              />
+           </div>
          </div>
          <div className="orderItems">
              <div className="row" style={{padding:'10px 15px'}}>
@@ -186,8 +200,7 @@ const cancelling = (
          <div className="orderItems">
              <div className="row" style={{padding:'10px 15px'}}>
                  <div className="col-md-8">
-                    <h5 style={{fontSize:'18px',fontWeight:'bold'}}>Current Status : <span style={{color:'var(--mainColor)',textTransform:'capitalise'}}> {order.status.status} </span> </h5>
-                    <div>
+                     <div>
                       {order.orderItems.map(item =>{
                          return(
                            <div className="row p-2">
