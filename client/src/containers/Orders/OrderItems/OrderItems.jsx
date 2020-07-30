@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect,useHistory } from 'react'
 import { connect } from 'react-redux'
 import {
   Grid, Card, CardContent, Slider, Paper, Typography, FormControl, CardMedia, Avatar,
@@ -11,6 +11,9 @@ import CloseIcon from '@material-ui/icons/Close';
 import ReplayIcon from '@material-ui/icons/Replay';
 import HelpIcon from '@material-ui/icons/Help';
 import StarIcon from '@material-ui/icons/Star';
+
+import Modal from '../../../components/Modal/Modal'
+import { useMutation } from 'react-query'
 
 function OrderItems(props) {
   var month = new Array();
@@ -28,7 +31,7 @@ function OrderItems(props) {
   month[11] = "December";
   const [order, setOrder] = useState(null);
   useEffect(() => {
-    fetch(`/get-orders?page=1&date=1&id=${props.id}`, {
+    fetch(`/get-orders?page=1&date=1&id=${props.match.params.id}`, {
       headers: {
         'Authorization': 'Bearer ' + props.idToken,
         'Content-Type': 'application/json'
@@ -36,56 +39,206 @@ function OrderItems(props) {
       method: 'GET',
     }).then(res => res.json())
       .then((data) => {
-        setOrder(data)
+        setOrder(data[0])
         console.log(data)
       })
   }, [])
 
-  console.log(order)
-  const progress = [
-    {
-      value: 0,
-      label: 'ordered',
-    },
-    {
-      value: 33.33,
-      label: 'packed',
-    },
-    {
-      value: 66.66,
-      label: 'shipped',
-    },
-    {
-      value: 99.99,
-      label: 'delivered',
-    },
-  ];
+
+  // const progress = [
+  //   {
+  //     value: 0,
+  //     label: 'ordered',
+  //   },
+  //   {
+  //     value: 33.33,
+  //     label: 'packed',
+  //   },
+  //   {
+  //     value: 66.66,
+  //     label: 'shipped',
+  //   },
+  //   {
+  //     value: 99.99,
+  //     label: 'delivered',
+  //   },
+  // ];
 
   function valuetext(value) {
     return `${value}`;
   }
-  const status_1 = (ord) => {
-    let status = progress.find((p) => {
-      return p.label === ord
-    })
-    return status
-  }
-  const single = (ord) => {
-    let pro = []
-    let val = status_1(ord[0].status.status).value
-    while (val >= 0) {
-      pro.push(val)
-      val = val - 33.33
+  // const status_1 = (ord) => {
+  //   let status = progress.find((p) => {
+  //     return p.label === ord
+  //   })
+  //   return status
+  // }
+  // const single = (ord) => {
+  //   let pro = []
+  //   let val = status_1(ord[0].status.status).value
+  //   while (val >= 0) {
+  //     pro.push(val)
+  //     val = val - 33.33
+  //   }
+  //   return pro
+  // }
+  const cancel_list = [
+    {reason:'Order Created by mistake'},
+    {reason:'Item(s) would not arrive on time'},
+    {reason:'Shipping cost is too high'},
+    {reason:'Item price is too high'},
+    {reason:'Found Cheaper somewhere else'},
+    {reason:'Need to change Shipping address'},
+    {reason:'Need to change shipping speed'},
+    {reason:'Need to change billing address'},
+    {reason:'Need to change payment method'},
+    {reason:'Others'}
+]
+  const [cancel,setCancel] = useState(false)
+    const openModal= ()=>{
+        setCancel(true)
     }
-    return pro
-  }
-  console.log(order)
+    const closeModal = ()=>{
+        setCancel(false)
+    } 
 
-  let address;
+  const deleteOrder = ()=>{
+    return fetch('/delete-order',{
+        headers: {
+            'Authorization': 'Bearer ' + props.idToken,
+            'Content-Type': 'application/json'
+        },
+        method:'POST',
+        body:JSON.stringify({id:props.match.params.id})
+    }
+        ).then(async res=>{
+          res = await res.json()
+          if(res.status === 400){
+              return res.message
+          }
+          return res.message
+        }).catch(err => {
+            console.log(err);
+        })
+}
+
+const[cancels,meta] = useMutation(deleteOrder)
+
+const cancelling = (
+    <React.Fragment>
+        <Paper className="container" style={{minHeight:'400px'}}>
+             <CloseIcon style={{float:'right',cursor:'pointer',marginTop:'10px'}} onClick={closeModal} />
+             <h4 style={{padding:'10px 20px'}}>Reason for cancellation (optional):</h4>
+             <select style={{width:'60%',margin:'30px 17%',padding:'10px'}}>
+                 <option>Select Cancellation Reason</option>
+                 {cancel_list.map(itm=>{
+                     return(
+                     <option>{itm.reason}</option>
+                     )
+                 })}
+             </select>
+             <div>
+             <button className="cancel_btn" onClick={cancels} >Cancel Order</button>
+             </div>
+        </Paper>
+    </React.Fragment>
+)
 
   return (
     order ? <React.Fragment>
-      <Paper className="orderItem">
+      <Paper className="container" style={{marginTop:'2%', paddingBottom:'20px'}}>
+         <div>
+          <h1 style={{padding:'25px 0 5px 0',fontSize:'25px',fontWeight:'bold'}}>Order Summary</h1>
+          <p style={{fontSize:'17px'}}>Ordered on {new Date(order.createdAt).getDate()} {month[new Date(order.createdAt).getMonth()]} {new Date(order.createdAt).getFullYear()} </p>
+          <p style={{fontSize:'17px'}}>Order: <span style={{color:'var(--mainColor)'}}> #{10000+order.id} </span></p>
+         </div>
+         <div className="orderItems">
+             <div className="row" style={{padding:'10px 15px'}}>
+                 <div className="col-md-4">
+                    <h5 style={{fontSize:'18px',fontWeight:'bold'}}>Shipping Address</h5>
+                    <div>
+                      {JSON.parse(order.shippingAddress).address}<br/>
+                      State: <span style={{fontWeight:'bold'}}> {JSON.parse(order.shippingAddress).state} </span><br/>
+                      Country: <span style ={{fontWeight:'bold'}} > {JSON.parse(order.shippingAddress).country} </span><br/>
+                      Pin Code: <span style ={{fontWeight:'bold'}} > {JSON.parse(order.shippingAddress).zip} </span>
+                    </div>
+                 </div>
+                 <div className="col-md-4">
+                   <h5 style={{fontSize:'18px',fontWeight:'bold'}}>Payment Method</h5>
+                   <p> {order.paymentType} </p>
+                   <div className="mt-4" style={{fontSize:'18px'}}>
+                     Download <span style={{color:'var(--mainColor)'}}>Invoice</span>
+                   </div>
+                 </div>
+                 <div className="col-md-4">
+                   <h5 style={{fontSize:'18px',fontWeight:'bold'}}>Order Summary</h5>
+                   <div>
+                      Item(s) Subtotal: <span style={{float:'right'}}> ₹{order.price} </span><br/>
+                      Shipping: <span style={{float:'right'}}> ₹0 </span><br/>
+                      Total: <span style={{float:'right'}}> ₹{order.price} </span><br/>
+                      <div className="mt-3" style={{fontWeight:'bold'}}>
+                        <span >Grand Total:</span> <span style={{float:'right'}}> ₹{order.price} </span>
+                      </div>
+                   </div>
+                 </div>
+             </div>
+         </div>
+         <div className="orderItems">
+             <div className="row" style={{padding:'10px 15px'}}>
+                 <div className="col-md-8">
+                    <h5 style={{fontSize:'18px',fontWeight:'bold'}}>Current Status : <span style={{color:'var(--mainColor)',textTransform:'capitalise'}}> {order.status.status} </span> </h5>
+                    <div>
+                      {order.orderItems.map(item =>{
+                         return(
+                           <div className="row p-2">
+                               <div className="col-md-3">
+                                   <img src={item.sku.images[0].src} style={{width:'70%',height:'120px'}} />
+                               </div>
+                               <div className="col-md-8 pt-2">
+                                   <h6 style={{fontSize:'16px',fontWeight:'bold'}}> {item.sku.product.name} </h6>
+                                   <p>Sold by: <span style={{color:'var(--mainColor)'}}>LalaDukaan</span></p>
+                                   <p>₹ <span style={{color:'var(--mainColor)'}}> {item.sku.price} </span></p>
+                               </div>
+                            </div> 
+                         )
+                      })}
+                    </div>
+                 </div>
+                 <div className="col-md-4">
+                    <div className="mt-5">
+                        <Button variant="contained" color="inherit" style={{backgroundColor:'var(--mainColor)',color:'white',padding:'10px 15px',width:'300px',fontSize:'15px'}}>Track Package</Button>
+                        <div style={{marginTop:'5%'}}>
+                        <Button variant="contained" color="inherit" style={{backgroundColor:'#f3f3f3',color:'black',padding:'10px 15px',width:'300px',fontSize:'15px'}} onClick={openModal}>Cancel Order</Button>
+                        <Modal visible={cancel}>
+                             {cancelling}
+                         </Modal>
+                        </div>
+                    </div>
+                 </div>
+             </div>
+         </div>
+      </Paper>
+    
+    </React.Fragment> : null
+  )
+}
+
+const mapStateToProps = state => {
+  return {
+    ...state
+  }
+}
+const mapDispatchToProps = dispatch => {
+  return {
+
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(OrderItems);
+
+
+
+{/* <Paper className="orderItem">
         <div className="row" style={{height:'100%'}}>
           <div className="col-md-3" style={{borderRight:'1px solid grey',height:'100%'}}>
             <Typography variant="h6" component="h6">
@@ -160,21 +313,4 @@ function OrderItems(props) {
           <span style={{ color: 'var(--mainColor' }}>  <ReplayIcon /> RETURN  <HelpIcon /> NEED HELP? <StarIcon />  RATE & REVIEW PRODUCTS</span>
         </p>
       </div>
-      </Paper>
-    
-    </React.Fragment> : null
-  )
-}
-
-const mapStateToProps = state => {
-  return {
-    ...state
-  }
-}
-const mapDispatchToProps = dispatch => {
-  return {
-
-  }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(OrderItems);
+      </Paper> */}

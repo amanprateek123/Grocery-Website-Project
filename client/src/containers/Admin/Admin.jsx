@@ -24,13 +24,14 @@ import AddProduct from './SingleUploads/AddProduct';
 import AddProductJSON from './SingleUploads/AddProductJSON';
 import DeleteProduct from './Edit/DeleteProduct';
 import EditProduct from './Edit/EditProduct';
+import Homepage from './HomePage/Homepage'
 
 const Profile = (props) => {
 
     const [user, setUser] = useState({});
     const [modal, setModal] = useState(false);
 
-    const [tab, setTab] = useState('categories');
+    const [tab, setTab] = useState('homepage');
 
 
 
@@ -79,6 +80,12 @@ const Profile = (props) => {
                                             </ListSubheader>
                                             }
                                         >
+                                            <ListItem button selected={tab == 'homepage'} onClick={() => setTab('homepage')}>
+                                                <ListItemIcon>
+                                                    <CategoryIcon />
+                                                </ListItemIcon>
+                                                <ListItemText primary="Homepage" />
+                                            </ListItem>
                                             <ListItem button selected={tab == 'category'} onClick={() => setTab('category')}>
                                                 <ListItemIcon>
                                                     <CategoryIcon />
@@ -183,7 +190,8 @@ const Profile = (props) => {
                                                             <DeleteProduct />
                                                             : tab == 'editProduct' ?
                                                                 <EditProduct />
-                                                                : null}
+                                                                :tab == 'homepage' ?
+                                                                   <Homepage/>:null}
                         </div>
                     </div>
                 </div>

@@ -12,6 +12,7 @@ import { connect } from 'react-redux';
 import * as actions from './store/actions';
 import Footer from './components/Footer/Footer';
 import OrderConfirmation from './containers/Checkout/OrderConfirm/OrderConfirmation'
+import OrderItems from './containers/Orders/OrderItems/OrderItems';
 
 
 const App = (props) => {
@@ -57,7 +58,7 @@ const App = (props) => {
             <Orders />
           </Route>
           <Route path="/product/:id" component={Details} />
-
+          <Route path="/order/:id" component={OrderItems} />
           <Route path="/checkout" component={Checkout} />
           <Route component={E404} />
         </Switch>

@@ -521,3 +521,7 @@ exports.addDepartments = (req, res) => {
         res.json({ status: 400, message: `Please Submit a CSV file with fields [name].` })
     }
 }
+
+exports.homePage = (req,res) => {
+    
+}

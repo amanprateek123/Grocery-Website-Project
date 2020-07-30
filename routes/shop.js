@@ -12,6 +12,7 @@ router.get('/cart', isAuth, shopCtrl.getCart)
 router.get('/get-orders', isAuth, shopCtrl.getOrders)
 router.get('/get-status', shopCtrl.getStatus)
 router.post('/post-order', isAuth, shopCtrl.postOrder)
+router.post('/delete-order',isAuth,shopCtrl.delOrder)
 
 
 module.exports = router
