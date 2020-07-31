@@ -19,7 +19,7 @@ import Snackbar from '@material-ui/core/Snackbar';
             {
                 key:'',
                 value:'',
-                fieldType:'Adding Product'
+                fieldType:''
             }
         ]
     }
@@ -64,24 +64,27 @@ import Snackbar from '@material-ui/core/Snackbar';
                                 <div>
                             {values.sections.map((sec, index)=>(
                                 <div key={index}>
-                                  <div className="mt-3">
+                                   <div className="mt-3">
+                  <label htmlFor={`sections.${index}.fieldType`}>Enter the Field Type:</label>
+                  <Field name={`sections.${index}.fieldType`} as="select" style={{float:'right',padding:'3px',width:'300px'}}>
+                   <option value="">Select Option</option>   
+                   <option value="Adding Product">Adding Product</option>
+                   <option value="Adding Banners">Adding Banners</option>
+                 </Field>
+                  <ErrorMessage name="fieldType" />
+                  </div>
+                  <div className="mt-3">
                   <label htmlFor={`sections.${index}.key`}>Enter the heading for the section:</label>
                   <Field name={`sections.${index}.key`} type="text" style={{float:'right',padding:'3px',width:'300px'}} required />
                   <ErrorMessage name={`sections.${index}.key`} />
                   </div>
-                  <div className="mt-3">
-                  <label htmlFor={`sections.${index}.value`}>Enter the JSON Array(SKU's ID) for adding products:</label>
-                  <Field name={`sections.${index}.value`} type="text" style={{float:'right',padding:'3px',width:'300px'}} required/>
-                  <ErrorMessage name={`sections.${index}.value`} />
-                  </div>
-                  <div className="mt-3">
-                  <label htmlFor={`sections.${index}.fieldType`}>Enter the Field Type:</label>
-                  <Field name={`sections.${index}.fieldType`} as="select" style={{float:'right',padding:'3px',width:'300px'}}>
-                   <option value="product">Adding Product</option>
-                   <option value="banners">Adding Banners</option>
-                 </Field>
-                  <ErrorMessage name="fieldType" />
-                  </div>
+                   {sec.fieldType===''?null:
+                                     <div className="mt-3">
+                                     <label htmlFor={`sections.${index}.value`}>Enter the {(sec.fieldType==="Adding Product")?"JSON Array(SKU's ID) for adding products":(sec.fieldType)==="Adding Banners"?"array of image links":null}:</label>
+                                     <Field name={`sections.${index}.value`} type="text" style={{float:'right',padding:'3px',width:'300px'}} required/>
+                                     <ErrorMessage name={`sections.${index}.value`} />
+                                     </div>}
+
                    <Button color="secondary" onClick={() => remove(index)}>Remove</Button>
                                  </div>
                             ))}
@@ -90,8 +93,8 @@ import Snackbar from '@material-ui/core/Snackbar';
                    {meta.isSuccess?<div style={{color:'green',textAlign:'center',fontSize:'15px'}}>Uploaded Successfully</div>:null} */}
                    {meta.isError?<div style={{color:'red',textAlign:'center',fontSize:'15px'}}>Uploading Failed</div>:null}   
                         <div className="mt-3">                            
-                 <Button style={{padding:'10px 8px',borderRadius:'200px',width:'200px',marginBottom:'5px',fontSize:'17px'}} variant="contained" color="secondary" onClick={() => push({ key: "", value: "",fieldType:"" })}>Add Section</Button>
-                  <Button type="submit" variant="contained" color="primary" style={{padding:'10px 8px',borderRadius:'200px',width:'200px',margin:'5% 35%',fontSize:'17px'}}>Submit</Button>
+                 <Button style={{padding:'5px 4px',borderRadius:'200px',width:'180px',marginBottom:'5px',fontSize:'15px'}} variant="contained" color="secondary" onClick={() => push({ key: "", value: "",fieldType:"" })}>Add Section</Button>
+                  <Button type="submit" variant="contained" color="primary" style={{padding:'5px 4px',borderRadius:'200px',width:'180px',margin:'5% 37%',fontSize:'15px'}}>Submit</Button>
                         </div>
                            </React.Fragment>
                         )}

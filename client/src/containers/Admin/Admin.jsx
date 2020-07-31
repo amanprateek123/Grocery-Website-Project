@@ -84,25 +84,25 @@ const Profile = (props) => {
                                                 <ListItemIcon>
                                                     <CategoryIcon />
                                                 </ListItemIcon>
-                                                <ListItemText primary="Homepage" />
+                                                <ListItemText primary="Homepage" id="tab"/>
                                             </ListItem>
                                             <ListItem button selected={tab == 'category'} onClick={() => setTab('category')}>
                                                 <ListItemIcon>
                                                     <CategoryIcon />
                                                 </ListItemIcon>
-                                                <ListItemText primary="Departments & Category" />
+                                                <ListItemText id="tab" primary="Departments & Category" />
                                             </ListItem>
                                             <ListItem button selected={tab == 'product'} onClick={() => setTab('product')}>
                                                 <ListItemIcon>
                                                     <CategoryIcon />
                                                 </ListItemIcon>
-                                                <ListItemText primary="Add Product" />
+                                                <ListItemText id="tab" primary="Add Product" />
                                             </ListItem>
                                             <ListItem button selected={tab == 'productJSON'} onClick={() => setTab('productJSON')}>
                                                 <ListItemIcon>
                                                     <CategoryIcon />
                                                 </ListItemIcon>
-                                                <ListItemText primary="Add Product (as JSON)" />
+                                                <ListItemText id="tab" primary="Add Product (as JSON)" />
                                             </ListItem>
                                         </List>
 
@@ -118,20 +118,20 @@ const Profile = (props) => {
                                                 <ListItemIcon>
                                                     <FileIcon />
                                                 </ListItemIcon>
-                                                <ListItemText primary="Departments & Categories" />
+                                                <ListItemText id="tab" primary="Departments & Categories" />
                                             </ListItem>
 
                                             <ListItem button selected={tab == 'products'} onClick={() => setTab('products')}>
                                                 <ListItemIcon>
                                                     <FileIcon />
                                                 </ListItemIcon>
-                                                <ListItemText primary="Add Products" />
+                                                <ListItemText id="tab" primary="Add Products" />
                                             </ListItem>
                                             <ListItem button selected={tab == 'skus'} onClick={() => setTab('skus')}>
                                                 <ListItemIcon>
                                                     <FileIcon />
                                                 </ListItemIcon>
-                                                <ListItemText primary="Add SKU" />
+                                                <ListItemText id="tab" primary="Add SKU" />
                                             </ListItem>
                                         </List>
 
@@ -146,13 +146,13 @@ const Profile = (props) => {
                                                 <ListItemIcon>
                                                     <CategoryIcon />
                                                 </ListItemIcon>
-                                                <ListItemText primary="Delete Product" />
+                                                <ListItemText id="tab" primary="Delete Product" />
                                             </ListItem>
                                             <ListItem button selected={tab == 'editProduct'} onClick={() => setTab('editProduct')}>
                                                 <ListItemIcon>
                                                     <CategoryIcon />
                                                 </ListItemIcon>
-                                                <ListItemText primary="Edit Product" />
+                                                <ListItemText id="tab" primary="Edit Product" />
                                             </ListItem>
                                         </List>
                                         <Divider />
@@ -161,7 +161,7 @@ const Profile = (props) => {
                                                 <ListItemIcon>
                                                     <PowerSettingsNewIcon />
                                                 </ListItemIcon>
-                                                <ListItemText primary="Logout" />
+                                                <ListItemText id="tab" primary="Logout" />
                                             </ListItem>
                                         </List>
                                     </CardContent>
