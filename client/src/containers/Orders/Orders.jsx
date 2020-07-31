@@ -2,6 +2,7 @@ import React from 'react'
 import { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { useState, useRef } from 'react';
+import {Link} from 'react-router-dom'
 
 import {
     Grid, Card, CardContent, Paper, Typography, FormControl,
@@ -188,12 +189,10 @@ function Orders(props) {
             window.removeEventListener('scroll', handleScroll);
         }
     }, [user])
+   
 
     return (
         <React.Fragment>
-            <Modal visible={show}>
-                <OrderItems id={od} closeModal={closeModal} />
-            </Modal>
             <div className="container">
                 <Paper>
                     <Card>
@@ -226,6 +225,7 @@ function Orders(props) {
                         res.map((order, i) => {
                             let name = ''
                             return (
+                                <Link to= {`/order/${order.id}`} style={{textDecoration:'none'}}>
                                 <Card key={order.id + i} style={{ marginBottom: '16px', cursor: 'pointer' }} onClick={() => openModal(order.id)}>
                                     <div className="row">
                                         <div className="col-5">
@@ -270,7 +270,7 @@ function Orders(props) {
                                         </div>
 
                                     </div>
-                                </Card>
+                                </Card></Link>
                             )
                         })
                     ) : null}

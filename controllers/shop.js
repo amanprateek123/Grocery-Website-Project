@@ -784,3 +784,21 @@ exports.postOrder = (req, res) => {
    // if payment is Successful
 
 }
+
+//deleting Order
+exports.delOrder = async (req,res)=>{
+     try{
+      const order = await db.order.findByPk(req.body.id)
+      if(order.userId === req.userId){
+         await order.destroy()
+         res.json({status:"200",message:"Order cancel successfully"})
+      }
+      else{
+         res.json({status:"400",message:"Unauthorised"})
+      }
+     }
+     catch(e){
+        console.log(e)
+        res.json(e)
+     }
+}

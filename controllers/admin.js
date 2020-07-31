@@ -569,3 +569,28 @@ exports.addDepartments = (req, res) => {
         res.json({ status: 400, message: `Please Submit a CSV file with fields [name].` })
     }
 }
+
+exports.homePage = async (req,res) => {
+    console.log(req.body)
+    await db.homepage.destroy({where:{}})
+    let data = req.body
+    Promise.all(
+        data.map((item,i)=>{
+        return db.homepage.create({
+            key:item.key,
+            value:item.value,
+            fieldType:item.fieldType
+        }            
+        ).then(add =>{
+            console.log("Row Added")
+        })
+    })
+    ).then(result =>{
+        console.log(result)
+        res.json({message:"Successfully Added",status:201,data:result})
+    }).catch(e=>{
+        console.log(e)
+        res.json({message:"Uploading failed"})
+    })
+    
+}

@@ -36,6 +36,7 @@ const Payment = (props) => {
             })
         }).then(async res => {
             res = await res.json();
+            console.log(res)
             props.setOrderData(res);
             if (res.status == 400) {
                 return 'Cart is Emply';
@@ -50,7 +51,7 @@ const Payment = (props) => {
     }
 
     const [placeOrder, payMeta] = useMutation(placeOrderPOST)
-
+    
     useEffect(() => {
         props.setPlacedOrder(payMeta.isSuccess)
     }, [payMeta])

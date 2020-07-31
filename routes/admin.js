@@ -12,6 +12,7 @@ router.post('/add-categories', multer.single('categories'), adminCtrl.addCategor
 router.post('/add-parentCategories', multer.single('parentCategories'), adminCtrl.addParentCategories)
 router.post('/add-departments', multer.single('departments'), adminCtrl.addDepartments)
 router.post('/add-products', multer.single('products'), adminCtrl.addProducts)
+router.post('/homepage',adminCtrl.homePage)
 
 router.post('/add-product',
     multerImage.fields([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(i => ({ name: `images${i}`, maxCount: 10 }))),
