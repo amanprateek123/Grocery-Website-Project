@@ -25,7 +25,7 @@ const AddProductsFile = (props) => {
         e.preventDefault();
         var input = document.querySelector('#products-file');
         if (input.files[0].type != 'text/csv') {
-            props.setResponse({ status: 400, message: 'Please Upload a CSV file with fields [name,categoryId,brand]' })
+            props.setResponse({ status: 400, message: 'Please Upload a CSV file with fields [sn,op,categoryId,name,brand,description,keywords,code,model,price,stock,json,src,attr,attrv]' })
             return;
         }
 

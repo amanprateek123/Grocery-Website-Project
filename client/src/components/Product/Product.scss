@@ -56,7 +56,9 @@
     }
 
     h6{
-        font-size: 1.4em;
+        font-size: 1.2em;
+        max-height: 2.5em;
+        overflow: hidden;
     }
 
     .card-image{
@@ -69,6 +71,7 @@
 
     .company{
         font-size: 0.7em;
+        margin-top: 0.5em;
     }
     .desc{
         font-size: 0.8em;   
@@ -96,15 +99,51 @@
         height: auto;
         justify-content: space-between;
     }
+    .card-bottom{
+        padding: 0.5em 1.5em 1em;
+        display: flex;
+        flex-direction: column;
+
+    }
+    .sku-select{
+        display: flex;
+        height: 2.5em;
+        width: 100%;
+        border: 1px solid #ddd;
+        border-radius: 0.5em;
+        >*{
+            width: 100%;
+            height: 100%;
+        }
+        select,option{
+            border:0px;
+            outline:0px;
+            border-left: 1px solid #ddd;
+            height: 100%;
+            border-radius: 0.2em;
+            background: #fff;
+            font-size: 1.1em;
+        }
+        
+    }
     .price{
-        background-color: #1f9c06aa;
-        color: #fff;
-        width: fit-content;
+        // background-color: #1f9c06aa;
+        // color: #fff;
+        border-color: #fff;
+        // border: 1px solid #333;
+        // width: fit-content;
+        white-space: nowrap;
+        // min-width: 30%;
+        width: 100%;
+        min-width: fit-content;
+        // font-weight: bold;
+        text-align: center;
         padding: 0.1em 0.8em 0 0.8em;
         border-radius: 0.2em;
     }
 
     .attrs{
+        padding-left: 1em;
         *{
             text-transform: capitalize;
         }
@@ -113,24 +152,49 @@
     .card-actions{
         display: flex;
         justify-content: space-between;
-        padding: 1em !important;
+        // padding: 0em 1.5em 1em 1.5em;
+        align-items: center;
+        margin: 0 !important;
         width: 100%;
         z-index: 100;
 
+        .MuiInput-underline:before,.MuiInput-underline:after{
+            display: none;
+        }
+
+
+        .MuiInputLabel-root{
+            position: absolute;
+            top: 0em;
+            left: 0em;
+            margin-bottom: 0;
+            font-size: 1.8em;
+        }
         .quantity-inp{
             width: 50%;
+            position: relative;
+            border-radius: 0.5em;
+            // border: 2px solid black;
             *{
                 text-align: right;
+            }
+            .MuiInputBase-root{
+                margin-top: 0;
             }
         }
 
         .add-to-cart{
             width: 100%;
             background: #107483;
-            border-radius: 0.8em;
+            border-radius: 0.5em;
+            height: 2.5em;
             color: #fff;
             font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
             white-space: nowrap;
+            font-size: 1.1em;
 
             &:hover{
                 background: #17a2b8;

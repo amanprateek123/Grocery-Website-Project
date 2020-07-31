@@ -393,6 +393,8 @@ exports.cart = (req, res) => {
    // Expects {skuId, action: (add,remove,delete)}
    // User has to be authenticated in middleware isAuth >> req.userId is available at this point.
 
+   let qty = req.body.qty || 1;
+
    switch (req.body.action) {
       case 'add':
          db.cart.findAll({
@@ -406,7 +408,7 @@ exports.cart = (req, res) => {
             if (cartItem) {
                // if the product is already in the user cart
                db.cart.update({
-                  quantity: cartItem.quantity + 1,
+                  quantity: cartItem.quantity + qty,
                }, {
                   where: {
                      id: cartItem.id
@@ -435,7 +437,7 @@ exports.cart = (req, res) => {
                db.cart.create({
                   userId: req.userId,
                   skuId: req.body.skuId,
-                  quantity: 1,
+                  quantity: qty,
                }).then(async result => {
                   let response = await db.cart.findByPk(result.id, {
                      include: {
@@ -703,32 +705,32 @@ exports.postOrder = (req, res) => {
          ...order,
 
       })
-   }).then(_order => {
+   }).then(async (_order) => {
 
       order = _order;
       let orderItems = [];
 
-      orderCart.forEach(ci => {
-         for (let i = 0; i < ci.quantity; i++) {
-            orderItems.push(
-               db.sku.findByPk(ci.skuId).then( async _sku=>{
-                  if(+_sku.stockQuantity>0){
-                     _sku.stockQuantity--;
+      orderCart.forEach((ci) => {
+         orderItems.push(new Promise(async (resolve, reject) => {
+            for (let i = 0; i < ci.quantity; i++) {
+               await db.sku.findByPk(ci.skuId).then(async _sku => {
+                  if (+_sku.stockQuantity > 0) {
+                     _sku.stockQuantity = _sku.stockQuantity - 1;
                      await _sku.save();
-                     console.log("Stock Decreased.");
-                     return db.orderItem.create({
+                     console.log(`Remaining Stock . ${_sku.stockQuantity}`);
+                     db.orderItem.create({
                         orderId: _order.id,
                         skuId: ci.skuId,
                      })
-                     
-                     
                   }
-                  else{
-                     console.log(ci.skuId,' Is OUT OF STOCK.!');
+                  else {
+                     console.log(ci.skuId, ' is OUT OF STOCK.!');
                   }
                })
-            )
-         }
+            }
+            resolve()
+         }))
+
       })
 
       return Promise.all(orderItems)

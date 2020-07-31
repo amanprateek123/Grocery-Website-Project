@@ -161,11 +161,12 @@ const addToCart = (state, action) => {
     let updatedCart = [...state.cart];
 
     console.log(action.skuId);
+    action.product.quantity = action.qty;
 
     if (updatedCart.find(p => p.skuId == action.skuId)) {
         updatedCart = updatedCart.map(product => {
             if (product.skuId == action.skuId) {
-                product.quantity += 1;
+                product.quantity += action.qty;
             }
             return product;
         })

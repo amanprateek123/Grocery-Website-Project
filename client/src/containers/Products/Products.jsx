@@ -12,9 +12,13 @@ import {
     Grid, Card, CardContent, Paper, Typography, CardMedia, Avatar,
     List, ListItem, ListSubheader, ListItemIcon, ListItemText, Divider,
     TextField, CardActionArea, CardActions, Button, Select, MenuItem, InputLabel, Badge, Chip, Checkbox, FormControlLabel
-    , Slider, LinearProgress, Snackbar, InputAdornment
+    , Slider, LinearProgress, Snackbar, InputAdornment,
 }
     from '@material-ui/core'
+import Accordion from '@material-ui/core/Accordion';
+import AccordionSummary from '@material-ui/core/AccordionSummary';
+import AccordionDetails from '@material-ui/core/AccordionDetails';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { Alert, Pagination, PaginationItem, TreeView, TreeItem } from '@material-ui/lab';
 
 import Product from '../../components/Product/Product'
@@ -170,12 +174,12 @@ const Products = (props) => {
             {/* <Divider /> */}
             {!loading ? products[0] ?
                 <div className="products">
-                    <Transition items={visibleProducts} keys={item => item.id} config={config.stiff} trail={100}
+                    {/* <Transition items={visibleProducts} keys={item => item.id} config={config.stiff} trail={100}
                         from={{ transform: 'translate(0,20px) translateZ(30px)', opacity: '0' }}
                         enter={{ transform: 'translate(0,0px) translateZ(0)', opacity: '1' }}>
                         {product => styles => <Product style={styles} key={product.id} product={product} addToCart={props.addToCart} feedback={() => setSnackbar(true)} />}
-                    </Transition>
-                    {/* {visibleProducts.map(product => <Product key={product.id} product={product} addToCart={props.addToCart} feedback={() => setSnackbar(true)} />)} */}
+                    </Transition> */}
+                    {visibleProducts.map(product => <Product key={product.id} product={product} addToCart={props.addToCart} feedback={() => setSnackbar(true)} />)}
                 </div>
                 :
                 <React.Fragment>
@@ -225,7 +229,7 @@ const Products = (props) => {
 
                                     <div className="mb-3">
                                         <Card className="side-nav">
-                                            <CardContent>
+                                            <CardContent className="side-nav">
                                                 <List className="filter-list" dense component="nav" aria-label="main" id="categories-fetched"
                                                     subheader={<ListSubheader component="div" >Categories</ListSubheader>}
                                                 >
@@ -248,51 +252,56 @@ const Products = (props) => {
 
                                                 {
                                                     brands.length ?
-                                                        <List className="filter-list" dense component="nav" aria-label="secondary"
-                                                            subheader={<ListSubheader component="div" id="nested-list-subheader">Brand</ListSubheader>}
-                                                        >
-                                                            <div className="brands">
-                                                                {brands.map((brand, i) => <FormControlLabel key={brand.name + i} className="d-block ctrl m-0" label={brand.name} control={<Checkbox color="primary" checked={brand.selected} onChange={(e) => changeBrand(brand.name, e)} value={brand.name} />} />)}
-                                                            </div>
-                                                        </List>
+                                                        <Accordion className="filter-list acc" dense aria-controls="brands-content">
+                                                            <AccordionSummary className="list-heading" expandIcon={<ExpandMoreIcon />}>Brands</AccordionSummary>
+                                                            <AccordionDetails>
+                                                                <div className="brands">
+                                                                    {brands.map((brand, i) => <FormControlLabel key={brand.name + i} className="d-block ctrl m-0" label={brand.name} control={<Checkbox color="primary" checked={brand.selected} onChange={(e) => changeBrand(brand.name, e)} value={brand.name} />} />)}
+                                                                </div>
+                                                            </AccordionDetails>
+                                                        </Accordion>
                                                         : null
                                                 }
                                                 {/* <Divider /> */}
 
                                                 {
                                                     categories.length ?
-                                                        <List className="filter-list" dense component="nav" aria-label="secondary"
-                                                            subheader={<ListSubheader component="div" id="nested-list-subheader" className="price-header"><span>Price</span><Button size="small" color="primary" onClick={applyPrice}>Apply</Button></ListSubheader>}
-                                                        >
-                                                            <div className="prices">
-                                                                <TextField InputProps={{
-                                                                    startAdornment: <InputAdornment position="start">$</InputAdornment>,
-                                                                }} type="number" label="min" value={priceRange[0]} onChange={(e) => handlePriceChange(e, 0)} />
-                                                                <TextField InputProps={{
-                                                                    startAdornment: <InputAdornment position="start">$</InputAdornment>,
-                                                                }} type="number" label="max" value={priceRange[1]} onChange={(e) => handlePriceChange(e, 1)} />
+                                                        <Accordion className="filter-list acc" dense aria-controls="brands-content">
+                                                            <AccordionSummary className="list-heading" expandIcon={<ExpandMoreIcon />}>Price Filter</AccordionSummary>
+                                                            <AccordionDetails>
+                                                                <div className="prices">
+                                                                    <TextField InputProps={{
+                                                                        startAdornment: <InputAdornment position="start">$</InputAdornment>,
+                                                                    }} type="number" label="min" value={priceRange[0]} onChange={(e) => handlePriceChange(e, 0)} />
+                                                                    <TextField InputProps={{
+                                                                        startAdornment: <InputAdornment position="start">$</InputAdornment>,
+                                                                    }} type="number" label="max" value={priceRange[1]} onChange={(e) => handlePriceChange(e, 1)} />
 
-                                                            </div>
-                                                        </List>
+                                                                </div>
+                                                            </AccordionDetails>
+                                                        </Accordion>
                                                         : null
                                                 }
 
                                                 {SKUTypes.map(name => (
-                                                    <React.Fragment>
-                                                        <List className="filter-list" key={name} dense component="nav" aria-label="secondary"
-                                                            subheader={<ListSubheader component="div" id="nested-list-subheader">{name}</ListSubheader>}
-                                                        >
-                                                            <div className="pack-sizes">
-                                                                {SKUs.map(sku => (
-                                                                    sku.name == name && sku.value ?
-                                                                        <FormControlLabel key={sku.value + sku.id + sku.name} className="d-block ctrl m-0" label={sku.value} control={<Checkbox color="primary"
-                                                                            checked={sku.selected} onChange={(e) => changeSKU(sku.value, e)} value={sku.value} />} />
-                                                                        : null
-                                                                ))}
-                                                            </div>
-                                                        </List>
-                                                        {/* <Divider /> */}
-                                                    </React.Fragment>
+                                                    name?.trim() ?
+                                                        <React.Fragment>
+                                                            <Accordion className="filter-list acc" key={name} dense >
+                                                                <AccordionSummary className="list-heading" expandIcon={<ExpandMoreIcon />}>{name}</AccordionSummary>
+                                                                <AccordionDetails>
+                                                                    <div className="pack-sizes">
+                                                                        {SKUs.map(sku => (
+                                                                            sku.name == name && sku.value ?
+                                                                                <FormControlLabel key={sku.value + sku.id + sku.name} className="d-block ctrl m-0" label={sku.value} control={<Checkbox color="primary"
+                                                                                    checked={sku.selected} onChange={(e) => changeSKU(sku.value, e)} value={sku.value} />} />
+                                                                                : null
+                                                                        ))}
+                                                                    </div>
+                                                                </AccordionDetails>
+                                                            </Accordion>
+                                                            {/* <Divider /> */}
+                                                        </React.Fragment>
+                                                        : null
                                                 ))}
 
                                             </CardContent>

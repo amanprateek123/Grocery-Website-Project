@@ -8,6 +8,86 @@ const csv = require('csvtojson')
 
 const { validationResult } = require('express-validator')
 
+// *** DB Functions
+async function createProduct(prod, files) {
+    return new Promise((resolve, reject) => {
+        db.product.create({
+            name: prod.name,
+            description: prod.description,
+            brand: prod.brand,
+            keywords: prod.keywords,
+            categoryId: prod.categoryId
+        }).then(_product => {
+            console.log(" >> ADDED PRODUCT: ", _product.id);
+
+            Promise.all(
+                prod.skus.map((sku, i) => {
+                    return db.sku.create({
+                        productId: _product.id,
+                        code: sku.code,
+                        name: sku.name,
+                        price: sku.price,
+                        stockQuantity: sku.stockQuantity,
+                        json: sku.json
+                    }).then(_sku => {
+                        console.log(" >> ADDED SKU: ", _sku.id);
+                        return Promise.all(
+                            [
+                                ...(function () {
+                                    try {
+                                        return files[`images${i}`].map(image => {
+                                            return db.image.create({
+                                                skuId: _sku.id,
+                                                src: image.path.replace('public', ''),
+                                            }).then(_img => {
+                                                console.log(" >> ADDED IMG: ", _img.id);
+                                                return _img
+                                            })
+                                        })
+                                    }
+                                    catch (e) {
+                                        return []
+                                    }
+                                }()),
+
+                                ...sku.images.map(image => {
+                                    return db.image.create({
+                                        ...(image.id) && { id: image.id },
+                                        skuId: _sku.id,
+                                        src: image.src,
+                                    }).then(_image => {
+                                        console.log(" >> PRESERVED Image: ", _image.id);
+                                        return _image
+                                    })
+                                }),
+
+                                ...sku.attributes.map(attr => {
+                                    return db.attribute.create({
+                                        skuId: _sku.id,
+                                        name: attr.name,
+                                        value: attr.value,
+                                    }).then(_attr => {
+                                        console.log(" >> ADDED attr: ", _attr.id);
+                                        return _attr
+                                    })
+                                })
+                            ]
+                        ).then(imatrr => {
+                            return console.log(" >> IMAGES AND ATTRIBUTES DONE");
+                        })
+                    })
+                })
+            ).then(_skus => {
+                console.log(" >> SKUS DONE");
+                resolve(_product)
+            })
+        })
+    })
+
+}
+
+
+
 // *** Single UPLOADS ***
 
 exports.addProduct = (req, res, next) => {
@@ -33,65 +113,8 @@ exports.addProduct = (req, res, next) => {
         return res.status(422).json({ status: 422, errors: valErrors.array() });
     }
 
-    db.product.create({
-        name: prod.name,
-        description: prod.description,
-        brand: prod.brand,
-        keywords: prod.keywords,
-        categoryId: prod.categoryId
-    }).then(_product => {
-        console.log(" >> ADDED PRODUCT: ", _product.id);
-
-        Promise.all(
-            prod.skus.map((sku, i) => {
-                return db.sku.create({
-                    productId: _product.id,
-                    code: sku.code,
-                    name: sku.name,
-                    price: sku.price,
-                    stockQuantity: sku.stockQuantity,
-                    json: sku.json
-                }).then(_sku => {
-                    console.log(" >> ADDED SKU: ", _sku.id);
-                    return Promise.all(
-                        [
-                            ...(function () {
-                                try {
-                                    return req.files[`images${i}`].map(image => {
-                                        return db.image.create({
-                                            skuId: _sku.id,
-                                            src: image.path.replace('public', ''),
-                                        }).then(_img => {
-                                            console.log(" >> ADDED IMG: ", _img.id);
-                                            return _img
-                                        })
-                                    })
-                                }
-                                catch (e) {
-                                    return []
-                                }
-                            }()),
-
-                            ...sku.attributes.map(attr => {
-                                return db.attribute.create({
-                                    skuId: _sku.id,
-                                    name: attr.name,
-                                    value: attr.value,
-                                }).then(_attr => {
-                                    console.log(" >> ADDED attr: ", _attr.id);
-                                    return _attr
-                                })
-                            })
-                        ]
-                    ).then(imatrr => {
-                        return console.log(" >> IMAGES AND ATTRIBUTES DONE");
-                    })
-                })
-            })
-        ).then(_skus => {
-            console.log(" >> SKUS DONE");
-            res.json({ message: "Product Added", status: 200, product: _product })
-        })
+    createProduct(prod, req.files).then(_product => {
+        res.json({ status: 200, message: `Product Added with ID : ${_product.id}`, product: _product })
     })
 
 }
@@ -310,43 +333,68 @@ exports.addProducts = (req, res) => {
         // fields of every product must match with what is in database.
         // convert csv to json
         csv().fromString(req.file.buffer.toString('utf-8')).then(json => {
-            let products = json;
+            let rows = json;
             let promises = [];
+            let product = {};
+            let pn = 1;
 
-            for (prop in products[0]) {
-                if (products[0].hasOwnProperty(prop)) {
-                    console.log(prop);
-
-                    if (!['name', 'categoryId', 'brand', 'description', 'keywords'].includes(prop)) {
-                        res.json({ status: 400, message: `Please Submit a CSV file with fields [name,categoryId,brand,description,keywords]. Fields don't match.` })
-                        return;
-                    }
+            ['sn', 'op', 'categoryId', 'name', 'brand', 'description', 'keywords', 'code', 'model', 'price', 'stock', 'json', 'src', 'attr', 'attrv'].forEach(field => {
+                if (!rows[0].hasOwnProperty(field)) {
+                    res.json({ status: 400, message: `Please Submit a CSV file with fields [sn,op,categoryId,name,brand,description,keywords,code,model,price,stock,json,src,attr,attrv]. Fields don't match.` })
+                    return;
                 }
+            })
+
+            rows.forEach((row, i) => {
+                if (row.op === 'p') {
+                    if (product.name) {
+                        console.dir(product)
+                        promises.push(createProduct(product, null))
+                    }
+                    product = {};
+                    product.categoryId = row.categoryId;
+                    product.name = row.name;
+                    product.brand = row.brand;
+                    product.description = row.description;
+                    product.keywords = row.keywords;
+                }
+                else if (row.op === 's') {
+                    if (!product.skus) {
+                        product.skus = [];
+                    }
+                    let sku = {
+                        code: row.code,
+                        name: row.model,
+                        price: row.price,
+                        stockQuantity: row.stock,
+                        json: row.json,
+                        images: row.src.split(',').map(src => ({ src: src }))
+                    }
+                    let attrs = row.attr.split(',');
+                    let attrv = row.attrv.split(',');
+                    sku.attributes = attrs.map((attr, i) => ({ name: attr, value: attrv[i] }));
+
+                    product.skus.push(sku);
+                }
+                else {
+
+                }
+            })
+            if (product.name) {
+                console.dir(product)
+                promises.push(createProduct(product, null))
             }
 
-            products.forEach(product => {
-                promises.push(
-                    db.product.create({
-                        ...product
-                    })
-                        .then(result => {
-                            console.log('a product added.');
-
-                        }).catch(err => {
-                            console.log('Cant add: ', err);
-
-                        })
-                );
+            Promise.all(promises).then(result => {
+                res.json({ status: 200, message: `${promises.length} products added.` })
+            }).catch(err => {
+                console.log(err);
+                res.json({ status: 500, message: err.message })
             })
-
-            Promise.all(promises).then(done => {
-                res.json({ status: 200, message: `Added ${promises.length} products.`, products })
-            })
-
         })
     }
     else {
-        res.json({ status: 400, message: `Please Submit a CSV file with fields [name,categoryId,brand,image].` })
+        res.json({ status: 400, message: `Please Submit a CSV file with fields [sn,op,categoryId,name,brand,description,keywords,code,model,price,stock,json,src,attr,attrv].` })
     }
 
 }
