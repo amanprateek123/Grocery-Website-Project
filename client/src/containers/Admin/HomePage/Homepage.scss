@@ -9,3 +9,17 @@
 .home_form{
     margin: 20px;
 }
+.home-snackbar{
+    width: 100%;
+    text-align: center;
+    border-radius: 0;
+    padding: 1em;
+    position: fixed;
+    bottom: 0;
+    // left: 0;
+    &>*{
+        text-align: center;
+        justify-content: center;
+        align-items: center;
+    }
+}

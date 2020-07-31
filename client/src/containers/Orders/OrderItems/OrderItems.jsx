@@ -204,7 +204,7 @@ const cancelling = (
                       {order.orderItems.map(item =>{
                          return(
                            <div className="row p-2">
-                               <div className="col-md-3">
+                               <div className="col-md-3" style={{justifyContent:'center',alignItems:'center'}}>
                                    <img src={item.sku.images[0].src} style={{width:'70%',height:'120px'}} />
                                </div>
                                <div className="col-md-8 pt-2">
