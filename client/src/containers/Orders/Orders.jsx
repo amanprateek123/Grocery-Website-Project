@@ -256,6 +256,7 @@ function Orders(props) {
                                         </div>
                                         <div className="col-3" style={{ fontSize: '17px', textAlign: 'left', margin: '2% 0' }}>
                                             ₹{order.price}
+                                            {order.cancelled===null?null:<p style={{color:'red',fontSize:'14px',fontWeight:'550',position:'relative',bottom:'-50%'}}>Cancelled</p>}
                                         </div>
                                         <div className="col-4 pt-2" >
                                             <div style={{ textAlign: 'left', margin: '3% 0' }}>

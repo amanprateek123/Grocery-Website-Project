@@ -24,6 +24,10 @@ module.exports = (sequelize, Sequelize = require('sequelize')) => {
         },
         transactionStatus: {
             type: Sequelize.ENUM(['SUCCESS', 'FAILED'])
+        },
+        cancelled:{
+            type:Sequelize.STRING,
+            defaultValue:null            
         }
     },
         {

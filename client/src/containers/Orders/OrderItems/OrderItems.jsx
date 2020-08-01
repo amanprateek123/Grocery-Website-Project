@@ -8,12 +8,10 @@ import {
   from '@material-ui/core';
 import './OrderItems.scss'
 import CloseIcon from '@material-ui/icons/Close';
-import ReplayIcon from '@material-ui/icons/Replay';
-import HelpIcon from '@material-ui/icons/Help';
-import StarIcon from '@material-ui/icons/Star';
-
+import { Formik, Form, Field,ErrorMessage,FieldArray } from 'formik';
 import Modal from '../../../components/Modal/Modal'
 import { useMutation } from 'react-query'
+import {Redirect} from 'react-router-dom'
 
 function OrderItems(props) {
   var month = new Array();
@@ -43,7 +41,6 @@ function OrderItems(props) {
         console.log(data)
       })
   }, [])
-
 
   const progress = [
     {
@@ -102,43 +99,81 @@ function OrderItems(props) {
         setCancel(false)
     } 
 
-  const deleteOrder = ()=>{
-    return fetch('/delete-order',{
-        headers: {
-            'Authorization': 'Bearer ' + props.idToken,
-            'Content-Type': 'application/json'
-        },
-        method:'POST',
-        body:JSON.stringify({id:props.match.params.id})
-    }
-        ).then(async res=>{
-          res = await res.json()
-          if(res.status === 400){
-              return res.message
-          }
-          return res.message
-        }).catch(err => {
-            console.log(err);
-        })
+//   const deleteOrder = ()=>{
+//     return fetch('/delete-order',{
+//         headers: {
+//             'Authorization': 'Bearer ' + props.idToken,
+//             'Content-Type': 'application/json'
+//         },
+//         method:'POST',
+//         body:JSON.stringify({id:props.match.params.id})
+//     }
+//         ).then(async res=>{
+//           res = await res.json()
+//           if(res.status === 400){
+//               return res.message
+//           }
+//           return res.message
+//         }).catch(err => {
+//             console.log(err);
+//         })
+// // }
+const cancelOrder = (variable)=>{
+  let body
+  if(variable.variables.reason==="Others"){
+    body= variable.variables.other
+  }
+  else{
+    body= variable.variables.reason
+  }
+  console.log(body)
+  return fetch('/get-orders',{
+            headers: {
+                'Authorization': 'Bearer ' + props.idToken,
+                'Content-Type': 'application/json'
+            },
+            method:'DELETE',
+            body:JSON.stringify({reason:body,id:order.id})
+        }).then(res=>res.json()).then(res=>
+           props.history.push('/orders')
+          )
 }
 
-const[cancels,meta] = useMutation(deleteOrder)
+
+
+const[cancels,meta] = useMutation(cancelOrder)
+
 
 const cancelling = (
     <React.Fragment>
         <Paper className="container" style={{minHeight:'400px'}}>
              <CloseIcon style={{float:'right',cursor:'pointer',marginTop:'10px'}} onClick={closeModal} />
-             <h4 style={{padding:'10px 20px'}}>Reason for cancellation (optional):</h4>
-             <select style={{width:'60%',margin:'30px 17%',padding:'10px'}}>
-                 <option>Select Cancellation Reason</option>
-                 {cancel_list.map(itm=>{
-                     return(
-                     <option>{itm.reason}</option>
-                     )
-                 })}
-             </select>
+             <h4 style={{padding:'10px 20px'}}>Reason for cancellation:</h4>
+             <Formik
+             initialValues={{
+               reason:'',
+               other:''
+             }}
+             onSubmit={async (values,{setSubmitting})=> await cancels({variables:values})}
+             >
+                {({values}) => (
+                  <Form>
+                  <Field style={{width:'60%',margin:'30px 17%',padding:'10px'}} as="select" name="reason">
+                   <option value="">Select Cancellation Reason</option>
+                   {cancel_list.map(itm=>{
+                       return(
+                        <option value={itm.reason}>{itm.reason}</option>
+                       )
+                   })}
+               </Field>
+                {values.reason==="Others"?<Field type="text" required name="other" placeholder="Enter reason..." style={{width:'30%',margin:'0 17%',padding:'10px'}} className="vis" />:<Field type="text"name="other" placeholder="Enter reason..." style={{width:'30%',margin:'0 17%',padding:'10px'}} className="hid" />}
+
+             <button className="cancel_btn" type="submit" style={{marginTop:'10%'}} >Cancel Order</button>
+                  </Form>
+                )}
+                
+             </Formik>
              <div>
-             <button className="cancel_btn" onClick={cancels} >Cancel Order</button>
              </div>
         </Paper>
     </React.Fragment>
@@ -153,17 +188,18 @@ const cancelling = (
            <p style={{fontSize:'17px'}}>Ordered on {new Date(order.createdAt).getDate()} {month[new Date(order.createdAt).getMonth()]} {new Date(order.createdAt).getFullYear()} </p>
            <p style={{fontSize:'17px'}}>Order: <span style={{color:'var(--mainColor)'}}> #{10000+order.id} </span></p>
            </div>
-           <div className="col-md-6" style={{display:'flex',alignItems:'center'}}>
-           <Slider
-                defaultValue={single(order)}
-                getAriaValueText={valuetext}
-                aria-labelledby="discrete-slider-custom"
-                step={33.33}
-                valueLabelDisplay="auto"
-                marks={progress}
-                disabled
-                style={{ color: 'green'}}
-              />
+           <div className="col-md-6" style={{display:'flex',alignItems:'center',justifyContent:'flex-end'}}>
+             {order.cancelled===null?
+                        <Slider
+                        defaultValue={single(order)}
+                        getAriaValueText={valuetext}
+                        aria-labelledby="discrete-slider-custom"
+                        step={33.33}
+                        valueLabelDisplay="auto"
+                        marks={progress}
+                        disabled
+                        style={{ color: 'green'}}
+                      />:<h5 style={{fontSize:'20px'}}>Status:<span className="ml-2"  style={{color:'red',fontWeight:'550'}}>Cancelled</span></h5>}
            </div>
          </div>
          <div className="orderItems">
@@ -201,9 +237,9 @@ const cancelling = (
              <div className="row" style={{padding:'10px 15px'}}>
                  <div className="col-md-8">
                      <div>
-                      {order.orderItems.map(item =>{
+                      {order.orderItems.map((item,i) =>{
                          return(
-                           <div className="row p-2">
+                           <div className="row p-2" key={i}>
                                <div className="col-md-3" style={{justifyContent:'center',alignItems:'center'}}>
                                    <img src={item.sku.images[0].src} style={{width:'70%',height:'120px'}} />
                                </div>
@@ -218,15 +254,16 @@ const cancelling = (
                     </div>
                  </div>
                  <div className="col-md-4">
-                    <div className="mt-5">
-                        <Button variant="contained" color="inherit" style={{backgroundColor:'var(--mainColor)',color:'white',padding:'10px 15px',width:'300px',fontSize:'15px'}}>Track Package</Button>
-                        <div style={{marginTop:'5%'}}>
-                        <Button variant="contained" color="inherit" style={{backgroundColor:'#f3f3f3',color:'black',padding:'10px 15px',width:'300px',fontSize:'15px'}} onClick={openModal}>Cancel Order</Button>
-                        <Modal visible={cancel}>
-                             {cancelling}
-                         </Modal>
-                        </div>
-                    </div>
+                   {order.cancelled===null?
+                                       <div className="mt-5">
+                                       <Button variant="contained" color="inherit" style={{backgroundColor:'var(--mainColor)',color:'white',padding:'10px 15px',width:'300px',fontSize:'15px'}}>Track Package</Button>
+                                       <div style={{marginTop:'5%'}}>
+                                       <Button variant="contained" color="inherit" style={{backgroundColor:'#f3f3f3',color:'black',padding:'10px 15px',width:'300px',fontSize:'15px'}} onClick={openModal}>Cancel Order</Button>
+                                       <Modal visible={cancel}>
+                                            {cancelling}
+                                        </Modal>
+                                       </div>
+                                   </div>:null}
                  </div>
              </div>
          </div>

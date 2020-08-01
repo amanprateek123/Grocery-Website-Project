@@ -646,6 +646,20 @@ exports.getOrders = (req, res) => {
    })
 }
 
+exports.cancelOrder = async (req,res)=>{
+  try{
+   const order = await db.order.findByPk(req.body.id)
+   if(order.userId === req.userId){
+      order.cancelled = req.body.reason
+      await order.save()
+      res.json({order:order,message:"This order is cancelled"})
+   }
+  }
+catch(e){
+   res.json(e.message)
+}
+}
+
 exports.postOrder = (req, res) => {
    /*
       Authenticated User : `req.userId` is available.
@@ -695,6 +709,7 @@ exports.postOrder = (req, res) => {
       order.paymentType = req.body.paymentType;
       order.userId = req.userId;
       order.statusId = 1;
+      order.cancelled = null
 
       let date = new Date();
       date.setDate(date.getDate() + 2)
@@ -786,19 +801,19 @@ exports.postOrder = (req, res) => {
 }
 
 //deleting Order
-exports.delOrder = async (req,res)=>{
-     try{
-      const order = await db.order.findByPk(req.body.id)
-      if(order.userId === req.userId){
-         await order.destroy()
-         res.json({status:"200",message:"Order cancel successfully"})
-      }
-      else{
-         res.json({status:"400",message:"Unauthorised"})
-      }
-     }
-     catch(e){
-        console.log(e)
-        res.json(e)
-     }
-}
+// exports.delOrder = async (req,res)=>{
+//      try{
+//       const order = await db.order.findByPk(req.body.id)
+//       if(order.userId === req.userId){
+//          await order.destroy()
+//          res.json({status:"200",message:"Order cancel successfully"})
+//       }
+//       else{
+//          res.json({status:"400",message:"Unauthorised"})
+//       }
+//      }
+//      catch(e){
+//         console.log(e)
+//         res.json(e)
+//      }
+// }
