@@ -43,6 +43,7 @@ function OrderSum(props) {
                                     <span className="order_price">
                                         ₹ {item.sku.price * (item.quantity)}
                                     </span>
+                                    {item.sku.stockQuantity === 0 ? <div className="out-of-stock">Out of Stock</div> : null}
                                 </div>
                             </div>
                             <div style={{ display: 'flex' }}>

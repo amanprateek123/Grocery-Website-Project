@@ -554,7 +554,7 @@ exports.getCart = (req, res) => {
       },
       include: {
          model: db.sku,
-         attributes: ['name', 'price', 'id'],
+         attributes: ['name', 'price', 'id', 'stockQuantity'],
          include: [
             {
                model: db.product,
@@ -646,18 +646,18 @@ exports.getOrders = (req, res) => {
    })
 }
 
-exports.cancelOrder = async (req,res)=>{
-  try{
-   const order = await db.order.findByPk(req.body.id)
-   if(order.userId === req.userId){
-      order.cancelled = req.body.reason
-      await order.save()
-      res.json({order:order,message:"This order is cancelled"})
+exports.cancelOrder = async (req, res) => {
+   try {
+      const order = await db.order.findByPk(req.body.id)
+      if (order.userId === req.userId) {
+         order.cancelled = req.body.reason
+         await order.save()
+         res.json({ order: order, message: "This order is cancelled" })
+      }
    }
-  }
-catch(e){
-   res.json(e.message)
-}
+   catch (e) {
+      res.json(e.message)
+   }
 }
 
 exports.postOrder = (req, res) => {
@@ -701,6 +701,7 @@ exports.postOrder = (req, res) => {
       // cart.filter(ci => !ci.sku).map(deleted => deleted.destroy().then(del => console.log(' >> Deleted cartId', del.id, ' as the product was deleted')))
       orderCart = cart.filter(ci => ci.sku)
 
+      // ! Price Included for Products with 0 Stock. need a check.
       price = orderCart.reduce((acc, cur) => acc + cur.sku.price * cur.quantity, 0);
       console.log('ORDER PRICE >> ', price);
 

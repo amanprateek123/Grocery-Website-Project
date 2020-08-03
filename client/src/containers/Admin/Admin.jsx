@@ -84,7 +84,7 @@ const Profile = (props) => {
                                                 <ListItemIcon>
                                                     <CategoryIcon />
                                                 </ListItemIcon>
-                                                <ListItemText primary="Homepage" id="tab"/>
+                                                <ListItemText primary="Homepage" id="tab" />
                                             </ListItem>
                                             <ListItem button selected={tab == 'category'} onClick={() => setTab('category')}>
                                                 <ListItemIcon>
@@ -127,12 +127,7 @@ const Profile = (props) => {
                                                 </ListItemIcon>
                                                 <ListItemText id="tab" primary="Add Products" />
                                             </ListItem>
-                                            <ListItem button selected={tab == 'skus'} onClick={() => setTab('skus')}>
-                                                <ListItemIcon>
-                                                    <FileIcon />
-                                                </ListItemIcon>
-                                                <ListItemText id="tab" primary="Add SKU" />
-                                            </ListItem>
+
                                         </List>
 
                                         <List component="nav" aria-label="main"
@@ -184,14 +179,12 @@ const Profile = (props) => {
                                                 <AddCategoriesFile />
                                                 : tab == 'products' ?
                                                     <AddProductsFile />
-                                                    : tab == 'skus' ?
-                                                        null
-                                                        : tab == 'deleteProduct' ?
-                                                            <DeleteProduct />
-                                                            : tab == 'editProduct' ?
-                                                                <EditProduct />
-                                                                :tab == 'homepage' ?
-                                                                   <Homepage/>:null}
+                                                    : tab == 'deleteProduct' ?
+                                                        <DeleteProduct />
+                                                        : tab == 'editProduct' ?
+                                                            <EditProduct />
+                                                            : tab == 'homepage' ?
+                                                                <Homepage /> : null}
                         </div>
                     </div>
                 </div>

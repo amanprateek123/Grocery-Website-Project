@@ -121,17 +121,24 @@ const Detail = (props) => {
                 </div>
                 <div className="detail_cart">
                     {/* <input type="text" value={quantity} onChange={props.handler} className="input12" /> */}
-                    <Button variant="contained" className={`detail_btn ${added ? 'added' : ''}`}
-                        onClick={() => {
-                            props.addToCart(props.product.skus[props.pack].id)
-                            setAdded(true);
-                            setTimeout(() => setAdded(false), 2000)
-                        }}>
-                        {added ? props.userName ? "ADDED TO CART" : "Please Login" : "ADD TO CART"}
-                    </Button>
-                    <Button variant="contained" className="detail_save">
-                        <BookmarkIcon /><span>Wishlist</span>
-                    </Button>
+                    {props.product.skus[props.pack].stockQuantity ?
+                        <React.Fragment>
+                            <Button variant="contained" className={`detail_btn ${added ? 'added' : ''}`}
+                                onClick={() => {
+                                    props.addToCart(props.product.skus[props.pack].id)
+                                    setAdded(true);
+                                    setTimeout(() => setAdded(false), 2000)
+                                }}>
+                                {added ? props.userName ? "ADDED TO CART" : "Please Login" : "ADD TO CART"}
+                            </Button>
+                            <Button variant="contained" className="detail_save">
+                                <BookmarkIcon /><span>Wishlist</span>
+                            </Button>
+                        </React.Fragment>
+                        : <div className="btn btn-full out-of-stock">Out of Stock</div>
+                    }
+
+
                 </div>
                 <div className="detail_ship">
                     <LocalShippingSharpIcon /><span>Standard: Tomorrow 9:30AM - 5:30PM</span>

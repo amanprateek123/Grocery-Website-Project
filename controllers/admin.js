@@ -5,12 +5,24 @@ const path = require('path')
 const db = require('../utils/database')
 const csv = require('csvtojson')
 
+const { validateProduct } = require('../utils/validators')
+
 
 const { validationResult } = require('express-validator')
 
 // *** DB Functions
 async function createProduct(prod, files) {
+    // Validation
+
+
     return new Promise((resolve, reject) => {
+
+        let errors = validateProduct(prod);
+        if (errors.length) {
+            resolve({ status: 422, errors: errors, product: prod });
+            return;
+        }
+
         db.product.create({
             name: prod.name,
             description: prod.description,
@@ -79,7 +91,7 @@ async function createProduct(prod, files) {
                 })
             ).then(_skus => {
                 console.log(" >> SKUS DONE");
-                resolve(_product)
+                resolve({ status: 200, product: _product })
             })
         })
     })
@@ -124,50 +136,85 @@ exports.addProduct = (req, res, next) => {
 exports.deleteProduct = (req, res) => {
     let productId = parseInt(req.body.productId);
 
-    console.log('Request to delete product with ID: ' + productId);
+    if (req.body.method == 'hard') {
+        console.log('Request to HARD delete product with ID: ' + productId);
 
+        db.product.findByPk(productId, {
+            include: [
+                {
+                    model: db.sku,
+                    include: [
+                        {
+                            model: db.image
+                        },
+                        {
+                            model: db.attribute
+                        }
+                    ]
+                }
+            ]
+        }).then(_product => {
 
-    db.product.findByPk(productId, {
-        include: [
-            {
-                model: db.sku,
-                include: [
-                    {
-                        model: db.image
-                    },
-                    {
-                        model: db.attribute
-                    }
-                ]
-            }
-        ]
-    }).then(_product => {
+            if (_product) {
 
-        if (_product) {
+                // Delete Images Linked to Product.
+                _product.skus.forEach(_sku => {
+                    _sku.images.forEach(_image => {
+                        fs.unlink(path.join('public', _image.src), (err) => {
+                            err ? console.log('::: Deletion ERROR ', err.message)
+                                : console.log('::: DELETED IMAGE public', _image.src);
+                        })
 
-            // Delete Images Linked to Product.
-            _product.skus.forEach(_sku => {
-                _sku.images.forEach(_image => {
-                    fs.unlink(path.join('public', _image.src), (err) => {
-                        err ? console.log('::: Deletion ERROR ', err.message)
-                            : console.log('::: DELETED IMAGE public', _image.src);
                     })
-
                 })
-            })
 
-            // All Associated Itms with that product will be deleted automatically due to OnDelete : CASCADE
-            _product.destroy().then(result => {
-                res.json({ status: 200, message: "deleted Successfully", product: _product })
-            });
-        }
-        else {
-            return res.json({ status: 400, message: "NO Such Product" })
-        }
-    }).catch(err => {
-        console.log(err);
-        res.json({ status: 500, message: "Server Error" });
-    })
+                // All Associated Itms with that product will be deleted automatically due to OnDelete : CASCADE
+                _product.destroy().then(result => {
+                    res.json({ status: 200, message: "deleted Successfully", product: _product })
+                });
+            }
+            else {
+                return res.json({ status: 400, message: "NO Such Product" })
+            }
+        }).catch(err => {
+            console.log(err);
+            res.json({ status: 500, message: "Server Error" });
+        })
+    }
+    else {
+        db.product.findByPk(productId, {
+            include: [
+                {
+                    model: db.sku,
+                    include: [
+                        {
+                            model: db.image
+                        },
+                        {
+                            model: db.attribute
+                        }
+                    ]
+                }
+            ]
+        }).then(async _product => {
+            if (_product) {
+                console.log('Request to SOFT delete product with ID: ' + productId);
+                _product.skus.forEach(_sku => {
+                    _sku.stockQuantity = 0;
+                    _sku.save();
+                })
+
+                await _product.save();
+                res.json({ status: 200, message: "SOFT Deleted Successfully" })
+            }
+            else {
+                return res.json({ status: 400, message: "NO Such Product" })
+            }
+        }).catch(err => {
+            console.log(err);
+            res.json({ status: 500, message: "Server Error" });
+        })
+    }
 
 }
 
@@ -345,10 +392,12 @@ exports.addProducts = (req, res) => {
                 }
             })
 
+            let failed = [];
+            let success = [];
+
             rows.forEach((row, i) => {
                 if (row.op === 'p') {
                     if (product.name) {
-                        console.dir(product)
                         promises.push(createProduct(product, null))
                     }
                     product = {};
@@ -381,12 +430,14 @@ exports.addProducts = (req, res) => {
                 }
             })
             if (product.name) {
-                console.dir(product)
                 promises.push(createProduct(product, null))
             }
 
             Promise.all(promises).then(result => {
-                res.json({ status: 200, message: `${promises.length} products added.` })
+                console.log(result)
+                errors = result.filter(p => p.status != 200);
+                success = result.filter(p => p.status == 200);
+                res.json({ status: 200, message: `${success.length} products added.`, errors })
             }).catch(err => {
                 console.log(err);
                 res.json({ status: 500, message: err.message })
@@ -570,27 +621,27 @@ exports.addDepartments = (req, res) => {
     }
 }
 
-exports.homePage = async (req,res) => {
+exports.homePage = async (req, res) => {
     console.log(req.body)
-    await db.homepage.destroy({where:{}})
+    await db.homepage.destroy({ where: {} })
     let data = req.body
     Promise.all(
-        data.map((item,i)=>{
-        return db.homepage.create({
-            key:item.key,
-            value:item.value,
-            fieldType:item.fieldType
-        }            
-        ).then(add =>{
-            console.log("Row Added")
+        data.map((item, i) => {
+            return db.homepage.create({
+                key: item.key,
+                value: item.value,
+                fieldType: item.fieldType
+            }
+            ).then(add => {
+                console.log("Row Added")
+            })
         })
-    })
-    ).then(result =>{
+    ).then(result => {
         console.log(result)
-        res.json({message:"Successfully Added",status:201,data:result})
-    }).catch(e=>{
+        res.json({ message: "Successfully Added", status: 201, data: result })
+    }).catch(e => {
         console.log(e)
-        res.json({message:"Uploading failed"})
+        res.json({ message: "Uploading failed" })
     })
-    
+
 }
