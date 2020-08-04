@@ -110,12 +110,14 @@
     float: left;
     margin-left: -20px;
     margin-top: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     .remove{
         border: 1px solid black;
         border-radius: 100%;
         padding: 0;
         text-align: center;
-        float: left;
         cursor: pointer;
         width: 18px;
         height: 18px;
@@ -141,7 +143,6 @@
         border-radius: 100%;
         text-align: center;
         padding: 0;
-        float: left;
         cursor: pointer;
         width: 18px;
         height: 18px;

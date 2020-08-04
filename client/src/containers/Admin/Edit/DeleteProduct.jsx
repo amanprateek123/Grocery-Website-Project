@@ -35,15 +35,17 @@ const DeleteProduct = (props) => {
 
     }
 
-    const deleteProduct = (e) => {
+    const deleteProduct = (e, method) => {
         e.preventDefault();
+
         fetch('/admin/delete-product', {
             method: 'delete',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                productId: product.id
+                productId: product.id,
+                method: method
             })
         }).then(res => res.json())
             .then(res => {
@@ -67,8 +69,17 @@ const DeleteProduct = (props) => {
                             <div className="form-group">
                                 <div>
                                     <p>Are you sure you want to DELETE this product?</p>
-                                    <p>All related data (sku,images,attributes) related to this product will be deleted.</p>
-                                    <Button variant="contained" color="secondary" onClick={deleteProduct}>Delete this Product</Button>
+
+                                    <p><b>Soft Delete</b> <br /> <span style={{ color: '#4CAF50' }}>Safe</span> - Reduce Stock Quantity to 0. <br />
+                                        <span className="text-muted">'Out of Stock' will be displayed if the product is in user's carts.</span>
+                                    </p>
+                                    <Button variant="contained" style={{ background: '#4CAF50', color: 'white' }} onClick={(e) => deleteProduct(e, 'soft')}>Safe Delete</Button>
+                                    <br />
+                                    <br />
+                                    <p><b>Hard Delete</b> <br /> <span style={{ color: 'red' }}>UnSafe</span> - All related data (sku,images,attributes) related to this product will be deleted. <br />
+                                        <span className="text-muted">Only do this if this product was added by mistake, or you completely want to wipe out this product from database. It will be directly removed from user carts.</span>
+                                    </p>
+                                    <Button variant="contained" color="secondary" onClick={(e) => deleteProduct(e, 'hard')}>Delete this Product</Button>
                                 </div>
                             </div>
                             : null

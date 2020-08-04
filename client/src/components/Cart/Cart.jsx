@@ -29,25 +29,28 @@ function Cart(props) {
                     <ul style={{ maxWidth: '700px' }}>
                         {props.cart.map((product, i) => {
                             if (!product.sku) return null;
-                            return <li key={i} style={{ backgroundColor: '#fff', marginBottom: '1.5%', height: '80px' }}>
+                            return <li key={i} style={{ backgroundColor: product.sku.stockQuantity !== 0 ? '#fff' : '#f003', marginBottom: '1.5%', height: '80px' }}>
                                 <div className="container-fluid item-wrap" style={{ position: 'relative', display: 'flex', flexDirection: 'row', padding: '0' }}>
                                     <div className="col-md-2" style={{ height: '80px' }} >
-                                        <div style={{ margin:'4px',marginLeft: '-10px', border: '1px solid #f3f3f3', height: '72px', width: '72px', overflow: 'hidden' }}>
-                                            {product.sku.images[0] ? <img src={product.sku.images[0].src} style={{ width: "100%",height:'68px',padding:'4px' }} /> : null}
+                                        <div style={{ margin: '4px', marginLeft: '-10px', border: '1px solid #f3f3f3', height: '72px', width: '72px', overflow: 'hidden' }}>
+                                            {product.sku.images[0] ? <img src={product.sku.images[0].src} style={{ width: "100%", height: '68px', padding: '4px' }} /> : null}
                                         </div>
                                     </div>
                                     <div className="col-md-6">
                                         <div className="row" style={{ marginTop: '-5px' }}>
-                                            <div className="brand col-md-12">
-                                                <p><u>{product.sku.product.brand}</u></p>
-                                            </div>
-                                            <Link to={`/product/${product.sku.product.id}?skuId=${product.sku.id}`} style={{ textDecoration: 'none' }}>
-                                                <div className="product_name col-md-12">
-                                                    <p className="sku_cart p">{trimming(product.sku.product.name)}</p>
-                                                    {product.sku.product.name.length > 35 ? <span>
-                                                        <p className="tooltips">{product.sku.product.name}</p>  </span> : null}
+                                            <div className="col">
+                                                <div className="brand col-md-12">
+                                                    <p><u>{product.sku.product.brand}</u></p>
                                                 </div>
-                                            </Link>
+                                                <Link to={`/product/${product.sku.product.id}?skuId=${product.sku.id}`} style={{ textDecoration: 'none' }}>
+                                                    <div className="product_name col-md-12">
+                                                        <p className="sku_cart p">{trimming(product.sku.product.name)}</p>
+                                                        {product.sku.product.name.length > 35 ? <span>
+                                                            <p className="tooltips">{product.sku.product.name}</p>  </span> : null}
+                                                    </div>
+                                                </Link>
+                                                {product.sku.stockQuantity !== 0 ? null : <div className="error text-bold">Out Of Stock</div>}
+                                            </div>
                                         </div>
                                     </div>
                                     <div className="col-md-4">
@@ -55,7 +58,7 @@ function Cart(props) {
                                             <div className='col-md-6'>
                                                 <div className="add_rem">
                                                     <button className="remove" onClick={() => props.removeFromCart(product.skuId)} disabled={product.quantity === 1 ? true : false}>-</button>
-                                                    <input type="text" value={product.quantity} readOnly="readonly" />
+                                                    <div style={{ display: 'inline-block', padding: '0.5em' }}>{product.quantity}</div>
                                                     <button className="add" onClick={() => props.addToCart(product.skuId)}>+</button>
                                                 </div>
                                             </div>
