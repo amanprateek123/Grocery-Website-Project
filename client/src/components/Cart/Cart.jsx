@@ -38,7 +38,7 @@ function Cart(props) {
                                     </div>
                                     <div className="col-md-6">
                                         <div className="row" style={{ marginTop: '-5px' }}>
-                                            <div className="col">
+                                            <div style={{width:'100%'}}>
                                                 <div className="brand col-md-12">
                                                     <p><u>{product.sku.product.brand}</u></p>
                                                 </div>
@@ -49,12 +49,12 @@ function Cart(props) {
                                                             <p className="tooltips">{product.sku.product.name}</p>  </span> : null}
                                                     </div>
                                                 </Link>
-                                                {product.sku.stockQuantity !== 0 ? null : <div className="error text-bold">Out Of Stock</div>}
+                                                {product.sku.stockQuantity !== 0 ? null : <div className="stock">Out Of Stock</div>}
                                             </div>
                                         </div>
                                     </div>
                                     <div className="col-md-4">
-                                        <div className="row" style={{ marginTop: '10%' }}>
+                                        <div className="row" style={{ marginTop: '3%' }}>
                                             <div className='col-md-6'>
                                                 <div className="add_rem">
                                                     <button className="remove" onClick={() => props.removeFromCart(product.skuId)} disabled={product.quantity === 1 ? true : false}>-</button>
