@@ -12,6 +12,7 @@ import { Formik, Form, Field,ErrorMessage,FieldArray } from 'formik';
 import Modal from '../../../components/Modal/Modal'
 import { useMutation } from 'react-query'
 import {Redirect} from 'react-router-dom'
+import { Alert } from '@material-ui/lab'
 
 function OrderItems(props) {
   var month = new Array();
@@ -118,6 +119,8 @@ function OrderItems(props) {
 //             console.log(err);
 //         })
 // // }
+const[snackbar,setSnackbar] = useState(false)
+
 const cancelOrder = (variable)=>{
   let body
   if(variable.variables.reason==="Others"){
@@ -134,8 +137,11 @@ const cancelOrder = (variable)=>{
             },
             method:'DELETE',
             body:JSON.stringify({reason:body,id:order.id})
-        }).then(res=>res.json()).then(res=>
-           props.history.push('/orders')
+        }).then(res=>res.json()).then(res=>{
+           setSnackbar(true)
+           setTimeout(()=>{
+            props.history.push('/orders')
+           },3000)}
           )
 }
 
@@ -267,8 +273,13 @@ const cancelling = (
                  </div>
              </div>
          </div>
+         
       </Paper>
-    
+      <Snackbar open={snackbar} autoHideDuration={2000} className="home-snackbar" onClose={() => setSnackbar(false)} anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}>
+         <Alert  severity="success" className="home-snackbar" variant="filled" >
+            Your Order is Cancelled!
+          </Alert>
+      </Snackbar>
     </React.Fragment> : null
   )
 }

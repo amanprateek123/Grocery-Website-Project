@@ -652,6 +652,7 @@ exports.cancelOrder = async (req,res)=>{
    if(order.userId === req.userId){
       order.cancelled = req.body.reason
       await order.save()
+      console.log(">> Order is cancelled")
       res.json({order:order,message:"This order is cancelled"})
    }
   }
