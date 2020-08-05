@@ -226,14 +226,14 @@ function Orders(props) {
                             let name = ''
                             return (
                                 <Link to= {`/order/${order.id}`} style={{textDecoration:'none'}}>
-                                <Card key={order.id + i} style={{ marginBottom: '16px', cursor: 'pointer' }} onClick={() => openModal(order.id)}>
+                                <Card key={order.id + i} style={{ marginBottom: '16px', cursor: 'pointer',padding:'10px' }} onClick={() => openModal(order.id)}>
                                     <div className="row">
-                                        <div className="col-5">
+                                        <div className="col-md-5">
                                             <div className="row">
-                                                <div className="col-4 p-2">
-                                                    <img src={order.orderItems[0].sku.images[0].src} style={{ width: '70%' }} className="ml-4" />
+                                                <div className="col-md-4 p-2">
+                                                    <img src={order.orderItems[0].sku.images[0].src} style={{ width: '70%',height:'110px' }} className="ml-4" />
                                                 </div>
-                                                <div className="col-8">
+                                                <div className="col-md-8">
                                                     <div className="mt-2">
                                                         {order.orderItems.forEach(od => {
                                                             name = od.sku.product.name
@@ -254,11 +254,13 @@ function Orders(props) {
                                                 </div>
                                             </div>
                                         </div>
-                                        <div className="col-3" style={{ fontSize: '17px', textAlign: 'left', margin: '2% 0' }}>
+                                        <div className="col-md-3" style={{ fontSize: '17px', textAlign: 'left', margin: '2% 0' }}>
                                             ₹{order.price}
-                                            {order.cancelled===null?null:<p style={{color:'red',fontSize:'14px',fontWeight:'550',position:'relative',bottom:'-50%'}}>Cancelled</p>}
-                                        </div>
-                                        <div className="col-4 pt-2" >
+                                            <div style={{position:'relative',top:'40px'}}>
+                                            {!order.isCancelled?null:<p style={{color:'red',fontSize:'14px',fontWeight:'550'}}>Cancelled</p>}                                       
+                                            </div>
+                                             </div>
+                                        <div className="col-md-4 pt-2" >
                                             <div style={{ textAlign: 'left', margin: '3% 0' }}>
                                                 <b>  Delivered on {month[new Date(order.deliverOn).getMonth()]} {new Date(order.deliverOn).getDate()}</b>
                                             </div>

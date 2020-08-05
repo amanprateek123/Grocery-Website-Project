@@ -651,7 +651,8 @@ exports.cancelOrder = async (req, res) => {
    try {
       const order = await db.order.findByPk(req.body.id)
       if (order.userId === req.userId) {
-         order.cancelled = req.body.reason
+         order.remarks = req.body.reason
+         order.isCancelled = true
          await order.save()
          res.json({ order: order, message: "This order is cancelled" })
       }
