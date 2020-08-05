@@ -158,7 +158,7 @@ const Payment = (props) => {
                                 <div className="row" style={{ minHeight: '56px', width: '60%' }}>
                                     {props.cart.map(itm => {
                                         return (
-                                            <div className="lister_img">
+                                            <div className="lister_img" style={{display:'flex'}}>
                                                 <img src={itm.sku.images[0].src} />
                                             </div>
                                         )

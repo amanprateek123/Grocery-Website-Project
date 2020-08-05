@@ -25,9 +25,13 @@ module.exports = (sequelize, Sequelize = require('sequelize')) => {
         transactionStatus: {
             type: Sequelize.ENUM(['SUCCESS', 'FAILED'])
         },
-        cancelled:{
+        isCancelled:{
+            type:Sequelize.BOOLEAN,
+            defaultValue:false            
+        },
+        remarks:{
             type:Sequelize.STRING,
-            defaultValue:null            
+            defaultValue:null             
         }
     },
         {

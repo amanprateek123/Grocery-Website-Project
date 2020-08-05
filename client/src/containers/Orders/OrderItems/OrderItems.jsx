@@ -39,7 +39,7 @@ function OrderItems(props) {
     }).then(res => res.json())
       .then((data) => {
         setOrder(data[0])
-        console.log(data)
+        console.log(data[0])
       })
   }, [])
 
@@ -100,6 +100,9 @@ function OrderItems(props) {
         setCancel(false)
     } 
 
+
+
+
 //   const deleteOrder = ()=>{
 //     return fetch('/delete-order',{
 //         headers: {
@@ -138,52 +141,106 @@ const cancelOrder = (variable)=>{
             method:'DELETE',
             body:JSON.stringify({reason:body,id:order.id})
         }).then(res=>res.json()).then(res=>{
-           setSnackbar(true)
-           setTimeout(()=>{
-            props.history.push('/orders')
-           },3000)}
+          //  setSnackbar(true)
+          //  setTimeout(()=>{
+          //   props.history.push('/orders')
+          //  },3000)
+        }
           )
 }
-
-
+// let data = []
+// if(order){
+//   data = [...order.orderItems]
+// }
+// const duplicate = (data) =>{
+//   data.map(item=>{
+//     let a = []
+//     if(!a.includes(item)){
+//           a.push(item)
+//     }
+//     return a
+//   })
+// }
 
 const[cancels,meta] = useMutation(cancelOrder)
 
 
 const cancelling = (
-    <React.Fragment>
-        <Paper className="container" style={{minHeight:'400px'}}>
-             <CloseIcon style={{float:'right',cursor:'pointer',marginTop:'10px'}} onClick={closeModal} />
-             <h4 style={{padding:'10px 20px'}}>Reason for cancellation:</h4>
-             <Formik
-             initialValues={{
-               reason:'',
-               other:''
-             }}
-             onSubmit={async (values,{setSubmitting})=> await cancels({variables:values})}
-             >
-                {({values}) => (
-                  <Form>
-                  <Field style={{width:'60%',margin:'30px 17%',padding:'10px'}} as="select" name="reason">
-                   <option value="">Select Cancellation Reason</option>
-                   {cancel_list.map(itm=>{
-                       return(
-                        <option value={itm.reason}>{itm.reason}</option>
-                       )
-                   })}
-               </Field>
-                {values.reason==="Others"?<Field type="text" required name="other" placeholder="Enter reason..." style={{width:'30%',margin:'0 17%',padding:'10px'}} className="vis" />:<Field type="text"name="other" placeholder="Enter reason..." style={{width:'30%',margin:'0 17%',padding:'10px'}} className="hid" />}
-
-             <button className="cancel_btn" type="submit" style={{marginTop:'10%'}} >Cancel Order</button>
-                  </Form>
-                )}
-                
-             </Formik>
-             <div>
-             </div>
-        </Paper>
-    </React.Fragment>
+   order?
+   <React.Fragment>
+   <Paper className="container" style={{minHeight:'350px'}}>
+        <CloseIcon style={{float:'right',cursor:'pointer',marginTop:'10px'}} onClick={closeModal} />
+        <h4 style={{padding:'10px 20px'}}>Reason for cancellation:</h4>
+        <Formik
+        initialValues={{
+          reason:'',
+          other:''
+        }}
+        onSubmit={async (values,{setSubmitting})=> await cancels({variables:values})}
+        >
+           {({values}) => (
+             <Form className="row">
+       <div className="col-md-9">
+           <Field style={{width:'60%',margin:'30px 17%',padding:'10px'}} as="select" name="reason">
+              <option value="">Select Cancellation Reason</option>
+              {cancel_list.map(itm=>{
+                  return(
+                   <option value={itm.reason}>{itm.reason}</option>
+                  )
+              })}
+            </Field>
+           {values.reason==="Others"?<Field type="text" required name="other" placeholder="Enter reason..." style={{width:'30%',margin:'0 17%',padding:'10px'}} className="vis" />:<Field type="text"name="other" placeholder="Enter reason..." style={{width:'30%',margin:'0 17%',padding:'10px'}} className="hid" />}
+            
+       </div>
+       <div className="col-md-3">
+           <Button type="submit" variant="contained" disabled={order.statusId>2?true:false} color='secondary' style={{padding:'10px',width:'200px',marginTop:'12%'}} >Cancel Order</Button>
+       </div>
+             </Form>
+           )}
+           
+        </Formik>
+        {(meta.isSuccess && order.statusId<3)?
+        <div>
+        <p style={{textAlign:'center',color:'green',marginTop:'10%',fontSize:'22px'}}>Your order is cancelled!</p>
+      </div>:null
+                   }
+         {order.statusId>2?         
+         <div>
+         <p style={{textAlign:'center',color:'red',marginTop:'10%',fontSize:'22px'}}>Item cannot be cancelled!</p>
+       </div>:null}          
+   </Paper>
+</React.Fragment>:null
 )
+// let a = []
+// let skuId = []
+// if(order){
+//   for(let i=0;i<order.orderItems.length;i++){
+//     let count = 0
+//         for(let j=0;j<order.orderItems.length;j++){
+//            if(order.orderItems[i].sku.id===order.orderItems[j].sku.id){
+//                     count++;
+//            }
+//         }     
+//     if(!skuId.includes(order.orderItems[i].sku.id)){
+//     a.push({data:order.orderItems[i],count:count})
+//     skuId.push(order.orderItems[i].sku.id)
+//         }   
+//   }
+// }
+// console.log(a)
+let filtered = [];
+if(order){
+for (let oi of order.orderItems){
+  let existing = filtered.find(foi=>foi.skuId == oi.skuId);
+  if(existing){
+      existing.count++;
+  }
+  else{
+      filtered.push({...oi,count:1})
+  }
+}
+}
+
 
   return (
     order ? <React.Fragment>
@@ -195,7 +252,7 @@ const cancelling = (
            <p style={{fontSize:'17px'}}>Order: <span style={{color:'var(--mainColor)'}}> #{10000+order.id} </span></p>
            </div>
            <div className="col-md-6" style={{display:'flex',alignItems:'center',justifyContent:'flex-end'}}>
-             {order.cancelled===null?
+             {!order.isCancelled?
                         <Slider
                         defaultValue={single(order)}
                         getAriaValueText={valuetext}
@@ -243,16 +300,17 @@ const cancelling = (
              <div className="row" style={{padding:'10px 15px'}}>
                  <div className="col-md-8">
                      <div>
-                      {order.orderItems.map((item,i) =>{
+                      {filtered.map((item,i) =>{
                          return(
                            <div className="row p-2" key={i}>
-                               <div className="col-md-3" style={{justifyContent:'center',alignItems:'center'}}>
-                                   <img src={item.sku.images[0].src} style={{width:'70%',height:'120px'}} />
+                               <div className="col-md-3" style={{display:'flex',justifyContent:'center',alignItems:'center',padding:'5px'}}>
+                                   <img src={item.sku.images[0].src} style={{width:'70%',height:'130px'}} />
                                </div>
                                <div className="col-md-8 pt-2">
                                    <h6 style={{fontSize:'16px',fontWeight:'bold'}}> {item.sku.product.name} </h6>
                                    <p>Sold by: <span style={{color:'var(--mainColor)'}}>LalaDukaan</span></p>
                                    <p>₹ <span style={{color:'var(--mainColor)'}}> {item.sku.price} </span></p>
+                                   <p style={{fontWeight:'bold'}}>Quantity: <span style={{fontWeight:'normal'}}> {item.count} </span></p>
                                </div>
                             </div> 
                          )
@@ -260,7 +318,7 @@ const cancelling = (
                     </div>
                  </div>
                  <div className="col-md-4">
-                   {order.cancelled===null?
+                   {!order.isCancelled?
                                        <div className="mt-5">
                                        <Button variant="contained" color="inherit" style={{backgroundColor:'var(--mainColor)',color:'white',padding:'10px 15px',width:'300px',fontSize:'15px'}}>Track Package</Button>
                                        <div style={{marginTop:'5%'}}>
@@ -275,11 +333,11 @@ const cancelling = (
          </div>
          
       </Paper>
-      <Snackbar open={snackbar} autoHideDuration={2000} className="home-snackbar" onClose={() => setSnackbar(false)} anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}>
+      {/* <Snackbar open={snackbar} autoHideDuration={2000} className="home-snackbar" onClose={() => setSnackbar(false)} anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}>
          <Alert  severity="success" className="home-snackbar" variant="filled" >
             Your Order is Cancelled!
           </Alert>
-      </Snackbar>
+      </Snackbar> */}
     </React.Fragment> : null
   )
 }
