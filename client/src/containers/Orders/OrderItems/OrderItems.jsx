@@ -180,7 +180,7 @@ const cancelling = (
         >
            {({values}) => (
              <Form className="row">
-       <div className="col-md-9">
+       <div className="col-md-8">
            <Field style={{width:'60%',margin:'30px 17%',padding:'10px'}} as="select" name="reason">
               <option value="">Select Cancellation Reason</option>
               {cancel_list.map(itm=>{
@@ -193,7 +193,7 @@ const cancelling = (
             
        </div>
        <div className="col-md-3">
-           <Button type="submit" variant="contained" disabled={order.statusId>2?true:false} color='secondary' style={{padding:'10px',width:'200px',marginTop:'12%'}} >Cancel Order</Button>
+           <Button type="submit" variant="contained" disabled={(order.statusId>2 || values.reason==='')?true:false} color='secondary' style={{padding:'10px',width:'200px',marginTop:'12%'}} >Cancel Order</Button>
        </div>
              </Form>
            )}
