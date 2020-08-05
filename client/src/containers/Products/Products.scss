@@ -90,7 +90,7 @@
         padding: 0px 5px 0 2px !important;
     }
     .MuiTypography-body1 {
-        font-size: 14px;
+        font-size: 1em;
         white-space: nowrap;
         font-family: "Oswald", "Helvetica", "Arial", sans-serif;
     }
@@ -137,6 +137,7 @@
         border-radius: 1em;
         // padding: 0.3em;
         padding: 0.1em;
+        font-size: 13px;
         box-shadow: none;
 
         ul{

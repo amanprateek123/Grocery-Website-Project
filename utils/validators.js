@@ -34,7 +34,7 @@ exports.validateProduct = (prod) => {
         })
     }
 
-    if (!vld.isInt(prod.categoryId)) {
+    if (!vld.isInt('' + prod.categoryId)) {
         errors.push({
             param: 'categoryId',
             msg: 'categoryId should an Integer.',

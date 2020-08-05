@@ -368,6 +368,7 @@ exports.getProducts = (req, res) => {
                include: [
                   {
                      model: db.image,
+                     order: [['src', 'ASC']],
                      attributes: ['id', 'src'],
                   },
                   {

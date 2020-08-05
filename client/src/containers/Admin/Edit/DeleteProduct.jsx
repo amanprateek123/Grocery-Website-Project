@@ -6,10 +6,13 @@ import * as actions from '../../../store/actions'
 import { connect } from 'react-redux'
 import { useState } from 'react';
 import { useEffect } from 'react';
-import '../Admin.scss'
-import '../SingleUploads/AddProduct.scss'
 import Product from '../../../components/Product/Product'
 import { useRef } from 'react';
+
+import Swal from 'sweetalert2'
+import '../Admin.scss'
+import '../SingleUploads/AddProduct.scss'
+import '@sweetalert2/theme-minimal/minimal.scss';
 
 const DeleteProduct = (props) => {
 
@@ -38,19 +41,55 @@ const DeleteProduct = (props) => {
     const deleteProduct = (e, method) => {
         e.preventDefault();
 
-        fetch('/admin/delete-product', {
-            method: 'delete',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                productId: product.id,
-                method: method
-            })
-        }).then(res => res.json())
-            .then(res => {
-                setResponse(res);
-            })
+        Swal.fire({
+            title: 'Are you sure?',
+            text: method=='hard'?
+            `All related data (sku,images,attributes) related to this product will be deleted. This cannot be reverted.`
+            :`Reduce Stock Quantity to 0.`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes',
+            confirmButtonColor:'#f009',
+            cancelButtonText: 'No'
+        }).then((result) => {
+            if (result.value) {
+                fetch('/admin/delete-product', {
+                    method: 'delete',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        productId: product.id,
+                        method: method
+                    })
+                }).then(res => res.json())
+                    .then(res => {
+                        setResponse(res);
+                        if (res.status == 200) {
+                            Swal.fire(
+                                'Deleted!',
+                                'Product has been deleted Successfully.',
+                                'success'
+                            )
+                        }
+                        else {
+                            Swal.fire(
+                                'Error',
+                                'Some Error Occurred on Server.',
+                                'error'
+                            )
+                        }
+                    })
+
+
+            } else if (result.dismiss === Swal.DismissReason.cancel) {
+                Swal.fire(
+                    'Cancelled',
+                    'Product NOT Deleted.',
+                    'error'
+                )
+            }
+        })
 
     }
 

@@ -87,36 +87,48 @@ const Product = (props) => {
             </CardContent>
             <div className="space"></div>
             <CardActions className="card-bottom">
-                <div className="sku-select">
-                    <Typography className="price" component="p">
-                        Rs. {selectedSKU ? selectedSKU.price : '$$$'} <span className="info"></span>
-                    </Typography>
-                    {product.skus ?
-                        product.skus[1] ?
-                            product.skus[0].attributes.length == 1 ? // show this dropdown for 1 attribute case
-                                <div className="variants">
-                                    <select labelId="variant" className="pack-size" onChange={(e) => {
-                                        console.log(e.target.value);
-                                        setSelectedSKU(product.skus[e.target.value])
-                                    }}>
-                                        {
-                                            product.skus.map((sku, i) => <option key={sku.id} value={i}>{sku.attributes[0]?.value}</option>)
-                                        }
-                                    </select>
+                {
+                    props.noOptions ?
+                        null
+                        :
+                        <div className="sku-select">
+                            <Typography className="price" component="p">
+                                Rs. {selectedSKU ? selectedSKU.price : '$$$'} <span className="info"></span>
+                            </Typography>
+                            {product.skus ?
+                                product.skus[1] ?
+                                    product.skus[0].attributes.length == 1 ? // show this dropdown for 1 attribute case
+                                        <div className="variants">
+                                            <select labelId="variant" className="pack-size" onChange={(e) => {
+                                                console.log(e.target.value);
+                                                setSelectedSKU(product.skus[e.target.value])
+                                            }}>
+                                                {
+                                                    product.skus.map((sku, i) => <option key={sku.id} value={i}>{sku.attributes[0]?.value}</option>)
+                                                }
+                                            </select>
 
-                                </div>
+                                        </div>
+                                        : null
+                                    : null
                                 : null
-                            : null
+                            }
+                        </div>
+                }
+
+                {
+                    props.priceLabel ?
+                        <div className="price-label">Rs. {selectedSKU ? selectedSKU.price : '$$$'}</div>
                         : null
-                    }
-                </div>
+                }
+
                 <div className="card-actions">
                     {
                         props.noCart || product.skus[0].attributes.length > 1 && product.skus.length > 1
                             ? null
                             : selectedSKU.stockQuantity ?
                                 <React.Fragment>
-                                    <TextField className="quantity-inp" type="number" defaultValue="1" label="Qty." InputProps={{ inputProps: { min: 1, max: 10 } }} />
+                                    <TextField className="quantity-inp" type="number" defaultValue="1" label="Qty" InputProps={{ inputProps: { min: 1, max: Math.min(10, selectedSKU.stockQuantity) } }} />
                                     <div className="btn btn-full add-to-cart" onClick={(e) => {
                                         props.addToCart(selectedSKU.id, +e.target.parentElement.querySelector('.quantity-inp input').value)
                                         props.feedback()

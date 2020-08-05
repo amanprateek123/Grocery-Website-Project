@@ -28,12 +28,14 @@ export default function About(props) {
 
     }
     return (
-        <div className="about_product">
-            <h1>{props.head}</h1>
-            <hr />
-            <div>
-                {content}
+        content.length ?
+            <div className="about_product">
+                <h1>{props.head}</h1>
+                <hr />
+                <div>
+                    {content}
+                </div>
             </div>
-        </div>
+            : null
     )
 }

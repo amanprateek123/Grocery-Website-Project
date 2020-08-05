@@ -23,6 +23,10 @@ function Checkout(props) {
 
             })
         })
+
+        // fetch latest cart
+        props.fetchCart();
+
     }, []
     )
 
@@ -240,7 +244,9 @@ const mapStateToProps = state => {
 }
 const mapDispatchToProps = dispatch => {
     return {
-        emptyCart: () => dispatch({ type: actions.SET_CART, cart: [] })
+        emptyCart: () => dispatch({ type: actions.SET_CART, cart: [] }),
+        fetchCart: () => dispatch(actions.fetchCart())
+
 
     }
 }

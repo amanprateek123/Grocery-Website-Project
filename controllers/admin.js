@@ -62,16 +62,24 @@ async function createProduct(prod, files) {
                                     }
                                 }()),
 
-                                ...sku.images.map(image => {
-                                    return db.image.create({
-                                        ...(image.id) && { id: image.id },
-                                        skuId: _sku.id,
-                                        src: image.src,
-                                    }).then(_image => {
-                                        console.log(" >> PRESERVED Image: ", _image.id);
-                                        return _image
-                                    })
-                                }),
+                                ...(function () {
+                                    try {
+                                        return sku.images.map(image => {
+                                            return db.image.create({
+                                                ...(image.id) && { id: image.id },
+                                                skuId: _sku.id,
+                                                src: image.src,
+                                            }).then(_image => {
+                                                console.log(" >> PRESERVED Image: ", _image.id);
+                                                return _image
+                                            })
+                                        })
+                                    }
+                                    catch (e) {
+                                        return []
+                                    }
+
+                                }()),
 
                                 ...sku.attributes.map(attr => {
                                     return db.attribute.create({
@@ -125,8 +133,8 @@ exports.addProduct = (req, res, next) => {
         return res.status(422).json({ status: 422, errors: valErrors.array() });
     }
 
-    createProduct(prod, req.files).then(_product => {
-        res.json({ status: 200, message: `Product Added with ID : ${_product.id}`, product: _product })
+    createProduct(prod, req.files).then(_result => {
+        res.json({ status: 200, message: `Product Added with ID : ${_result.product.id}`, product: _result.product })
     })
 
 }
