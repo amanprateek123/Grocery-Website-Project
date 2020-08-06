@@ -231,7 +231,7 @@ function Orders(props) {
                                         <div className="col-md-5">
                                             <div className="row">
                                                 <div className="col-md-4 p-2">
-                                                    <img src={order.orderItems[0].sku.images[0].src} style={{ width: '70%',height:'110px' }} className="ml-4" />
+                                                    <div style={{ width: '70%',height:'110px',backgroundImage:`url(${order.orderItems[0].sku.images[0].src})` }} className="ml-4 orderimg" ></div>
                                                 </div>
                                                 <div className="col-md-8">
                                                     <div className="mt-2">

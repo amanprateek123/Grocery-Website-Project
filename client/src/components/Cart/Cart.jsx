@@ -33,7 +33,7 @@ function Cart(props) {
                                 <div className="container-fluid item-wrap" style={{ position: 'relative', display: 'flex', flexDirection: 'row', padding: '0' }}>
                                     <div className="col-md-2" style={{ height: '80px' }} >
                                         <div style={{ margin: '4px', marginLeft: '-10px', border: '1px solid #f3f3f3', height: '72px', width: '72px', overflow: 'hidden' }}>
-                                            {product.sku.images[0] ? <img src={product.sku.images[0].src} style={{ width: "100%", height: '68px', padding: '4px' }} /> : null}
+                                            {product.sku.images[0] ? <div className="cartimg" style={{ width: "100%", height: '70px',padding:'2px',backgroundImage:`url(${product.sku.images[0].src})` }} ></div> : null}
                                         </div>
                                     </div>
                                     <div className="col-md-6">

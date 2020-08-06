@@ -141,10 +141,10 @@ const cancelOrder = (variable)=>{
             method:'DELETE',
             body:JSON.stringify({reason:body,id:order.id})
         }).then(res=>res.json()).then(res=>{
-          //  setSnackbar(true)
-          //  setTimeout(()=>{
-          //   props.history.push('/orders')
-          //  },3000)
+          console.log(order.id)
+           setTimeout(()=>{
+            props.history.push(`/order/${order.id}`)
+           },3000)
         }
           )
 }
@@ -164,12 +164,13 @@ const cancelOrder = (variable)=>{
 
 const[cancels,meta] = useMutation(cancelOrder)
 
+const [msg,setMsg] = useState(false)
 
 const cancelling = (
    order?
    <React.Fragment>
-   <Paper className="container" style={{minHeight:'350px'}}>
-        <CloseIcon style={{float:'right',cursor:'pointer',marginTop:'10px'}} onClick={closeModal} />
+   <Paper className="container" style={{minHeight:'350px',padding:'15px'}}>
+        <CloseIcon style={{float:'right',cursor:'pointer'}} onClick={closeModal} />
         <h4 style={{padding:'10px 20px'}}>Reason for cancellation:</h4>
         <Formik
         initialValues={{
@@ -193,21 +194,18 @@ const cancelling = (
             
        </div>
        <div className="col-md-3">
-           <Button type="submit" variant="contained" disabled={(order.statusId>2 || values.reason==='')?true:false} color='secondary' style={{padding:'10px',width:'200px',marginTop:'12%'}} >Cancel Order</Button>
+           <Button type="submit" variant="contained" disabled={(values.reason==='')?true:false} color='secondary' style={{padding:'10px',width:'200px',marginTop:'12%'}} >Cancel Order</Button>
        </div>
+       {(meta.isSuccess && order.statusId<3)?
+        <div className="message">
+        <p style={{textAlign:'left',color:'green',marginTop:'2%'}}>Your order has been cancelled for the reason indicated below. You will get an email with details of items which were part of the cancelled order.</p>
+        <p><b>Reason:</b> {values.other===''?values.reason:values.other} </p>
+      </div>:null
+                   }
              </Form>
            )}
            
-        </Formik>
-        {(meta.isSuccess && order.statusId<3)?
-        <div>
-        <p style={{textAlign:'center',color:'green',marginTop:'10%',fontSize:'22px'}}>Your order is cancelled!</p>
-      </div>:null
-                   }
-         {order.statusId>2?         
-         <div>
-         <p style={{textAlign:'center',color:'red',marginTop:'10%',fontSize:'22px'}}>Item cannot be cancelled!</p>
-       </div>:null}          
+        </Formik>         
    </Paper>
 </React.Fragment>:null
 )
@@ -241,15 +239,14 @@ for (let oi of order.orderItems){
 }
 }
 
-
   return (
     order ? <React.Fragment>
-      <Paper className="container" style={{marginTop:'2%', paddingBottom:'20px'}}>
+      <Paper className="container" style={{marginTop:'2%',marginBottom:'2%', paddingBottom:'20px'}}>
          <div className="row">
            <div className="col-md-5">
-           <h1 style={{padding:'25px 0 5px 0',fontSize:'25px',fontWeight:'bold'}}>Order Summary</h1>
-           <p style={{fontSize:'17px'}}>Ordered on {new Date(order.createdAt).getDate()} {month[new Date(order.createdAt).getMonth()]} {new Date(order.createdAt).getFullYear()} </p>
-           <p style={{fontSize:'17px'}}>Order: <span style={{color:'var(--mainColor)'}}> #{10000+order.id} </span></p>
+           <h1 style={{padding:'25px 0 5px 0',fontSize:'20px',fontWeight:'bold'}}>Order Summary</h1>
+           <p style={{fontSize:'15px'}}>Ordered on {new Date(order.createdAt).getDate()} {month[new Date(order.createdAt).getMonth()]} {new Date(order.createdAt).getFullYear()} </p>
+           <p style={{fontSize:'15px'}}>Order: <span style={{color:'var(--mainColor)'}}> #{10000+order.id} </span></p>
            </div>
            <div className="col-md-6" style={{display:'flex',alignItems:'center',justifyContent:'flex-end'}}>
              {!order.isCancelled?
@@ -261,15 +258,15 @@ for (let oi of order.orderItems){
                         valueLabelDisplay="auto"
                         marks={progress}
                         disabled
-                        style={{ color: 'green'}}
-                      />:<h5 style={{fontSize:'20px'}}>Status:<span className="ml-2"  style={{color:'red',fontWeight:'550'}}>Cancelled</span></h5>}
+                        style={{ color: 'green',textTransform:'capitalize'}}
+                      />:<h5 style={{fontSize:'16px'}}>Status:<span className="ml-2"  style={{color:'red',fontWeight:'550'}}>Cancelled</span></h5>}
            </div>
          </div>
          <div className="orderItems">
              <div className="row" style={{padding:'10px 15px'}}>
                  <div className="col-md-4">
-                    <h5 style={{fontSize:'18px',fontWeight:'bold'}}>Shipping Address</h5>
-                    <div>
+                    <h5 style={{fontSize:'16px',fontWeight:'bold'}}>Shipping Address</h5>
+                    <div style={{fontSize:'13px'}}>
                       {JSON.parse(order.shippingAddress).address}<br/>
                       State: <span style={{fontWeight:'bold'}}> {JSON.parse(order.shippingAddress).state} </span><br/>
                       Country: <span style ={{fontWeight:'bold'}} > {JSON.parse(order.shippingAddress).country} </span><br/>
@@ -277,15 +274,15 @@ for (let oi of order.orderItems){
                     </div>
                  </div>
                  <div className="col-md-4">
-                   <h5 style={{fontSize:'18px',fontWeight:'bold'}}>Payment Method</h5>
-                   <p> {order.paymentType} </p>
-                   <div className="mt-4" style={{fontSize:'18px'}}>
+                   <h5 style={{fontSize:'16px',fontWeight:'bold'}}>Payment Method</h5>
+                   <p style={{fontSize:'13px'}}> {order.paymentType} </p>
+                   <div className="mt-4" style={{fontSize:'16px'}}>
                      Download <span style={{color:'var(--mainColor)'}}>Invoice</span>
                    </div>
                  </div>
                  <div className="col-md-4">
-                   <h5 style={{fontSize:'18px',fontWeight:'bold'}}>Order Summary</h5>
-                   <div>
+                   <h5 style={{fontSize:'16px',fontWeight:'bold'}}>Order Summary</h5>
+                   <div style={{fontSize:'13px'}}>
                       Item(s) Subtotal: <span style={{float:'right'}}> ₹{order.price} </span><br/>
                       Shipping: <span style={{float:'right'}}> ₹0 </span><br/>
                       Total: <span style={{float:'right'}}> ₹{order.price} </span><br/>
@@ -298,16 +295,16 @@ for (let oi of order.orderItems){
          </div>
          <div className="orderItems">
              <div className="row" style={{padding:'10px 15px'}}>
-                 <div className="col-md-8">
+                 <div className="col-md-8 hides" style={{maxHeight:'450px',overflowY:'scroll'}}>
                      <div>
                       {filtered.map((item,i) =>{
                          return(
-                           <div className="row p-2" key={i}>
-                               <div className="col-md-3" style={{display:'flex',justifyContent:'center',alignItems:'center',padding:'5px'}}>
-                                   <img src={item.sku.images[0].src} style={{width:'70%',height:'130px'}} />
+                           <div className="row p-1 mt-1" key={i}>
+                               <div className="col-md-2 li_img" style={{backgroundImage:`url(${item.sku.images[0].src})`}}>
+                                   
                                </div>
-                               <div className="col-md-8 pt-2">
-                                   <h6 style={{fontSize:'16px',fontWeight:'bold'}}> {item.sku.product.name} </h6>
+                               <div className="col-md-8 order_list_item">
+                                   <p style={{fontSize:'16px',fontWeight:'bold'}}> {item.sku.product.name} </p>
                                    <p>Sold by: <span style={{color:'var(--mainColor)'}}>LalaDukaan</span></p>
                                    <p>₹ <span style={{color:'var(--mainColor)'}}> {item.sku.price} </span></p>
                                    <p style={{fontWeight:'bold'}}>Quantity: <span style={{fontWeight:'normal'}}> {item.count} </span></p>
@@ -319,10 +316,11 @@ for (let oi of order.orderItems){
                  </div>
                  <div className="col-md-4">
                    {!order.isCancelled?
-                                       <div className="mt-5">
-                                       <Button variant="contained" color="inherit" style={{backgroundColor:'var(--mainColor)',color:'white',padding:'10px 15px',width:'300px',fontSize:'15px'}}>Track Package</Button>
+                                       <div className="mt-3">
+                                       <Button variant="contained" color="inherit" style={{backgroundColor:'var(--mainColor)',color:'white',padding:'10px 15px',width:'260px',fontSize:'14px'}}>Track Package</Button>
                                        <div style={{marginTop:'5%'}}>
-                                       <Button variant="contained" color="inherit" style={{backgroundColor:'#f3f3f3',color:'black',padding:'10px 15px',width:'300px',fontSize:'15px'}} onClick={openModal}>Cancel Order</Button>
+                                       {order.statusId<3?<Button variant="contained" color="inherit" style={{backgroundColor:'#f3f3f3',color:'black',padding:'10px 15px',width:'260px',fontSize:'14px'}}  onClick={openModal}>Cancel Order</Button>:
+                                       <Button variant="contained" color="inherit" style={{backgroundColor:'#f3f3f3',color:'black',padding:'10px 15px',width:'260px',fontSize:'14px'}} onClick={()=>setMsg(true)} >Cancel Order</Button>}
                                        <Modal visible={cancel}>
                                             {cancelling}
                                         </Modal>
@@ -330,6 +328,10 @@ for (let oi of order.orderItems){
                                    </div>:null}
                  </div>
              </div>
+         {msg?         
+         <div>
+         <p style={{textAlign:'left',color:'red',marginTop:'1%',fontSize:'15px',padding:'0 15px'}}><b>Note: </b><span style={{fontSize:'13px',color:'black'}}>Your Order is shipped.So,you are not able to cancel the order!</span> </p>
+       </div>:null} 
          </div>
          
       </Paper>
