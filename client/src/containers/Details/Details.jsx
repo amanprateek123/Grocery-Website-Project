@@ -56,18 +56,19 @@ const Details = (props) => {
                         index = i
                 })
                 setPack(parseInt(index))
+
             }
+            window.scrollTo(0, 0);
         })).catch(err => {
             console.log(err);
 
         })
 
 
-
     }, [props.location])
 
-    const [zoom, setZoom] = useState(false);   
-   
+    const [zoom, setZoom] = useState(false);
+
 
     return (
         product ?
@@ -87,7 +88,7 @@ const Details = (props) => {
                                     {
                                         product.skus[pack].images.map((item, i) => {
                                             return (<div className={img === i ? "img_det2" : "img_det1"} key={item.id} onClick={() => { changeImg(i) }} >
-                                                <img src={item.src} alt="pic"/>
+                                                <img src={item.src} alt="pic" />
                                             </div>)
                                         })
                                     }

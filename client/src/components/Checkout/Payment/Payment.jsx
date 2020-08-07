@@ -8,6 +8,8 @@ import * as actions from '../../../store/actions'
 import { useMutation } from 'react-query'
 import { useEffect } from 'react';
 
+import site from '../../../site_config';
+
 const Payment = (props) => {
 
 
@@ -152,13 +154,13 @@ const Payment = (props) => {
                         <input type="radio" checked className="del_rad" />
                         <span className="add_list_1">
                             <div className="col-md-6">
-                                <p style={{ fontSize: "16px" }}>Laladukaan Basket <span style={{ fontWeight: 'bold' }}>({props.cart.length} items)</span></p>
+                                <p style={{ fontSize: "16px" }}>{site.name} Basket <span style={{ fontWeight: 'bold' }}>({props.cart.length} items)</span></p>
                             </div>
                             <div className="order_list_sum">
                                 <div className="row" style={{ minHeight: '56px', width: '60%' }}>
                                     {props.cart.map(itm => {
                                         return (
-                                            <div className="list_img col-md-2" style={{backgroundImage:`url(${itm.sku.images[0].src})`}}>
+                                            <div className="list_img col-md-2" style={{ backgroundImage: `url(${itm.sku.images[0].src})` }}>
                                             </div>
                                         )
                                     })}

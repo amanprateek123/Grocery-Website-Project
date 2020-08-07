@@ -388,6 +388,30 @@ exports.getProducts = (req, res) => {
    })
 }
 
+exports.predictiveSearch = (req, res) => {
+   let query = req.query.q;
+   db.product.findAll({
+      where: {
+         [Op.or]: [
+            {
+               name: {
+                  [Op.like]: `%${query}%`
+               }
+            },
+            {
+               keywords: {
+                  [Op.like]: `%${query}%`
+               }
+            }
+         ]
+      },
+      limit: 10,
+      attributes: [[db.Sequelize.literal('DISTINCT name'), 'name']]
+   }).then(products => {
+      let strings = products.map(p => p.name);
+      res.json(strings)
+   })
+}
 
 // *** CART
 

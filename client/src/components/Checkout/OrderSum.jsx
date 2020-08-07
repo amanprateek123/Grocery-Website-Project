@@ -4,6 +4,7 @@ import DoneIcon from '@material-ui/icons/Done';
 import { connect } from 'react-redux'
 import * as actions from '../../store/actions'
 
+import site from '../../site_config';
 
 function OrderSum(props) {
 
@@ -38,7 +39,7 @@ function OrderSum(props) {
                                         {item.sku.name}
                                     </div>
                                     <div className="seller_prod">
-                                        <span>Seller: Laladukaan</span>
+                                        <span>Seller: {site.name}</span>
                                     </div>
                                     <span className="order_price">
                                         ₹ {item.sku.price * (item.quantity)}

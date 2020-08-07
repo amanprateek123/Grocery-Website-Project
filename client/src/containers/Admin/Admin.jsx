@@ -25,6 +25,7 @@ import AddProductJSON from './SingleUploads/AddProductJSON';
 import DeleteProduct from './Edit/DeleteProduct';
 import EditProduct from './Edit/EditProduct';
 import Homepage from './HomePage/Homepage'
+import { useEffect } from 'react';
 
 const Profile = (props) => {
 
@@ -42,6 +43,10 @@ const Profile = (props) => {
     const closeModal = () => {
         setModal(false);
     }
+
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, [tab])
 
 
 
