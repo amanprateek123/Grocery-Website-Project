@@ -4,8 +4,20 @@ import './Home.scss'
 import Carousel from './MultiCarousel/Carousel'
 import Carousel1 from './MultiCarousel/Carousel1'
 import Facilities from './Facilities/Facilities'
+import {useQuery,useMutation } from 'react-query';
 
 export default function Home() {
+        //fetch homepage table using query
+
+        const query = useQuery('sections',()=>(
+            fetch('admin/homepage',{
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                method:'GET'}).then(res=>res.json())
+        ))
+         console.log('data',query.data)
+
     return (
         <React.Fragment>
             <Paper className="row home1" style={{margin:'40px auto'}}>

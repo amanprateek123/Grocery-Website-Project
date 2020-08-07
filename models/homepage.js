@@ -8,7 +8,11 @@ module.exports = (sequelize, Sequelize) => {
         },
         key: {
             type: Sequelize.STRING,
-            allowNull: false
+            allowNull: true
+        },
+        subHeading: {
+            type: Sequelize.STRING,
+            allowNull: true
         },
         value: {
             type: Sequelize.STRING,

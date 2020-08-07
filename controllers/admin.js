@@ -638,7 +638,8 @@ exports.homePage = async (req, res) => {
             return db.homepage.create({
                 key: item.key,
                 value: item.value,
-                fieldType: item.fieldType
+                fieldType: item.fieldType,
+                subHeading:item.sub
             }
             ).then(add => {
                 console.log("Row Added")
@@ -646,10 +647,15 @@ exports.homePage = async (req, res) => {
         })
     ).then(result => {
         console.log(result)
-        res.json({ message: "Successfully Added", status: 201, data: result })
+        res.json({ message: "Successfully Added", status: 201, data: req.body })
     }).catch(e => {
         console.log(e)
         res.json({ message: "Uploading failed" })
     })
 
+}
+
+//get homepage data
+exports.getHome = async (req,res)=>{
+    db.homepage.findAll({}).then(data=>res.json(data)).catch((err)=>res.json(err))
 }

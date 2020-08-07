@@ -9,7 +9,7 @@ import { useState } from 'react';
 import { useEffect } from 'react';
 import { Formik, Form, Field,ErrorMessage,FieldArray } from 'formik';
 import './Homepage.scss'
-import { useMutation } from 'react-query';
+import {useQuery,useMutation } from 'react-query';
 import Snackbar from '@material-ui/core/Snackbar';
 
  function Homepage(props) {
@@ -18,6 +18,7 @@ import Snackbar from '@material-ui/core/Snackbar';
         sections:[
             {
                 key:'',
+                sub:'',
                 value:'',
                 fieldType:''
             }
@@ -26,6 +27,7 @@ import Snackbar from '@material-ui/core/Snackbar';
     const [data,setData] = useState(null)
 
     const homePage = (variable) =>{
+        console.log(variable.variables.sections)
         return (
             fetch('/admin/homepage',{
                 headers: {
@@ -43,8 +45,7 @@ import Snackbar from '@material-ui/core/Snackbar';
     const[snackbar,setSnackbar] = useState(false)
 
     const [home,meta] = useMutation(homePage)
-
-
+    
     return (
         <Paper className="home_edit">
             <h1>Homepage</h1>
@@ -70,17 +71,26 @@ import Snackbar from '@material-ui/core/Snackbar';
                    <option value="">Select Option</option>   
                    <option value="Adding Product">Adding Product</option>
                    <option value="Adding Banners">Adding Banners</option>
+                   <option value="special">Special Section</option>
                  </Field>
                   <ErrorMessage name="fieldType" />
                   </div>
+                   {sec.fieldType===''|| sec.fieldType==='special'?null:
+                   <React.Fragment>
                   <div className="mt-3">
                   <label htmlFor={`sections.${index}.key`}>Enter the heading for the section:</label>
                   <Field name={`sections.${index}.key`} type="text" style={{float:'right',padding:'3px',width:'300px'}} required />
                   <ErrorMessage name={`sections.${index}.key`} />
                   </div>
+                  <div className="mt-3">
+                  <label htmlFor={`sections.${index}.sub`}>Enter the sub-heading for the section:</label>
+                  <Field name={`sections.${index}.sub`} type="text" style={{float:'right',padding:'3px',width:'300px'}} required />
+                  <ErrorMessage name={`sections.${index}.sub`} />
+                  </div>                       
+                       </React.Fragment>}
                    {sec.fieldType===''?null:
                                      <div className="mt-3">
-                                     <label htmlFor={`sections.${index}.value`}>Enter the {(sec.fieldType==="Adding Product")?"JSON Array(SKU's ID) for adding products":(sec.fieldType)==="Adding Banners"?"array of image links":null}:</label>
+                                     <label htmlFor={`sections.${index}.value`}>Enter the {(sec.fieldType==="Adding Product")?"JSON Array(SKU's ID) for adding products":(sec.fieldType)==="Adding Banners"?"array of image links":(sec.fieldType==="special")?"array of 4 objects(includes Heading and Category Id) ":null}:</label>
                                      <Field name={`sections.${index}.value`} type="text" style={{float:'right',padding:'3px',width:'300px'}} required/>
                                      <ErrorMessage name={`sections.${index}.value`} />
                                      </div>}
