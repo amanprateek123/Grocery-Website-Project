@@ -18,7 +18,7 @@ module.exports = (sequelize, Sequelize) => {
             type: Sequelize.STRING,
             allowNull: false
         },
-        fieldType:{
+        fieldType: {
             type: Sequelize.STRING,
             allowNull: false
         }

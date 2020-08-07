@@ -42,6 +42,7 @@ exports.getProducts = (req, res) => {
    let where = {};
    let catWhere = {};
    req.query.id ? (where.id = req.query.id) : null;
+   req.query.ids ? (where.id = { [Op.in]: JSON.parse(req.query.ids) }) : null;
    req.query.categoryId ? (where.categoryId = req.query.categoryId) : null;
    req.query.category ? (where['$category.name$'] = { [Op.like]: `%${req.query.category}%` }) : null;
    req.query.brand ? (where['$product.brand$'] = { [Op.in]: req.query.brand.split(',') }) : null;
