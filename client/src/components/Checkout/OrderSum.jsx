@@ -63,6 +63,13 @@ function OrderSum(props) {
                                     </div>
                                 </div>
                             </div>
+                            {
+                                props.response.status && props.response.status != 200 ?
+                                    <div className="error mt-2">
+                                        {props.response.message}
+                                    </div>
+                                    : null
+                            }
                         </div>
                     )
                 })}
@@ -119,7 +126,8 @@ function OrderSum(props) {
 }
 const mapStateToProps = state => {
     return {
-        cart: state.cart
+        cart: state.cart,
+        response: state.response
     }
 }
 const mapDispatchToProps = dispatch => {

@@ -40,10 +40,10 @@ const Payment = (props) => {
             res = await res.json();
             console.log(res)
             props.setOrderData(res);
-            if (res.status == 400) {
-                return 'Cart is Emply';
+            props.fetchCart();
+            if (res.status != 200) {
+                return res;
             }
-            props.emptyCart();
 
             return 'Order Placed Successfully.';
         }).catch(err => {
@@ -55,7 +55,9 @@ const Payment = (props) => {
     const [placeOrder, payMeta] = useMutation(placeOrderPOST)
 
     useEffect(() => {
-        props.setPlacedOrder(payMeta.isSuccess)
+        if (payMeta.isSuccess && payMeta.data.statusId) {
+            props.setPlacedOrder(payMeta.isSuccess)
+        }
     }, [payMeta])
 
     const pay = (
@@ -103,7 +105,7 @@ const Payment = (props) => {
             <div className="confirm">
                 <span className="error">
                     {payMeta.isError ? payMeta.error.message : null}
-                    {payMeta.isSuccess ? JSON.stringify(payMeta.data) : null}
+                    {payMeta.isSuccess ? payMeta.data.message : null}
                 </span>
                 <span>
                     {
@@ -186,7 +188,7 @@ const mapDispatchToProps = dispatch => {
     return {
         setResponse: (response) => dispatch({ type: actions.SET_RESPONSE, response: response }),
         logout: () => dispatch(actions.logout()),
-        emptyCart: () => dispatch({ type: actions.SET_CART, cart: [] })
+        fetchCart: () => dispatch(actions.fetchCart())
     }
 }
 

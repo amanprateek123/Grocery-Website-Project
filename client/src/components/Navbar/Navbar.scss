@@ -61,6 +61,10 @@
             &::placeholder{
                 color: #ccc;
             }
+
+            &:not(:focus) {
+                color: #999;
+            }
         }
         .search_btn{
             justify-content: flex-end;
@@ -73,6 +77,13 @@
             cursor: pointer;
             padding: 4px 12px 0 8px;
         }
+
+        // ? Clicking on the list items was not working so removed this.
+        // &:not(:focus-within){
+        //     .pre-search{
+        //         display: none;
+        //     }
+        // }
         
         .pre-search{
             position: absolute;

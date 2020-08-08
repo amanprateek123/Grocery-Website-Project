@@ -145,7 +145,7 @@ function OrderItems(props) {
     }).then(res => res.json()).then(res => {
       console.log(order.id)
       setTimeout(() => {
-        props.history.push(`/order`)
+        props.history.push(`/orders`)
       }, 3000)
     }
     )

@@ -133,8 +133,8 @@ const Navbar = (props) => {
         if (!query) {
             return;
         }
-        history.push(`/products?search=${encodeURI(query)}&sr`)
         setPreSearch([])
+        history.push(`/products?search=${encodeURI(query)}&sr`)
     }
     const [classy, setclassy] = useState("cartRem")
     const [cart_bg, setcart_bg] = useState("cart")
@@ -158,6 +158,10 @@ const Navbar = (props) => {
     useEffect(() => {
 
         let handler = (e) => {
+            if (e.keyCode == 13) {
+                setPreSearch([]);
+                return;
+            }
             if (e.target.value.length > 2) {
                 fetch(`/pre-search?q=${e.target.value}`).then(res => res.json())
                     .then(strings => {

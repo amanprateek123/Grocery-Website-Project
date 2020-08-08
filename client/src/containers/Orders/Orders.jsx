@@ -233,14 +233,14 @@ function Orders(props) {
                                             <div className="col-md-5">
                                                 <div className="row">
                                                     <div className="col-md-4 p-2">
-                                                        <div style={{ width: '70%', height: '110px', backgroundImage: `url(${order.orderItems[0].sku.images[0].src})` }} className="ml-4 orderimg" ></div>
+                                                        <div style={{ width: '70%', height: '110px', backgroundImage: `url(${order.orderItems[0]?.sku?.images[0]?.src})` }} className="ml-4 orderimg" ></div>
                                                     </div>
                                                     <div className="col-md-8">
                                                         <div className="mt-2">
                                                             {order.orderItems.forEach(od => {
-                                                                name = od.sku.product.name
+                                                                name = od.sku?.product.name
                                                             })}
-                                                            <b>{order.orderItems[0].sku.product.name}</b><br />
+                                                            <b>{order.orderItems[0]?.sku?.product.name}</b><br />
 
                                                         </div>
                                                         <div className="mt-2" style={{ color: 'grey' }}>

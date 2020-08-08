@@ -315,7 +315,7 @@ const Products = (props) => {
                     <div className="col-md-10 col">
                         {props.userName ?
                             <Snackbar className="cart-snackbar" open={snackbar} onClose={() => setSnackbar(false)} autoHideDuration={2000} anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}>
-                                {true ? <Alert className="cart-snackbar" variant="filled" severity={"success"}>{"Item Added to Cart"}</Alert> : null}
+                                {true ? <Alert className="cart-snackbar" variant="filled" severity={props.response.status == 200 ? "success" : "warning"}>{props.response.message}</Alert> : null}
                             </Snackbar>
                             :
                             <Snackbar className="cart-snackbar" open={snackbar} onClose={() => setSnackbar(false)} autoHideDuration={2000} anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}>
