@@ -76,7 +76,15 @@ export default function Home() {
             case "product":  
             return(
                 <React.Fragment>
-
+                  <Paper className="multi_car" style={{ margin: '40px auto' }}>
+                     <div style={{ borderBottom: '2px solid #f3f3f3' }}>
+                        <h1>{data.query.key}</h1>
+                        <p>{data.query.subHeading}</p>
+                     </div>
+                     <div className="mt-1">
+                        <Carousel product={data.products} />
+                     </div>
+                  </Paper>
                 </React.Fragment>
             )
             break; 
@@ -103,15 +111,14 @@ export default function Home() {
     }
         return (
         <React.Fragment>
-
-            {/* THIS IS SAMPLE */}
+            
             {array.map(data=>(
                 <React.Fragment>
                     {render(data)}
                  </React.Fragment>   
             ))}
 
-            <Paper>
+            {/* <Paper>
                 {
                     productSections.map(ps => (
                         <Card className="row">
@@ -129,7 +136,7 @@ export default function Home() {
                         </Card>
                     ))
                 }
-            </Paper>
+            </Paper> */}
             {/* <Paper>
                 {
                     banners.map(itm=>(
@@ -236,15 +243,6 @@ export default function Home() {
                     <img src="https://storiesflistgv2.azureedge.net/stories/2016/09/daily_offers_banner_Final.jpg" style={{ width: '100%', padding: '5px' }} />
                 </Card>
             </Paper> */}
-            <Paper className="multi_car" style={{ margin: '40px auto' }}>
-                <div style={{ borderBottom: '2px solid #f3f3f3' }}>
-                    <h1>Best Battery Phones</h1>
-                    <p>More than 4000 mAh battery</p>
-                </div>
-                <div className="mt-1">
-                    <Carousel />
-                </div>
-            </Paper>
             <Paper className="multi_car" style={{ margin: '40px auto' }}>
                 <div style={{ borderBottom: '2px solid #f3f3f3' }}>
                     <h1>Trending Brands</h1>

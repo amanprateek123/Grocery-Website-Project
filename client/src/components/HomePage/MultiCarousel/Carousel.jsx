@@ -2,7 +2,7 @@ import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import React from 'react'
 import './Carousel.scss'
-export default function Carousels(){
+export default function Carousels(props){
     const responsive = {
         superLargeDesktop: {
           // the naming can be any, depends on you.
@@ -11,7 +11,7 @@ export default function Carousels(){
         },
         desktop: {
           breakpoint: { max: 3000, min: 1024 },
-          items: 8
+          items: 6
         },
         tablet: {
           breakpoint: { max: 1024, min: 464 },
@@ -22,25 +22,28 @@ export default function Carousels(){
           items: 1
         }
       };
+      console.log(props.product)
     return(
-        <Carousel 
+       props.product? <Carousel 
         responsive={responsive}        
         keyBoardControl={true}
         containerClass="carousel-container"
         dotListClass="custom-dot-list-style"
         itemClass="carousel-item-padding-40-px"
         >
+        {props.product.map(item=>(
         <div className="main_car">
-            <div className="carousels">
-                <img src="https://rukminim1.flixcart.com/image/312/312/kb1470w0/mobile/q/g/g/oppo-a12-cph2083-original-imafsh2hfkyamqyt.jpeg?q=70"/>
-            </div>
-            <div className="text_car">
-                <h5>Oppo A12 (Blue, 32 GB)</h5>
-                <h6>5000 mAh Battery</h6>
-                <p>Now ₹8999</p>
-            </div>
+        <div className="carousels">
+            <img src={item.skus[0].images[0].src}/>
         </div>
-        <div className="main_car">
+        <div className="text_car">
+            <h5> {item.name} </h5>
+            <h6>{item.category.name}</h6>
+            <p>Now ₹{item.skus[0].price}</p>
+        </div>
+    </div>            
+        ))}
+        {/* <div className="main_car">
             <div className="carousels">
                 <img src="https://rukminim1.flixcart.com/image/312/312/k2jbyq80pkrrdj/mobile-refurbished/a/j/j/a5s-32-b-cph1909-oppo-2-original-imaffmvugunustek.jpeg?q=70"/>
             </div>
@@ -139,8 +142,8 @@ export default function Carousels(){
                 <h6>5000 mAh Battery</h6>
                 <p>Now ₹8999</p>
             </div>
-        </div>
+        </div> */}
         
-      </Carousel>
+      </Carousel>:null
     )
 }
