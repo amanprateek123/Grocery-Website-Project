@@ -8,6 +8,8 @@ import * as actions from '../../../store/actions'
 import { useMutation } from 'react-query'
 import { useEffect } from 'react';
 
+import site from '../../../site_config';
+
 const Payment = (props) => {
 
 
@@ -38,10 +40,10 @@ const Payment = (props) => {
             res = await res.json();
             console.log(res)
             props.setOrderData(res);
-            if (res.status == 400) {
-                return 'Cart is Emply';
+            props.fetchCart();
+            if (res.status != 200) {
+                return res;
             }
-            props.emptyCart();
 
             return 'Order Placed Successfully.';
         }).catch(err => {
@@ -53,7 +55,9 @@ const Payment = (props) => {
     const [placeOrder, payMeta] = useMutation(placeOrderPOST)
 
     useEffect(() => {
-        props.setPlacedOrder(payMeta.isSuccess)
+        if (payMeta.isSuccess && payMeta.data.statusId) {
+            props.setPlacedOrder(payMeta.isSuccess)
+        }
     }, [payMeta])
 
     const pay = (
@@ -101,7 +105,7 @@ const Payment = (props) => {
             <div className="confirm">
                 <span className="error">
                     {payMeta.isError ? payMeta.error.message : null}
-                    {payMeta.isSuccess ? JSON.stringify(payMeta.data) : null}
+                    {payMeta.isSuccess ? payMeta.data.message : null}
                 </span>
                 <span>
                     {
@@ -152,13 +156,13 @@ const Payment = (props) => {
                         <input type="radio" checked className="del_rad" />
                         <span className="add_list_1">
                             <div className="col-md-6">
-                                <p style={{ fontSize: "16px" }}>Laladukaan Basket <span style={{ fontWeight: 'bold' }}>({props.cart.length} items)</span></p>
+                                <p style={{ fontSize: "16px" }}>{site.name} Basket <span style={{ fontWeight: 'bold' }}>({props.cart.length} items)</span></p>
                             </div>
                             <div className="order_list_sum">
                                 <div className="row" style={{ minHeight: '56px', width: '60%' }}>
                                     {props.cart.map(itm => {
                                         return (
-                                            <div className="list_img col-md-2" style={{backgroundImage:`url(${itm.sku.images[0].src})`}}>
+                                            <div className="list_img col-md-2" style={{ backgroundImage: `url(${itm.sku.images[0].src})` }}>
                                             </div>
                                         )
                                     })}
@@ -184,7 +188,7 @@ const mapDispatchToProps = dispatch => {
     return {
         setResponse: (response) => dispatch({ type: actions.SET_RESPONSE, response: response }),
         logout: () => dispatch(actions.logout()),
-        emptyCart: () => dispatch({ type: actions.SET_CART, cart: [] })
+        fetchCart: () => dispatch(actions.fetchCart())
     }
 }
 

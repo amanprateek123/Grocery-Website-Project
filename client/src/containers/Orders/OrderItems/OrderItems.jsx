@@ -1,4 +1,4 @@
-import React, { useState, useEffect,useHistory } from 'react'
+import React, { useState, useEffect, useHistory } from 'react'
 import { connect } from 'react-redux'
 import {
   Grid, Card, CardContent, Slider, Paper, Typography, FormControl, CardMedia, Avatar,
@@ -8,11 +8,13 @@ import {
   from '@material-ui/core';
 import './OrderItems.scss'
 import CloseIcon from '@material-ui/icons/Close';
-import { Formik, Form, Field,ErrorMessage,FieldArray } from 'formik';
+import { Formik, Form, Field, ErrorMessage, FieldArray } from 'formik';
 import Modal from '../../../components/Modal/Modal'
 import { useMutation } from 'react-query'
-import {Redirect} from 'react-router-dom'
+import { Redirect } from 'react-router-dom'
 import { Alert } from '@material-ui/lab'
+
+import site from '../../../site_config';
 
 function OrderItems(props) {
   var month = new Array();
@@ -81,259 +83,259 @@ function OrderItems(props) {
     return pro
   }
   const cancel_list = [
-    {reason:'Order Created by mistake'},
-    {reason:'Item(s) would not arrive on time'},
-    {reason:'Shipping cost is too high'},
-    {reason:'Item price is too high'},
-    {reason:'Found Cheaper somewhere else'},
-    {reason:'Need to change Shipping address'},
-    {reason:'Need to change shipping speed'},
-    {reason:'Need to change billing address'},
-    {reason:'Need to change payment method'},
-    {reason:'Others'}
-]
-  const [cancel,setCancel] = useState(false)
-    const openModal= ()=>{
-        setCancel(true)
+    { reason: 'Order Created by mistake' },
+    { reason: 'Item(s) would not arrive on time' },
+    { reason: 'Shipping cost is too high' },
+    { reason: 'Item price is too high' },
+    { reason: 'Found Cheaper somewhere else' },
+    { reason: 'Need to change Shipping address' },
+    { reason: 'Need to change shipping speed' },
+    { reason: 'Need to change billing address' },
+    { reason: 'Need to change payment method' },
+    { reason: 'Others' }
+  ]
+  const [cancel, setCancel] = useState(false)
+  const openModal = () => {
+    setCancel(true)
+  }
+  const closeModal = () => {
+    setCancel(false)
+  }
+
+
+
+
+  //   const deleteOrder = ()=>{
+  //     return fetch('/delete-order',{
+  //         headers: {
+  //             'Authorization': 'Bearer ' + props.idToken,
+  //             'Content-Type': 'application/json'
+  //         },
+  //         method:'POST',
+  //         body:JSON.stringify({id:props.match.params.id})
+  //     }
+  //         ).then(async res=>{
+  //           res = await res.json()
+  //           if(res.status === 400){
+  //               return res.message
+  //           }
+  //           return res.message
+  //         }).catch(err => {
+  //             console.log(err);
+  //         })
+  // // }
+  const [snackbar, setSnackbar] = useState(false)
+
+  const cancelOrder = (variable) => {
+    let body;
+    if (variable.variables.reason === "Others") {
+      body = variable.variables.other
     }
-    const closeModal = ()=>{
-        setCancel(false)
-    } 
-
-
-
-
-//   const deleteOrder = ()=>{
-//     return fetch('/delete-order',{
-//         headers: {
-//             'Authorization': 'Bearer ' + props.idToken,
-//             'Content-Type': 'application/json'
-//         },
-//         method:'POST',
-//         body:JSON.stringify({id:props.match.params.id})
-//     }
-//         ).then(async res=>{
-//           res = await res.json()
-//           if(res.status === 400){
-//               return res.message
-//           }
-//           return res.message
-//         }).catch(err => {
-//             console.log(err);
-//         })
-// // }
-const[snackbar,setSnackbar] = useState(false)
-
-const cancelOrder = (variable)=>{
-  let body
-  if(variable.variables.reason==="Others"){
-    body= variable.variables.other
+    else {
+      body = variable.variables.reason
+    }
+    console.log(body)
+    return fetch('/get-orders', {
+      headers: {
+        'Authorization': 'Bearer ' + props.idToken,
+        'Content-Type': 'application/json'
+      },
+      method: 'DELETE',
+      body: JSON.stringify({ reason: body, id: order.id })
+    }).then(res => res.json()).then(res => {
+      console.log(order.id)
+      setTimeout(() => {
+        props.history.push(`/orders`)
+      }, 3000)
+    }
+    )
   }
-  else{
-    body= variable.variables.reason
-  }
-  console.log(body)
-  return fetch('/get-orders',{
-            headers: {
-                'Authorization': 'Bearer ' + props.idToken,
-                'Content-Type': 'application/json'
-            },
-            method:'DELETE',
-            body:JSON.stringify({reason:body,id:order.id})
-        }).then(res=>res.json()).then(res=>{
-          console.log(order.id)
-           setTimeout(()=>{
-            props.history.push(`/order/${order.id}`)
-           },3000)
-        }
-          )
-}
-// let data = []
-// if(order){
-//   data = [...order.orderItems]
-// }
-// const duplicate = (data) =>{
-//   data.map(item=>{
-//     let a = []
-//     if(!a.includes(item)){
-//           a.push(item)
-//     }
-//     return a
-//   })
-// }
+  // let data = []
+  // if(order){
+  //   data = [...order.orderItems]
+  // }
+  // const duplicate = (data) =>{
+  //   data.map(item=>{
+  //     let a = []
+  //     if(!a.includes(item)){
+  //           a.push(item)
+  //     }
+  //     return a
+  //   })
+  // }
 
-const[cancels,meta] = useMutation(cancelOrder)
+  const [cancels, meta] = useMutation(cancelOrder)
 
-const [msg,setMsg] = useState(false)
+  const [msg, setMsg] = useState(false)
 
-const cancelling = (
-   order?
-   <React.Fragment>
-   <Paper className="container" style={{minHeight:'350px',padding:'15px'}}>
-        <CloseIcon style={{float:'right',cursor:'pointer'}} onClick={closeModal} />
-        <h4 style={{padding:'10px 20px'}}>Reason for cancellation:</h4>
-        <Formik
-        initialValues={{
-          reason:'',
-          other:''
-        }}
-        onSubmit={async (values,{setSubmitting})=> await cancels({variables:values})}
-        >
-           {({values}) => (
-             <Form className="row">
-       <div className="col-md-8">
-           <Field style={{width:'60%',margin:'30px 17%',padding:'10px'}} as="select" name="reason">
-              <option value="">Select Cancellation Reason</option>
-              {cancel_list.map(itm=>{
-                  return(
-                   <option value={itm.reason}>{itm.reason}</option>
-                  )
-              })}
-            </Field>
-           {values.reason==="Others"?<Field type="text" required name="other" placeholder="Enter reason..." style={{width:'30%',margin:'0 17%',padding:'10px'}} className="vis" />:<Field type="text"name="other" placeholder="Enter reason..." style={{width:'30%',margin:'0 17%',padding:'10px'}} className="hid" />}
-            
-       </div>
-       <div className="col-md-3">
-           <Button type="submit" variant="contained" disabled={(values.reason==='')?true:false} color='secondary' style={{padding:'10px',width:'200px',marginTop:'12%'}} >Cancel Order</Button>
-       </div>
-       {(meta.isSuccess && order.statusId<3)?
-        <div className="message">
-        <p style={{textAlign:'left',color:'green',marginTop:'2%'}}>Your order has been cancelled for the reason indicated below. You will get an email with details of items which were part of the cancelled order.</p>
-        <p><b>Reason:</b> {values.other===''?values.reason:values.other} </p>
-      </div>:null
-                   }
-             </Form>
-           )}
-           
-        </Formik>         
-   </Paper>
-</React.Fragment>:null
-)
-// let a = []
-// let skuId = []
-// if(order){
-//   for(let i=0;i<order.orderItems.length;i++){
-//     let count = 0
-//         for(let j=0;j<order.orderItems.length;j++){
-//            if(order.orderItems[i].sku.id===order.orderItems[j].sku.id){
-//                     count++;
-//            }
-//         }     
-//     if(!skuId.includes(order.orderItems[i].sku.id)){
-//     a.push({data:order.orderItems[i],count:count})
-//     skuId.push(order.orderItems[i].sku.id)
-//         }   
-//   }
-// }
-// console.log(a)
-let filtered = [];
-if(order){
-for (let oi of order.orderItems){
-  let existing = filtered.find(foi=>foi.skuId == oi.skuId);
-  if(existing){
-      existing.count++;
+  const cancelling = (
+    order ?
+      <React.Fragment>
+        <Paper className="container" style={{ minHeight: '350px', padding: '15px' }}>
+          <CloseIcon style={{ float: 'right', cursor: 'pointer' }} onClick={closeModal} />
+          <h4 style={{ padding: '10px 20px' }}>Reason for cancellation:</h4>
+          <Formik
+            initialValues={{
+              reason: '',
+              other: ''
+            }}
+            onSubmit={async (values, { setSubmitting }) => await cancels({ variables: values })}
+          >
+            {({ values }) => (
+              <Form className="row">
+                <div className="col-md-8">
+                  <Field style={{ width: '60%', margin: '30px 17%', padding: '10px' }} as="select" name="reason">
+                    <option value="">Select Cancellation Reason</option>
+                    {cancel_list.map(itm => {
+                      return (
+                        <option value={itm.reason}>{itm.reason}</option>
+                      )
+                    })}
+                  </Field>
+                  {values.reason === "Others" ? <Field type="text" required name="other" placeholder="Enter reason..." style={{ width: '30%', margin: '0 17%', padding: '10px' }} className="vis" /> : <Field type="text" name="other" placeholder="Enter reason..." style={{ width: '30%', margin: '0 17%', padding: '10px' }} className="hid" />}
+
+                </div>
+                <div className="col-md-3">
+                  <Button type="submit" variant="contained" disabled={(values.reason === '') ? true : false} color='secondary' style={{ padding: '10px', width: '200px', marginTop: '12%' }} >Cancel Order</Button>
+                </div>
+                {(meta.isSuccess && order.statusId < 3) ?
+                  <div className="message">
+                    <p style={{ textAlign: 'left', color: 'green', marginTop: '2%' }}>Your order has been cancelled for the reason indicated below. You will get an email with details of items which were part of the cancelled order.</p>
+                    <p><b>Reason:</b> {values.other === '' ? values.reason : values.other} </p>
+                  </div> : null
+                }
+              </Form>
+            )}
+
+          </Formik>
+        </Paper>
+      </React.Fragment> : null
+  )
+  // let a = []
+  // let skuId = []
+  // if(order){
+  //   for(let i=0;i<order.orderItems.length;i++){
+  //     let count = 0
+  //         for(let j=0;j<order.orderItems.length;j++){
+  //            if(order.orderItems[i].sku.id===order.orderItems[j].sku.id){
+  //                     count++;
+  //            }
+  //         }     
+  //     if(!skuId.includes(order.orderItems[i].sku.id)){
+  //     a.push({data:order.orderItems[i],count:count})
+  //     skuId.push(order.orderItems[i].sku.id)
+  //         }   
+  //   }
+  // }
+  // console.log(a)
+  let filtered = [];
+  if (order) {
+    for (let oi of order.orderItems) {
+      let existing = filtered.find(foi => foi.skuId == oi.skuId);
+      if (existing) {
+        existing.count++;
+      }
+      else {
+        filtered.push({ ...oi, count: 1 })
+      }
+    }
   }
-  else{
-      filtered.push({...oi,count:1})
-  }
-}
-}
 
   return (
     order ? <React.Fragment>
-      <Paper className="container" style={{marginTop:'2%',marginBottom:'2%', paddingBottom:'20px'}}>
-         <div className="row">
-           <div className="col-md-5">
-           <h1 style={{padding:'25px 0 5px 0',fontSize:'20px',fontWeight:'bold'}}>Order Summary</h1>
-           <p style={{fontSize:'15px'}}>Ordered on {new Date(order.createdAt).getDate()} {month[new Date(order.createdAt).getMonth()]} {new Date(order.createdAt).getFullYear()} </p>
-           <p style={{fontSize:'15px'}}>Order: <span style={{color:'var(--mainColor)'}}> #{10000+order.id} </span></p>
-           </div>
-           <div className="col-md-6" style={{display:'flex',alignItems:'center',justifyContent:'flex-end'}}>
-             {!order.isCancelled?
-                        <Slider
-                        defaultValue={single(order)}
-                        getAriaValueText={valuetext}
-                        aria-labelledby="discrete-slider-custom"
-                        step={33.33}
-                        valueLabelDisplay="auto"
-                        marks={progress}
-                        disabled
-                        style={{ color: 'green',textTransform:'capitalize'}}
-                      />:<h5 style={{fontSize:'16px'}}>Status:<span className="ml-2"  style={{color:'red',fontWeight:'550'}}>Cancelled</span></h5>}
-           </div>
-         </div>
-         <div className="orderItems">
-             <div className="row" style={{padding:'10px 15px'}}>
-                 <div className="col-md-4">
-                    <h5 style={{fontSize:'16px',fontWeight:'bold'}}>Shipping Address</h5>
-                    <div style={{fontSize:'13px'}}>
-                      {JSON.parse(order.shippingAddress).address}<br/>
-                      State: <span style={{fontWeight:'bold'}}> {JSON.parse(order.shippingAddress).state} </span><br/>
-                      Country: <span style ={{fontWeight:'bold'}} > {JSON.parse(order.shippingAddress).country} </span><br/>
-                      Pin Code: <span style ={{fontWeight:'bold'}} > {JSON.parse(order.shippingAddress).zip} </span>
-                    </div>
-                 </div>
-                 <div className="col-md-4">
-                   <h5 style={{fontSize:'16px',fontWeight:'bold'}}>Payment Method</h5>
-                   <p style={{fontSize:'13px'}}> {order.paymentType} </p>
-                   <div className="mt-4" style={{fontSize:'16px'}}>
-                     Download <span style={{color:'var(--mainColor)'}}>Invoice</span>
-                   </div>
-                 </div>
-                 <div className="col-md-4">
-                   <h5 style={{fontSize:'16px',fontWeight:'bold'}}>Order Summary</h5>
-                   <div style={{fontSize:'13px'}}>
-                      Item(s) Subtotal: <span style={{float:'right'}}> ₹{order.price} </span><br/>
-                      Shipping: <span style={{float:'right'}}> ₹0 </span><br/>
-                      Total: <span style={{float:'right'}}> ₹{order.price} </span><br/>
-                      <div className="mt-3" style={{fontWeight:'bold'}}>
-                        <span >Grand Total:</span> <span style={{float:'right'}}> ₹{order.price} </span>
+      <Paper className="container" style={{ marginTop: '2%', marginBottom: '2%', paddingBottom: '20px' }}>
+        <div className="row">
+          <div className="col-md-5">
+            <h1 style={{ padding: '25px 0 5px 0', fontSize: '20px', fontWeight: 'bold' }}>Order Summary</h1>
+            <p style={{ fontSize: '15px' }}>Ordered on {new Date(order.createdAt).getDate()} {month[new Date(order.createdAt).getMonth()]} {new Date(order.createdAt).getFullYear()} </p>
+            <p style={{ fontSize: '15px' }}>Order: <span style={{ color: 'var(--mainColor)' }}> #{10000 + order.id} </span></p>
+          </div>
+          <div className="col-md-6" style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
+            {!order.isCancelled ?
+              <Slider
+                defaultValue={single(order)}
+                getAriaValueText={valuetext}
+                aria-labelledby="discrete-slider-custom"
+                step={33.33}
+                valueLabelDisplay="auto"
+                marks={progress}
+                disabled
+                style={{ color: 'green', textTransform: 'capitalize' }}
+              /> : <h5 style={{ fontSize: '16px' }}>Status:<span className="ml-2" style={{ color: 'red', fontWeight: '550' }}>Cancelled</span></h5>}
+          </div>
+        </div>
+        <div className="orderItems">
+          <div className="row" style={{ padding: '10px 15px' }}>
+            <div className="col-md-4">
+              <h5 style={{ fontSize: '16px', fontWeight: 'bold' }}>Shipping Address</h5>
+              <div style={{ fontSize: '13px' }}>
+                {JSON.parse(order.shippingAddress).address}<br />
+                      State: <span style={{ fontWeight: 'bold' }}> {JSON.parse(order.shippingAddress).state} </span><br />
+                      Country: <span style={{ fontWeight: 'bold' }} > {JSON.parse(order.shippingAddress).country} </span><br />
+                      Pin Code: <span style={{ fontWeight: 'bold' }} > {JSON.parse(order.shippingAddress).zip} </span>
+              </div>
+            </div>
+            <div className="col-md-4">
+              <h5 style={{ fontSize: '16px', fontWeight: 'bold' }}>Payment Method</h5>
+              <p style={{ fontSize: '13px' }}> {order.paymentType} </p>
+              <div className="mt-4" style={{ fontSize: '16px' }}>
+                Download <span style={{ color: 'var(--mainColor)' }}>Invoice</span>
+              </div>
+            </div>
+            <div className="col-md-4">
+              <h5 style={{ fontSize: '16px', fontWeight: 'bold' }}>Order Summary</h5>
+              <div style={{ fontSize: '13px' }}>
+                Item(s) Subtotal: <span style={{ float: 'right' }}> ₹{order.price} </span><br />
+                      Shipping: <span style={{ float: 'right' }}> ₹0 </span><br />
+                      Total: <span style={{ float: 'right' }}> ₹{order.price} </span><br />
+                <div className="mt-3" style={{ fontWeight: 'bold' }}>
+                  <span >Grand Total:</span> <span style={{ float: 'right' }}> ₹{order.price} </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="orderItems">
+          <div className="row" style={{ padding: '10px 15px' }}>
+            <div className="col-md-8 hides" style={{ maxHeight: '450px', overflowY: 'scroll' }}>
+              <div>
+                {filtered.map((item, i) => {
+                  return (
+                    <div className="row p-1 mt-1" key={i}>
+                      <div className="col-md-2 li_img" style={{ backgroundImage: `url(${item.sku.images[0].src})` }}>
+
                       </div>
-                   </div>
-                 </div>
-             </div>
-         </div>
-         <div className="orderItems">
-             <div className="row" style={{padding:'10px 15px'}}>
-                 <div className="col-md-8 hides" style={{maxHeight:'450px',overflowY:'scroll'}}>
-                     <div>
-                      {filtered.map((item,i) =>{
-                         return(
-                           <div className="row p-1 mt-1" key={i}>
-                               <div className="col-md-2 li_img" style={{backgroundImage:`url(${item.sku.images[0].src})`}}>
-                                   
-                               </div>
-                               <div className="col-md-8 order_list_item">
-                                   <p style={{fontSize:'16px',fontWeight:'bold'}}> {item.sku.product.name} </p>
-                                   <p>Sold by: <span style={{color:'var(--mainColor)'}}>LalaDukaan</span></p>
-                                   <p>₹ <span style={{color:'var(--mainColor)'}}> {item.sku.price} </span></p>
-                                   <p style={{fontWeight:'bold'}}>Quantity: <span style={{fontWeight:'normal'}}> {item.count} </span></p>
-                               </div>
-                            </div> 
-                         )
-                      })}
+                      <div className="col-md-8 order_list_item">
+                        <p style={{ fontSize: '16px', fontWeight: 'bold' }}> {item.sku.product.name} </p>
+                        <p>Sold by: <span style={{ color: 'var(--mainColor)' }}>{site.name}</span></p>
+                        <p>₹ <span style={{ color: 'var(--mainColor)' }}> {item.sku.price} </span></p>
+                        <p style={{ fontWeight: 'bold' }}>Quantity: <span style={{ fontWeight: 'normal' }}> {item.count} </span></p>
+                      </div>
                     </div>
-                 </div>
-                 <div className="col-md-4">
-                   {!order.isCancelled?
-                                       <div className="mt-3">
-                                       <Button variant="contained" color="inherit" style={{backgroundColor:'var(--mainColor)',color:'white',padding:'10px 15px',width:'260px',fontSize:'14px'}}>Track Package</Button>
-                                       <div style={{marginTop:'5%'}}>
-                                       {order.statusId<3?<Button variant="contained" color="inherit" style={{backgroundColor:'#f3f3f3',color:'black',padding:'10px 15px',width:'260px',fontSize:'14px'}}  onClick={openModal}>Cancel Order</Button>:
-                                       <Button variant="contained" color="inherit" style={{backgroundColor:'#f3f3f3',color:'black',padding:'10px 15px',width:'260px',fontSize:'14px'}} onClick={()=>setMsg(true)} >Cancel Order</Button>}
-                                       <Modal visible={cancel}>
-                                            {cancelling}
-                                        </Modal>
-                                       </div>
-                                   </div>:null}
-                 </div>
-             </div>
-         {msg?         
-         <div>
-         <p style={{textAlign:'left',color:'red',marginTop:'1%',fontSize:'15px',padding:'0 15px'}}><b>Note: </b><span style={{fontSize:'13px',color:'black'}}>Your Order is shipped.So,you are not able to cancel the order!</span> </p>
-       </div>:null} 
-         </div>
-         
+                  )
+                })}
+              </div>
+            </div>
+            <div className="col-md-4">
+              {!order.isCancelled ?
+                <div className="mt-3">
+                  <Button variant="contained" color="inherit" style={{ backgroundColor: 'var(--mainColor)', color: 'white', padding: '10px 15px', width: '260px', fontSize: '14px' }}>Track Package</Button>
+                  <div style={{ marginTop: '5%' }}>
+                    {order.statusId < 3 ? <Button variant="contained" color="inherit" style={{ backgroundColor: '#f3f3f3', color: 'black', padding: '10px 15px', width: '260px', fontSize: '14px' }} onClick={openModal}>Cancel Order</Button> :
+                      <Button variant="contained" color="inherit" style={{ backgroundColor: '#f3f3f3', color: 'black', padding: '10px 15px', width: '260px', fontSize: '14px' }} onClick={() => setMsg(true)} >Cancel Order</Button>}
+                    <Modal visible={cancel}>
+                      {cancelling}
+                    </Modal>
+                  </div>
+                </div> : null}
+            </div>
+          </div>
+          {msg ?
+            <div>
+              <p style={{ textAlign: 'left', color: 'red', marginTop: '1%', fontSize: '15px', padding: '0 15px' }}><b>Note: </b><span style={{ fontSize: '13px', color: 'black' }}>Your Order is shipped.So,you are not able to cancel the order!</span> </p>
+            </div> : null}
+        </div>
+
       </Paper>
       {/* <Snackbar open={snackbar} autoHideDuration={2000} className="home-snackbar" onClose={() => setSnackbar(false)} anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}>
          <Alert  severity="success" className="home-snackbar" variant="filled" >

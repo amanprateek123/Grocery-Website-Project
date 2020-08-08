@@ -24,7 +24,7 @@ const AddProductsFile = (props) => {
     const addDepartments = (e) => {
         e.preventDefault();
         var input = document.querySelector('#departments-file');
-        if (input.files[0].type != 'text/csv') {
+        if (!['application/vnd.ms-excel', 'text/csv'].includes(input.files[0].type)) {
             props.setResponse({ status: 400, message: `NOT a .csv file. Please Upload a CSV file with fields [name]. ${input.files[0].type} file type not supported.` })
             return;
         }
@@ -45,7 +45,7 @@ const AddProductsFile = (props) => {
     const addParentCategories = (e) => {
         e.preventDefault();
         var input = document.querySelector('#parentCategories-file');
-        if (input.files[0].type != 'text/csv') {
+        if (!['application/vnd.ms-excel', 'text/csv'].includes(input.files[0].type)) {
             props.setResponse({ status: 400, message: 'Please Upload a CSV file with fields [ department | name ]' })
             return;
         }
@@ -66,7 +66,7 @@ const AddProductsFile = (props) => {
     const addCategories = (e) => {
         e.preventDefault();
         var input = document.querySelector('#categories-file');
-        if (input.files[0].type != 'text/csv') {
+        if (['application/vnd.ms-excel', 'text/csv'].includes(input.files[0].type)) {
             props.setResponse({ status: 400, message: 'Please Upload a CSV file with fields [parentCategory | name ]' })
             return;
         }

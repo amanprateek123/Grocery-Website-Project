@@ -12,6 +12,8 @@ import successGif from '../../assets/illustrations/success.gif'
 import verified from '../../assets/illustrations/verified.svg'
 import { useRef } from 'react';
 
+import site from '../../site_config';
+
 const SignUp = props => {
 
     const [regMode, setRegMode] = useState(false)
@@ -222,7 +224,7 @@ const SignUp = props => {
             {[0, 1].includes(formState) ?
                 <React.Fragment>
                     <h1>SignUp</h1>
-                    <p>{props.response.message || "Create an account for LalaDukaan using your Email Account."}</p>
+                    <p>{props.response.message || `Create an account for ${site.name} using your Email Account.`}</p>
                 </React.Fragment>
                 : null}
 

@@ -2,7 +2,7 @@ import React from 'react'
 import { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { useState, useRef } from 'react';
-import {Link} from 'react-router-dom'
+import { Link } from 'react-router-dom'
 
 import {
     Grid, Card, CardContent, Paper, Typography, FormControl,
@@ -14,6 +14,8 @@ import Modal from '../../components/Modal/Modal'
 
 import OrderItems from './OrderItems/OrderItems'
 import './Orders.scss'
+
+import site from '../../site_config';
 
 function Orders(props) {
 
@@ -189,7 +191,7 @@ function Orders(props) {
             window.removeEventListener('scroll', handleScroll);
         }
     }, [user])
-   
+
 
     return (
         <React.Fragment>
@@ -225,55 +227,55 @@ function Orders(props) {
                         res.map((order, i) => {
                             let name = ''
                             return (
-                                <Link to= {`/order/${order.id}`} style={{textDecoration:'none'}}>
-                                <Card key={order.id + i} style={{ marginBottom: '16px', cursor: 'pointer',padding:'10px' }} onClick={() => openModal(order.id)}>
-                                    <div className="row">
-                                        <div className="col-md-5">
-                                            <div className="row">
-                                                <div className="col-md-4 p-2">
-                                                    <div style={{ width: '70%',height:'110px',backgroundImage:`url(${order.orderItems[0].sku.images[0].src})` }} className="ml-4 orderimg" ></div>
+                                <Link to={`/order/${order.id}`} style={{ textDecoration: 'none' }}>
+                                    <Card key={order.id + i} style={{ marginBottom: '16px', cursor: 'pointer', padding: '10px' }} onClick={() => openModal(order.id)}>
+                                        <div className="row">
+                                            <div className="col-md-5">
+                                                <div className="row">
+                                                    <div className="col-md-4 p-2">
+                                                        <div style={{ width: '70%', height: '110px', backgroundImage: `url(${order.orderItems[0]?.sku?.images[0]?.src})` }} className="ml-4 orderimg" ></div>
+                                                    </div>
+                                                    <div className="col-md-8">
+                                                        <div className="mt-2">
+                                                            {order.orderItems.forEach(od => {
+                                                                name = od.sku?.product.name
+                                                            })}
+                                                            <b>{order.orderItems[0]?.sku?.product.name}</b><br />
+
+                                                        </div>
+                                                        <div className="mt-2" style={{ color: 'grey' }}>
+                                                            Order Date : {month[new Date(order.createdAt).getMonth()]} {new Date(order.createdAt).getDate()}
+                                                        </div>
+                                                        <div className="mt-1" style={{ color: 'grey' }}>
+                                                            Order ID : {order.id}
+                                                        </div>
+                                                        <div className="mt-1" style={{ color: 'grey' }}>
+                                                            Seller : {site.name}
+                                                        </div>
+
+                                                    </div>
                                                 </div>
-                                                <div className="col-md-8">
-                                                    <div className="mt-2">
-                                                        {order.orderItems.forEach(od => {
-                                                            name = od.sku.product.name
-                                                        })}
-                                                        <b>{order.orderItems[0].sku.product.name}</b><br />
-
-                                                    </div>
-                                                    <div className="mt-2" style={{ color: 'grey' }}>
-                                                        Order Date : {month[new Date(order.createdAt).getMonth()]} {new Date(order.createdAt).getDate()}
-                                                    </div>
-                                                    <div className="mt-1" style={{ color: 'grey' }}>
-                                                        Order ID : {order.id}
-                                                    </div>
-                                                    <div className="mt-1" style={{ color: 'grey' }}>
-                                                        Seller : LalaDukaan
-                                         </div>
-
+                                            </div>
+                                            <div className="col-md-3" style={{ fontSize: '17px', textAlign: 'left', margin: '2% 0' }}>
+                                                ₹{order.price}
+                                                <div style={{ position: 'relative', top: '40px' }}>
+                                                    {!order.isCancelled ? null : <p style={{ color: 'red', fontSize: '14px', fontWeight: '550' }}>Cancelled</p>}
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div className="col-md-3" style={{ fontSize: '17px', textAlign: 'left', margin: '2% 0' }}>
-                                            ₹{order.price}
-                                            <div style={{position:'relative',top:'40px'}}>
-                                            {!order.isCancelled?null:<p style={{color:'red',fontSize:'14px',fontWeight:'550'}}>Cancelled</p>}                                       
+                                            <div className="col-md-4 pt-2" >
+                                                <div style={{ textAlign: 'left', margin: '3% 0' }}>
+                                                    <b>  Delivered on {month[new Date(order.deliverOn).getMonth()]} {new Date(order.deliverOn).getDate()}</b>
+                                                </div>
+                                                <div style={{ textAlign: 'left', margin: '3% 0' }}>
+                                                    Return Policy valid till Tommorow, {month[today.getMonth()]} {today.getDate() + 1}
+                                                </div>
+                                                <div style={{ textAlign: 'left', color: 'var(--mainColor)', margin: '3% 0', cursor: 'pointer' }}>
+                                                    <StarIcon /> <span>RATE & REVIEW PRODUCT</span>
+                                                </div>
                                             </div>
-                                             </div>
-                                        <div className="col-md-4 pt-2" >
-                                            <div style={{ textAlign: 'left', margin: '3% 0' }}>
-                                                <b>  Delivered on {month[new Date(order.deliverOn).getMonth()]} {new Date(order.deliverOn).getDate()}</b>
-                                            </div>
-                                            <div style={{ textAlign: 'left', margin: '3% 0' }}>
-                                                Return Policy valid till Tommorow, {month[today.getMonth()]} {today.getDate() + 1}
-                                            </div>
-                                            <div style={{ textAlign: 'left', color: 'var(--mainColor)', margin: '3% 0', cursor: 'pointer' }}>
-                                                <StarIcon /> <span>RATE & REVIEW PRODUCT</span>
-                                            </div>
-                                        </div>
 
-                                    </div>
-                                </Card></Link>
+                                        </div>
+                                    </Card></Link>
                             )
                         })
                     ) : null}

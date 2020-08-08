@@ -388,17 +388,55 @@ exports.getProducts = (req, res) => {
    })
 }
 
+exports.predictiveSearch = (req, res) => {
+   let query = req.query.q;
+   db.product.findAll({
+      where: {
+         [Op.or]: [
+            {
+               name: {
+                  [Op.like]: `%${query}%`
+               }
+            },
+            {
+               keywords: {
+                  [Op.like]: `%${query}%`
+               }
+            }
+         ]
+      },
+      limit: 10,
+      attributes: [[db.Sequelize.literal('DISTINCT name'), 'name']]
+   }).then(products => {
+      let strings = products.map(p => p.name);
+      res.json(strings)
+   })
+}
 
 // *** CART
 
-exports.cart = (req, res) => {
-   // Expects {skuId, action: (add,remove,delete)}
+exports.cart = async (req, res) => {
+   // Expects {skuId,qty, action: (add,remove,delete)}
    // User has to be authenticated in middleware isAuth >> req.userId is available at this point.
+   /**
+    * Creates , removes , delete a cart item
+    * @param skuId -- skuId of the product to be added to cart
+    * @param qty -- quantity
+    * @param action -- add | remove | delete
+    * 
+    * @returns cart -- on addition
+    * @returns {status: 200 | 400  ,message: }
+    * 
+    */
 
    let qty = req.body.qty || 1;
 
    switch (req.body.action) {
       case 'add':
+         let _sku = await db.sku.findByPk(req.body.skuId);
+         if (!_sku) {
+            return res.json({ status: 400, message: `No such Product SKU exists.` });
+         }
          db.cart.findAll({
             where: {
                userId: req.userId,
@@ -409,6 +447,9 @@ exports.cart = (req, res) => {
          }).then(([cartItem]) => {
             if (cartItem) {
                // if the product is already in the user cart
+               if (_sku.stockQuantity < Number(cartItem.quantity) + Number(req.body.qty)) {
+                  return res.json({ status: 201, message: `Not in stock. Only ${_sku.stockQuantity} items in stock.` })
+               }
                db.cart.update({
                   quantity: cartItem.quantity + qty,
                }, {
@@ -432,16 +473,21 @@ exports.cart = (req, res) => {
                         ]
                      }
                   })
-                  return res.json(result)
+                  return res.json({ status: 200, cartItem: result, message: 'Added Successfully.' })
                }).catch(err => res.status(500).json(err)) // ! don't send error report to user  
             } else {
                // new product in the cart
+
+               if (_sku.stockQuantity < Number(req.body.qty)) {
+                  return res.json({ status: 201, message: `Not in stock. Only ${_sku.stockQuantity} items in stock.` })
+               }
+
                db.cart.create({
                   userId: req.userId,
                   skuId: req.body.skuId,
                   quantity: qty,
                }).then(async result => {
-                  let response = await db.cart.findByPk(result.id, {
+                  let ci = await db.cart.findByPk(result.id, {
                      include: {
                         model: db.sku,
                         attributes: ['name', 'price', 'id'],
@@ -457,7 +503,7 @@ exports.cart = (req, res) => {
                         ]
                      }
                   })
-                  return res.json(response)
+                  return res.json({ status: 200, cartItem: ci, message: 'Added Successfully.' })
                }).catch(err => res.status(500).json(err)) // ! don't send error report to user
             }
          }).catch(err => res.status(500).json(err)) // ! don't send error report to user
@@ -498,7 +544,7 @@ exports.cart = (req, res) => {
                            ]
                         }
                      })
-                     return res.json(result);
+                     return res.json({ status: 200, cartItem: result, message: 'Removed from Cart.' });
                   }).catch(err => res.status(500).json(err)) // ! don't send error report to user  
                } else {
                   // only One product in the cart
@@ -584,13 +630,6 @@ exports.getCart = (req, res) => {
    })
 }
 
-exports.createOrder = (req, res) => {
-   // AddressId, UserId,
-
-   res.json({ status: 200, message: "Order Placed Successfully" })
-}
-
-
 // *** ORDERS
 
 exports.getStatus = (req, res) => {
@@ -657,6 +696,9 @@ exports.cancelOrder = async (req, res) => {
          await order.save()
          res.json({ order: order, message: "This order is cancelled" })
       }
+      else {
+         res.json({ status: 400, message: "NOT Authorized.! Order does not belong to you." })
+      }
    }
    catch (e) {
       res.json(e.message)
@@ -689,7 +731,9 @@ exports.postOrder = (req, res) => {
       },
       include: {
          model: db.sku,
-         attributes: ['price', 'id'],
+         include: {
+            model: db.product
+         }
       }
    }).then(cart => {
       // If there are some products in the cart which were DELETED by ADMIN
@@ -702,10 +746,21 @@ exports.postOrder = (req, res) => {
       }
 
       // cart.filter(ci => !ci.sku).map(deleted => deleted.destroy().then(del => console.log(' >> Deleted cartId', del.id, ' as the product was deleted')))
-      orderCart = cart.filter(ci => ci.sku)
+      orderCart = cart.filter(ci => {
+         if (ci.sku) {
+            if (ci.quantity > ci.sku.stockQuantity) {
+               let err = new Error(`Only ${ci.sku.stockQuantity} stocks left of ${ci.sku.product.name}. Please reduce quantity.`)
+               throw err;
+            }
+            return true;
+         }
+         console.log(`NOT in stock.${ci.quantity} vs ${ci.sku.stockQuantity}`);
+         return false;
+      })
 
-      // ! Price Included for Products with 0 Stock. need a check.
-      price = orderCart.reduce((acc, cur) => acc + cur.sku.price * cur.quantity, 0);
+      // 
+
+      price = orderCart.reduce((acc, cur) => acc + cur.sku.price * Math.min(cur.quantity, cur.sku.stockQuantity), 0);
       console.log('ORDER PRICE >> ', price);
 
       order.price = price;
@@ -719,6 +774,12 @@ exports.postOrder = (req, res) => {
       date.setDate(date.getDate() + 2)
 
       order.deliverOn = date.toISOString();
+
+      if (!orderCart.length) {
+         let err = new Error('Cart Not Eligible for Order.');
+         err.status = 400;
+         throw err;
+      }
 
       return db.order.create({
          ...order,
@@ -789,7 +850,6 @@ exports.postOrder = (req, res) => {
       }).then(cart => {
          cart.forEach(ci => ci.destroy())
       })
-
       res.json(order);
    })
       .catch(err => {

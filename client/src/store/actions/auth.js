@@ -48,8 +48,7 @@ export const logout = () => {
 
 
 // Shop
-
-export const fetchCart = () => {
+const _fetchCart = () => {
     return dispatch => {
         // update cart in database >> get success response >> dispatch ADD_CART
         let idToken = localStorage.getItem('idToken');
@@ -68,6 +67,7 @@ export const fetchCart = () => {
         })
     }
 }
+export const fetchCart = _fetchCart;
 
 export const addToCart = (skuId, qty = 1) => {
     return async dispatch => {
@@ -85,10 +85,12 @@ export const addToCart = (skuId, qty = 1) => {
                 method: 'POST',
                 body: JSON.stringify({ skuId: skuId, action: 'add', qty })
             })
-            let product = await response.json();
-            if (product.status != 401) {
-                dispatch({ type: actions.ADD_CART, skuId, product, qty })
+            let data = await response.json();
+            if (data.status == 200) {
+                // dispatch({ type: actions.ADD_CART, skuId, product: data.cartItem, qty })
+                dispatch(_fetchCart())
             }
+            dispatch({ type: actions.SET_RESPONSE, response: data })
         }
         catch (err) {
             console.log(err);
@@ -108,8 +110,9 @@ export const removeFromCart = (skuId) => {
             method: 'POST',
             body: JSON.stringify({ skuId: skuId, action: 'remove' })
         }).then(async product => {
-            product = await product.json();
-            dispatch({ type: actions.REMOVE_CART, skuId, product })
+            let data = await product.json();
+            // dispatch({ type: actions.REMOVE_CART, skuId, product: data.cartItem })
+            dispatch(_fetchCart())
         }).catch(err => {
             console.log(err);
         })
@@ -130,7 +133,8 @@ export const deleteFromCart = (skuId) => {
             body: JSON.stringify({ skuId: skuId, action: 'delete' })
         }).then(async product => {
             product = await product.json();
-            dispatch({ type: actions.DELETE_CART, skuId, product })
+            // dispatch({ type: actions.DELETE_CART, skuId, product })
+            dispatch(_fetchCart())
         }).catch(err => {
             console.log(err);
         })

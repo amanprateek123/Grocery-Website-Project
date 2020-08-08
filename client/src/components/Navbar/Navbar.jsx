@@ -45,6 +45,7 @@ import { useRef } from 'react';
 
 import male_avatar from '../../assets/illustrations/male_avatar.svg'
 import female_avatar from '../../assets/illustrations/female_avatar.svg'
+import { useEffect } from 'react';
 
 const drawerWidth = 240;
 
@@ -111,6 +112,8 @@ const Navbar = (props) => {
     const theme = useTheme();
     const [open, setOpen] = React.useState(false);
 
+    const [preSearch, setPreSearch] = useState([]);
+
     const history = useHistory();
 
     const handleDrawerOpen = () => {
@@ -123,9 +126,15 @@ const Navbar = (props) => {
 
     let searchText = useRef();
 
-    const search = (e) => {
+
+    const search = (e, str) => {
         e.preventDefault();
-        history.push(`/products?search=${encodeURI(searchText.current.value)}&sr`)
+        let query = str || searchText.current.value;
+        if (!query) {
+            return;
+        }
+        setPreSearch([])
+        history.push(`/products?search=${encodeURI(query)}&sr`)
     }
     const [classy, setclassy] = useState("cartRem")
     const [cart_bg, setcart_bg] = useState("cart")
@@ -145,6 +154,30 @@ const Navbar = (props) => {
     const more_hide = () => {
         setMore('cart1')
     }
+
+    useEffect(() => {
+
+        let handler = (e) => {
+            if (e.keyCode == 13) {
+                setPreSearch([]);
+                return;
+            }
+            if (e.target.value.length > 2) {
+                fetch(`/pre-search?q=${e.target.value}`).then(res => res.json())
+                    .then(strings => {
+                        setPreSearch(strings)
+                    })
+            }
+            else if (e.target.value.length < 2) {
+                setPreSearch([])
+            }
+        }
+        searchText.current.addEventListener('keyup', handler)
+
+        return () => {
+            searchText.current.removeEventListener('keyup', handler)
+        }
+    }, [])
 
 
     return (
@@ -182,6 +215,20 @@ const Navbar = (props) => {
                                         <i className="fa fa-search " aria-hidden="true" />
                                     </button>
                                 </div>
+                                {
+                                    preSearch.length ?
+                                        <div className="pre-search list-group">
+                                            <ul>
+                                                {
+                                                    preSearch.map(str => (
+                                                        <li className="pre-search-li" onClick={(e) => search(e, str)}>{str}</li>
+                                                    ))
+                                                }
+                                            </ul>
+                                        </div>
+                                        : null
+                                }
+
                             </form>
                         </div>
 

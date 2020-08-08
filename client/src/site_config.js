@@ -1,3 +1,7 @@
+
+exports.name = "LalaDukaan"
+
+
 exports.footer = {
     about: [
         {

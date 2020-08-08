@@ -136,6 +136,7 @@ const Product = (props) => {
                                 </React.Fragment>
                                 :
                                 <div className="btn btn-full add-to-cart out-of-stock">Out of Stock</div>
+                        // ! some other sku- variant of this product could be in stock
                     }
                 </div>
             </CardActions>

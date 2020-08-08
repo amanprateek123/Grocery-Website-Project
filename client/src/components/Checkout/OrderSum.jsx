@@ -4,6 +4,7 @@ import DoneIcon from '@material-ui/icons/Done';
 import { connect } from 'react-redux'
 import * as actions from '../../store/actions'
 
+import site from '../../site_config';
 
 function OrderSum(props) {
 
@@ -38,7 +39,7 @@ function OrderSum(props) {
                                         {item.sku.name}
                                     </div>
                                     <div className="seller_prod">
-                                        <span>Seller: Laladukaan</span>
+                                        <span>Seller: {site.name}</span>
                                     </div>
                                     <span className="order_price">
                                         ₹ {item.sku.price * (item.quantity)}
@@ -62,6 +63,13 @@ function OrderSum(props) {
                                     </div>
                                 </div>
                             </div>
+                            {
+                                props.response.status && props.response.status != 200 ?
+                                    <div className="error mt-2">
+                                        {props.response.message}
+                                    </div>
+                                    : null
+                            }
                         </div>
                     )
                 })}
@@ -118,7 +126,8 @@ function OrderSum(props) {
 }
 const mapStateToProps = state => {
     return {
-        cart: state.cart
+        cart: state.cart,
+        response: state.response
     }
 }
 const mapDispatchToProps = dispatch => {

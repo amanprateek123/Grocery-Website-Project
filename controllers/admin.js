@@ -384,7 +384,7 @@ exports.editProduct = async (req, res, next) => {
 exports.addProducts = (req, res) => {
 
     // if file type is not csv return error.
-    if (req.file.mimetype == 'text/csv') {
+    if (['application/vnd.ms-excel', 'text/csv'].includes(req.file.mimetype)) {
         // fields of every product must match with what is in database.
         // convert csv to json
         csv().fromString(req.file.buffer.toString('utf-8')).then(json => {
@@ -460,7 +460,7 @@ exports.addProducts = (req, res) => {
 
 exports.addCategories = (req, res) => {
 
-    if (req.file.mimetype == 'text/csv') {
+    if (['application/vnd.ms-excel', 'text/csv'].includes(req.file.mimetype)) {
         csv().fromString(req.file.buffer.toString('utf-8')).then(json => {
             let categories = json;
             let promises = [];
@@ -524,7 +524,7 @@ exports.addCategories = (req, res) => {
 
 exports.addParentCategories = (req, res) => {
 
-    if (req.file.mimetype == 'text/csv') {
+    if (['application/vnd.ms-excel', 'text/csv'].includes(req.file.mimetype)) {
         csv().fromString(req.file.buffer.toString('utf-8')).then(json => {
             let parentCategories = json;
             let promises = [];
@@ -587,7 +587,7 @@ exports.addParentCategories = (req, res) => {
 
 exports.addDepartments = (req, res) => {
 
-    if (req.file.mimetype == 'text/csv') {
+    if (['application/vnd.ms-excel', 'text/csv'].includes(req.file.mimetype)) {
         csv().fromString(req.file.buffer.toString('utf-8')).then(json => {
             let departments = json;
             let promises = [];
@@ -657,6 +657,6 @@ exports.homePage = async (req, res) => {
 }
 
 //get homepage data
-exports.getHome = async (req,res)=>{
-    db.homepage.findAll({}).then(data=>res.json(data)).catch((err)=>res.json(err))
+exports.getHome = async (req, res) => {
+    db.homepage.findAll({}).then(data => res.json(data)).catch((err) => res.json(err))
 }
