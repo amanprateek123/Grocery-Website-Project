@@ -26,7 +26,7 @@ const AddProductsFile = (props) => {
     const addProducts = (e) => {
         e.preventDefault();
         var input = document.querySelector('#products-file');
-        if (input.files[0].type != 'text/csv') {
+        if (['application/vnd.ms-excel', 'text/csv'].includes(input.files[0].type)) {
             props.setResponse({ status: 400, message: 'Please Upload a CSV file with fields [sn,op,categoryId,name,brand,description,keywords,code,model,price,stock,json,src,attr,attrv]' })
             return;
         }
