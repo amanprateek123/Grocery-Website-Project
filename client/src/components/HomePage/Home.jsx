@@ -8,13 +8,15 @@ import { useQuery, useMutation } from 'react-query';
 import { useEffect } from 'react';
 import { useState } from 'react';
 import Product from '../Product/Product'
+import Carousels from '../Carousel/Carousel'
 
 export default function Home() {
     //fetch homepage table using query
+    const [carousel,setCarousel] = useState([])
     const [productQueries, setProductQueries] = useState([]); // product list related Queries Meta
-    const [imageQueries, setImageQueries] = useState([]); // Images related queries.
+    const [banners, setbanners] = useState([]); // banners related queries.
     const [specialQueries, setSpecialQueries] = useState([]); // 4x4 section queries.
-
+    const [sections,setSections] = useState([])
 
     const [productSections, setProductSections] = useState([]); // Product Sections Data 
 
@@ -26,10 +28,12 @@ export default function Home() {
             method: 'GET'
         }).then(res => res.json())
             .then(sections => {
-                setProductQueries(sections.filter(sec => sec.fieldType == 'Adding Product'))
-                setImageQueries(sections.filter(sec => sec.fieldType == 'Adding Banners'))
+                setSections(sections)
+                setProductQueries(sections.filter(sec => sec.fieldType == 'product'))
+                setbanners(sections.filter(sec => sec.fieldType == 'banners'))
                 setSpecialQueries(sections.filter(sec => sec.fieldType == 'special'))
-                console.log(productQueries, imageQueries, specialQueries);
+                setCarousel(sections.filter(sec=>sec.fieldType==='carousel'))
+                console.log('img',carousel)
             })
     }, [])
 
@@ -41,7 +45,7 @@ export default function Home() {
                 fetch(`/get-products?ids=${pq.value}`).then(async res => {
                     let data = await res.json();
                     console.log(data);
-                    _productSections.push({ ...data, query: pq })
+                    _productSections.push({ ...data, query: pq,order:pq.order,fieldType:pq.fieldType })
                 })
             ))
         ).then(queries => {
@@ -50,10 +54,62 @@ export default function Home() {
         })
     }, [productQueries])
 
-    return (
+    const array = productSections.concat(banners.concat(carousel.concat(specialQueries)))
+    console.log('Array',array)
+    array.sort((a,b)=>(
+        a.order-b.order
+    ))
+    console.log('ArraySort',array)
+
+
+    //rendering sections
+    const render = (data)=>{
+        console.log('home',data)
+        switch(data.fieldType){
+            case "carousel":
+               return(
+                   <React.Fragment>
+                       <Carousels links={JSON.parse(data.value)} />
+                   </React.Fragment>
+               )
+               break;
+            case "product":  
+            return(
+                <React.Fragment>
+
+                </React.Fragment>
+            )
+            break; 
+            case "banners":  
+            return(
+                <React.Fragment>
+                    <Paper className="row" style={{ margin: '40px auto' }}>
+                        {JSON.parse(data.value).map(img=>(
+                         <Card className="col-md-4">
+                            <img src={img} style={{ width: '100%', padding: '5px' }} />
+                         </Card>))}
+                    </Paper>
+                </React.Fragment>
+            )
+            break; 
+            case "special":  
+            return(
+                <React.Fragment>
+
+                </React.Fragment>
+            )
+            break;  
+        }
+    }
+        return (
         <React.Fragment>
 
             {/* THIS IS SAMPLE */}
+            {array.map(data=>(
+                <React.Fragment>
+                    {render(data)}
+                 </React.Fragment>   
+            ))}
 
             <Paper>
                 {
@@ -74,10 +130,24 @@ export default function Home() {
                     ))
                 }
             </Paper>
+            {/* <Paper>
+                {
+                    banners.map(itm=>(
+                        <Card className="row">
+                        <div className="col-md-6">
+                             {JSON.parse(itm.value).map(i=>(
+                                 <img src={i} style={{width:'100%'}} />
+                             ))}
+                        </div>
+                     </Card>
+                    ))
+                }
+            </Paper> */}
 
             {/* SAMPLE ENDS */}
 
-            <Paper Paper className="row home1" style={{ margin: '40px auto' }}>
+            <Paper 
+             className="row home1" style={{ margin: '40px auto' }}>
                 <Card className="col-md-3">
                     <h1>Customer's Most Loved</h1>
                     <div className="row mb-3">
@@ -155,7 +225,7 @@ export default function Home() {
                     </div>
                 </Card>
             </Paper>
-            <Paper className="row" style={{ margin: '40px auto' }}>
+            {/* <Paper className="row" style={{ margin: '40px auto' }}>
                 <Card className="col-md-4">
                     <img src="https://storiesflistgv2.azureedge.net/stories/2016/09/daily_offers_banner_Final.jpg" style={{ width: '100%', padding: '5px' }} />
                 </Card>
@@ -165,7 +235,7 @@ export default function Home() {
                 <Card className="col-md-4">
                     <img src="https://storiesflistgv2.azureedge.net/stories/2016/09/daily_offers_banner_Final.jpg" style={{ width: '100%', padding: '5px' }} />
                 </Card>
-            </Paper>
+            </Paper> */}
             <Paper className="multi_car" style={{ margin: '40px auto' }}>
                 <div style={{ borderBottom: '2px solid #f3f3f3' }}>
                     <h1>Best Battery Phones</h1>

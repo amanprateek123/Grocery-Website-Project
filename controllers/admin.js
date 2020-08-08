@@ -639,7 +639,8 @@ exports.homePage = async (req, res) => {
                 key: item.key,
                 value: item.value,
                 fieldType: item.fieldType,
-                subHeading:item.sub
+                subHeading:item.sub,
+                order:i+1
             }
             ).then(add => {
                 console.log("Row Added")

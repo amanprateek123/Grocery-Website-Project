@@ -21,6 +21,10 @@ module.exports = (sequelize, Sequelize) => {
         fieldType: {
             type: Sequelize.STRING,
             allowNull: false
+        },
+        order:{
+            type:Sequelize.INTEGER,
+            allowNull: false
         }
     },
         {
