@@ -660,3 +660,13 @@ exports.homePage = async (req, res) => {
 exports.getHome = async (req, res) => {
     db.homepage.findAll({}).then(data => res.json(data)).catch((err) => res.json(err))
 }
+
+
+
+
+
+
+
+
+
+

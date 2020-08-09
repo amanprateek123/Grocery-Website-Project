@@ -15,7 +15,7 @@ module.exports = (sequelize, Sequelize) => {
             allowNull: true
         },
         value: {
-            type: Sequelize.STRING,
+            type: Sequelize.TEXT,
             allowNull: false
         },
         fieldType: {

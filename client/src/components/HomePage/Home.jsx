@@ -100,10 +100,24 @@ export default function Home() {
                 </React.Fragment>
             )
             break; 
-            case "special":  
+            case "special":
+                let sp = JSON.parse(data.value) 
+                console.log('special',sp) 
             return(
                 <React.Fragment>
-
+                    <Paper className="row home1" style={{ margin: '40px auto' }}>
+                        {sp?sp.map(item=>(
+                             <Card className="col-md-3">
+                             <h1>{item.heading}</h1>
+                             <div className="row">
+                             {item.detail.map(i=>(
+                                 <div className="col-md-6">
+                                     <img src={i.image} style={{ width: '100%' }} />
+                                 </div>
+                             ))}</div>
+                         </Card>
+                        )):null}
+                </Paper>
                 </React.Fragment>
             )
             break;  
@@ -153,7 +167,7 @@ export default function Home() {
 
             {/* SAMPLE ENDS */}
 
-            <Paper 
+            {/* <Paper 
              className="row home1" style={{ margin: '40px auto' }}>
                 <Card className="col-md-3">
                     <h1>Customer's Most Loved</h1>
@@ -231,7 +245,7 @@ export default function Home() {
                         </div>
                     </div>
                 </Card>
-            </Paper>
+            </Paper> */}
             {/* <Paper className="row" style={{ margin: '40px auto' }}>
                 <Card className="col-md-4">
                     <img src="https://storiesflistgv2.azureedge.net/stories/2016/09/daily_offers_banner_Final.jpg" style={{ width: '100%', padding: '5px' }} />
