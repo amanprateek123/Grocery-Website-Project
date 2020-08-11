@@ -73,6 +73,7 @@ import Snackbar from '@material-ui/core/Snackbar';
                    <option value="banners">Banners</option>
                    <option value="carousel">Carousel</option>
                    <option value="special">Special Section</option>
+                   <option value="brands">Brand-banner</option>
                  </Field>
                   <ErrorMessage name="fieldType" />
                   </div>
@@ -91,7 +92,7 @@ import Snackbar from '@material-ui/core/Snackbar';
                        </React.Fragment>}
                    {sec.fieldType===''?null:
                                      <div className="mt-3">
-                                     <label htmlFor={`sections.${index}.value`}>Enter the {(sec.fieldType==="product")?"JSON Array(SKU's ID) for adding products":((sec.fieldType)==="banners" || (sec.fieldType)==="carousel")?"array of image links":(sec.fieldType==="special")?"array of 4 objects(includes Heading and Category Id) ":null}:</label>
+                                     <label htmlFor={`sections.${index}.value`}>Enter the {(sec.fieldType==="product")?"JSON Array(SKU's ID) for adding products":((sec.fieldType)==="banners" || sec.fieldType==="brands" || (sec.fieldType)==="carousel")?"array of image links":(sec.fieldType==="special")?"array of 4 objects(includes Heading and Category Id) ":null}:</label>
                                      <Field name={`sections.${index}.value`} type="text" style={{float:'right',padding:'3px',width:'300px'}} required/>
                                      <ErrorMessage name={`sections.${index}.value`} />
                                      </div>}

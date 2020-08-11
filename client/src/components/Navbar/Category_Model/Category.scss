@@ -76,7 +76,6 @@
     }
     .subdept{
         position: relative;
-        padding: 12px;
         min-width: 240px;
         .nav_drop{
             padding: 12px;
@@ -97,8 +96,9 @@
         color: #878787;
         font-weight: 500;
         position: absolute;
-        top: 15px;
+        top: 0;
         font-size: 1em;
+        margin-bottom: 5px;
     }
     .cata_drop:hover{
         color: var(--mainColor);
@@ -106,6 +106,7 @@
     .sub_nav{
         padding: 12px;
         display: flex;
+        min-width: 240px;
         width: 100%;
         background: #fff;
         color: #222;
@@ -120,7 +121,7 @@
         
     }
     .visible{
-        display: inline-block;
+        display: block;
         color: black;
     }
     .invisible{

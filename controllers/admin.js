@@ -636,7 +636,7 @@ exports.homePage = async (req, res) => {
     Promise.all(
         data.map((item, i) => {
             return db.homepage.create({
-                key: item.key,
+                heading: item.key,
                 value: item.value,
                 fieldType: item.fieldType,
                 subHeading:item.sub,
