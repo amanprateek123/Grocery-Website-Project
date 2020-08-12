@@ -636,10 +636,10 @@ exports.homePage = async (req, res) => {
     Promise.all(
         data.map((item, i) => {
             return db.homepage.create({
-                heading: item.key,
+                heading: item.heading,
                 value: item.value,
                 fieldType: item.fieldType,
-                subHeading:item.sub,
+                subHeading:item.subHeading,
                 order:i+1
             }
             ).then(add => {

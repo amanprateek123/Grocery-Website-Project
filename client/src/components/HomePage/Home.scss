@@ -6,6 +6,9 @@
         padding: 10px;
         text-align: left;
         font-weight: bold;
+        @media(max-width: 600px){
+            text-align: center;
+        }
     }
 }
 .multi_car{
@@ -16,18 +19,38 @@
         padding: 5px 10px;
         text-align: left;
         font-weight: bold;
+        @media(max-width: 600px){
+            font-size: 20px;
+            text-align: center;
+        }
     }
     p{
         padding: 0 10px;
         text-align: left;
         color: grey;
+        @media(max-width: 600px){
+            font-size: 14px;
+            text-align: center;
+        }
     }
 }
 .specials{
     width: 23%;
     margin: 0 1%;
+    @media(max-width: 600px){
+        margin: 10px 0;
+    }
 }
 .banner{
     width: 32%;
     margin: 0;
+    @media(max-width: 600px){
+        margin: 10px 0;
+    }
+}
+.facility{
+    height: 250px;
+    @media(max-width: 600px){
+        height:1600px;
+    }
 }

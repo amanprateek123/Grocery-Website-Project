@@ -44,13 +44,13 @@ function OrderConfirmation(props) {
     
     return (
         <React.Fragment>
-            <Paper className="container mt-5 mb-5">
+            <Paper className="container mt-5 mb-5" id="confi">
                 <div className="order_conf">
                    <img src={img}/>
                 </div>
                 <div className="mt-4" style={{borderBottom:'1px solid #f3f3f3'}}>
                      <h3 className="pl-5" style={{fontSize:'17px'}}>Hey <span style={{fontWeight:'bold'}}>{user.firstName},</span></h3>
-                     <h2 style={{color:'var(--mainColor)',fontSize:'22px',margin:'20px 40px'}}><DoneIcon fontSize='inherit' style={{fontSize:'30px'}}/><span className="ml-3">Your Order is confirmed</span></h2>
+                     <h2 style={{color:'var(--mainColor)',margin:'20px 40px'}}><DoneIcon fontSize='inherit' style={{fontSize:'30px'}}/><span className="ml-3">Your Order is confirmed</span></h2>
                      <p style={{fontSize:'17px',margin:'20px 40px'}}>Thanks for shopping! Your Order hasn't shipped yet, but we'll send you an email while it does.</p>
                 </div>
                 <div className="row" style={{borderBottom:'1px solid #f3f3f3'}}>

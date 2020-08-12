@@ -125,6 +125,9 @@
         }
         .span3{
             float: right;
+            @media(max-width: 600px){
+                display: none;
+            }
         }
         }
 }
@@ -172,6 +175,9 @@
     color: #212121;
     line-height: 1;
     display: inline;
+    @media(max-width: 600px){
+        font-size: 14px;
+    }
     }
     }
 }
@@ -183,6 +189,9 @@
     color: #878787;
     font-size: 14px;
     height: 20px;
+    @media(max-width: 600px){
+        font-size: 13px;
+    }
 }
 .seller_prod{
     margin-top: 8px;
@@ -190,6 +199,9 @@
     color: #878787;
     font-size: 14px;
     height: 20px;
+    @media(max-width: 600px){
+        font-size: 13px;
+    }
 }
 .order_price{
     font-size: 18px;
@@ -198,6 +210,9 @@
     display: inline-block;
     margin-right: 8px;
     margin-top: 18px;
+    @media(max-width: 600px){
+        font-size: 14px;
+    }
 }
 .pro_manp{
     width: var(--cart-item-image-width);
@@ -215,6 +230,10 @@
     border-radius: 50%;
     padding-top: 1px;
     line-height: 1;
+    @media(max-width: 600px){
+        width: 24px;
+        height: 24px;
+    }
 }
 .pro_quan{
     display: inline-block;
@@ -227,6 +246,9 @@
     background-color: #fff;
     border: 1px solid #c2c2c2;
     margin: 0 5px;
+    @media(max-width: 600px){
+        width: 35px;
+    }
     input{
     border: none;
     width: 100%;
@@ -237,7 +259,7 @@
     }
 }
 .delete_prod{
-    padding-left: 24px;
+    margin-left: 40px;
     padding-top: 3px;
     .rem_del{
         display: inline-block;
@@ -248,6 +270,9 @@
         font-weight: 500;
         cursor: pointer;
         margin-right: 25px;
+        @media(max-width: 600px){
+            font-size: 14px;
+        }
     }
     .rem_del:hover{
         color:#2874f0
@@ -262,13 +287,25 @@
     font-size: 16px;
     justify-content: flex-end;
     align-items: center;
+    @media(max-width: 600px){
+        justify-content: center;
+        flex-direction: column;
+        height: 150px;
+    }
     span{
     flex: 1 1 auto;
+    @media(max-width: 600px){
+        width: 100%;
+        font-size: 15px;
+    }
     span{
     border-bottom: none;
     display: inline-block;
     padding-bottom: 7px;
     padding-top: 7px;
+    @media(max-width: 600px){
+        width: 100px;
+    }
     p{
     outline: none;
     border: none;
@@ -290,6 +327,10 @@
     box-shadow: 0 1px 2px 0 rgba(0,0,0,.2);
     border: none;
     color: #fff;
+    @media(max-width: 600px){
+        float: left;
+        margin: 0 15%;
+    }
 }
 .order_sum{
     font-size: 16px;

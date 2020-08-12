@@ -82,7 +82,7 @@ export default function Home() {
                   <Paper className="multi_car" style={{ margin: '40px auto' }}>
                      <div style={{ borderBottom: '2px solid #f3f3f3' }}>
                         <Link to={`/products?${data.query.value}&limit=20`}>
-                        <Button variant="contained" color="primary" style={{float:'right',margin:'10px 15px',padding:'10px',width:'120px'}}>View All</Button>
+                        {/* <Button variant="contained" color="primary" style={{float:'right',margin:'10px 15px',padding:'10px',width:'120px'}}>View All</Button> */}
                         </Link>
                         <h1>{data.query.heading}</h1>
                         <p>{data.query.subHeading}</p>
@@ -288,7 +288,7 @@ export default function Home() {
                     <Carousel1 />
                 </div>
             </Paper> */}
-            <Paper style={{ margin: '40px auto', height: '250px',backgroundColor:'transparent' }}>
+            <Paper className="facility" style={{ margin: '40px auto',backgroundColor:'transparent' }}>
                 <div className="mt-1" style={{backgroundColor:'white'}}>
                     <Facilities />
                 </div>

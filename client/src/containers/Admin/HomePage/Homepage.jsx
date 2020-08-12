@@ -14,16 +14,44 @@ import Snackbar from '@material-ui/core/Snackbar';
 
  function Homepage(props) {
     
-    const initial = {
-        sections:[
-            {
-                key:'',
-                sub:'',
-                value:'',
-                fieldType:''
-            }
-        ]
+    const [initial,setInitial] = useState(null)
+
+    const convert = (data) =>{
+        let a = []
+        data.map(i=>{
+            a.push({heading:i.heading,subHeading:i.subHeading,value:i.value,fieldType:i.fieldType})
+        })
+        if(a.length===0){
+            setInitial({
+                sections:[
+                    {
+                        heading:'',
+                        subHeading:'',
+                        value:'',
+                        fieldType:''
+                    }
+                ]
+            })
+        }
+        else{
+        setInitial({
+            sections:a
+        })
+        }
+        console.log('a',a)
+      
     }
+
+    useEffect(()=>{
+       fetch('/admin/homepage',{
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        method:'GET',
+       }).then(res=>res.json()).then(res=>{
+          convert(res)
+       } )
+    },[])
     const [data,setData] = useState(null)
 
     const homePage = (variable) =>{
@@ -52,7 +80,7 @@ import Snackbar from '@material-ui/core/Snackbar';
             <div className="m-3">
                 <p className="p-2" style={{fontSize:'20px'}}>Add sections for the Homepage:</p>
                  <div>  
-                    <Formik
+                   {initial? <Formik
                     initialValues={initial}
                     onSubmit={async (values,{setSubmitting})=> await home({variables:values})}
                     >
@@ -80,14 +108,14 @@ import Snackbar from '@material-ui/core/Snackbar';
                    {sec.fieldType===''|| sec.fieldType==='special'?null:
                    <React.Fragment>
                   <div className="mt-3">
-                  <label htmlFor={`sections.${index}.key`}>Enter the heading for the section:</label>
-                  <Field name={`sections.${index}.key`} type="text" style={{float:'right',padding:'3px',width:'300px'}} required />
-                  <ErrorMessage name={`sections.${index}.key`} />
+                  <label htmlFor={`sections.${index}.heading`}>Enter the heading for the section:</label>
+                  <Field name={`sections.${index}.heading`} type="text" style={{float:'right',padding:'3px',width:'300px'}} required />
+                  <ErrorMessage name={`sections.${index}.heading`} />
                   </div>
                   <div className="mt-3">
-                  <label htmlFor={`sections.${index}.sub`}>Enter the sub-heading for the section:</label>
-                  <Field name={`sections.${index}.sub`} type="text" style={{float:'right',padding:'3px',width:'300px'}} required />
-                  <ErrorMessage name={`sections.${index}.sub`} />
+                  <label htmlFor={`sections.${index}.subHeading`}>Enter the sub-heading for the section:</label>
+                  <Field name={`sections.${index}.subHeading`} type="text" style={{float:'right',padding:'3px',width:'300px'}} required />
+                  <ErrorMessage name={`sections.${index}.subHeading`} />
                   </div>                       
                        </React.Fragment>}
                    {sec.fieldType===''?null:
@@ -116,7 +144,7 @@ import Snackbar from '@material-ui/core/Snackbar';
                 </Form>
                          </div>
                     )}
-                    </Formik>   
+                    </Formik>:null}   
                 </div>
             </div>
             <Snackbar open={snackbar} autoHideDuration={2000} className="home-snackbar" onClose={() => setSnackbar(false)} anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}>
