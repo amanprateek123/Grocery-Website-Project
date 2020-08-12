@@ -144,7 +144,7 @@ function Checkout(props) {
         box === 1 ?
             (
                 (user && user.addresses) ?
-                    <Paper style={{ marginTop: '15px', boxShadow: 'none' }}>
+                    <Paper style={{ marginTop: '15px', boxShadow: 'none' }} id="ord">
                         <div style={{ display: 'flex', alignItems: 'flex-start' }}>
                             <div className="address_det">
                                 <h3>

@@ -125,6 +125,9 @@
     margin-top: 10px;
     font-size: 16px;
     display: block;
+    @media(max-width: 600px){
+        font-size: 13px;
+    }
 }
 .adder{
     font-size: 16px;

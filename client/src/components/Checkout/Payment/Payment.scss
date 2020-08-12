@@ -49,6 +49,11 @@
     overflow: hidden;
     position: relative;
     left: -25px;
+    @media(max-width: 600px){
+        width: 96%;
+        left: 0px;
+        top: -18px;
+    }
 }
 .oreder_list_sum{
     padding: 24px 0 22px;
@@ -73,4 +78,17 @@
     background-size: contain !important;
     background-repeat: no-repeat;
     background-position: center;
+}
+.deli_sum{
+    @media(max-width: 600px){
+        height: auto;
+        margin: auto;
+    }
+}
+.lilly{
+    min-height:56px;
+     width: 60%;
+     @media(max-width: 600px){
+         width: 100%;
+     }
 }

@@ -1,10 +1,17 @@
 .facility{
     width: 80%;
+    @media(max-width: 600px){
+        
+    }
 }
 .individual{
     border-left: 1px solid #f0f0f0;
     border-right: 1px solid #f0f0f0;
     height: 250px;
+    @media(max-width: 600px){
+        border: 1px solid #f0f0f0;
+        margin-top: 10px;
+    }
 }
 .fac_list{
     text-align: center;

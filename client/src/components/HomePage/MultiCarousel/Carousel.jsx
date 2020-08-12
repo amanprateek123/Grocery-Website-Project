@@ -2,6 +2,7 @@ import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import React from 'react'
 import './Carousel.scss'
+import { Link } from "react-router-dom";
 export default function Carousels(props){
     const responsive = {
         superLargeDesktop: {
@@ -11,7 +12,7 @@ export default function Carousels(props){
         },
         desktop: {
           breakpoint: { max: 3000, min: 1024 },
-          items: 6
+          items: 8
         },
         tablet: {
           breakpoint: { max: 1024, min: 464 },
@@ -23,6 +24,14 @@ export default function Carousels(props){
         }
       };
       console.log(props.product)
+
+      const trimming = (string) => {
+        const length = 25
+        var trimmedString = string.length > length ?
+            string.substring(0, length) + "..." :
+            string;
+        return trimmedString
+    }
     return(
        props.product? <Carousel 
         responsive={responsive}        
@@ -32,16 +41,20 @@ export default function Carousels(props){
         itemClass="carousel-item-padding-40-px"
         >
         {props.product.map(item=>(
+          <Link to={`/product/${item.id}`} style={{textDecoration:'none'}}>
         <div className="main_car">
         <div className="carousels">
             <img src={item.skus[0].images[0].src}/>
         </div>
         <div className="text_car">
-            <h5> {item.name} </h5>
-            <h6>{item.category.name}</h6>
+            <h5> {trimming(item.name)} </h5>
+            {item.name.length>25?
+            <h4> {item.name} </h4>:null}
+            <h6 style={{color:'black'}}>{item.category.name}</h6>
             <p>Now ₹{item.skus[0].price}</p>
         </div>
-    </div>            
+    </div>           
+          </Link>           
         ))}
         {/* <div className="main_car">
             <div className="carousels">

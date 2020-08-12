@@ -159,7 +159,7 @@ const Payment = (props) => {
                                 <p style={{ fontSize: "16px" }}>{site.name} Basket <span style={{ fontWeight: 'bold' }}>({props.cart.length} items)</span></p>
                             </div>
                             <div className="order_list_sum">
-                                <div className="row" style={{ minHeight: '56px', width: '60%' }}>
+                                <div className="row lilly" >
                                     {props.cart.map(itm => {
                                         return (
                                             <div className="list_img col-md-2" style={{ backgroundImage: `url(${itm.sku.images[0].src})` }}>

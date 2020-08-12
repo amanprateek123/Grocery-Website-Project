@@ -9,6 +9,7 @@ import { useEffect } from 'react';
 import { useState } from 'react';
 import Product from '../Product/Product'
 import Carousels from '../Carousel/Carousel'
+import { Link } from 'react-router-dom';
 
 export default function Home() {
     //fetch homepage table using query
@@ -17,6 +18,7 @@ export default function Home() {
     const [banners, setbanners] = useState([]); // banners related queries.
     const [specialQueries, setSpecialQueries] = useState([]); // 4x4 section queries.
     const [sections,setSections] = useState([])
+    const [brands, setBrands] = useState([])
 
     const [productSections, setProductSections] = useState([]); // Product Sections Data 
 
@@ -29,11 +31,12 @@ export default function Home() {
         }).then(res => res.json())
             .then(sections => {
                 setSections(sections)
+                setBrands(sections.filter(sec => sec.fieldType === 'brands'))
                 setProductQueries(sections.filter(sec => sec.fieldType == 'product'))
                 setbanners(sections.filter(sec => sec.fieldType == 'banners'))
                 setSpecialQueries(sections.filter(sec => sec.fieldType == 'special'))
                 setCarousel(sections.filter(sec=>sec.fieldType==='carousel'))
-                console.log('img',carousel)
+                console.log('brands',sections)
             })
     }, [])
 
@@ -42,7 +45,7 @@ export default function Home() {
         let _productSections = [];
         Promise.all(
             productQueries.map(pq => (
-                fetch(`/get-products?ids=${pq.value}`).then(async res => {
+                fetch(`/get-products?ids=${pq.value}&limit=20`).then(async res => {
                     let data = await res.json();
                     console.log(data);
                     _productSections.push({ ...data, query: pq,order:pq.order,fieldType:pq.fieldType })
@@ -54,14 +57,14 @@ export default function Home() {
         })
     }, [productQueries])
 
-    const array = productSections.concat(banners.concat(carousel.concat(specialQueries)))
+    const array = productSections.concat(banners.concat(carousel.concat(specialQueries.concat(brands))))
     console.log('Array',array)
     array.sort((a,b)=>(
         a.order-b.order
     ))
     console.log('ArraySort',array)
 
-
+  
     //rendering sections
     const render = (data)=>{
         console.log('home',data)
@@ -78,7 +81,10 @@ export default function Home() {
                 <React.Fragment>
                   <Paper className="multi_car" style={{ margin: '40px auto' }}>
                      <div style={{ borderBottom: '2px solid #f3f3f3' }}>
-                        <h1>{data.query.key}</h1>
+                        <Link to={`/products?${data.query.value}&limit=20`}>
+                        {/* <Button variant="contained" color="primary" style={{float:'right',margin:'10px 15px',padding:'10px',width:'120px'}}>View All</Button> */}
+                        </Link>
+                        <h1>{data.query.heading}</h1>
                         <p>{data.query.subHeading}</p>
                      </div>
                      <div className="mt-1">
@@ -87,14 +93,28 @@ export default function Home() {
                   </Paper>
                 </React.Fragment>
             )
-            break; 
+            break;
+            case "brands":  
+            return(
+                <React.Fragment>
+                  <Paper className="multi_car" style={{ margin: '40px auto' }}>
+                  <div style={{ borderBottom: '2px solid #f3f3f3' }}>
+                    <h1>{data.heading}</h1>
+                </div>
+                     <div className="mt-1">
+                        <Carousel1 brands={JSON.parse(data.value)} />
+                     </div>
+                  </Paper>
+                </React.Fragment>
+            )
+            break;             
             case "banners":  
             return(
                 <React.Fragment>
-                    <Paper className="row" style={{ margin: '40px auto' }}>
+                    <Paper className="row" style={{ margin: '40px auto',boxShadow:'none',backgroundColor:'transparent' }}>
                         {JSON.parse(data.value).map(img=>(
-                         <Card className="col-md-4">
-                            <img src={img} style={{ width: '100%', padding: '5px' }} />
+                         <Card className="col-md banner" style={{backgroundColor:'transparent',boxShadow:'none'}}>
+                            <img src={img} style={{ width: '100%'}} />
                          </Card>))}
                     </Paper>
                 </React.Fragment>
@@ -105,15 +125,18 @@ export default function Home() {
                 console.log('special',sp) 
             return(
                 <React.Fragment>
-                    <Paper className="row home1" style={{ margin: '40px auto' }}>
+                    <Paper className="row home1" style={{ margin: '40px auto',boxShadow:'none',backgroundColor:'transparent',display:'flex' }}>
                         {sp?sp.map(item=>(
-                             <Card className="col-md-3">
+                             <Card className="col-md" style={{margin:'0 1%'}}>
                              <h1>{item.heading}</h1>
                              <div className="row">
                              {item.detail.map(i=>(
-                                 <div className="col-md-6">
+                              <Link to={`/products?category=${i.category}`} className="col-md-6" style={{margin:'5px 0'}}>
+                                 <div >
                                      <img src={i.image} style={{ width: '100%' }} />
-                                 </div>
+                                     <p style={{textAlign:'center',color:'black'}}> {i.name} </p>
+                                 </div>                              
+                              </Link>
                              ))}</div>
                          </Card>
                         )):null}
@@ -125,7 +148,7 @@ export default function Home() {
     }
         return (
         <React.Fragment>
-            
+            <div style={{backgroundColor:'#f3f3f3'}}>
             {array.map(data=>(
                 <React.Fragment>
                     {render(data)}
@@ -257,19 +280,20 @@ export default function Home() {
                     <img src="https://storiesflistgv2.azureedge.net/stories/2016/09/daily_offers_banner_Final.jpg" style={{ width: '100%', padding: '5px' }} />
                 </Card>
             </Paper> */}
-            <Paper className="multi_car" style={{ margin: '40px auto' }}>
+            {/* <Paper className="multi_car" style={{ margin: '40px auto' }}>
                 <div style={{ borderBottom: '2px solid #f3f3f3' }}>
                     <h1>Trending Brands</h1>
                 </div>
                 <div className="mt-1">
                     <Carousel1 />
                 </div>
-            </Paper>
-            <Paper style={{ margin: '40px auto', height: '250px' }}>
-                <div className="mt-1">
+            </Paper> */}
+            <Paper className="facility" style={{ margin: '40px auto',backgroundColor:'transparent' }}>
+                <div className="mt-1" style={{backgroundColor:'white'}}>
                     <Facilities />
                 </div>
             </Paper>
+           </div> 
         </React.Fragment>
     )
 }
