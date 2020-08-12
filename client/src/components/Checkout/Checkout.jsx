@@ -167,6 +167,7 @@ function Checkout(props) {
                                                                 <p>
                                                                     <span className="span_name">{user.addresses[i].name}</span>
                                                                     <span className="span_place">Home</span>
+                                                                    {add.deliverable ? <div className="badge badge-warning mb-1 ml-1" style={{ opacity: 0.7 }}>Delivery NOT Availiable at this address </div> : null}
                                                                     <span className="span_num">{user.addresses[i].mobile}</span>
                                                                 </p>
                                                                 <span className="address_show">
@@ -174,9 +175,14 @@ function Checkout(props) {
                                                                     <br />
                                                                     <span> {add.state}, {add.country} - {add.zip}</span>
                                                                 </span>
-                                                                {(radio === i) ? <button onClick={() => takeBox(i)}>
-                                                                    Deliver Here
-                                                                    </button>
+                                                                {(radio === i) ?
+                                                                    add.deliverable ?
+                                                                        <button onClick={() => takeBox(i)}>
+                                                                            Deliver Here
+                                                                        </button>
+                                                                        : <button >
+                                                                            Delivery Not Available Here
+                                                                        </button>
                                                                     : null
                                                                 }
                                                             </div>

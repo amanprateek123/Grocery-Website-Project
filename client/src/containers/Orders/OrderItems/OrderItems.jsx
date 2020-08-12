@@ -14,6 +14,8 @@ import { useMutation } from 'react-query'
 import { Redirect } from 'react-router-dom'
 import { Alert } from '@material-ui/lab'
 
+import Swal from 'sweetalert2'
+
 import site from '../../../site_config';
 
 function OrderItems(props) {
@@ -30,6 +32,8 @@ function OrderItems(props) {
   month[9] = "October";
   month[10] = "November";
   month[11] = "December";
+
+  let orderId = props.match.params.id;
   const [order, setOrder] = useState(null);
   useEffect(() => {
     fetch(`/get-orders?page=1&date=1&id=${props.match.params.id}`, {
@@ -166,7 +170,26 @@ function OrderItems(props) {
 
   const [cancels, meta] = useMutation(cancelOrder)
 
-  const [msg, setMsg] = useState(false)
+  const [msg, setMsg] = useState(false);
+
+  const getInvoice = (orderId) => {
+    fetch(`/get-invoice/${orderId}`, {
+      headers: {
+        'Authorization': 'Bearer ' + props.idToken,
+      },
+      method: 'GET',
+    }).then(async response => {
+      if (response.status != 200) {
+        return Swal.fire('Not Authorized', 'The order was not found with your account.', 'error');
+      }
+      let blob = await response.blob();
+      let url = URL.createObjectURL(blob);
+      let a = document.createElement('a');
+      a.download = `invoice-${orderId}.pdf`
+      a.href = url;
+      a.click();
+    })
+  }
 
   const cancelling = (
     order ?
@@ -279,7 +302,7 @@ function OrderItems(props) {
               <h5 style={{ fontSize: '16px', fontWeight: 'bold' }}>Payment Method</h5>
               <p style={{ fontSize: '13px' }}> {order.paymentType} </p>
               <div className="mt-4" style={{ fontSize: '16px' }}>
-                Download <span style={{ color: 'var(--mainColor)' }}>Invoice</span>
+                Download <span style={{ color: 'var(--mainColor)', cursor: 'pointer' }} onClick={() => getInvoice(orderId)}>Invoice</span>
               </div>
             </div>
             <div className="col-md-4">

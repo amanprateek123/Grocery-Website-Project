@@ -15,4 +15,7 @@ router.get('/get-status', shopCtrl.getStatus)
 router.post('/post-order', isAuth, shopCtrl.postOrder)
 router.delete('/get-orders', isAuth, shopCtrl.cancelOrder)
 
+
+router.get('/get-invoice/:id', isAuth, shopCtrl.getInvoice)
+
 module.exports = router

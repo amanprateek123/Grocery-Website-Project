@@ -1,40 +1,13 @@
-module.exports = {
+<!DOCTYPE html>
+<html lang="en">
 
-    COMPANY: 'LalaDukaan',
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
 
-    // AUTH
-    SUCCESS: 'Success.!',
-    WRONG_PASSWORD: "Wrong Password",
-
-    USER_EXISTS: "User with this Email Already Exists. ",
-    UNVERIFIED_ACC: "Account needs verification. Please complete the registration process again.",
-    NO_ACC: "No account with this Email.",
-
-    OTP_SENT: 'OTP has been sent to your email.',
-    OTP_VERIFIED: 'Successfully Verified',
-    OTP_MISMATCH: 'OTP did NOT Match.!',
-
-    SERVER_ERROR: 'Internal Server Error.',
-
-    NO_AUTH_HEADER: 'NO auth token.',
-    INVALID_AUTH: "Invalid Authentication token.",
-    AUTH_EXPIRED: "Authentication token Expired. Please Login Again.",
-
-
-    PASSWORD_CHANGED: 'Successfully Updated Password.',
-    PASSWORD_RESET: 'Password Reset Successful.',
-
-    // PROFILE
-    FETCHED_PROFILE: "fetched user details",
-    PROFILE_UPDATED: "Successfully Updated Profile",
-
-    ADDRESS_ADDED: "Address Added Successfully",
-    ADDRESS_REMOVED: "Address Removed Successfully",
-
-
-    // EMAILS
-    REG_OTP_SUBJECT: `OTP for ${this.COMPANY}`,
-    REG_OTP_BODY: (token) => `
+<body>
     <div style="display: flex; flex-direction: column; max-width: 700px; margin: auto;">
         <header style="min-height:4em; background:black; display:flex; justify-content: center; align-items: center;">
             <img src="" />
@@ -42,13 +15,13 @@ module.exports = {
         </header>
         <main style="padding: 1em;">
             Dear Customer, <br /> <br />
-            <b>${token}</b> - Use this OTP to register for your ${this.COMPANY} account. <br /> <br />
+            <b>145073</b> - Use this OTP to register for your LalaDukaan account. <br /> <br />
             This otp is valid for only 5 minutes or 1 successful attempt whichever is earlier. Please note, this OTP is
             only this transaction and cannot be used for any other transaction. <br /> <br />
             Please do not disclose/share your OTP with anyone for thee security reasons. <br /> <br />
-            Thank you for shopping with ${this.COMPANY}.<br /> <br />
+            Thank you for shopping with LalaDukaan.<br /> <br />
             Best Regards,<br />
-            Team ${this.COMPANY}
+            Team LalaDukaan
 
 
         </main>
@@ -96,13 +69,6 @@ module.exports = {
             </p>
         </footer>
     </div>
-    `,
+</body>
 
-    PR_OTP_SUBJECT: "OTP for LalaDukaan",
-    PR_OTP_BODY: (token) => `Laladukaan. <strong>${token}</strong> is your OTP for resetting your password.`,
-
-    MAIL_OTP_SUBJECT: "OTP for LalaDukaan to change email.",
-    MAIL_OTP_BODY: (token) => `Laladukaan. <strong>${token}</strong> is your OTP for changing your email ID.`,
-
-
-}
+</html>

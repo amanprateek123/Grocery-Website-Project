@@ -7,20 +7,20 @@ const Test = (props) => {
 
     const [res, setRes] = useState();
 
-    useEffect(() => {
+    // useEffect(() => {
 
-        fetch('/post-order', {
-            headers: {
-                'Authorization': 'Bearer ' + props.idToken,
-                'Content-Type': 'application/json'
-            },
-            method: 'POST',
-        }).then(res => res.json())
-            .then(res => {
-                setRes(res)
-            })
+    //     fetch('/post-order', {
+    //         headers: {
+    //             'Authorization': 'Bearer ' + props.idToken,
+    //             'Content-Type': 'application/json'
+    //         },
+    //         method: 'POST',
+    //     }).then(res => res.json())
+    //         .then(res => {
+    //             setRes(res)
+    //         })
 
-    }, [])
+    // }, [])
 
     return (
         res ?

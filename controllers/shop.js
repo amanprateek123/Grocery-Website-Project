@@ -1,3 +1,6 @@
+
+const PDFDocument = require('pdfkit')
+
 const db = require('../utils/database')
 const Op = require('sequelize').Op;
 
@@ -881,3 +884,49 @@ exports.postOrder = (req, res) => {
 //         res.json(e)
 //      }
 // }
+
+// INVOICE
+
+exports.getInvoice = async (req, res) => {
+   let orderId = req.params.id;
+   let filename = 'invoice-' + orderId;
+
+   let order = await db.order.findByPk(orderId, {
+      include: {
+         all: true,
+         nested: true
+      }
+   });
+
+   if (order) {
+      if (order.userId == req.userId) {
+         res.setHeader('COntent-Type', 'application/pdf');
+         res.setHeader('Content-Disposition', 'inline; filename="' + filename + '"')
+
+         let doc = new PDFDocument();
+
+         doc.pipe(res);
+
+
+         doc.text(`Invoice for Oeder ${order.id} \n`);
+
+         let total = 0;
+         order.orderItems.forEach(oi => {
+            doc.text(`${oi.sku.product.name} --- ${oi.sku.price} \n`);
+            total += oi.sku.price;
+         })
+         doc.text(`Total = ${total}`)
+
+
+         doc.end();
+      }
+      else {
+         res.status(401).end('NOT Authorized.')
+      }
+   }
+   else {
+      res.status(404).end('Order Not Found.');
+   }
+
+
+}
