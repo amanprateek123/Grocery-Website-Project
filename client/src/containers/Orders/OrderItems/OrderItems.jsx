@@ -308,8 +308,8 @@ function OrderItems(props) {
             <div className="col-md-4">
               <h5 style={{ fontSize: '16px', fontWeight: 'bold' }}>Order Summary</h5>
               <div style={{ fontSize: '13px' }}>
-                Item(s) Subtotal: <span style={{ float: 'right' }}> ₹{order.price} </span><br />
-                      Shipping: <span style={{ float: 'right' }}> ₹0 </span><br />
+                Item(s) Subtotal: <span style={{ float: 'right' }}> ₹{order.price - order.deliveryCharges} </span><br />
+                      Shipping: <span style={{ float: 'right' }}> ₹{order.deliveryCharges} </span><br />
                       Total: <span style={{ float: 'right' }}> ₹{order.price} </span><br />
                 <div className="mt-3" style={{ fontWeight: 'bold' }}>
                   <span >Grand Total:</span> <span style={{ float: 'right' }}> ₹{order.price} </span>

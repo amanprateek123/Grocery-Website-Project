@@ -6,6 +6,10 @@ const Op = require('sequelize').Op;
 
 const PAGINATION = 7;
 
+const deliveryCharges = (distance) => {
+   return parseInt(distance * 2);
+}
+
 // *** CATEGORIES
 
 exports.getCategories = (req, res) => {
@@ -144,8 +148,8 @@ exports.getProducts = (req, res) => {
    let limit = parseInt(req.query.limit) || PAGINATION;
    let offset = page * limit;
    offset += (parseInt(req.query.skip) || 0);
-   let order = req.query.order || 'createdAt';
    let dir = req.query.dir || 'DESC';
+   let order = req.query.order ? [[db.Sequelize.literal(req.query.order), dir]] : [['createdAt', dir]];
 
    let result = { meta: {} };
 
@@ -307,7 +311,7 @@ exports.getProducts = (req, res) => {
       console.log('>>> Fetching Product Ids.');
       return db.product.findAll({
          offset, limit, where,
-         order: [[order, dir]],
+         order,
          subQuery: false,
          nest: true,
          group: ['id'],
@@ -680,8 +684,15 @@ exports.getOrders = (req, res) => {
             model: db.status,
             attributes: ['status', 'index']
          }
-      ]
+      ],
    }).then(orders => {
+      orders = orders.map(o => {
+         o = o.toJSON();
+         o.deliveryCharges = o.price - o.orderItems.reduce((total, oi) => oi.sku.price, 0);
+         return o;
+      })
+      console.log(orders);
+
       res.json(orders);
    }).catch(err => {
       res.json(err)
@@ -726,7 +737,8 @@ exports.postOrder = (req, res) => {
    // Calculate the amount to pay.
    let price = 0;
    let order = {};
-   let orderCart
+   let orderCart;
+
    // Fetch Cart
    db.cart.findAll({
       where: {
@@ -738,7 +750,7 @@ exports.postOrder = (req, res) => {
             model: db.product
          }
       }
-   }).then(cart => {
+   }).then(async cart => {
       // If there are some products in the cart which were DELETED by ADMIN
       // they need to be deleted from the cart.
 
@@ -748,7 +760,7 @@ exports.postOrder = (req, res) => {
          throw error;
       }
 
-      // cart.filter(ci => !ci.sku).map(deleted => deleted.destroy().then(del => console.log(' >> Deleted cartId', del.id, ' as the product was deleted')))
+      // cart = cart.filter(ci => !ci.sku).map(deleted => deleted.destroy().then(del => console.log(' >> Deleted cartId', del.id, ' as the product was deleted')))
       orderCart = cart.filter(ci => {
          if (ci.sku) {
             if (ci.quantity > ci.sku.stockQuantity) {
@@ -766,8 +778,18 @@ exports.postOrder = (req, res) => {
       price = orderCart.reduce((acc, cur) => acc + cur.sku.price * Math.min(cur.quantity, cur.sku.stockQuantity), 0);
       console.log('ORDER PRICE >> ', price);
 
+      let _address = await db.shippingAddress.findByPk(req.body.shippingAddress.id)
+      _address = _address.toJSON();
+
+      let delivery_charges = deliveryCharges(_address.distance)
+
+      console.log(`${price} + ${delivery_charges} = ${price + delivery_charges}`);
+
+      price += delivery_charges;
+
+
       order.price = price;
-      order.shippingAddress = JSON.stringify(req.body.shippingAddress);
+      order.shippingAddress = JSON.stringify(_address);
       order.paymentType = req.body.paymentType;
       order.userId = req.userId;
       order.statusId = 1;

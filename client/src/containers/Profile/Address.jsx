@@ -6,7 +6,6 @@ import { useState } from 'react';
 
 const Address = (props) => {
 
-    let [deliverable, setDeliverable] = useState(false);
     return (
         <React.Fragment>
             <Divider />
@@ -15,7 +14,7 @@ const Address = (props) => {
                     primary={<React.Fragment>
                         {props.value.name}
                         {props.value.isPrimary ? <div className="badge badge-success mb-1 ml-1" style={{ opacity: 0.7 }}>primary</div> : null}
-                        {!deliverable ? <div className="badge badge-warning mb-1 ml-1" style={{ opacity: 0.7 }}>Not Deliverable</div> : null}
+                        {!props.value.canDeliver ? <div className="badge badge-warning mb-1 ml-1" style={{ opacity: 0.7 }}>Not Deliverable</div> : null}
                     </React.Fragment>}
                     secondary={
                         <p style={{ width: '100%' }} className="mar">

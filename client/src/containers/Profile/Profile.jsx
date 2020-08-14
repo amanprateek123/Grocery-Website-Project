@@ -25,7 +25,7 @@ import male_avatar from '../../assets/illustrations/male_avatar.svg'
 import female_avatar from '../../assets/illustrations/female_avatar.svg'
 import { Spinner } from 'react-bootstrap'
 
-import {Transition,config} from 'react-spring/renderprops'
+import { Transition, config } from 'react-spring/renderprops'
 
 const Profile = (props) => {
 
@@ -103,7 +103,7 @@ const Profile = (props) => {
             res.json().then(res => {
                 props.setResponse(res);
                 setUser(res.user);
-                // console.log(res.user);
+                console.log('PROFILE_USER : ', res.user);
 
             })
         })
@@ -158,16 +158,18 @@ const Profile = (props) => {
             if (res.status == 200) {
                 setAddingAddress(false);
                 props.setResponse(res);
-                setUser((user) => ({
-                    ...user,
-                    addresses: [
-                        ...user.addresses,
-                        {
-                            ...address,
-                            id: res.addressId
-                        }
-                    ]
-                }))
+                // setUser((user) => ({
+                //     ...user,
+                //     addresses: [
+                //         ...user.addresses,
+                //         {
+                //             ...address,
+                //             id: res.addressId
+                //         }
+                //     ]
+                // }))
+
+                fetchProfile();
             }
             else {
                 props.setResponse(res);
@@ -459,16 +461,16 @@ const Profile = (props) => {
                         {addressEditMode ? <AddressEditor addAddress={editAddressPost} onCancel={() => setAddressEditMode(false)} editMode={addressEditMode} address={editingAddress} /> : null}
                         <Transition config={config.stiff} trail={100}
                             items={user.addresses}
-                            keys={it=>it.id}
+                            keys={it => it.id}
                             from={{ transform: 'translate(50px,0)', opacity: '0' }}
                             enter={{ transform: 'translate(0,0px)', opacity: '1' }}
                             leave={{ transform: 'translate(50px,0px)', opacity: '0' }}>
 
-                            {(address,xx, i) => styles=>
+                            {(address, xx, i) => styles =>
                                 <Address key={address.id}
                                     property={`Address ${i + 1} :`}
                                     value={address}
-                                    style={{...styles}}
+                                    style={{ ...styles }}
                                     removeAddress={() => removeAddress(address.id)}
                                     editAddress={() => editAddress(address)}
                                 />

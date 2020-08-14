@@ -13,11 +13,11 @@ import { Link } from 'react-router-dom';
 
 export default function Home() {
     //fetch homepage table using query
-    const [carousel,setCarousel] = useState([])
+    const [carousel, setCarousel] = useState([])
     const [productQueries, setProductQueries] = useState([]); // product list related Queries Meta
     const [banners, setbanners] = useState([]); // banners related queries.
     const [specialQueries, setSpecialQueries] = useState([]); // 4x4 section queries.
-    const [sections,setSections] = useState([])
+    const [sections, setSections] = useState([])
     const [brands, setBrands] = useState([])
 
     const [productSections, setProductSections] = useState([]); // Product Sections Data 
@@ -35,8 +35,8 @@ export default function Home() {
                 setProductQueries(sections.filter(sec => sec.fieldType == 'product'))
                 setbanners(sections.filter(sec => sec.fieldType == 'banners'))
                 setSpecialQueries(sections.filter(sec => sec.fieldType == 'special'))
-                setCarousel(sections.filter(sec=>sec.fieldType==='carousel'))
-                console.log('brands',sections)
+                setCarousel(sections.filter(sec => sec.fieldType === 'carousel'))
+                console.log('brands', sections)
             })
     }, [])
 
@@ -48,114 +48,115 @@ export default function Home() {
                 fetch(`/get-products?ids=${pq.value}&limit=20`).then(async res => {
                     let data = await res.json();
                     console.log(data);
-                    _productSections.push({ ...data, query: pq,order:pq.order,fieldType:pq.fieldType })
+                    _productSections.push({ ...data, query: pq, order: pq.order, fieldType: pq.fieldType })
                 })
             ))
         ).then(queries => {
+
             setProductSections(_productSections)
             console.log('Sections state set.');
         })
     }, [productQueries])
 
     const array = productSections.concat(banners.concat(carousel.concat(specialQueries.concat(brands))))
-    console.log('Array',array)
-    array.sort((a,b)=>(
-        a.order-b.order
+    // console.log('Array',array)
+    array.sort((a, b) => (
+        a.order - b.order
     ))
-    console.log('ArraySort',array)
+    // console.log('ArraySort', array)
 
-  
+
     //rendering sections
-    const render = (data)=>{
-        console.log('home',data)
-        switch(data.fieldType){
+    const render = (data) => {
+        // console.log('redner home')
+        switch (data.fieldType) {
             case "carousel":
-               return(
-                   <React.Fragment>
-                       <Carousels links={JSON.parse(data.value)} />
-                   </React.Fragment>
-               )
-               break;
-            case "product":  
-            return(
-                <React.Fragment>
-                  <Paper className="multi_car" style={{ margin: '40px auto' }}>
-                     <div style={{ borderBottom: '2px solid #f3f3f3' }}>
-                        <Link to={`/products?${data.query.value}&limit=20`}>
-                        {/* <Button variant="contained" color="primary" style={{float:'right',margin:'10px 15px',padding:'10px',width:'120px'}}>View All</Button> */}
-                        </Link>
-                        <h1>{data.query.heading}</h1>
-                        <p>{data.query.subHeading}</p>
-                     </div>
-                     <div className="mt-1">
-                        <Carousel product={data.products} />
-                     </div>
-                  </Paper>
-                </React.Fragment>
-            )
-            break;
-            case "brands":  
-            return(
-                <React.Fragment>
-                  <Paper className="multi_car" style={{ margin: '40px auto' }}>
-                  <div style={{ borderBottom: '2px solid #f3f3f3' }}>
-                    <h1>{data.heading}</h1>
-                </div>
-                     <div className="mt-1">
-                        <Carousel1 brands={JSON.parse(data.value)} />
-                     </div>
-                  </Paper>
-                </React.Fragment>
-            )
-            break;             
-            case "banners":  
-            return(
-                <React.Fragment>
-                    <Paper className="row" style={{ margin: '40px auto',boxShadow:'none',backgroundColor:'transparent' }}>
-                        {JSON.parse(data.value).map(img=>(
-                         <Card className="col-md banner" style={{backgroundColor:'transparent',boxShadow:'none'}}>
-                            <img src={img} style={{ width: '100%'}} />
-                         </Card>))}
-                    </Paper>
-                </React.Fragment>
-            )
-            break; 
+                return (
+                    <React.Fragment>
+                        <Carousels links={JSON.parse(data.value)} />
+                    </React.Fragment>
+                )
+                break;
+            case "product":
+                return (
+                    <React.Fragment>
+                        <Paper className="multi_car" style={{ margin: '40px auto' }}>
+                            <div style={{ borderBottom: '2px solid #f3f3f3' }}>
+                                <Link to={`/products?${data.query.value}&limit=20`}>
+                                    {/* <Button variant="contained" color="primary" style={{float:'right',margin:'10px 15px',padding:'10px',width:'120px'}}>View All</Button> */}
+                                </Link>
+                                <h1>{data.query.heading}</h1>
+                                <p>{data.query.subHeading}</p>
+                            </div>
+                            <div className="mt-1">
+                                <Carousel product={data.products} />
+                            </div>
+                        </Paper>
+                    </React.Fragment>
+                )
+                break;
+            case "brands":
+                return (
+                    <React.Fragment>
+                        <Paper className="multi_car" style={{ margin: '40px auto' }}>
+                            <div style={{ borderBottom: '2px solid #f3f3f3' }}>
+                                <h1>{data.heading}</h1>
+                            </div>
+                            <div className="mt-1">
+                                <Carousel1 brands={JSON.parse(data.value)} />
+                            </div>
+                        </Paper>
+                    </React.Fragment>
+                )
+                break;
+            case "banners":
+                return (
+                    <React.Fragment>
+                        <Paper className="row" style={{ margin: '40px auto', boxShadow: 'none', backgroundColor: 'transparent' }}>
+                            {JSON.parse(data.value).map(img => (
+                                <Card className="col-md banner" style={{ backgroundColor: 'transparent', boxShadow: 'none' }}>
+                                    <img src={img} style={{ width: '100%' }} />
+                                </Card>))}
+                        </Paper>
+                    </React.Fragment>
+                )
+                break;
             case "special":
-                let sp = JSON.parse(data.value) 
-                console.log('special',sp) 
-            return(
-                <React.Fragment>
-                    <Paper className="row home1" style={{ margin: '40px auto',boxShadow:'none',backgroundColor:'transparent',display:'flex' }}>
-                        {sp?sp.map(item=>(
-                             <Card className="col-md" style={{margin:'0 1%'}}>
-                             <h1>{item.heading}</h1>
-                             <div className="row">
-                             {item.detail.map(i=>(
-                              <Link to={`/products?category=${i.category}`} className="col-md-6" style={{margin:'5px 0'}}>
-                                 <div >
-                                     <img src={i.image} style={{ width: '100%' }} />
-                                     <p style={{textAlign:'center',color:'black'}}> {i.name} </p>
-                                 </div>                              
-                              </Link>
-                             ))}</div>
-                         </Card>
-                        )):null}
-                </Paper>
-                </React.Fragment>
-            )
-            break;  
+                let sp = JSON.parse(data.value)
+                // console.log('special', sp)
+                return (
+                    <React.Fragment>
+                        <Paper className="row home1" style={{ margin: '40px auto', boxShadow: 'none', backgroundColor: 'transparent', display: 'flex' }}>
+                            {sp ? sp.map(item => (
+                                <Card className="col-md" style={{ margin: '0 1%' }}>
+                                    <h1>{item.heading}</h1>
+                                    <div className="row">
+                                        {item.detail.map(i => (
+                                            <Link to={`/products?category=${i.category}`} className="col-md-6" style={{ margin: '5px 0' }}>
+                                                <div >
+                                                    <img src={i.image} style={{ width: '100%' }} />
+                                                    <p style={{ textAlign: 'center', color: 'black' }}> {i.name} </p>
+                                                </div>
+                                            </Link>
+                                        ))}</div>
+                                </Card>
+                            )) : null}
+                        </Paper>
+                    </React.Fragment>
+                )
+                break;
         }
     }
-        return (
+    return (
         <React.Fragment>
-            <div style={{backgroundColor:'#f3f3f3'}}>
-            {array.map(data=>(
-                <React.Fragment>
-                    {render(data)}
-                 </React.Fragment>   
-            ))}
+            <div style={{ backgroundColor: '#f3f3f3' }}>
+                {array.map(data => (
+                    <React.Fragment>
+                        {render(data)}
+                    </React.Fragment>
+                ))}
 
-            {/* <Paper>
+                {/* <Paper>
                 {
                     productSections.map(ps => (
                         <Card className="row">
@@ -174,7 +175,7 @@ export default function Home() {
                     ))
                 }
             </Paper> */}
-            {/* <Paper>
+                {/* <Paper>
                 {
                     banners.map(itm=>(
                         <Card className="row">
@@ -188,9 +189,9 @@ export default function Home() {
                 }
             </Paper> */}
 
-            {/* SAMPLE ENDS */}
+                {/* SAMPLE ENDS */}
 
-            {/* <Paper 
+                {/* <Paper 
              className="row home1" style={{ margin: '40px auto' }}>
                 <Card className="col-md-3">
                     <h1>Customer's Most Loved</h1>
@@ -269,7 +270,7 @@ export default function Home() {
                     </div>
                 </Card>
             </Paper> */}
-            {/* <Paper className="row" style={{ margin: '40px auto' }}>
+                {/* <Paper className="row" style={{ margin: '40px auto' }}>
                 <Card className="col-md-4">
                     <img src="https://storiesflistgv2.azureedge.net/stories/2016/09/daily_offers_banner_Final.jpg" style={{ width: '100%', padding: '5px' }} />
                 </Card>
@@ -280,7 +281,7 @@ export default function Home() {
                     <img src="https://storiesflistgv2.azureedge.net/stories/2016/09/daily_offers_banner_Final.jpg" style={{ width: '100%', padding: '5px' }} />
                 </Card>
             </Paper> */}
-            {/* <Paper className="multi_car" style={{ margin: '40px auto' }}>
+                {/* <Paper className="multi_car" style={{ margin: '40px auto' }}>
                 <div style={{ borderBottom: '2px solid #f3f3f3' }}>
                     <h1>Trending Brands</h1>
                 </div>
@@ -288,12 +289,12 @@ export default function Home() {
                     <Carousel1 />
                 </div>
             </Paper> */}
-            <Paper className="facility" style={{ margin: '40px auto',backgroundColor:'transparent' }}>
-                <div className="mt-1" style={{backgroundColor:'white'}}>
-                    <Facilities />
-                </div>
-            </Paper>
-           </div> 
+                <Paper className="facility" style={{ margin: '40px auto', backgroundColor: 'transparent' }}>
+                    <div className="mt-1" style={{ backgroundColor: 'white' }}>
+                        <Facilities />
+                    </div>
+                </Paper>
+            </div>
         </React.Fragment>
     )
 }

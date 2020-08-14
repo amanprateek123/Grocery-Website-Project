@@ -15,8 +15,6 @@ const Payment = (props) => {
 
     const placeOrderPOST = () => {
         let shippingAddress = props.address[props.addrIndex];
-        delete shippingAddress.id
-        delete shippingAddress.userId
         delete shippingAddress.createdAt
         delete shippingAddress.updatedAt
         let paymentType = document.querySelector('input[name=paymentType]:checked');

@@ -20,6 +20,7 @@ function Checkout(props) {
         }).then(res => {
             res.json().then(res => {
                 setUser(res.user)
+                props.setAddress(res.user.addresses[0]);
 
             })
         })
@@ -41,6 +42,7 @@ function Checkout(props) {
     const radiochange = (i) => {
         setRadio(i)
         setAddressEditMode(false)
+        props.setAddress(user.addresses[i]);
     }
     const viewAdd = (i) => {
         if (addr === i) {
@@ -164,24 +166,25 @@ function Checkout(props) {
                                                     <div className="user_add">
                                                         <div style={{ width: '100%' }}>
                                                             <div className="user_1">
-                                                                <p>
+                                                                <p className="mb-0">
                                                                     <span className="span_name">{user.addresses[i].name}</span>
-                                                                    <span className="span_place">Home</span>
-                                                                    {add.deliverable ? <div className="badge badge-warning mb-1 ml-1" style={{ opacity: 0.7 }}>Delivery NOT Availiable at this address </div> : null}
+                                                                    {/* <span className="span_place">Home</span> */}
                                                                     <span className="span_num">{user.addresses[i].mobile}</span>
                                                                 </p>
+
+                                                                {!add.canDeliver ? <div className="badge badge-warning mb-1 ml-1" style={{ opacity: 0.7 }}>Delivery NOT Availiable at this address </div> : null}
                                                                 <span className="address_show">
                                                                     {add.address}
                                                                     <br />
                                                                     <span> {add.state}, {add.country} - {add.zip}</span>
                                                                 </span>
                                                                 {(radio === i) ?
-                                                                    add.deliverable ?
+                                                                    add.canDeliver ?
                                                                         <button onClick={() => takeBox(i)}>
                                                                             Deliver Here
                                                                         </button>
-                                                                        : <button >
-                                                                            Delivery Not Available Here
+                                                                        : <button style={{ opacity: 0.8, filter: 'saturate(0)' }}>
+                                                                            Deliver Here
                                                                         </button>
                                                                     : null
                                                                 }

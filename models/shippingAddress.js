@@ -38,6 +38,9 @@ module.exports = (sequelize, Sequelize = require('sequelize')) => {
         additionalInfo: {
             type: Sequelize.STRING,
         },
+        distance: {
+            type: Sequelize.FLOAT
+        },
         isPrimary: {
             type: Sequelize.BOOLEAN,
         }

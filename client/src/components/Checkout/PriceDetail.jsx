@@ -3,6 +3,10 @@ import { Card, CardMedia, CardContent, Typography, CardActions, Button, Select, 
 import './Price.scss'
 import { connect } from 'react-redux';
 
+const deliveryCharges = (distance) => {
+    return parseInt(distance * 2);
+}
+
 function PriceDetail(props) {
     let total = 0
     props.cart.forEach(itm => {
@@ -33,8 +37,8 @@ function PriceDetail(props) {
                                 Delivery Charges
                             <span>
                                     <div className="hel_price">
-                                        ₹ 30
-                                </div>
+                                        ₹ {deliveryCharges(props.address?.distance || 0)}
+                                    </div>
                                 </span>
                             </div>
                         </div>
@@ -44,7 +48,7 @@ function PriceDetail(props) {
                                     Total Payable
                             <span>
                                         <div className="hel_price">
-                                            ₹ {total + 30}
+                                            ₹ {total + deliveryCharges(props.address?.distance || 0)}
                                         </div>
                                     </span>
                                 </div>

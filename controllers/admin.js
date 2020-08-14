@@ -395,7 +395,7 @@ exports.addProducts = (req, res) => {
 
             ['sn', 'op', 'categoryId', 'name', 'brand', 'description', 'keywords', 'code', 'model', 'price', 'stock', 'json', 'src', 'attr', 'attrv'].forEach(field => {
                 if (!rows[0].hasOwnProperty(field)) {
-                    res.json({ status: 400, message: `Please Submit a CSV file with fields [sn,op,categoryId,name,brand,description,keywords,code,model,price,stock,json,src,attr,attrv]. Fields don't match.` })
+                    res.json({ status: 400, message: `SERVER: Please Submit a CSV file with fields [sn,op,categoryId,name,brand,description,keywords,code,model,price,stock,json,src,attr,attrv]. Fields don't match.` })
                     return;
                 }
             })
@@ -639,8 +639,8 @@ exports.homePage = async (req, res) => {
                 heading: item.heading,
                 value: item.value,
                 fieldType: item.fieldType,
-                subHeading:item.subHeading,
-                order:i+1
+                subHeading: item.subHeading,
+                order: i + 1
             }
             ).then(add => {
                 console.log("Row Added")

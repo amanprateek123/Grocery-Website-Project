@@ -1,11 +1,16 @@
 const crypto = require('crypto');
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
+const fetch = require('node-fetch')
 
 const flash = require('../utils/flash')
 
 const sgMail = require('@sendgrid/mail');
 require('dotenv').config()
+
+const DELIVERY_RANGE = 100;
+const SHOP_POINT = 'shimla';
+
 
 // sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
@@ -15,16 +20,18 @@ const db = require('../utils/database')
 
 exports.getProfile = (req, res) => {
 
-    db.user.findAll({
+    db.user.findByPk(req.userId, {
         include: {
             model: db.shippingAddress
-        },
-        where: {
-            id: req.userId
         }
     }).then(user => {
-        user = user[0].dataValues;
+        user = user.toJSON();
         // console.log(user);
+
+        if (user.shippingAddresses) {
+            user.shippingAddresses = user.shippingAddresses.map(add => ({ ...add, canDeliver: Number(add.distance) <= DELIVERY_RANGE }))
+        }
+
         res.json({
             status: 200, message: flash.FETCHED_PROFILE, user: {
                 firstName: user.firstName,
@@ -102,8 +109,24 @@ exports.addAddress = async (req, res) => {
         })
     }
 
+    let distance = 10000;
+    try {
+        let route = await fetch(`http://dev.virtualearth.net/REST/V1/Routes/Driving?o=json&wp.0=${SHOP_POINT}&wp.1=${address.address}, ${address.city}, ${address.state}, ${address.zip}, ${address.country}&routeAttributes=routeSummariesOnly&key=${process.env.BING_MAP_API_KEY}`);
+        route = await route.json();
+        if (route.resourceSets[0]) {
+            if (route.resourceSets[0].resources[0]) {
+                distance = route.resourceSets[0].resources[0].travelDistance;
+                console.log(`>> ADDRESS : ${address.address},${address.city},${address.state},${address.country}  == ${distance}km`);
+            }
+        }
+    }
+    catch (err) {
+        console.log(err);
+    }
+
     db.shippingAddress.create({
         ...address,
+        distance: distance,
         userId: req.userId
     }).then(rowsUpdated => {
         console.log(rowsUpdated);

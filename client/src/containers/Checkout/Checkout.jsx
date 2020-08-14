@@ -8,6 +8,7 @@ import OrderConf from './OrderConfirm/OrderConfirmation'
 export default function Checkout() {
     const [placedOrder, setPlacedOrder] = useState(false);
     const [orderData, setOrderData] = useState(null);
+    const [address, setAddress] = useState(null)
 
     useEffect(() => {
         console.log(orderData);
@@ -17,13 +18,13 @@ export default function Checkout() {
         !placedOrder ?
             <div className="checkout12 row" style={{ margin: '0 auto', width: '95%' }}>
                 <div className="col-md-9">
-                    <Check setPlacedOrder={setPlacedOrder} setOrderData={setOrderData} />
+                    <Check setPlacedOrder={setPlacedOrder} setOrderData={setOrderData} setAddress={setAddress} />
                 </div>
                 <div className="col-md-3">
-                    <Price />
+                    <Price address={address} />
                 </div>
             </div>
             :
-             <OrderConf data={orderData}/>
+            <OrderConf data={orderData} />
     )
 }
