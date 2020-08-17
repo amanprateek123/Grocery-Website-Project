@@ -113,7 +113,7 @@ export default function Home() {
                 return (
                     <React.Fragment>
                         <Paper className="row" style={{ margin: '40px auto', boxShadow: 'none', backgroundColor: 'transparent' }}>
-                            {JSON.parse(data.value).map(img => (
+                            {JSON.parse(data.value).map((img, i) => (
                                 <Card className="col-md banner" style={{ backgroundColor: 'transparent', boxShadow: 'none' }}>
                                     <img src={img} style={{ width: '100%' }} />
                                 </Card>))}
@@ -126,13 +126,13 @@ export default function Home() {
                 // console.log('special', sp)
                 return (
                     <React.Fragment>
-                        <Paper className="row home1" style={{ margin: '40px auto', boxShadow: 'none', backgroundColor: 'transparent', display: 'flex' }}>
-                            {sp ? sp.map(item => (
-                                <Card className="col-md" style={{ margin: '0 1%' }}>
+                        <Paper className="row home1" style={{ margin: '40px auto', boxShadow: 'none', backgroundColor: 'transparent', display: 'flex', flexWrap: 'wrap' }}>
+                            {sp ? sp.map((item, index) => (
+                                <Card key={item.heading + index} className="col-md" style={{ margin: '0.5em', minWidth: '20em', }}>
                                     <h1>{item.heading}</h1>
-                                    <div className="row">
-                                        {item.detail.map(i => (
-                                            <Link to={`/products?category=${i.category}`} className="col-md-6" style={{ margin: '5px 0' }}>
+                                    <div className="row" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gridTemplateAreas: item.gridArea, gap: '0.5em', padding: '0.5em' }}>
+                                        {item.detail.map((i, j) => (
+                                            <Link to={`/products?category=${i.category}`} style={{ display: 'block', width: '100%', minWidth: '10em', gridArea: item.gridArea?.includes(`g${j + 1}`) ? `g${j + 1}` : null }}>
                                                 <div >
                                                     <img src={i.image} style={{ width: '100%' }} />
                                                     <p style={{ textAlign: 'center', color: 'black' }}> {i.name} </p>

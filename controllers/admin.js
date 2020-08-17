@@ -658,7 +658,9 @@ exports.homePage = async (req, res) => {
 
 //get homepage data
 exports.getHome = async (req, res) => {
-    db.homepage.findAll({}).then(data => res.json(data)).catch((err) => res.json(err))
+    db.homepage.findAll({
+        order: [['order', 'ASC']]
+    }).then(data => res.json(data)).catch((err) => res.json(err))
 }
 
 
