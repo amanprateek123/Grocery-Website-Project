@@ -11,7 +11,7 @@ import PolicyOutlinedIcon from '@material-ui/icons/PolicyOutlined';
 export default function Facilities() {
     return (
         <div className="facility row" style={{margin:'0 auto'}}>
-            <div className="col-md-2 individual">
+            <div className="col-2 individual">
                   <div className="fac_icon">
                       <EuroSymbolOutlinedIcon fontSize="inherit"/>
                   </div>
@@ -25,7 +25,7 @@ export default function Facilities() {
 
                   </div>
             </div>
-            <div className="col-md-2 individual">
+            <div className="col-2 individual">
                   <div className="fac_icon">
                         <LocalShippingOutlinedIcon fontSize="inherit"/>
                   </div>
@@ -39,7 +39,7 @@ export default function Facilities() {
 
                   </div>
             </div>
-            <div className="col-md-2 individual">
+            <div className="col-2 individual">
                   <div className="fac_icon">
                        <CreditCardOutlinedIcon fontSize="inherit"/>
                   </div>
@@ -53,7 +53,7 @@ export default function Facilities() {
 
                   </div>
             </div>
-            <div className="col-md-2 individual">
+            <div className="col-2 individual">
                   <div className="fac_icon">
                       <PolicyOutlinedIcon fontSize="inherit"/>
                   </div>
@@ -67,7 +67,7 @@ export default function Facilities() {
 
                   </div>
             </div>
-            <div className="col-md-2 individual">
+            <div className="col-2 individual">
                   <div className="fac_icon">
                       <GroupOutlinedIcon fontSize="inherit"/>
                   </div>
@@ -81,7 +81,7 @@ export default function Facilities() {
 
                   </div>
             </div>
-            <div className="col-md-2 individual">
+            <div className="col-2 individual">
                   <div className="fac_icon">
                       <AndroidOutlinedIcon fontSize="inherit"/><span><AppleIcon fontSize="inherit"/></span>
                   </div>

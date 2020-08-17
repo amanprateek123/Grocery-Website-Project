@@ -300,15 +300,16 @@ const Navbar = (props) => {
                     <Divider />
 
                     <Link to="/profile">
+                    {props.userName ?
                         <div className="row align-items-center my-3 drawer-user">
                             <div className="col-3 ml-1">
                                 <Avatar className="dp" src={male_avatar} />
                             </div>
-                            <div className="col">
-                                <div><i>Hello,</i></div>
-                                {props.userName ? <h5>{props.userName}</h5> : 'User'}
+                             
+                            <div className="col mt-2 mr-3">
+                              <h5>{props.userName}</h5>
                             </div>
-                        </div>
+                        </div> :null}
                     </Link>
 
                     <Divider />
