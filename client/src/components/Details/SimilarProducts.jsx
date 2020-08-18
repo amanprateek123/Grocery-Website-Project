@@ -19,7 +19,7 @@ const SimilarProducts = (props) => {
                             sp.data.products.map(prod => {
 
                                 if (prod.id != props.currentId) {
-                                    return <Product product={prod} noCart noOptions priceLabel />
+                                    return <Product product={prod} key={prod.id} noCart noOptions priceLabel />
                                 }
                                 return null
                             }

@@ -32,8 +32,8 @@ const Detail = (props) => {
                         < h5 > {json[i].key}</h5 >
                         <div className="lister attr">
                             {Array.isArray(json[i].value) ?
-                                json[i].value.map(li => {
-                                    return (<li className="list">
+                                json[i].value.map((li,i) => {
+                                    return (<li className="list" key={li.key + li.value + i}>
                                         <h6>{li.key}</h6>
                                         <p>{li.value}</p>
                                     </li>)

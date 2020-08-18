@@ -31,9 +31,9 @@ export default function Carousels1(props){
         dotListClass="custom-dot-list-style"
         itemClass="carousel-item-padding-40-px"
         >
-         {props.brands.map(item=>(
-             <div className="main_car">
-             <Link to={`/products?brand=${item.name}`} style={{textDecoration:'none'}}>
+         {props.brands.map((item,i)=>(
+             <div className="main_car" key={item.name}>
+             <Link to={`/products?brand=${item.name +i}`} style={{textDecoration:'none'}}>
              <div className="carousels1">
                  <img src= {item.image}/>
              </div>

@@ -160,7 +160,7 @@ const Payment = (props) => {
                                 <div className="row lilly" >
                                     {props.cart.map(itm => {
                                         return (
-                                            <div className="list_img col-md-2" style={{ backgroundImage: `url(${itm.sku.images[0].src})` }}>
+                                            <div className="list_img col-md-2" key={itm.id} style={{ backgroundImage: `url(${itm.sku.images[0].src})` }}>
                                             </div>
                                         )
                                     })}

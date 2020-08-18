@@ -40,8 +40,8 @@ export default function Carousels(props){
         dotListClass="custom-dot-list-style"
         itemClass="carousel-item-padding-40-px"
         >
-        {props.product.map(item=>(
-          <Link to={`/product/${item.id}`} style={{textDecoration:'none'}}>
+        {props.product.map((item,i)=>(
+          <Link to={`/product/${item.id}`} style={{textDecoration:'none'}} key={item.id+i} >
         <div className="main_car">
         <div className="carousels">
             <img src={item.skus[0].images[0].src}/>

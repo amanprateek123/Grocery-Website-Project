@@ -14,32 +14,32 @@ const Footer = (props) => {
                         <div className="foot">
                             About
                         </div>
-                        {footer.about.map(itm =>{
-                           return <Link to="itm.link" className="foot_link">{itm.tag}</Link>
+                        {footer.about.map((itm,i) =>{
+                           return <Link to="itm.link" key={itm+i}  className="foot_link">{itm.tag}</Link>
                         })}
                     </div>
                     <div className="col-md-2">
                         <div className="foot">
                             Help
                         </div>
-                        {footer.help.map(itm =>{
-                           return <Link to="itm.link" className="foot_link">{itm.tag}</Link>
+                        {footer.help.map((itm,i) =>{
+                           return <Link to="itm.link" key={itm+i} className="foot_link">{itm.tag}</Link>
                         })}
                     </div>
                     <div className="col-md-2">
                         <div className="foot">
                             Policy
                         </div>
-                        {footer.policy.map(itm =>{
-                           return <Link to="itm.link" className="foot_link">{itm.tag}</Link>
+                        {footer.policy.map((itm,i) =>{
+                           return <Link to="itm.link" key={itm+i} className="foot_link">{itm.tag}</Link>
                         })}
                     </div>
                     <div className="col-md-2" style={{ borderRight: '1px solid grey' }}>
                         <div className="foot">
                             Social
                         </div>
-                        {footer.social.map(itm =>{
-                           return <Link to="itm.link" className="foot_link">{itm.tag}</Link>
+                        {footer.social.map((itm,i) =>{
+                           return <Link to="itm.link" key={itm+i} className="foot_link">{itm.tag}</Link>
                         })}
                     </div>
                     <div className="col-md-2">

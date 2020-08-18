@@ -227,8 +227,8 @@ function Orders(props) {
                         res.map((order, i) => {
                             let name = ''
                             return (
-                                <Link to={`/order/${order.id}`} style={{ textDecoration: 'none' }}>
-                                    <Card key={order.id + i} style={{ marginBottom: '16px', cursor: 'pointer', padding: '10px' }} onClick={() => openModal(order.id)}>
+                                <Link to={`/order/${order.id}`} style={{ textDecoration: 'none' }} key={order.id} >
+                                    <Card style={{ marginBottom: '16px', cursor: 'pointer', padding: '10px' }} onClick={() => openModal(order.id)}>
                                         <div className="row">
                                             <div className="col-md-5">
                                                 <div className="row">

@@ -22,7 +22,7 @@ function OrderSum(props) {
             <div style={{ backgroundColor: '#fff' }}>
                 {props.cart.map((item, i) => {
                     return (
-                        <div className="cart_lister">
+                        <div className="cart_lister" key={item.id} >
                             <div style={{ display: 'flex' }}>
                                 <div>
                                     <div className="img_cont">

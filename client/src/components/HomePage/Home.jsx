@@ -114,7 +114,7 @@ export default function Home() {
                     <React.Fragment>
                         <Paper className="row" style={{ margin: '40px auto', boxShadow: 'none', backgroundColor: 'transparent' }}>
                             {JSON.parse(data.value).map((img, i) => (
-                                <Card className="col-md banner" style={{ backgroundColor: 'transparent', boxShadow: 'none' }}>
+                                <Card className="col-md banner" key={img + i} style={{ backgroundColor: 'transparent', boxShadow: 'none' }}>
                                     <img src={img} style={{ width: '100%' }} />
                                 </Card>))}
                         </Paper>
@@ -132,7 +132,7 @@ export default function Home() {
                                     <h1>{item.heading}</h1>
                                     <div className="row" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gridTemplateAreas: item.gridArea, gap: '0.5em', padding: '0.5em' }}>
                                         {item.detail.map((i, j) => (
-                                            <Link to={`/products?category=${i.category}`} style={{ display: 'block', width: '100%', minWidth: '10em', gridArea: item.gridArea?.includes(`g${j + 1}`) ? `g${j + 1}` : null }}>
+                                            <Link to={`/products?category=${i.category}`} key={i.category+j} style={{ display: 'block', width: '100%', minWidth: '10em', gridArea: item.gridArea?.includes(`g${j + 1}`) ? `g${j + 1}` : null }}>
                                                 <div >
                                                     <img src={i.image} style={{ width: '100%' }} />
                                                     <p style={{ textAlign: 'center', color: 'black' }}> {i.name} </p>
@@ -150,8 +150,8 @@ export default function Home() {
     return (
         <React.Fragment>
             <div style={{ backgroundColor: '#f3f3f3' }}>
-                {array.map(data => (
-                    <React.Fragment>
+                {array.map((data,i )=> (
+                    <React.Fragment key={data+i} >
                         {render(data)}
                     </React.Fragment>
                 ))}
