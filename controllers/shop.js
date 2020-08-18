@@ -6,8 +6,9 @@ const Op = require('sequelize').Op;
 
 const PAGINATION = 7;
 
-const deliveryCharges = (distance) => {
-   return parseInt(distance * 2);
+// from config
+const deliveryCharges = (distance, price, weight = 0, extraCharges = 0) => {
+   return parseInt(distance * 2) + weight * 0.5 + extraCharges;
 }
 
 // *** CATEGORIES
@@ -609,7 +610,7 @@ exports.getCart = (req, res) => {
       },
       include: {
          model: db.sku,
-         attributes: ['name', 'price', 'id', 'stockQuantity'],
+         attributes: ['name', 'price', 'id', 'stockQuantity', 'weight', 'extraCharges'],
          include: [
             {
                model: db.product,
@@ -776,12 +777,14 @@ exports.postOrder = (req, res) => {
       // 
 
       price = orderCart.reduce((acc, cur) => acc + cur.sku.price * Math.min(cur.quantity, cur.sku.stockQuantity), 0);
+      let totalWeight = orderCart.reduce((acc, cur) => acc + cur.sku.weight * Math.min(cur.quantity, cur.sku.stockQuantity), 0);
+      let totalExtraCharges = orderCart.reduce((acc, cur) => acc + cur.sku.extraCharges * Math.min(cur.quantity, cur.sku.stockQuantity), 0);
       console.log('ORDER PRICE >> ', price);
 
       let _address = await db.shippingAddress.findByPk(req.body.shippingAddress.id)
       _address = _address.toJSON();
 
-      let delivery_charges = deliveryCharges(_address.distance)
+      let delivery_charges = deliveryCharges(_address.distance, price, totalWeight, totalExtraCharges);
 
       console.log(`${price} + ${delivery_charges} = ${price + delivery_charges}`);
 

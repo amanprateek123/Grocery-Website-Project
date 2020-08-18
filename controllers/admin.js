@@ -40,6 +40,8 @@ async function createProduct(prod, files) {
                         name: sku.name,
                         price: sku.price,
                         stockQuantity: sku.stockQuantity,
+                        weight: sku.weight,
+                        extraCharges: sku.extraCharges,
                         json: sku.json
                     }).then(_sku => {
                         console.log(" >> ADDED SKU: ", _sku.id);
@@ -393,9 +395,9 @@ exports.addProducts = (req, res) => {
             let product = {};
             let pn = 1;
 
-            ['sn', 'op', 'categoryId', 'name', 'brand', 'description', 'keywords', 'code', 'model', 'price', 'stock', 'json', 'src', 'attr', 'attrv'].forEach(field => {
+            ['sn', 'op', 'categoryId', 'name', 'brand', 'description', 'keywords', 'code', 'model', 'price', 'stock', 'json', 'weight', 'extraCharges', 'src', 'attr', 'attrv'].forEach(field => {
                 if (!rows[0].hasOwnProperty(field)) {
-                    res.json({ status: 400, message: `SERVER: Please Submit a CSV file with fields [sn,op,categoryId,name,brand,description,keywords,code,model,price,stock,json,src,attr,attrv]. Fields don't match.` })
+                    res.json({ status: 400, message: `SERVER: Please Submit a CSV file with fields [sn,op,categoryId,name,brand,description,keywords,code,model,price,stock,json,weight,extraCharges,src,attr,attrv]. Fields don't match.` })
                     return;
                 }
             })
@@ -453,7 +455,7 @@ exports.addProducts = (req, res) => {
         })
     }
     else {
-        res.json({ status: 400, message: `Please Submit a CSV file with fields [sn,op,categoryId,name,brand,description,keywords,code,model,price,stock,json,src,attr,attrv].` })
+        res.json({ status: 400, message: `Please Submit a CSV file with fields [sn,op,categoryId,name,brand,description,keywords,code,model,price,stock,json,weight,extraCharges,src,attr,attrv].` })
     }
 
 }

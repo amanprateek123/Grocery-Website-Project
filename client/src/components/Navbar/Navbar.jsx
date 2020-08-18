@@ -210,7 +210,7 @@ const Navbar = (props) => {
                         <div className="app-search-bar">
                             <form onSubmit={search}>
                                 <div className="app_search">
-                                    <input type="text" ref={searchText} className="input-search" title="Search for products, brands and more" name="search" autoComplete="off" placeholder="Search for products, brands and more" />
+                                    <input type="text" ref={searchText} className="input-search" title={`Search Products`} name="search" autoComplete="off" placeholder={`Hi ${props.userName ? props.userName : ''}, what are you looking for today?`} />
                                     <button className="search_btn">
                                         <i className="fa fa-search " aria-hidden="true" />
                                     </button>
@@ -300,16 +300,16 @@ const Navbar = (props) => {
                     <Divider />
 
                     <Link to="/profile">
-                    {props.userName ?
-                        <div className="row align-items-center my-3 drawer-user">
-                            <div className="col-3 ml-1">
-                                <Avatar className="dp" src={male_avatar} />
-                            </div>
-                             
-                            <div className="col mt-2 mr-3">
-                              <h5>{props.userName}</h5>
-                            </div>
-                        </div> :null}
+                        {props.userName ?
+                            <div className="row align-items-center my-3 drawer-user">
+                                <div className="col-3 ml-1">
+                                    <Avatar className="dp" src={male_avatar} />
+                                </div>
+
+                                <div className="col mt-2 mr-3">
+                                    <h5>{props.userName}</h5>
+                                </div>
+                            </div> : null}
                     </Link>
 
                     <Divider />

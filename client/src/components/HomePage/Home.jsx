@@ -128,17 +128,19 @@ export default function Home() {
                     <React.Fragment>
                         <Paper className="row home1" style={{ margin: '40px auto', boxShadow: 'none', backgroundColor: 'transparent', display: 'flex', flexWrap: 'wrap' }}>
                             {sp ? sp.map((item, index) => (
-                                <Card key={item.heading + index} className="col-md" style={{ margin: '0.5em', minWidth: '20em', }}>
+                                <Card key={item.heading + index} className="col-md" style={{ margin: '0.5em', minWidth: '20em', justifyContent: 'space-between' }}>
                                     <h1>{item.heading}</h1>
-                                    <div className="row" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gridTemplateAreas: item.gridArea, gap: '0.5em', padding: '0.5em' }}>
-                                        {item.detail.map((i, j) => (
-                                            <Link to={`/products?category=${i.category}`} key={i.category+j} style={{ display: 'block', width: '100%', minWidth: '10em', gridArea: item.gridArea?.includes(`g${j + 1}`) ? `g${j + 1}` : null }}>
-                                                <div >
-                                                    <img src={i.image} style={{ width: '100%' }} />
-                                                    <p style={{ textAlign: 'center', color: 'black' }}> {i.name} </p>
-                                                </div>
-                                            </Link>
-                                        ))}</div>
+                                    <div>
+                                        <div className="row" style={{ display: 'grid', height: '100%', alignItems: 'center', gridTemplateColumns: '1fr 1fr', gridTemplateAreas: item.gridArea, gap: '0.5em', padding: '0.5em' }}>
+                                            {item.detail.map((i, j) => (
+                                                <Link to={`/products?category=${i.category}`} key={i.category + j} style={{ display: 'block', width: '100%', minWidth: '10em', gridArea: item.gridArea?.includes(`g${j + 1}`) ? `g${j + 1}` : null }}>
+                                                    <div >
+                                                        <img src={i.image} style={{ width: '100%' }} />
+                                                        <p style={{ textAlign: 'center', marginBottom: '0', padding: '0.5em 1em 0.5em', color: 'black', background: '#eee' }}> {i.name} </p>
+                                                    </div>
+                                                </Link>
+                                            ))}</div>
+                                    </div>
                                 </Card>
                             )) : null}
                         </Paper>
@@ -150,8 +152,8 @@ export default function Home() {
     return (
         <React.Fragment>
             <div style={{ backgroundColor: '#f3f3f3' }}>
-                {array.map((data,i )=> (
-                    <React.Fragment key={data+i} >
+                {array.map((data, i) => (
+                    <React.Fragment key={data + i} >
                         {render(data)}
                     </React.Fragment>
                 ))}

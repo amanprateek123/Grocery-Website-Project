@@ -26,7 +26,14 @@ module.exports = (sequelize, Sequelize = require('sequelize')) => {
             type: Sequelize.INTEGER,
             defaultValue: 0
         },
-
+        weight: {
+            type: Sequelize.FLOAT,
+            defaultValue: 0,
+        },
+        extraCharges: {
+            type: Sequelize.FLOAT,
+            defaultValue: 0,
+        },
         // ! ...
         json: {
             type: Sequelize.TEXT,

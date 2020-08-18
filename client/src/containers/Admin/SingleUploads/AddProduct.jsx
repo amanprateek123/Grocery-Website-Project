@@ -22,6 +22,8 @@ let schema = {
             name: "",
             price: "",
             stockQuantity: "",
+            weight: "",
+            extraChanges: "0",
             json: "",
             attributes: [
                 {
@@ -318,6 +320,10 @@ const AddProduct = (props) => {
                                     <div className="form-group">
                                         <TextField required type="number" value={sku.price} name="price" onChange={(e) => handleChangeSKU(e, i)} label="price" InputLabelProps={{ shrink: Boolean(sku.price) }} />
                                         <TextField required type="number" value={sku.stockQuantity} name="stockQuantity" onChange={(e) => handleChangeSKU(e, i)} label="stockQuantity" InputLabelProps={{ shrink: Boolean(sku.stockQuantity) }} />
+                                    </div>
+                                    <div className="form-group">
+                                        <TextField required type="number" value={sku.weight} name="weight" onChange={(e) => handleChangeSKU(e, i)} label="weight" InputLabelProps={{ shrink: Boolean(sku.weight) }} />
+                                        <TextField required type="number" value={sku.extraCharges} name="extraCharges" onChange={(e) => handleChangeSKU(e, i)} label="extraCharges" InputLabelProps={{ shrink: Boolean(sku.extraCharges) }} />
                                     </div>
                                     <div className="form-group">
                                         <TextField required value={sku.json} name="json" onChange={(e) => handleChangeSKU(e, i)} label="json" multiline InputLabelProps={{ shrink: Boolean(sku.json) }} />

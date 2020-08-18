@@ -2,18 +2,32 @@ import React from 'react'
 import { Card, CardMedia, CardContent, Typography, CardActions, Button, Select, MenuItem, Fab, InputLabel, CardActionArea } from '@material-ui/core';
 import './Price.scss'
 import { connect } from 'react-redux';
+import { useState } from 'react';
+import { useEffect } from 'react';
 
-const deliveryCharges = (distance) => {
-    return parseInt(distance * 2);
+const deliveryCharges = (distance, price, weight = 0, extraCharges = 0) => {
+    return parseInt(distance * 2) + weight * 0.5 + extraCharges;
 }
 
 function PriceDetail(props) {
-    let total = 0
-    props.cart.forEach(itm => {
-        if (itm.sku) {
-            total += itm.quantity * (itm.sku.price)
-        }
-    })
+
+    const [price, setPrice] = useState(0)
+    const [shippingCharges, setShippingCharges] = useState(0)
+
+    useEffect(() => {
+        let _price = 0;
+        props.cart.forEach(itm => {
+            if (itm.sku) {
+                _price += itm.quantity * (itm.sku.price)
+            }
+        })
+        let totalWeight = props.cart.reduce((acc, cur) => acc + cur.sku.weight * Math.min(cur.quantity, cur.sku.stockQuantity), 0);
+        let totalExtraCharges = props.cart.reduce((acc, cur) => acc + cur.sku.extraCharges * Math.min(cur.quantity, cur.sku.stockQuantity), 0);
+        setPrice(_price);
+        setShippingCharges(deliveryCharges(props.address?.distance, price, totalWeight, totalExtraCharges))
+
+    }, [props.address])
+
     return (
         <React.Fragment>
             <Card style={{ backgroundColor: 'white', marginLeft: '10px', marginTop: '15px', borderRadius: '4px', minHeight: '50px' }}>
@@ -27,7 +41,7 @@ function PriceDetail(props) {
                                 Price({props.cart.length} item)
                             <span>
                                     <div className="hel_price">
-                                        ₹ {total}
+                                        ₹ {price}
                                     </div>
                                 </span>
                             </div>
@@ -37,7 +51,7 @@ function PriceDetail(props) {
                                 Delivery Charges
                             <span>
                                     <div className="hel_price">
-                                        ₹ {deliveryCharges(props.address?.distance || 0)}
+                                        ₹ {shippingCharges}
                                     </div>
                                 </span>
                             </div>
@@ -48,7 +62,7 @@ function PriceDetail(props) {
                                     Total Payable
                             <span>
                                         <div className="hel_price">
-                                            ₹ {total + deliveryCharges(props.address?.distance || 0)}
+                                            ₹ {price + shippingCharges}
                                         </div>
                                     </span>
                                 </div>

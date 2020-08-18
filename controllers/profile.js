@@ -8,7 +8,7 @@ const flash = require('../utils/flash')
 const sgMail = require('@sendgrid/mail');
 require('dotenv').config()
 
-const DELIVERY_RANGE = 40000;
+const DELIVERY_RANGE = 100;
 const SHOP_POINT = 'shimla';
 
 
