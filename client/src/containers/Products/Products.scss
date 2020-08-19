@@ -42,6 +42,15 @@
         padding: 0 0 0.5em 0;
     }
 
+    .radio-control{
+        input{
+            padding: 0.1em 0.2em;
+        }
+        label{
+            margin: 0 0.5em;
+        }
+    }
+
     .list-heading,.MuiListSubheader-root{
         color: #555;
         font-size: normal;
@@ -151,4 +160,13 @@
         padding-top: 0;
         margin-bottom: 1em;
     }
+}
+
+.btn-sec{
+    padding:0.5em;
+     text-align:center;
+     background:#eee;
+     font-weight:bold;
+     color:#555;
+     cursor: pointer ;
 }

@@ -69,11 +69,11 @@ function PriceDetail(props) {
                             </div>
                         </div>
                     </div>
-                    <div className="price_det">
+                    {/* <div className="price_det">
                         <div style={{ width: '100%', color: 'darkgreen', fontWeight: 'bold', padding: '5px 20px' }}>
                             Your Total Savings on this order ₹ 1959
                         </div>
-                    </div>
+                    </div> */}
                 </CardContent>
             </Card>
             <div className="price_foot">
