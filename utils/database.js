@@ -37,6 +37,7 @@ db.order = require('../models/order')(sequelize, Sequelize);
 db.orderItem = require('../models/orderItem')(sequelize, Sequelize);
 db.status = require('../models/status')(sequelize, Sequelize);
 db.homepage = require('../models/homepage')(sequelize, Sequelize)
+db.offers = require('../models/offers')(sequelize, Sequelize)
 // Relations - creates respective Foreign Keys as [ownerModel]Id 
 
 db.otp.belongsTo(db.user, { onDelete: 'CASCADE' });

@@ -50,3 +50,32 @@
     color: #878787;
     }
 }
+.coupons{
+    margin: 5px 0;
+    h6{
+        font-size: 11px;
+        color: var(--mainColor);
+        cursor: pointer;
+    }
+}
+.code{
+    input{
+        padding: 2px;
+    }
+    button{
+        margin: 0 5px;
+        font-size: 10px;
+        padding: 5px;
+    }
+}
+.applied{
+    padding: 2px;
+    font-size: 10px;
+    color:green;
+    
+}
+.cross_offer{
+    margin: 0 10px;
+    color:black;
+    font-size: 15px;
+}
