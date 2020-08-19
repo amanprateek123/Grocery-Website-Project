@@ -43,10 +43,17 @@
             align-items: center;
     
             .heading{
-                color: #007767 !important;   
-                // color: #ca4000 !important; 
+                // color: #007767 !important;   
+                color: var(--mainColor) !important; 
                 margin-right: 1em;
             }
+            
+        }
+        .MuiButton-textSecondary{
+            color: #888 !important;
+        }
+        .MuiButton-containedPrimary{
+            background: var(--mainColor) !important;
         }
     
         section{
