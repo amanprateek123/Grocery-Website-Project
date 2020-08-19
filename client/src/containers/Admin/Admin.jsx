@@ -25,6 +25,7 @@ import AddProductJSON from './SingleUploads/AddProductJSON';
 import DeleteProduct from './Edit/DeleteProduct';
 import EditProduct from './Edit/EditProduct';
 import Homepage from './HomePage/Homepage'
+import Offers from './Offers/Offers'
 import { useEffect } from 'react';
 
 const Profile = (props) => {
@@ -32,7 +33,7 @@ const Profile = (props) => {
     const [user, setUser] = useState({});
     const [modal, setModal] = useState(false);
 
-    const [tab, setTab] = useState('product');
+    const [tab, setTab] = useState('offers');
 
 
 
@@ -90,6 +91,12 @@ const Profile = (props) => {
                                                     <CategoryIcon />
                                                 </ListItemIcon>
                                                 <ListItemText primary="Homepage" id="tab" />
+                                            </ListItem>
+                                            <ListItem button selected={tab == 'offers'} onClick={() => setTab('offers')}>
+                                                <ListItemIcon>
+                                                    <CategoryIcon />
+                                                </ListItemIcon>
+                                                <ListItemText primary="Offers" id="tab" />
                                             </ListItem>
                                             <ListItem button selected={tab == 'category'} onClick={() => setTab('category')}>
                                                 <ListItemIcon>
@@ -189,7 +196,9 @@ const Profile = (props) => {
                                                         : tab == 'editProduct' ?
                                                             <EditProduct />
                                                             : tab == 'homepage' ?
-                                                                <Homepage /> : null}
+                                                                <Homepage />
+                                                                 : tab == 'offers' ?
+                                                                     <Offers/> : null}
                         </div>
                     </div>
                 </div>

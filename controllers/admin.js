@@ -665,8 +665,41 @@ exports.getHome = async (req, res) => {
     }).then(data => res.json(data)).catch((err) => res.json(err))
 }
 
+//offers
+exports.offers = async (req,res)=>{
+    console.log(req.body)
+    await db.offers.destroy({ where: {} })
+    let data = req.body
+    Promise.all(
+        data.map((item, i) => {
+            return db.offers.create({
+                offerCode: item.offerCode,
+                startDate: item.startDate,
+                endDate: item.endDate,
+                discount: item.discount,
+                minAmt: item.minAmt
+            }
+            ).then(add => {
+                console.log("Row Added")
+            })
+        })
+    ).then(result => {
+        console.log(result)
+        res.json({ message: "Successfully Added", status: 201, data: req.body })
+    }).catch(e => {
+        console.log(e)
+        res.json({ message: "Uploading failed" })
+    })
 
+}
 
+//getOffers
+exports.getOffers = async (req,res)=>{
+    db.offers.findAll({}).then(data => res.json(data)).catch(e=>{
+        res.json(e)
+        console.log('error',e)
+    })
+}
 
 
 
