@@ -383,36 +383,38 @@ const Profile = (props) => {
                             {details['name'].editing ? <Button color="primary" variant="contained" onClick={openModal}>Save</Button> : null}
                         </section>
                         <section>
-                            <InputLabel id="gender" className="external-label">Gender</InputLabel>
+                            {/* <InputLabel id="gender" className="external-label">Gender</InputLabel> */}
                             <Select className="text-field" labelId="gender" id="gender" value={user.gender} displayEmpty
-                                renderValue={() => user.gender == 'M' ? 'Male' : user.gender == 'F' ? 'Female' : user.gender == 'T' ? 'Other' : 'Not Selected'}
+                                renderValue={() => user.gender == 'M' ? 'Male' : user.gender == 'F' ? 'Female' : user.gender == 'T' ? 'Other' : 'Gender'}
                                 onChange={(e) => onChangeHandler('gender', e)} disabled={!details['name'].editing}>
-                                <MenuItem value={undefined}>Not Selected</MenuItem>
+                                {/* <MenuItem value={undefined}>Not Selected</MenuItem> */}
                                 <MenuItem value={'M'}>Male</MenuItem>
                                 <MenuItem value={'F'}>Female</MenuItem>
                                 <MenuItem value={'T'}>Other</MenuItem>
                             </Select>
-                            <InputLabel id="dob" className="external-label">Birthday</InputLabel>
+                            {/* <InputLabel id="dob" className="external-label">Birthday</InputLabel> */}
                             <TextField className="text-field" type="date" label="Birthday" id="dob" value={user.dob || ''} onChange={(e) => onChangeHandler('dob', e)} disabled={!details['name'].editing} />
                         </section>
                     </div>
                     <div className="profile-section">
-                        <header>
+                        {/* <header>
                             <h5 className="heading d-inline-block">Email Address</h5>
                             <Button color="secondary" onClick={() => toggleEdit('email')}>{details['email'].editing ? "Cancel" : "Edit"}</Button>
-                        </header>
+                        </header> */}
                         <section>
                             <TextField className="text-field" label="Email" type="email" required id="email" value={user.email} onChange={(e) => onChangeHandler('email', e)} disabled={!details['email'].editing} InputLabelProps={{ shrink: Boolean(user.email) }} />
+                            <Button color="secondary" onClick={() => toggleEdit('email')}>{details['email'].editing ? "Cancel" : "Edit"}</Button>
                             {details['email'].editing ? <Button color="primary" variant="contained" onClick={changeEmailReq}>Save</Button> : null}
                         </section>
                     </div>
                     <div className="profile-section">
-                        <header>
+                        {/* <header>
                             <h5 className="heading d-inline-block">Mobile Number</h5>
                             <Button color="secondary" onClick={() => toggleEdit('mobile')}>{details['mobile'].editing ? "Cancel" : "Edit"}</Button>
-                        </header>
+                        </header> */}
                         <section>
                             <TextField className="text-field" label="Mobile Number" id="mobile" value={user.mobile} onChange={(e) => onChangeHandler('mobile', e)} disabled={!details['mobile'].editing} InputLabelProps={{ shrink: Boolean(user.mobile) }} />
+                            <Button color="secondary" onClick={() => toggleEdit('mobile')}>{details['mobile'].editing ? "Cancel" : "Edit"}</Button>
                             {details['mobile'].editing ? <Button color="primary" variant="contained" onClick={changeMobileReq}>Save</Button> : null}
                         </section>
                     </div>

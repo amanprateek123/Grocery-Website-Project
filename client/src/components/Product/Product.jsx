@@ -132,7 +132,7 @@ const Product = (props) => {
                                     <div className="btn btn-full add-to-cart" onClick={(e) => {
                                         props.addToCart(selectedSKU.id, +e.target.parentElement.querySelector('.quantity-inp input').value)
                                         props.feedback()
-                                    }}><CartIcon fontSize="small" /> Add to Cart</div>
+                                    }}><CartIcon fontSize="small" style={{ transform: 'scale(0.8)' }} /> Add to Cart</div>
                                 </React.Fragment>
                                 :
                                 <div className="btn btn-full add-to-cart out-of-stock">Out of Stock</div>

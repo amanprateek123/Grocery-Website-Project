@@ -28,8 +28,8 @@ function PriceDetail(props) {
 
     const [price, setPrice] = useState(0)
     const [shippingCharges, setShippingCharges] = useState(0)
-    const [whole,setWhole] = useState(true)
-    const [detail,setDetail] = useState(null)
+    const [whole, setWhole] = useState(true)
+    const [detail, setDetail] = useState(null)
 
     useEffect(() => {
         let _price = 0;
@@ -44,19 +44,19 @@ function PriceDetail(props) {
         setShippingCharges(deliveryCharges(props.address?.distance, price, totalWeight, totalExtraCharges))
 
     }, [props.address])
-  
-     const [coupon,setCoupon] = useState(false)
-      const [code,setCode] = useState('')
-      const [data,setData]=useState(null)
 
-      useEffect(() => {
+    const [coupon, setCoupon] = useState(false)
+    const [code, setCode] = useState('')
+    const [data, setData] = useState(null)
+
+    useEffect(() => {
         fetch('/admin/offers', {
             headers: {
                 'Content-Type': 'application/json'
             },
             method: 'GET',
         }).then(res => res.json()).then(res => {
-              setData(res)
+            setData(res)
         })
     }, [code])
     let coup
@@ -156,23 +156,23 @@ function PriceDetail(props) {
                                 <div style={{ width: '100%' }}>
                                     Total Payable
                             <span>
-                            {valid===1?
-                                        <div className="hel_price">
-                                        <strike style={{fontWeight:'normal',color:'grey'}}>₹ {price + shippingCharges}</strike><span className="ml-2">₹ {price + shippingCharges - (discount/100)*price}</span>
-                                    </div>:
-                                        <div className="hel_price">
-                                            ₹ {price + shippingCharges}
-                                        </div>}
+                                        {valid === 1 ?
+                                            <div className="hel_price">
+                                                <strike style={{ fontWeight: 'normal', color: 'grey' }}>₹ {price + shippingCharges}</strike><span className="ml-2">₹ {price + shippingCharges - (discount / 100) * price}</span>
+                                            </div> :
+                                            <div className="hel_price">
+                                                ₹ {price + shippingCharges}
+                                            </div>}
                                     </span>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div className="price_det">
+                    {/* <div className="price_det">
                         <div style={{ width: '100%', color: 'darkgreen', fontWeight: 'bold', padding: '5px 20px' }}>
                             Your Total Savings on this order ₹ {((discount/100)*price).toFixed(2)}
                         </div>
-                    </div>
+                    </div> */}
                 </CardContent>
             </Card>
             <div className="price_foot">

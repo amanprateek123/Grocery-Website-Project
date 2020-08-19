@@ -23,7 +23,7 @@ let schema = {
             price: "",
             stockQuantity: "",
             weight: "",
-            extraChanges: "0",
+            extraChanges: "",
             json: "",
             attributes: [
                 {

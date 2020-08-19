@@ -41,6 +41,7 @@ const Products = (props) => {
     const [SKUs, setSKUs] = useState([]);
     const [SKUTypes, setSKUTypes] = useState([]);
     const [priceRange, setPriceRange] = useState([0, 10000000]);
+    const [sortBy, setSortBy] = useState('');
 
     const [loading, setLoading] = useState(true);
     const [snackbar, setSnackbar] = useState(false);
@@ -51,19 +52,34 @@ const Products = (props) => {
         products.length && null || setLoading(true);
         fetch(`/get-products${props.location.search}`).then(res => res.json().then(({ meta, products }) => {
             setProducts(products);
+
+            // Sort
+
+            let _searchParams = new URLSearchParams(props.location.search);
+            if (_searchParams.get('order')) {
+                console.log('Sorted Data');
+                if (_searchParams.get('dir') == 'DESC') {
+                    products = products.sort((a, b) => b.skus[0].price - a.skus[0].price);
+                }
+                else if (_searchParams.get('dir') == 'ASC') {
+                    products = products.sort((a, b) => a.skus[0].price - b.skus[0].price);
+                }
+            }
+
             setVisibleProducts(products);
 
             setMetaData(meta)
 
             setCategories(meta.categories);
 
+            // refresh sidebar 
             if (['?category', '?parentCategory', '&sr'].map(str => props.location.search.indexOf(str) != -1).reduce((acc, cur) => acc || cur, false)) {
                 setBrands(Array.from(
                     new Set(
                         meta.brands.map(brand => (
                             JSON.stringify({
                                 name: brand.name,
-                                selected: (new URLSearchParams(props.location.search).get('brand')) && ((new URLSearchParams(props.location.search).get('brand')).indexOf(brand.name) != -1)
+                                selected: (_searchParams.get('brand')) && ((_searchParams.get('brand')).indexOf(brand.name) != -1)
                             })
                         ))
                     )
@@ -71,7 +87,7 @@ const Products = (props) => {
                 )
                 props.location.search = props.location.search.replace('&sr', '');
             }
-            setSKUs(meta.skus.map(s => ({ ...s, selected: (new URLSearchParams(props.location.search).get('filter')) && ((new URLSearchParams(props.location.search).get('filter')).indexOf(s.value) != -1) })));
+            setSKUs(meta.skus.map(s => ({ ...s, selected: (_searchParams.get('filter')) && ((_searchParams.get('filter')).indexOf(s.value) != -1) })));
             setSKUTypes(Array.from(new Set(meta.skus.map(sku => sku.name))));
 
 
@@ -121,6 +137,27 @@ const Products = (props) => {
         else {
             let query = props.location.search.replace(/page=[\w\d,]*/, `page=1`);
             history.push(`/products?filter=${filter}&${query.slice(1)}`)
+        }
+    }
+
+    const handleChangeSort = (e) => {
+        let value = e.target.value;
+        setSortBy(e.target.value);
+        console.log(e.target.value);
+        if (!value) {
+            let query = props.location.search.replace(/order=[\w .,]*&dir=[\w .,]*&/, `&`);
+            query = query.replace(/page=[\w\d ,]*/, `page=1`);
+            history.push(`/products${query}`);
+            return;
+        }
+        if (props.location.search.indexOf('order') != -1) {
+            let query = props.location.search.replace(/order=[\w .,]*&dir=[\w .,]*&/, `order=${value}&`);
+            query = query.replace(/page=[\w\d .,]*/, `page=1`);
+            history.push(`/products${query}`);
+        }
+        else {
+            let query = props.location.search.replace(/page=[\w\d .,]*/, `page=1`);
+            history.push(`/products?order=${value}&${query.slice(1)}`)
         }
     }
 
@@ -249,6 +286,27 @@ const Products = (props) => {
                                                 </List>
 
                                                 {/* <Divider /> */}
+                                                {
+                                                    categories.length ?
+                                                        <Accordion className="filter-list acc" dense aria-controls="brands-content">
+                                                            <AccordionSummary className="list-heading" expandIcon={<ExpandMoreIcon />}>Sort</AccordionSummary>
+                                                            <AccordionDetails style={{ display: 'flex', flexDirection: 'column' }}>
+                                                                <div className="radio-control">
+                                                                    <input type="radio" name="sort" value="" onChange={handleChangeSort} />
+                                                                    <label>None</label>
+                                                                </div>
+                                                                <div className="radio-control">
+                                                                    <input type="radio" name="sort" value="skus.price&dir=ASC" onChange={handleChangeSort} />
+                                                                    <label><b>Price</b> : Low to High</label>
+                                                                </div>
+                                                                <div className="radio-control">
+                                                                    <input type="radio" name="sort" value="skus.price&dir=DESC" onChange={handleChangeSort} />
+                                                                    <label><b>Price</b> : High to Low</label>
+                                                                </div>
+                                                            </AccordionDetails>
+                                                        </Accordion>
+                                                        : null
+                                                }
 
                                                 {
                                                     brands.length ?
@@ -268,7 +326,10 @@ const Products = (props) => {
                                                     categories.length ?
                                                         <Accordion className="filter-list acc" dense aria-controls="brands-content">
                                                             <AccordionSummary className="list-heading" expandIcon={<ExpandMoreIcon />}>Price Filter</AccordionSummary>
-                                                            <AccordionDetails>
+                                                            <AccordionDetails style={{ display: 'flex', flexDirection: 'column' }}>
+                                                                <div onClick={applyPrice} style={{ margin: '-1.5em 0 1em 0' }} className="btn-sec">
+                                                                    Apply
+                                                                </div>
                                                                 <div className="prices">
                                                                     <TextField InputProps={{
                                                                         startAdornment: <InputAdornment position="start">$</InputAdornment>,
@@ -285,7 +346,7 @@ const Products = (props) => {
 
                                                 {SKUTypes.map(name => (
                                                     name?.trim() ?
-                                                        <React.Fragment>
+                                                        <React.Fragment key={name}>
                                                             <Accordion className="filter-list acc" key={name} dense >
                                                                 <AccordionSummary className="list-heading" expandIcon={<ExpandMoreIcon />}>{name}</AccordionSummary>
                                                                 <AccordionDetails>

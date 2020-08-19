@@ -193,17 +193,16 @@ const Navbar = (props) => {
                 >
                     <Toolbar className="app-bar">
 
-                        <div className="logo">
-                            <IconButton
-                                color="inherit"
-                                aria-label="open drawer"
-                                onClick={handleDrawerOpen}
-                                edge="start"
-                                className={clsx(classes.menuButton, open && classes.hide, "d-md-none")}
-                            >
-                                <MenuIcon />
-                            </IconButton>
-
+                        <IconButton
+                            color="inherit"
+                            aria-label="open drawer"
+                            onClick={handleDrawerOpen}
+                            edge="start"
+                            className={clsx(classes.menuButton, open && classes.hide, "d-md-none")}
+                        >
+                            <MenuIcon />
+                        </IconButton>
+                        <div className="logo" >
                             <Link to="/"><img src={img} height={60} className="" /></Link>
                         </div>
 
@@ -230,6 +229,16 @@ const Navbar = (props) => {
                                 }
 
                             </form>
+                        </div>
+
+                        <div className="d-md-none d-flex navigation">
+                            {props.userName ?
+                                <Link to="/checkout" style={{ color: 'inherit' }}>
+                                    <ShoppingCartIcon style={{}} />
+                                    <div className="badge" style={{ position: 'absolute' }}>{props.cart.length}</div>
+                                </Link>
+                                : null
+                            }
                         </div>
 
                         <div className="navigation d-md-flex d-none">

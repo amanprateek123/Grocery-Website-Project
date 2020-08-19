@@ -28,10 +28,19 @@
                 height: 40px;
             }
         }
+        @media (max-width: 500px){
+            display: none;
+        }
+    }
+
+    button{
+        margin-right: 0 !important;
     }
 
 
     .app-search-bar{
+
+        
         .app_search{
             
             display: flex;
@@ -40,10 +49,15 @@
             border-radius: 2px;
             background-color: #fff;
             overflow: hidden;
-            max-width: 35em;
+            max-width: 50em;
+            width: 100%;
             @media (min-width: 768px){
                 // width: 120%;
-                min-width: 25em;
+                min-width: 35em;
+            }
+            @media (max-width: 500px){
+                // width: 120%;
+                // min-width: 70vw !important;
             }
             
         }
