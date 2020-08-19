@@ -180,7 +180,7 @@
 }
 .cart_value{
     position: absolute;
-    left:90.6%;
+    left:91.5%;
     top: 10%;
     text-align: center;
     border-radius: 7px;
@@ -263,4 +263,19 @@
         background-color: #f0f0f0;
     }
     }
+}
+.badge1{
+    position: absolute;
+    top: 2px;
+    right: 36px;
+    text-align: center;
+    border-radius: 100%;
+    width: 18px;
+    height: 18px;
+    background-color: var(--mainColor);
+    border: 1px solid #fff;
+    font-weight: 400;
+    color: #f0f0f0;
+    line-height: 16px;
+    font-size: 12px;
 }
