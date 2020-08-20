@@ -286,27 +286,6 @@ const Products = (props) => {
                                                 </List>
 
                                                 {/* <Divider /> */}
-                                                {
-                                                    categories.length ?
-                                                        <Accordion className="filter-list acc" dense aria-controls="brands-content">
-                                                            <AccordionSummary className="list-heading" expandIcon={<ExpandMoreIcon />}>Sort</AccordionSummary>
-                                                            <AccordionDetails style={{ display: 'flex', flexDirection: 'column' }}>
-                                                                <div className="radio-control">
-                                                                    <input type="radio" name="sort" value="" onChange={handleChangeSort} />
-                                                                    <label>None</label>
-                                                                </div>
-                                                                <div className="radio-control">
-                                                                    <input type="radio" name="sort" value="skus.price&dir=ASC" onChange={handleChangeSort} />
-                                                                    <label><b>Price</b> : Low to High</label>
-                                                                </div>
-                                                                <div className="radio-control">
-                                                                    <input type="radio" name="sort" value="skus.price&dir=DESC" onChange={handleChangeSort} />
-                                                                    <label><b>Price</b> : High to Low</label>
-                                                                </div>
-                                                            </AccordionDetails>
-                                                        </Accordion>
-                                                        : null
-                                                }
 
                                                 {
                                                     brands.length ?
@@ -373,6 +352,18 @@ const Products = (props) => {
                         }
 
                     </div>
+                    {
+                        categories.length ?
+                            <div className="filter-list acc sort-ctrl" dense aria-controls="brands-content">
+                                <label style={{ color: '#aaa' }}>Sort by : </label>
+                                <select onChange={handleChangeSort}>
+                                    <option name="sort" value="">None</option>
+                                    <option name="sort" value="skus.price&dir=ASC" >Price - Low to High</option>
+                                    <option name="sort" value="skus.price&dir=DESC">Price - High to Low</option>
+                                </select>
+                            </div>
+                            : null
+                    }
                     <div className="col-md-10 col">
                         {props.userName ?
                             <Snackbar className="cart-snackbar" open={snackbar} onClose={() => setSnackbar(false)} autoHideDuration={2000} anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}>
