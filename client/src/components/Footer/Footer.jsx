@@ -57,7 +57,7 @@ const Footer = (props) => {
                 </div>
                 <div className="row mt-2">
                     <div className="copyrights">
-                        &copy; 2020. all rights reserved
+                        &copy; 2020. all rights reserved<br/>powered by <span style={{color:'var(--mainColor'}}>Lala-Logix!</span>
                     </div>
                 </div>
             </div>

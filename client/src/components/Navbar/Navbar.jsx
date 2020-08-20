@@ -233,9 +233,9 @@ const Navbar = (props) => {
 
                         <div className="d-md-none d-flex navigation">
                             {props.userName ?
-                                <Link to="/checkout" style={{ color: 'inherit' }}>
+                                <Link to="/checkout" style={{ color: 'inherit',margin:'5px 15px' }}>
                                     <ShoppingCartIcon style={{}} />
-                                    <div className="badge" style={{ position: 'absolute' }}>{props.cart.length}</div>
+                                    <div className="badge1">{props.cart.length}</div>
                                 </Link>
                                 : null
                             }

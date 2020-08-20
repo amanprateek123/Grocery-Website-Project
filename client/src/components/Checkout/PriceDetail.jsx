@@ -10,6 +10,20 @@ const deliveryCharges = (distance, price, weight = 0, extraCharges = 0) => {
     return parseInt(distance * 2) + weight * 0.5 + extraCharges;
 }
 
+var month = new Array();
+month[0] = "January";
+month[1] = "February";
+month[2] = "March";
+month[3] = "April";
+month[4] = "May";
+month[5] = "June";
+month[6] = "July";
+month[7] = "August";
+month[8] = "September";
+month[9] = "October";
+month[10] = "November";
+month[11] = "December";
+
 function PriceDetail(props) {
 
     const [price, setPrice] = useState(0)
@@ -47,30 +61,47 @@ function PriceDetail(props) {
     }, [code])
     let coup
 
-    const [valid, setValid] = useState()
+   const [valid,setValid] = useState()
 
-    const apply = (codes) => {
-        if (data) {
-            coup = data.find(itm => itm.offerCode === codes)
-            console.log(coup)
-            setDetail(coup)
-            if (coup) {
-                setValid(1)
-                setWhole(false)
-                setDiscount(coup.discount)
+  const apply=(codes)=>{
+    if (data){
+        coup = data.find(itm=>itm.offerCode===codes)
+        console.log('coup',coup)
+        setDetail(coup)
+        
+        if(coup){
+          let d = new Date()
+          let e = new Date(coup.endDate)
+          let f = new Date(coup.startDate)
+          if(d.getTime()<=e.getTime() && d.getTime()>=f.getTime()){
+            if(price<coup.minAmt){
+                setValid(4)
             }
-            else {
-                setValid(0)
+            else{
+            setValid(1)
+            setWhole(false)
+            setDiscount(coup.discount)
             }
+          }
+          else if(d.getTime()<f.getTime()){
+              setValid(3)
+          }
+          else{
+              setValid(2)
+          }   
         }
-    }
-    const [discount, setDiscount] = useState(0)
-    const rem_offer = () => {
-        setValid(2)
-        setWhole(true)
-        setDiscount(0)
-        setCoupon(false)
-    }
+        else{
+            setValid(0)
+        }
+   } 
+  }
+  const [discount,setDiscount]=useState(0)
+  const rem_offer = ()=>{
+      setValid(5)
+      setWhole(true)
+      setDiscount(0)
+      setCoupon(false)
+  }
 
 
     return (
@@ -101,21 +132,25 @@ function PriceDetail(props) {
                                 </span>
                             </div>
                         </div>
-                        {whole ?
-                            <div className="coupons">
-                                <h6 onClick={() => setCoupon(true)} >Apply coupon code?</h6>
-                                {coupon ?
-                                    <div className="code">
-                                        <input type="text" onChange={(e) => setCode(e.target.value)} /><span><Button color="secondary" variant="contained" onClick={() => apply(code)} >Apply</Button></span>
-                                    </div> : null}
-                            </div> : null}
-                        {valid === 0 ? <div>
-                            <p style={{ color: 'red', fontSize: '11px' }}>Invalid Coupon.Try another!</p>
-                        </div> : valid === 1 ?
-                                <div className="applied">
-                                    Coupon : {detail.offerCode} Appllied! ({detail.discount}% off) <span className="cross_offer" ><CloseIcon fontSize="inherit" onClick={rem_offer} /></span>
-                                </div> : null}
-
+                       {whole?
+                        <div className="coupons">
+                        <h6 onClick={()=>setCoupon(true)} >Apply coupon code?</h6>
+                         {coupon?
+                        <div className="code">
+                          <input type="text" onChange={(e)=>setCode(e.target.value)} /><span><Button color="secondary" variant="contained" onClick={()=>apply(code)} >Apply</Button></span>
+                        </div>:null}                        
+                     </div>:null}
+                     {valid===0?<div>
+                         <p style={{color:'red',fontSize:'11px'}}>Invalid Coupon.Try another!</p>
+                         </div>:valid===1?
+                         <div className="applied">
+                           Coupon : {detail.offerCode} Appllied! ({detail.discount}% off) <span className="cross_offer" ><CloseIcon fontSize="inherit" onClick={rem_offer} /></span>
+                         </div>:
+                         valid===2?<p style={{color:'red',fontSize:'11px'}}>Sorry,this coupon is expired!</p>
+                     :valid===3?<p style={{color:'red',fontSize:'11px'}}>This coupon is valid after {new Date(detail.startDate).getDate()} {month[new Date(detail.startDate).getMonth()]} {new Date(detail.startDate).getFullYear()} </p>
+                         :valid===4?<p style={{color:'red',fontSize:'11px'}}>Your Order price should be above ₹{detail.minAmt} </p>
+                         :null}
+                        
                         <div className="price_total">
                             <div className="price_det">
                                 <div style={{ width: '100%' }}>
