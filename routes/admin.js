@@ -16,6 +16,7 @@ router.post('/homepage',adminCtrl.homePage)
 router.get('/homepage',adminCtrl.getHome)
 router.post('/offers',adminCtrl.offers)
 router.get('/offers',adminCtrl.getOffers)
+router.delete('/offers',adminCtrl.delOffers)
 
 router.post('/add-product',
     multerImage.fields([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(i => ({ name: `images${i}`, maxCount: 10 }))),

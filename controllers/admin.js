@@ -668,21 +668,18 @@ exports.getHome = async (req, res) => {
 //offers
 exports.offers = async (req,res)=>{
     console.log(req.body)
-    await db.offers.destroy({ where: {} })
     let data = req.body
-    Promise.all(
-        data.map((item, i) => {
-            return db.offers.create({
-                offerCode: item.offerCode,
-                startDate: item.startDate,
-                endDate: item.endDate,
-                discount: item.discount,
-                minAmt: item.minAmt
-            }
-            ).then(add => {
-                console.log("Row Added")
-            })
-        })
+    const offer = await db.offers.findAll({where:{offerCode:data.offerCode}})
+    if(offer){
+         await db.offers.destroy({where:{offerCode:data.offerCode}})
+    }
+    db.offers.create({
+        offerCode: data.offerCode,
+        startDate: data.startDate,
+        endDate: data.endDate,
+        discount: data.discount,
+        minAmt: data.minAmt
+    }
     ).then(result => {
         console.log(result)
         res.json({ message: "Successfully Added", status: 201, data: req.body })
@@ -690,7 +687,6 @@ exports.offers = async (req,res)=>{
         console.log(e)
         res.json({ message: "Uploading failed" })
     })
-
 }
 
 //getOffers
@@ -701,7 +697,23 @@ exports.getOffers = async (req,res)=>{
     })
 }
 
-
+exports.delOffers = async (req,res)=>{
+    const data = req.body
+    console.log(data)
+    const offer = await db.offers.findAll({where:{offerCode:data.offerCode}})
+    try{
+        await db.offers.destroy({
+            where:{
+                offerCode:data.offerCode
+            }
+        })
+        res.json({message:'Offer Deleted'})
+    }
+    catch(e){
+        console.log(e)
+        res.json(e)
+    }
+}
 
 
 
