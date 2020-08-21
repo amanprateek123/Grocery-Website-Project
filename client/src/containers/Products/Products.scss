@@ -1,7 +1,7 @@
 
 .products-page{
     max-width: 1510px;
-    
+    position: relative;
     @media (min-width:1200){
         min-width: 1250px;
     }
@@ -138,6 +138,19 @@
             p{
                 color: #57538a;
             }
+        }
+    }
+
+    .sort-ctrl{
+        position: absolute;
+        right: 5em;
+        top: 0.2em;
+        z-index: 0;
+        select, option{
+            outline: none;
+            color: #999;
+            border: 1px solid #eee;
+            background: transparent;
         }
     }
 
