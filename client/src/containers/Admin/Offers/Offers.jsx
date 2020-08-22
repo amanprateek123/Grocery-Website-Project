@@ -1,5 +1,5 @@
 import React from 'react'
-import { Paper,Card, Button, Select, MenuItem, FormHelperText } from '@material-ui/core'
+import { Paper, Card, Button, Select, MenuItem, FormHelperText } from '@material-ui/core'
 import { connect } from 'react-redux'
 import { useState } from 'react';
 import { useEffect } from 'react';
@@ -11,10 +11,11 @@ import './Offers.scss'
 import { Alert } from '@material-ui/lab'
 import Modal from '../../../components/Modal/Modal'
 import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline';
+import Swal from 'sweetalert2'
 
 export default function Offers() {
 
-    const[data,setData]=useState(null)
+    const [data, setData] = useState(null)
 
     useEffect(() => {
         fetch('/admin/offers', {
@@ -23,32 +24,45 @@ export default function Offers() {
             },
             method: 'GET',
         }).then(res => res.json()).then(res => {
-            console.log('res',res)
+            console.log('res', res)
             setData(res)
         })
     }, [])
 
-    const delOffer = (variable)=>{
-        return(
-            fetch('/admin/offers', {
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                method: 'DELETE',
-                body: JSON.stringify({offerCode:variable.variables})
-            }
-                ).then(res => res.json()).then(res => {
-                    console.log(res)
-                })
+    const delOffer = (variable) => {
+        return (
+            Swal.fire({
+                title: 'Are you sure?',
+                text: `This offer will be permanently deleted!`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes',
+                confirmButtonColor: '#f009',
+                cancelButtonText: 'No'
+            }).then((result) => {
+                if (result.value) {
+                    fetch('/admin/offers', {
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        method: 'DELETE',
+                        body: JSON.stringify({ offerCode: variable.variables })
+                    }
+                    ).then(res => res.json()).then(res => {
+                        console.log(res);
+                        Swal.fire('Deleted', 'Offer Removed Successfully!', 'success')
+                    })
+                }
+            })
+
         )
     }
-    const [del,meta1]=useMutation(delOffer)
+    const [del, meta1] = useMutation(delOffer)
 
     const [snackbar, setSnackbar] = useState(false)
 
     const offerAdd = (e) => {
-        e.preventDefault()
-        console.log('arg',offer)
+        console.log('arg', offer)
         return (
             fetch('/admin/offers', {
                 headers: {
@@ -63,131 +77,130 @@ export default function Offers() {
         )
     }
     const [off, meta] = useMutation(offerAdd)
-    
-    const format = (data)=>{
+
+    const format = (data) => {
         return data.split('.')[0]
     }
 
-    const [code,setCode]=useState('Select Offer')
-    
+    const [code, setCode] = useState('Select Offer')
+
     //Modal
-    const [dels,setDels]=useState(false)
-    const open = ()=>{
+    const [dels, setDels] = useState(false)
+    const open = () => {
         setDels(true)
     }
-    const close = ()=>{
+    const close = () => {
         setDels(false)
     }
-   
-    const handle = (e)=>{
+
+    const handle = (e) => {
         setCode(e.target.value)
     }
-    let scheme = {offerCode:'',startDate:'',endDate:'',discount:'',minAmt:''}
-    const[form,setForm] = useState(false)
-    const [offer,setOffer] = useState(scheme)
+    let scheme = { offerCode: '', startDate: '', endDate: '', discount: '', minAmt: '' }
+    const [form, setForm] = useState(false)
+    const [offer, setOffer] = useState(scheme)
 
-    const handleOffer = (e)=>{
-        setOffer({...offer,[e.target.name]: e.target.value})
+    const handleOffer = (e) => {
+        setOffer({ ...offer, [e.target.name]: e.target.value })
     }
 
-    const show = ()=>{
+    const show = () => {
         setForm(true)
         setEdit(false)
         setCode('Select Offer')
         setOffer(scheme)
     }
-const cancel = ()=>{
-    setForm(false)
-}
-const [edit,setEdit]=useState(false)
+    const cancel = () => {
+        setForm(false)
+    }
+    const [edit, setEdit] = useState(false)
 
-const editForm=()=>{
-    setEdit(true)
-    setForm(false)  
-}
+    const editForm = () => {
+        setEdit(true)
+        setForm(false)
+    }
 
-    console.log('offer',code)
-    useEffect(()=>{
-        if(code==="Select Offer"){
-            setOffer(scheme)            
+    useEffect(() => {
+        if (code === "Select Offer") {
+            setOffer(scheme)
         }
-        else{
-            if(data){
-                let i = data.find(itm=>itm.offerCode===code)
-                 let a= {offerCode:i.offerCode,startDate:i.startDate,endDate:i.endDate,discount:i.discount,minAmt:i.minAmt}
-                 setOffer(a)
+        else {
+            if (data) {
+                let i = data.find(itm => itm.offerCode === code)
+                let a = { offerCode: i.offerCode, startDate: i.startDate, endDate: i.endDate, discount: i.discount, minAmt: i.minAmt }
+                setOffer(a)
             }
         }
-    },[code])
+    }, [code])
 
     return (
-          <Paper className="offers">
-              <Modal visible={dels}>
-                   <Card style={{width:'30%',padding:'10px'}}>
-                       <div style={{display:'flex',justifyContent:'center',alignItems:'center'}}>
-                           <ErrorOutlineIcon fontSize='inherit' style={{color:'var(--mainColor)',fontSize:'65px'}} />
-                       </div>
-                       <h1>Are you sure?</h1>
-                       <div className="option">
-                       <p>This offer will be permanently deleted!</p>
-                       <Button onClick={()=>del({variables:code})} id="del" color='primary' variant="contained" style={{padding: '5px 4px', width: '100px', margin: '5% 0', fontSize: '15px'}} >Yes</Button><span style={{}}><Button onClick={close} id="del1" color="secondary" variant="contained" style={{float:'right',padding: '5px 4px', width: '100px', margin: '5% 0', fontSize: '15px'}} >No</Button></span>
-                       </div>
-                   </Card>
-              </Modal>
-             <h1>Genric Offers</h1>
-             <div className="row mt-4" >
-                <div className="col-md-6" style={{display:'flex',justifyContent:'center'}}>
-                   <Button color="secondary" variant="contained" style={{padding:'10px'}} onClick={show} >Add new Offer</Button>
-                </div>
-                <div className="col-md-6" style={{display:'flex',justifyContent:'center'}}> 
-                   <Button color="primary" variant="contained" style={{padding:'10px 15px'}} onClick={editForm} >Edit Offers</Button>
-                </div>
-                <div style={{width:'100%',display:'flex',justifyContent:'center'}}>
-                {edit?
-                <select style={{width:'30%',padding:'3px'}} onChange={handle}>
-                    <option>Select Offer</option>
-                {data?data.map(itm=>(
-                    <option key={itm.offerCode+itm.discount}>{itm.offerCode}</option>
-                )):null}
-            </select>:null}
-                </div>
-                <div style={{width:'100%',display:'flex',justifyContent:'center'}}>
-                {(form || (edit && code!='Select Offer'))?(
-                   <form style={{width:'50%'}} onSubmit={off} >
-                       <div className="mt-3" style={{ display: 'flex', justifyContent: 'center', flexDirection: 'column' }}>
-                        <label htmlFor='offerCode'>Enter the Offer Code:</label>
-                        <input name='offerCode' id='offerCode' value={offer.offerCode} type="text" style={{ padding: '3px' }} required onChange={handleOffer} disabled={edit} />
+        <Paper className="offers">
+            {/* <Modal visible={dels}>
+                <Card style={{ width: '30%', padding: '10px' }}>
+                    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                        <ErrorOutlineIcon fontSize='inherit' style={{ color: 'var(--mainColor)', fontSize: '65px' }} />
                     </div>
-                    <div className="mt-3" style={{ display: 'flex', justifyContent: 'space-between', flexDirection: 'column' }}>
-                        <label htmlFor='startDate'>Enter the Starting Date & Time:</label>
-                        <input name='startDate' id='startDate' type="datetime-local" value={format(offer.startDate)}  style={{ padding: '3px' }} required onChange={handleOffer} />                            
+                    <h1>Are you sure?</h1>
+                    <div className="option">
+                        <p>This offer will be permanently deleted!</p>
+                        <Button onClick={() => del({ variables: code })} id="del" color='primary' variant="contained" style={{ padding: '5px 4px', width: '100px', margin: '5% 0', fontSize: '15px' }} >Yes</Button><span style={{}}><Button onClick={close} id="del1" color="secondary" variant="contained" style={{ float: 'right', padding: '5px 4px', width: '100px', margin: '5% 0', fontSize: '15px' }} >No</Button></span>
                     </div>
-                    <div className="mt-3" style={{ display: 'flex', justifyContent: 'space-between', flexDirection: 'column' }}>
-                        <label htmlFor='endDate'>Enter the Ending Date & Time:</label>
-                        <input name='endDate' id='endDate' type="datetime-local" style={{ padding: '3px' }} value={format(offer.endDate)} required onChange={handleOffer} />                                                  </div>
-                    <div className="mt-3" style={{ display: 'flex', justifyContent: 'space-between', flexDirection: 'column' }}>
-                        <label htmlFor='discount'>Enter the amount of discount(in %)</label>
-                        <input name='discount' id='discount' type="text" style={{ padding: '3px' }} value={offer.discount} required onChange={handleOffer} />                                                    </div>
-                    <div className="mt-3 mb-3" style={{ display: 'flex', justifyContent: 'space-between', flexDirection: 'column' }}>
-                        <label htmlFor='minAmt'>Enter the min. order amount:</label>
-                        <input name='minAmt' id='minAmt' type="text" style={{ padding: '3px' }} value={offer.minAmt} required onChange={handleOffer} />  
-                    </div>
-                    <Button type="submit" variant="contained" color="primary" style={{ padding: '5px 4px', borderRadius: '200px', width: '180px', margin: '5% 0', fontSize: '15px' }}>Submit</Button>
-                    <span>
-                    {!edit?<Button variant="contained" color="secondary" style={{ padding: '5px 4px',float:'right', borderRadius: '200px', width: '180px', margin: '5% 0', fontSize: '15px' }} onClick={cancel} >Cancel</Button>
-                    :<Button  variant="contained" color="secondary" style={{ padding: '5px 4px',float:'right', borderRadius: '200px', width: '180px', margin: '5% 0', fontSize: '15px' }} onClick={open} >Delete</Button>}</span>
-                   </form>
-                ):null}
-                <Snackbar open={snackbar} autoHideDuration={2000} className="home-snackbar" onClose={() => setSnackbar(false)} anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}>
-            <Alert severity="success" className="home-snackbar" variant="filled" >
-                Uploaded Successfully
+                </Card>
+            </Modal> */}
+            <h1>Genric Offers</h1>
+            <div className="row mt-4" >
+                <div className="col-md-6" style={{ display: 'flex', justifyContent: 'center' }}>
+                    <Button color="secondary" variant="contained" style={{ padding: '10px' }} onClick={show} >Add new Offer</Button>
+                </div>
+                <div className="col-md-6" style={{ display: 'flex', justifyContent: 'center' }}>
+                    <Button color="primary" variant="contained" style={{ padding: '10px 15px' }} onClick={editForm} >Edit Offers</Button>
+                </div>
+                <div style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
+                    {edit ?
+                        <select style={{ width: '30%', padding: '3px' }} onChange={handle}>
+                            <option>Select Offer</option>
+                            {data ? data.map(itm => (
+                                <option key={itm.offerCode + itm.discount}>{itm.offerCode}</option>
+                            )) : null}
+                        </select> : null}
+                </div>
+                <div style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
+                    {(form || (edit && code != 'Select Offer')) ? (
+                        <form style={{ width: '50%' }} onSubmit={(e) => { e.preventDefault(); off(); }} >
+                            <div className="mt-3" style={{ display: 'flex', justifyContent: 'center', flexDirection: 'column' }}>
+                                <label htmlFor='offerCode'>Enter the Offer Code:</label>
+                                <input name='offerCode' id='offerCode' value={offer.offerCode} type="text" style={{ padding: '3px' }} required onChange={handleOffer} disabled={edit} />
+                            </div>
+                            <div className="mt-3" style={{ display: 'flex', justifyContent: 'space-between', flexDirection: 'column' }}>
+                                <label htmlFor='startDate'>Enter the Starting Date & Time:</label>
+                                <input name='startDate' id='startDate' type="datetime-local" value={format(offer.startDate)} style={{ padding: '3px' }} required onChange={handleOffer} />
+                            </div>
+                            <div className="mt-3" style={{ display: 'flex', justifyContent: 'space-between', flexDirection: 'column' }}>
+                                <label htmlFor='endDate'>Enter the Ending Date & Time:</label>
+                                <input name='endDate' id='endDate' type="datetime-local" style={{ padding: '3px' }} value={format(offer.endDate)} required onChange={handleOffer} />                                                  </div>
+                            <div className="mt-3" style={{ display: 'flex', justifyContent: 'space-between', flexDirection: 'column' }}>
+                                <label htmlFor='discount'>Enter the amount of discount(in %)</label>
+                                <input name='discount' id='discount' type="text" style={{ padding: '3px' }} value={offer.discount} required onChange={handleOffer} />                                                    </div>
+                            <div className="mt-3 mb-3" style={{ display: 'flex', justifyContent: 'space-between', flexDirection: 'column' }}>
+                                <label htmlFor='minAmt'>Enter the min. order amount:</label>
+                                <input name='minAmt' id='minAmt' type="text" style={{ padding: '3px' }} value={offer.minAmt} required onChange={handleOffer} />
+                            </div>
+                            <Button type="submit" variant="contained" color="primary" style={{ padding: '5px 4px', borderRadius: '200px', width: '180px', margin: '5% 0', fontSize: '15px' }}>Submit</Button>
+                            <span>
+                                {!edit ? <Button variant="contained" color="secondary" style={{ padding: '5px 4px', float: 'right', borderRadius: '200px', width: '180px', margin: '5% 0', fontSize: '15px' }} onClick={cancel} >Cancel</Button>
+                                    : <Button variant="contained" color="secondary" style={{ padding: '5px 4px', float: 'right', borderRadius: '200px', width: '180px', margin: '5% 0', fontSize: '15px' }} onClick={() => del({ variables: code })} >Delete</Button>}</span>
+                        </form>
+                    ) : null}
+                    <Snackbar open={snackbar} autoHideDuration={2000} className="home-snackbar" onClose={() => setSnackbar(false)} anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}>
+                        <Alert severity="success" className="home-snackbar" variant="filled" >
+                            Uploaded Successfully
       </Alert>
-        </Snackbar>
+                    </Snackbar>
+                </div>
             </div>
-             </div>
 
 
-             {/* <div>
+            {/* <div>
                        <select  name='option' onChange={handle}>
                         <option value="new" >New Offer</option>
                           {data?data.map(itm=>(
@@ -244,8 +257,8 @@ const editForm=()=>{
                     Uploaded Successfully
           </Alert>
             </Snackbar> */}
-          </Paper>
-           
+        </Paper>
+
 
 
 
