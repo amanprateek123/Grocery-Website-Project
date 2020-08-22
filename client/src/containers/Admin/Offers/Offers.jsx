@@ -17,7 +17,7 @@ export default function Offers() {
 
     const [data, setData] = useState(null)
 
-    useEffect(() => {
+    const fetchOffers = () => {
         fetch('/admin/offers', {
             headers: {
                 'Content-Type': 'application/json'
@@ -27,6 +27,10 @@ export default function Offers() {
             console.log('res', res)
             setData(res)
         })
+    }
+
+    useEffect(() => {
+        fetchOffers();
     }, [])
 
     const delOffer = (variable) => {
@@ -50,7 +54,8 @@ export default function Offers() {
                     }
                     ).then(res => res.json()).then(res => {
                         console.log(res);
-                        Swal.fire('Deleted', 'Offer Removed Successfully!', 'success')
+                        Swal.fire('Deleted', 'Offer Removed Successfully!', 'success');
+                        fetchOffers();
                     })
                 }
             })
@@ -73,6 +78,7 @@ export default function Offers() {
             }).then(res => res.json()).then(res => {
                 console.log(res)
                 setSnackbar(true)
+                fetchOffers();
             })
         )
     }
