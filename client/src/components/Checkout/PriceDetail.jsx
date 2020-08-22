@@ -116,7 +116,7 @@ function PriceDetail(props) {
                             <div style={{ width: '100%' }}>
                                 Price({props.cart.length} item)
                             <span>
-                                    <div className="hel_price">
+                                    <div className="hel_price" style={{fontSize:'16px'}}>
                                         ₹ {price}
                                     </div>
                                 </span>
@@ -126,7 +126,7 @@ function PriceDetail(props) {
                             <div style={{ width: '100%' }}>
                                 Delivery Charges
                             <span>
-                                    <div className="hel_price">
+                                    <div className="hel_price" style={{fontSize:'16px'}}>
                                         ₹ {shippingCharges}
                                     </div>
                                 </span>
@@ -153,7 +153,7 @@ function PriceDetail(props) {
                         
                         <div className="price_total">
                             <div className="price_det">
-                                <div style={{ width: '100%' }}>
+                                <div style={{ width: '100%',fontSize:'16px' }}>
                                     Total Payable
                             <span>
                                         {valid === 1 ?
@@ -168,11 +168,11 @@ function PriceDetail(props) {
                             </div>
                         </div>
                     </div>
-                    {/* <div className="price_det">
+                    <div className="price_det">
                         <div style={{ width: '100%', color: 'darkgreen', fontWeight: 'bold', padding: '5px 20px' }}>
                             Your Total Savings on this order ₹ {((discount/100)*price).toFixed(2)}
                         </div>
-                    </div> */}
+                    </div>
                 </CardContent>
             </Card>
             <div className="price_foot">
