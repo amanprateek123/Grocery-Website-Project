@@ -1,5 +1,5 @@
 import React from 'react'
-import { Paper, Button, Select, MenuItem, FormHelperText } from '@material-ui/core'
+import { Paper,Card, Button, Select, MenuItem, FormHelperText } from '@material-ui/core'
 import { connect } from 'react-redux'
 import { useState } from 'react';
 import { useEffect } from 'react';
@@ -9,6 +9,8 @@ import { useQuery, useMutation } from 'react-query';
 import Snackbar from '@material-ui/core/Snackbar';
 import './Offers.scss'
 import { Alert } from '@material-ui/lab'
+import Modal from '../../../components/Modal/Modal'
+import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline';
 
 export default function Offers() {
 
@@ -67,8 +69,16 @@ export default function Offers() {
     }
 
     const [code,setCode]=useState('Select Offer')
-
-
+    
+    //Modal
+    const [dels,setDels]=useState(false)
+    const open = ()=>{
+        setDels(true)
+    }
+    const close = ()=>{
+        setDels(false)
+    }
+   
     const handle = (e)=>{
         setCode(e.target.value)
     }
@@ -112,6 +122,18 @@ const editForm=()=>{
 
     return (
           <Paper className="offers">
+              <Modal visible={dels}>
+                   <Card style={{width:'30%',padding:'10px'}}>
+                       <div style={{display:'flex',justifyContent:'center',alignItems:'center'}}>
+                           <ErrorOutlineIcon fontSize='inherit' style={{color:'var(--mainColor)',fontSize:'65px'}} />
+                       </div>
+                       <h1>Are you sure?</h1>
+                       <div className="option">
+                       <p>This offer will be permanently deleted!</p>
+                       <Button onClick={()=>del({variables:code})} id="del" color='primary' variant="contained" style={{padding: '5px 4px', width: '100px', margin: '5% 0', fontSize: '15px'}} >Yes</Button><span style={{}}><Button onClick={close} id="del1" color="secondary" variant="contained" style={{float:'right',padding: '5px 4px', width: '100px', margin: '5% 0', fontSize: '15px'}} >No</Button></span>
+                       </div>
+                   </Card>
+              </Modal>
              <h1>Genric Offers</h1>
              <div className="row mt-4" >
                 <div className="col-md-6" style={{display:'flex',justifyContent:'center'}}>
@@ -152,8 +174,8 @@ const editForm=()=>{
                     </div>
                     <Button type="submit" variant="contained" color="primary" style={{ padding: '5px 4px', borderRadius: '200px', width: '180px', margin: '5% 0', fontSize: '15px' }}>Submit</Button>
                     <span>
-                    {!edit?<Button variant="contained" color="primary" style={{ padding: '5px 4px',float:'right', borderRadius: '200px', width: '180px', margin: '5% 0', fontSize: '15px' }} onClick={cancel} >Cancel</Button>
-                    :<Button  variant="contained" color="secondary" style={{ padding: '5px 4px',float:'right', borderRadius: '200px', width: '180px', margin: '5% 0', fontSize: '15px' }} onClick={()=>del({variables:code})} >Delete</Button>}</span>
+                    {!edit?<Button variant="contained" color="secondary" style={{ padding: '5px 4px',float:'right', borderRadius: '200px', width: '180px', margin: '5% 0', fontSize: '15px' }} onClick={cancel} >Cancel</Button>
+                    :<Button  variant="contained" color="secondary" style={{ padding: '5px 4px',float:'right', borderRadius: '200px', width: '180px', margin: '5% 0', fontSize: '15px' }} onClick={open} >Delete</Button>}</span>
                    </form>
                 ):null}
                 <Snackbar open={snackbar} autoHideDuration={2000} className="home-snackbar" onClose={() => setSnackbar(false)} anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}>
