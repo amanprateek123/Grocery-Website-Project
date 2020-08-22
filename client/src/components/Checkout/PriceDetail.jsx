@@ -4,6 +4,7 @@ import './Price.scss'
 import { connect } from 'react-redux';
 import { useState } from 'react';
 import { useEffect } from 'react';
+import DoneIcon from '@material-ui/icons/Done';
 import CloseIcon from '@material-ui/icons/Close';
 
 const deliveryCharges = (distance, price, weight = 0, extraCharges = 0) => {
@@ -137,7 +138,7 @@ function PriceDetail(props) {
                         <h6 onClick={()=>setCoupon(true)} >Apply coupon code?</h6>
                          {coupon?
                         <div className="code">
-                          <input type="text" onChange={(e)=>setCode(e.target.value)} /><span><Button color="secondary" variant="contained" onClick={()=>apply(code)} >Apply</Button></span>
+                          <input type="text" onChange={(e)=>setCode(e.target.value)} /><span><DoneIcon onClick={()=>apply(code)} style={{margin:'0 10px'}} /><CloseIcon onClick={()=>setCoupon(false)}/></span>
                         </div>:null}                        
                      </div>:null}
                      {valid===0?<div>
