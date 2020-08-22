@@ -690,7 +690,7 @@ exports.getOrders = (req, res) => {
    }).then(orders => {
       orders = orders.map(o => {
          o = o.toJSON();
-         o.deliveryCharges = o.price - o.orderItems.reduce((total, oi) => oi.sku.price, 0);
+         o.deliveryCharges = o.price - o.orderItems.reduce((total, oi) => total + oi.sku.price, 0);
          return o;
       })
       console.log(orders);
@@ -931,6 +931,7 @@ exports.getInvoice = async (req, res) => {
          res.setHeader('Content-Disposition', 'inline; filename="' + filename + '"')
 
          order = order.toJSON();
+         order.deliveryCharges = order.price - order.orderItems.reduce((total, oi) => total + oi.sku.price, 0);
 
          let filtered = [];
          for (let oi of order.orderItems) {

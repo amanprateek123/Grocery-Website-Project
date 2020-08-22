@@ -8,12 +8,12 @@ function createInvoice(doc, order) {
 
 function generateHeader(doc) {
     doc
-        // .image("../public/logos/LalaDukaan.png", 50, 45, { width: 50 })
+        .image("public/logos/shop_invoice_logo.png", 50, 55, { width: 50 })
         .fillColor("#444444")
         .fontSize(20)
-        .text("Laladukaan Inc.", 110, 57)
+        .text("LalaDukaan Pvt.", 110, 57)
         .fontSize(10)
-        .text("ACME Inc.", 200, 50, { align: "right" })
+        .text("LalaDukaan Pvt.", 200, 50, { align: "right" })
         .text("123 Main Street", 200, 65, { align: "right" })
         .text("New York, NY, 10025", 200, 80, { align: "right" })
         .moveDown();
@@ -45,6 +45,8 @@ function generateCustomerInformation(doc, order) {
             150,
             customerInformationTop + 45
         )
+        .text("Transaction ID:", 50, customerInformationTop + 60)
+        .text(order.transactionId, 150, customerInformationTop + 60)
 
         .font("Helvetica-Bold")
         .text(`${order.user.firstName} ${order.user.lastName}`, 300, customerInformationTop)
@@ -52,7 +54,7 @@ function generateCustomerInformation(doc, order) {
         .text(getAddress(order.shippingAddress), 300, customerInformationTop + 15)
         .moveDown();
 
-    generateHr(doc, 265);
+    generateHr(doc, customerInformationTop + 80);
 }
 
 
@@ -96,10 +98,24 @@ function generateInvoiceTable(doc, order) {
         subtotalPosition,
         "",
         "",
+        "Delivery Charges",
+        "",
+        formatCurrency(order.deliveryCharges)
+    );
+    subtotalPosition += 20;
+    generateHr(doc, subtotalPosition - 5);
+    doc.font('Helvetica-Bold');
+    generateTableRow(
+        doc,
+        subtotalPosition + 5,
+        "",
+        "",
         "Subtotal",
         "",
         formatCurrency(order.price)
     );
+    subtotalPosition += 20;
+    generateHr(doc, subtotalPosition);
 
     // const paidToDatePosition = subtotalPosition + 20;
     // generateTableRow(
@@ -129,6 +145,7 @@ function generateInvoiceTable(doc, order) {
 function generateFooter(doc) {
     let footerTop = subtotalPosition + 15;
     doc
+        .moveDown()
         .font("Helvetica-Bold")
         .text("Sold By : ", 50, footerTop + 15)
         .font("Helvetica")
@@ -138,11 +155,11 @@ function generateFooter(doc) {
         .font("Helvetica")
         .text("No. 42/1 & 43, Some Location at Bengluru, India.", 150, footerTop + 30)
 
-    generateHr(doc, footerTop + 45)
+    generateHr(doc, footerTop + 55)
 
-    doc.fontSize(8).text('keep this Invoice and manufacturer box for warrantee purposes.', 50, footerTop + 60);
-    doc.fontSize(10).text('If you have queries please contact billing@laladukaan.com');
-    doc.fontSize(8).moveDown().text('LalaDukaan - All rights reserved');
+    doc.fontSize(8).text('*keep this Invoice and manufacturer box for warrantee purposes.', 50, footerTop + 70, { align: 'center' });
+    doc.fontSize(10).moveDown().text('If you have queries please contact billing@laladukaan.com', { align: 'center' });
+    doc.fontSize(8).text('LalaDukaan - All rights reserved', { align: 'center' });
 }
 
 
@@ -178,8 +195,8 @@ function generateHr(doc, y) {
         .stroke();
 }
 
-function formatCurrency(cents) {
-    return "$" + (cents / 100).toFixed(2);
+function formatCurrency(dd) {
+    return "$" + (dd).toFixed(2);
 }
 
 function formatDate(date) {

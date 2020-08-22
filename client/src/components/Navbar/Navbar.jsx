@@ -209,7 +209,7 @@ const Navbar = (props) => {
                         <div className="app-search-bar">
                             <form onSubmit={search}>
                                 <div className="app_search">
-                                    <input type="text" ref={searchText} className="input-search" title={`Search Products`} name="search" autoComplete="off" placeholder={`Hi ${props.userName ? props.userName : ''}, what are you looking for today?`} />
+                                    <input type="text" ref={searchText} className="input-search" title={`Search Products`} name="search" autoComplete="off" placeholder={`Hi ${props.userName ? props.userName.split(' ')[0] : ''}, what are you looking for today?`} />
                                     <button className="search_btn">
                                         <i className="fa fa-search " aria-hidden="true" />
                                     </button>
@@ -233,7 +233,7 @@ const Navbar = (props) => {
 
                         <div className="d-md-none d-flex navigation">
                             {props.userName ?
-                                <Link to="/checkout" style={{ color: 'inherit',margin:'5px 15px' }}>
+                                <Link to="/checkout" style={{ color: 'inherit', margin: '5px 15px' }}>
                                     <ShoppingCartIcon style={{}} />
                                     <div className="badge1">{props.cart.length}</div>
                                 </Link>
