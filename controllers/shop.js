@@ -2,6 +2,7 @@
 const PDFDocument = require('pdfkit')
 
 const db = require('../utils/database')
+const { createInvoice } = require('../utils/createInvoice')
 const Op = require('sequelize').Op;
 
 const PAGINATION = 7;
@@ -920,7 +921,8 @@ exports.getInvoice = async (req, res) => {
       include: {
          all: true,
          nested: true
-      }
+      },
+
    });
 
    if (order) {
@@ -928,19 +930,26 @@ exports.getInvoice = async (req, res) => {
          res.setHeader('COntent-Type', 'application/pdf');
          res.setHeader('Content-Disposition', 'inline; filename="' + filename + '"')
 
-         let doc = new PDFDocument();
+         order = order.toJSON();
+
+         let filtered = [];
+         for (let oi of order.orderItems) {
+            let existing = filtered.find(foi => foi.skuId == oi.skuId);
+            if (existing) {
+               existing.quantity++;
+            }
+            else {
+               filtered.push({ ...oi, quantity: 1 })
+            }
+         }
+
+         order.orderItems = filtered;
+
+         let doc = new PDFDocument({ size: 'A4', margin: 50 });
 
          doc.pipe(res);
 
-
-         doc.text(`Invoice for Oeder ${order.id} \n`);
-
-         let total = 0;
-         order.orderItems.forEach(oi => {
-            doc.text(`${oi.sku.product.name} --- ${oi.sku.price} \n`);
-            total += oi.sku.price;
-         })
-         doc.text(`Total = ${total}`)
+         createInvoice(doc, order);
 
 
          doc.end();
