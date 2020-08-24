@@ -2,7 +2,8 @@
 const PDFDocument = require('pdfkit')
 
 const db = require('../utils/database')
-const { createInvoice } = require('../utils/createInvoice')
+const { createInvoice } = require('../utils/createInvoice');
+const sku = require('../models/sku');
 const Op = require('sequelize').Op;
 
 const PAGINATION = 7;
@@ -414,10 +415,31 @@ exports.predictiveSearch = (req, res) => {
             }
          ]
       },
+      include:[
+         {
+         model: db.sku,
+         required: true,
+         include: [
+            {
+               model: db.image,
+               order: [['src', 'ASC']],
+               attributes: ['id', 'src'],
+            },
+            {
+               model: db.attribute,
+               attributes: ['id', 'name', 'value']
+            },
+         ]
+      }
+   ],
       limit: 10,
-      attributes: [[db.Sequelize.literal('DISTINCT name'), 'name']]
    }).then(products => {
-      let strings = products.map(p => p.name);
+      console.log(products[0].skus[0])
+      let strings = products.map(p => {
+         return(
+            {name:p.name,brand:p.brand,img:p.skus[0].images[0].src,price:p.skus[0].price}
+         )
+      });
       res.json(strings)
    })
 }

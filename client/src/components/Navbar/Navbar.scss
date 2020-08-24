@@ -102,8 +102,7 @@
         .pre-search{
             position: absolute;
             background: #fff;
-            width: inherit;
-            max-width: 25em;
+            width: 37.5%;
             border-radius: 0.2em;
             // margin-top: 0.1em;
             z-index: 10;
@@ -111,13 +110,16 @@
             font-size: inherit;
             box-shadow: 0 10px 12px 1px #0003;
             ul{
-                padding: 0;
-                margin: 0;
+                padding: 1px;
+                margin: 2px 0;
                 font-size: inherit;
                 // font-weight: bold;
                 li{
                     cursor: pointer;
-                    padding: 0.5em 1em;
+                    min-height: 65px;
+                    max-height: 70px;
+                    padding: 5px;
+                    border:1px solid #dedede ;
                     &:hover{
                         background: #eee;
                     }
@@ -180,8 +182,8 @@
 }
 .cart_value{
     position: absolute;
-    left:91.5%;
-    top: 11.5%;
+    left:91.85%;
+    top: 14.8%;
     text-align: center;
     border-radius: 7px;
     width: 18px;
@@ -199,8 +201,8 @@
     height: 64px;
     width: 70px;
     padding-top: 5%;
-    padding-left: 4%;
-    
+    padding-left: 4%;  
+    margin-left: 50px!important; 
 }
 .cart{
     float: right;
@@ -208,6 +210,7 @@
     height: 64px;
     padding-top: 5%;
     padding-left: 4%;
+    margin-left: 50px!important;
 }
 .cart1{
     display: none;
@@ -278,4 +281,19 @@
     color: #f0f0f0;
     line-height: 16px;
     font-size: 12px;
+}
+.br{
+    font-size: 11px;
+    font-weight: bold;
+    color:black;
+}
+.search-img{
+    background-size: contain !important;
+    background-repeat: no-repeat;
+    background-position: center;
+    margin-left: 10px;
+    height: 60px;
+}
+.head-sch{
+    padding: 2px 10px;
 }

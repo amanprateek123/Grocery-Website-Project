@@ -178,7 +178,22 @@ const Navbar = (props) => {
             searchText.current.removeEventListener('keyup', handler)
         }
     }, [])
+  console.log('pre',preSearch)
+  const[show,setShow]=useState(false)
+  const[val,setVal]=useState(null)
+  const searchs= (e)=>{
+       setVal(e.target.value)
+       setShow(true)
+  }
 
+  const convert = (string)=>{
+         if(!string.toLowerCase().includes(val.toLowerCase())){
+             return string
+         }
+         const word = string.toLowerCase().replace(val.toLowerCase(),'*')
+         const words = word.split('*')
+         return <span>{words[0]}<b>{val}</b>{words[1]}</span>
+  }
 
     return (
         <React.Fragment>
@@ -209,7 +224,7 @@ const Navbar = (props) => {
                         <div className="app-search-bar">
                             <form onSubmit={search}>
                                 <div className="app_search">
-                                    <input type="text" ref={searchText} className="input-search" title={`Search Products`} name="search" autoComplete="off" placeholder={`Hi ${props.userName ? props.userName.split(' ')[0] : ''}, what are you looking for today?`} />
+                                    <input type="text" ref={searchText} onChange={searchs} className="input-search" title={`Search Products`} name="search" autoComplete="off" placeholder={`Hi ${props.userName ? props.userName.split(' ')[0] : ''}, what are you looking for today?`} />
                                     <button className="search_btn">
                                         <i className="fa fa-search " aria-hidden="true" />
                                     </button>
@@ -217,13 +232,27 @@ const Navbar = (props) => {
                                 {
                                     preSearch.length ?
                                         <div className="pre-search list-group">
-                                            <ul>
+                                          {show?  <ul onMouseLeave={()=>setShow(false)}>
+                                                 <div className="head-sch">Showing results for {val}:</div>
                                                 {
                                                     preSearch.map(str => (
-                                                        <li className="pre-search-li" onClick={(e) => search(e, str)}>{str}</li>
+                                                        <li className="pre-search-li" onClick={(e) => search(e, str.name)}>
+                                                            <div className="row">
+                                                                 <div className="col-md-2 search-img" style={{backgroundImage:`url(${str.img})`}}>
+                                                                     
+                                                                 </div>
+                                                                 <div className="col-md-7">
+                                                                     <span className="br"><u>{str.brand}</u></span><br/>
+                                                                     <p style={{fontSize:'12px',textTransform:'capitalize'}}>{convert(str.name)}</p>
+                                                                 </div>
+                                                                 <div className="col-md-2" style={{marginTop:'20px'}}>
+                                                                      Rs.<span>{str.price}</span>
+                                                                 </div>
+                                                            </div>
+                                                        </li>
                                                     ))
                                                 }
-                                            </ul>
+                                            </ul>:null}
                                         </div>
                                         : null
                                 }

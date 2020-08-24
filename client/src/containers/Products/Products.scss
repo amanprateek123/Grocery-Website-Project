@@ -144,9 +144,12 @@
 
     .sort-ctrl{
         position: absolute;
-        right: 5em;
+        right: 1em;
         top: 0.2em;
         z-index: 0;
+        background-color: #fff9;
+        height: 1.4em;
+        padding: 0;
         select, option{
             outline: none;
             color: #999;

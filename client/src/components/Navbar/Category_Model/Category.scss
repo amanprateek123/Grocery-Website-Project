@@ -33,8 +33,7 @@
         visibility: visible;
         pointer-events: auto;
         border-right: 1px solid black;
-        top: 2.5em;
-        margin-left: -100px;
+        top: 2.7em;
         position: absolute;
         min-width: 240px;
         color: #212121;
@@ -79,6 +78,7 @@
         min-width: 240px;
         .nav_drop{
             padding: 12px;
+            border:1px solid #dedede ;
             display: flex;
             background: #fff;
             color: #222;
@@ -109,6 +109,7 @@
         min-width: 240px;
         width: 100%;
         background: #fff;
+        border:1px solid #dedede ;
         color: #222;
         text-decoration: none;
         justify-content: space-between; 
