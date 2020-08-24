@@ -71,7 +71,7 @@ function generateInvoiceTable(doc, order) {
         "Description",
         "Unit Cost",
         "Quantity",
-        "Line Total"
+        "Total"
     );
     generateHr(doc, invoiceTableTop + 20);
     doc.font("Helvetica");

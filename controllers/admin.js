@@ -9,6 +9,8 @@ const { validateProduct } = require('../utils/validators')
 
 
 const { validationResult } = require('express-validator')
+const { Op } = require('sequelize')
+const order = require('../models/order')
 
 // *** DB Functions
 async function createProduct(prod, files) {
@@ -666,12 +668,12 @@ exports.getHome = async (req, res) => {
 }
 
 //offers
-exports.offers = async (req,res)=>{
+exports.offers = async (req, res) => {
     console.log(req.body)
     let data = req.body
-    const offer = await db.offers.findAll({where:{offerCode:data.offerCode}})
-    if(offer){
-         await db.offers.destroy({where:{offerCode:data.offerCode}})
+    const offer = await db.offers.findAll({ where: { offerCode: data.offerCode } })
+    if (offer) {
+        await db.offers.destroy({ where: { offerCode: data.offerCode } })
     }
     db.offers.create({
         offerCode: data.offerCode,
@@ -690,32 +692,193 @@ exports.offers = async (req,res)=>{
 }
 
 //getOffers
-exports.getOffers = async (req,res)=>{
-    db.offers.findAll({}).then(data => res.json(data)).catch(e=>{
+exports.getOffers = async (req, res) => {
+    db.offers.findAll({}).then(data => res.json(data)).catch(e => {
         res.json(e)
-        console.log('error',e)
+        console.log('error', e)
     })
 }
 
-exports.delOffers = async (req,res)=>{
+exports.delOffers = async (req, res) => {
     const data = req.body
     console.log(data)
-    const offer = await db.offers.findAll({where:{offerCode:data.offerCode}})
-    try{
+    const offer = await db.offers.findAll({ where: { offerCode: data.offerCode } })
+    try {
         await db.offers.destroy({
-            where:{
-                offerCode:data.offerCode
+            where: {
+                offerCode: data.offerCode
             }
         })
-        res.json({message:'Offer Deleted'})
+        res.json({ message: 'Offer Deleted' })
     }
-    catch(e){
+    catch (e) {
         console.log(e)
         res.json(e)
     }
 }
 
 
+//  * ORDERS
+
+exports.getOrders = async (req, res) => {
+    let where = {}
+    let limit = 10;
+    parseInt(req.query.limit) ? (limit = Math.max(0, parseInt(req.query.limit))) : null;
+    let offset = (parseInt(req.query.page) - 1) * limit || 0;
+    req.query.id ? (where.id = req.query.id) : null
+    req.query.date ? (where.createdAt = { [Op.gt]: new Date(req.query.date) }) : null
+    req.query.statusId ? (where.statusId = req.query.statusId) : null;
+    req.query.status ? (where['$status.status$'] = req.query.status) : null;
+    req.query.skuId ? (where['$orderItems.sku.id$'] = req.query.skuId) : null;
 
 
 
+    db.order.findAll({
+        subQuery: false,
+        group: ['id'],
+        nest: true,
+        where: {
+            ...where
+        },
+        order: [['createdAt', 'DESC']],
+        offset: offset,
+        limit: limit,
+        attributes: ['id'],
+        include: [
+            {
+                model: db.orderItem,
+                attributes: [],
+                include: {
+                    model: db.sku,
+                    attributes: [],
+                    include: [
+                        {
+                            model: db.product,
+                            attributes: [],
+                        },
+                        {
+                            model: db.image,
+                            attributes: [],
+                        }
+                    ]
+                },
+
+
+            },
+            {
+                model: db.status,
+                attributes: [],
+            },
+            {
+                model: db.user,
+                attributes: [],
+            }
+        ],
+    }).then(orders => {
+        let orderIds = orders.map(o => o.id)
+        return db.order.findAll({
+            where: {
+                id: { [Op.in]: orderIds }
+            },
+            order: [['createdAt', 'DESC']],
+            include: [
+                {
+                    model: db.orderItem,
+                    include: {
+                        model: db.sku,
+                        attributes: { exclude: ['json', 'createdAt', 'updatedAt'] },
+                        include: [
+                            {
+                                model: db.product,
+                                attributes: { exclude: ['description', 'keywords', 'createdAt', 'updatedAt'] }
+                            },
+                            {
+                                model: db.image,
+                                attributes: ['src']
+                            }
+                        ]
+                    },
+
+
+                },
+                {
+                    model: db.status,
+                    attributes: ['status', 'index']
+                },
+                {
+                    model: db.user,
+                    attributes: { exclude: ['password', 'createdAt', 'updatedAt'] }
+                }
+            ],
+        })
+    })
+        .then(orders => {
+            orders = orders.map(o => {
+                o = o.toJSON();
+                o.deliveryCharges = o.price - o.orderItems.reduce((total, oi) => total + oi.sku.price, 0);
+                return o;
+            })
+            console.log(orders);
+
+            res.json(orders);
+        }).catch(err => {
+            res.json(err)
+            console.error(err);
+        })
+}
+
+exports.getOrderedItems = async (req, res) => {
+
+    let where = {};
+
+    db.sku.findAll({
+        where: {
+            ['$orderItems.id$']: {
+                [Op.not]: null // ONLY THOSE SKUS WHICH ARE ORDERED
+            },
+            ['$orderItems.order.statusId$']: {
+                [Op.not]: 4 // NOT DELIVERED
+            },
+            ...where
+        },
+        attributes: { exclude: ['createdAt', 'updatedAt', 'json'] },
+        include: [
+            {
+                model: db.orderItem,
+                attributes: ['id'],
+                include: {
+                    model: db.order
+                }
+            },
+            {
+                model: db.product,
+                attributes: { exclude: ['createdAt', 'updatedAt', 'keywords', 'description'] },
+
+            }
+        ]
+    }).then(orderedItems => {
+        res.json(orderedItems)
+    })
+        .catch(err => {
+            console.log(err);
+            res.json(err);
+        })
+}
+
+
+exports.setStatus = async (req, res) => {
+    let orderId = req.query.orderId;
+    let statusId = req.query.statusId;
+
+    try {
+        let order = await db.order.findByPk(orderId);
+        order.statusId = statusId;
+        await order.save();
+        res.json({ status: 200, message: 'Order Updated' })
+    }
+    catch (err) {
+        console.log(err);
+        res.json(err);
+    }
+
+}
