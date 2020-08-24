@@ -39,7 +39,7 @@ export default class Department extends Component {
     return (
       this.state.departments ?
         <React.Fragment>
-          <div className="category-bar">
+          <div className={`category-bar ${document.location.pathname == '/admin/dashboard' ? 'd-none' : ''}`}>
             <ul className="departments">
               {this.state.departments.map(department => {
                 return (

@@ -731,9 +731,9 @@ exports.getOrders = async (req, res) => {
     req.query.status ? (where['$status.status$'] = req.query.status) : null;
     req.query.skuId ? (where['$orderItems.sku.id$'] = req.query.skuId) : null;
 
+    let meta = { count: {} };
 
-
-    db.order.findAll({
+    let emptyOptions = {
         subQuery: false,
         group: ['id'],
         nest: true,
@@ -774,44 +774,65 @@ exports.getOrders = async (req, res) => {
                 attributes: [],
             }
         ],
-    }).then(orders => {
-        let orderIds = orders.map(o => o.id)
-        return db.order.findAll({
-            where: {
-                id: { [Op.in]: orderIds }
-            },
-            order: [['createdAt', 'DESC']],
-            include: [
-                {
-                    model: db.orderItem,
-                    include: {
-                        model: db.sku,
-                        attributes: { exclude: ['json', 'createdAt', 'updatedAt'] },
-                        include: [
-                            {
-                                model: db.product,
-                                attributes: { exclude: ['description', 'keywords', 'createdAt', 'updatedAt'] }
-                            },
-                            {
-                                model: db.image,
-                                attributes: ['src']
-                            }
-                        ]
-                    },
+    }
 
 
-                },
-                {
-                    model: db.status,
-                    attributes: ['status', 'index']
-                },
-                {
-                    model: db.user,
-                    attributes: { exclude: ['password', 'createdAt', 'updatedAt'] }
-                }
-            ],
+    db.order.count({ ...emptyOptions, where: { ...where, statusId: 1 } })
+        .then(c => {
+            meta.count.ordered = c.length;
+            return db.order.count({ ...emptyOptions, where: { ...where, statusId: 2 } })
         })
-    })
+        .then(c => {
+            meta.count.packed = c.length;
+            return db.order.count({ ...emptyOptions, where: { ...where, statusId: 3 } })
+        })
+        .then(c => {
+            meta.count.shipped = c.length;
+            return db.order.count({ ...emptyOptions, where: { ...where, statusId: 4 } })
+        })
+        .then(c => {
+            meta.count.delivered = c.length;
+            return db.order.count(emptyOptions)
+        })
+
+        .then(orders => {
+            let orderIds = orders.map(o => o.id)
+            return db.order.findAll({
+                where: {
+                    id: { [Op.in]: orderIds }
+                },
+                order: [['createdAt', 'DESC']],
+                include: [
+                    {
+                        model: db.orderItem,
+                        include: {
+                            model: db.sku,
+                            attributes: { exclude: ['json', 'createdAt', 'updatedAt'] },
+                            include: [
+                                {
+                                    model: db.product,
+                                    attributes: { exclude: ['description', 'keywords', 'createdAt', 'updatedAt'] }
+                                },
+                                {
+                                    model: db.image,
+                                    attributes: ['src']
+                                }
+                            ]
+                        },
+
+
+                    },
+                    {
+                        model: db.status,
+                        attributes: ['status', 'index']
+                    },
+                    {
+                        model: db.user,
+                        attributes: { exclude: ['password', 'createdAt', 'updatedAt'] }
+                    }
+                ],
+            })
+        })
         .then(orders => {
             orders = orders.map(o => {
                 o = o.toJSON();
@@ -820,7 +841,7 @@ exports.getOrders = async (req, res) => {
             })
             console.log(orders);
 
-            res.json(orders);
+            res.json({ meta, orders });
         }).catch(err => {
             res.json(err)
             console.error(err);
@@ -869,16 +890,39 @@ exports.getOrderedItems = async (req, res) => {
 exports.setStatus = async (req, res) => {
     let orderId = req.query.orderId;
     let statusId = req.query.statusId;
+    let remarks = req.query.remarks || null;
 
     try {
         let order = await db.order.findByPk(orderId);
         order.statusId = statusId;
+        if (remarks) order.remarks = remarks;
         await order.save();
-        res.json({ status: 200, message: 'Order Updated' })
+
+        // State Specific Notifications / Emails 
+        switch (statusId) {
+            case 1: // ORDERED
+                console.log('[_] Ordered');
+                break;
+
+            case 2: // PACKED
+                console.log('[_] PACKED');
+                break;
+
+            case 3: // SHIPPED
+                console.log('[_] SHIPPED');
+                break;
+
+            case 4: // DELIVERED
+                console.log('[_] DELIVERED');
+                break;
+
+        }
+
+        res.json({ status: 200, message: `Order ${['Ordered', 'Packed', 'Shipped', 'Delivered'][orderId]}` })
     }
     catch (err) {
         console.log(err);
-        res.json(err);
+        res.json({ status: 500, error: err });
     }
 
 }

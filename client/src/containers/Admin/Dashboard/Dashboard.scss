@@ -1,0 +1,16 @@
+.admin-dashboard{
+    flex-grow: 1;
+    background: #fff;
+    display: flex;
+    padding: 3em 1em;
+    
+    .tabs{
+        border-right: 1px solid #eee;
+        *{
+            outline: none;
+        }
+    }
+    [role="tabpanel"]{
+        width: 100%;
+    }
+}
