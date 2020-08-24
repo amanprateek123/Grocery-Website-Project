@@ -170,7 +170,7 @@ function PriceDetail(props) {
                         </div>
                     </div>
                     <div className="price_det">
-                        <div style={{ width: '100%', color: 'darkgreen', fontWeight: 'bold', padding: '5px 20px' }}>
+                        <div style={{ width: '100%', color: 'darkgreen',fontSize:'12px' ,fontWeight: 'bold', padding: '5px 20px' }}>
                             Your Total Savings on this order ₹ {((discount/100)*price).toFixed(2)}
                         </div>
                     </div>

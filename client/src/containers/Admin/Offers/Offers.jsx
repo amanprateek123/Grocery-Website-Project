@@ -109,6 +109,7 @@ export default function Offers() {
     const handleOffer = (e) => {
         setOffer({ ...offer, [e.target.name]: e.target.value })
     }
+    console.log(offer)
 
     const show = () => {
         setForm(true)
@@ -138,6 +139,10 @@ export default function Offers() {
             }
         }
     }, [code])
+const cancel1 = ()=>{
+    setEdit(false)
+    setCode('Select Offer')
+}
 
     return (
         <Paper className="offers">
@@ -155,12 +160,12 @@ export default function Offers() {
             </Modal> */}
             <h1>Genric Offers</h1>
             <div className="row mt-4" >
-                <div className="col-md-6" style={{ display: 'flex', justifyContent: 'center' }}>
+                {(!form && !edit)?<div className="col-md-6" style={{ display: 'flex', justifyContent: 'center' }}>
                     <Button color="secondary" variant="contained" style={{ padding: '10px' }} onClick={show} >Add new Offer</Button>
-                </div>
-                <div className="col-md-6" style={{ display: 'flex', justifyContent: 'center' }}>
+                </div>:null}
+                {(!form && !edit)?<div className="col-md-6" style={{ display: 'flex', justifyContent: 'center' }}>
                     <Button color="primary" variant="contained" style={{ padding: '10px 15px' }} onClick={editForm} >Edit Offers</Button>
-                </div>
+                </div>:null}
                 <div style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
                     {edit ?
                         <select style={{ width: '30%', padding: '3px' }} onChange={handle}>
@@ -191,10 +196,12 @@ export default function Offers() {
                                 <label htmlFor='minAmt'>Enter the min. order amount:</label>
                                 <input name='minAmt' id='minAmt' type="text" style={{ padding: '3px' }} value={offer.minAmt} required onChange={handleOffer} />
                             </div>
-                            <Button type="submit" variant="contained" color="primary" style={{ padding: '5px 4px', borderRadius: '200px', width: '180px', margin: '5% 0', fontSize: '15px' }}>Submit</Button>
+                            {!edit?<Button type="submit" variant="contained" color="primary" style={{ padding: '5px 4px', borderRadius: '200px', width: '180px', margin: '5% 0', fontSize: '15px' }}>Submit</Button>:
+                            <Button type="submit" variant="contained" color="primary" style={{ padding: '5px 4px', borderRadius: '200px', width: '120px', margin: '5% 0', fontSize: '15px' }}>Submit</Button>}
                             <span>
                                 {!edit ? <Button variant="contained" color="secondary" style={{ padding: '5px 4px', float: 'right', borderRadius: '200px', width: '180px', margin: '5% 0', fontSize: '15px' }} onClick={cancel} >Cancel</Button>
-                                    : <Button variant="contained" color="secondary" style={{ padding: '5px 4px', float: 'right', borderRadius: '200px', width: '180px', margin: '5% 0', fontSize: '15px' }} onClick={() => del({ variables: code })} >Delete</Button>}</span>
+                                    : <Button variant="contained" color="secondary" style={{ padding: '5px 4px', float: 'right', borderRadius: '200px', width: '120px', margin: '5% 0', fontSize: '15px' }} onClick={() => del({ variables: code })} >Delete</Button>}</span>
+                                    {edit?<Button variant="contained" color="secondary" style={{ padding: '5px 4px', float: 'right', borderRadius: '200px', width: '120px', margin: '5% 10px', fontSize: '15px' }} onClick={cancel1} >Cancel</Button>:null}
                         </form>
                     ) : null}
                     <Snackbar open={snackbar} autoHideDuration={2000} className="home-snackbar" onClose={() => setSnackbar(false)} anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}>

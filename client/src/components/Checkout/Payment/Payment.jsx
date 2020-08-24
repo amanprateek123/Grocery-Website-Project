@@ -109,7 +109,7 @@ const Payment = (props) => {
                     {
                         props.cart.filter(ci => ci.sku.stockQuantity === 0).length ?
                             <div className="error">Please remove the products in your cart which are Out of Stock.</div>
-                            : <button className="cont_order" onClick={placeOrder}>Place Order</button>
+                            : <button className="cont_order" id="but" onClick={placeOrder}>Place Order</button>
                     }
                 </span>
             </div>
