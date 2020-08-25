@@ -186,9 +186,17 @@ const Navbar = (props) => {
        setShow(true)
   }
 
+  const trimming = (string) => {
+    const length = 40
+    var trimmedString = string.length > length ?
+        string.substring(0, length) + "..." :
+        string;
+    return trimmedString
+}
+
   const convert = (string)=>{
          if(!string.toLowerCase().includes(val.toLowerCase())){
-             return string
+             return <span>{string}</span>
          }
          const word = string.toLowerCase().replace(val.toLowerCase(),'*')
          const words = word.split('*')
@@ -243,9 +251,9 @@ const Navbar = (props) => {
                                                                  </div>
                                                                  <div className="col-md-7">
                                                                      <span className="br"><u>{str.brand}</u></span><br/>
-                                                                     <p style={{fontSize:'12px',textTransform:'capitalize'}}>{convert(str.name)}</p>
+                                                                     <p style={{fontSize:'12px',textTransform:'capitalize'}}>{convert(trimming(str.name))}</p>
                                                                  </div>
-                                                                 <div className="col-md-2" style={{marginTop:'20px'}}>
+                                                                 <div className="col-md-2" style={{marginTop:'21px',fontSize:'12px'}}>
                                                                       Rs.<span>{str.price}</span>
                                                                  </div>
                                                             </div>

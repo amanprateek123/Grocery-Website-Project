@@ -434,7 +434,6 @@ exports.predictiveSearch = (req, res) => {
    ],
       limit: 10,
    }).then(products => {
-      console.log(products[0].skus[0])
       let strings = products.map(p => {
          return(
             {name:p.name,brand:p.brand,img:p.skus[0].images[0].src,price:p.skus[0].price}
