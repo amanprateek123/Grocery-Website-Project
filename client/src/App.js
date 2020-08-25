@@ -8,6 +8,7 @@ import E404 from './containers/E404/E404'
 import Modal from './components/Modal/Modal';
 import SignUp from './components/SignUp/SignUp';
 import { Profile, Products, Admin, Details, Checkout, Test, Orders } from './containers'
+import AdminDashboard from './containers/Admin/Dashboard/Dashboard'
 import { connect } from 'react-redux';
 import * as actions from './store/actions';
 import Footer from './components/Footer/Footer';
@@ -51,9 +52,16 @@ const App = (props) => {
             </Route>
             : null
           }
-          <Route path="/admin">
+
+
+          <Route path="/admin" exact>
             <Admin />
           </Route>
+          <Route path="/admin/dashboard" exact>
+            <AdminDashboard />
+          </Route>
+
+
           <Route path="/orders">
             <Orders />
           </Route>
