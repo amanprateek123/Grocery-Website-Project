@@ -85,9 +85,23 @@
             text-decoration: none;
             justify-content: space-between;
         }
+        .nava1{
+            padding: 12px;
+            // border:1px solid #dedede ;
+            display: flex;
+            background: #fff;
+            color: #222;
+            text-decoration: none;
+            justify-content: space-between;
+            background-color: #f1f1f1;
+            color: var(--mainColor);
+            background-color: #f1f1f1;
+            font-weight: 500;
+        }
+
         .nav_drop:hover{
             color: var(--mainColor);
-            background-color: #f9f9f9;
+            background-color: #f1f1f1;
             font-weight: 500;
             
         }
@@ -117,7 +131,7 @@
     .sub_nav:hover{
         color: var(--mainColor);
         text-decoration: none;
-        background-color: #f9f9f9;
+        background-color: #f1f1f1;
         font-weight: 500;
         
     }

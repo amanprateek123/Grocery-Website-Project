@@ -215,10 +215,10 @@ function OrderItems(props) {
                       )
                     })}
                   </Field>
-                  {values.reason === "Others" ? <Field type="text" required name="other" placeholder="Enter reason..." style={{ width: '30%', margin: '0 17%', padding: '10px' }} className="vis" /> : <Field type="text" name="other" placeholder="Enter reason..." style={{ width: '30%', margin: '0 17%', padding: '10px' }} className="hid" />}
+                  {values.reason === "Others" ? <Field type="text" required name="other" placeholder="Enter reason..." style={{ width: '14.3rem', margin: '0 17%', padding: '10px' }} className="vis" /> : <Field type="text" name="other" placeholder="Enter reason..." style={{ width: '30%', margin: '0 17%', padding: '10px' }} className="hid" />}
 
                 </div>
-                <div className="col-md-3">
+                <div className="col-md-3 cancel_o">
                   <Button type="submit" variant="contained" disabled={(values.reason === '') ? true : false} color='secondary' style={{ padding: '10px', width: '200px', marginTop: '12%' }} >Cancel Order</Button>
                 </div>
                 {(meta.isSuccess && order.statusId < 3) ?
@@ -273,7 +273,7 @@ function OrderItems(props) {
             <p style={{ fontSize: '15px' }}>Ordered on {new Date(order.createdAt).getDate()} {month[new Date(order.createdAt).getMonth()]} {new Date(order.createdAt).getFullYear()} </p>
             <p style={{ fontSize: '15px' }}>Order: <span style={{ color: 'var(--mainColor)' }}> #{10000 + order.id} </span></p>
           </div>
-          <div className="col-md-6" style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
+          <div className="col-md-6 slider" style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
             {!order.isCancelled ?
               <Slider
                 defaultValue={single(order)}
@@ -339,7 +339,7 @@ function OrderItems(props) {
                 })}
               </div>
             </div>
-            <div className="col-md-4">
+            <div className="col-md-4" style={{display:'flex',justifyContent:'center'}}>
               {!order.isCancelled ?
                 <div className="mt-3">
                   <Button variant="contained" color="inherit" style={{ backgroundColor: 'var(--mainColor)', color: 'white', padding: '10px 15px', width: '260px', fontSize: '14px' }}>Track Package</Button>

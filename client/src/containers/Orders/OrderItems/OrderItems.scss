@@ -139,3 +139,16 @@
 // .hides::-webkit-scrollbar {
 //     display: none;
 //   }
+.slider{
+    @media(max-width:600px){
+        width: 85%!important;
+        margin: auto;
+    }
+}
+.cancel_o{
+    @media(max-width:600px){
+        display: flex;
+        justify-content: center;
+        margin: 10px 0;
+    }
+}
