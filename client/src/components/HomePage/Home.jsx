@@ -23,7 +23,7 @@ export default function Home() {
     const [productSections, setProductSections] = useState([]); // Product Sections Data 
 
     useEffect(() => {
-        fetch('admin/homepage', {
+        fetch('/homepage', {
             headers: {
                 'Content-Type': 'application/json'
             },

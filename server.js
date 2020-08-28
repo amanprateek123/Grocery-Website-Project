@@ -12,6 +12,11 @@ const authRoutes = require('./routes/auth')
 const profileRoutes = require('./routes/profile')
 const shopRoutes = require('./routes/shop')
 const adminRoutes = require('./routes/admin')
+const shippingRoutes = require('./routes/shipping')
+
+const isAuth = require('./middleware/is-auth')
+const isAdmin = require('./middleware/is-admin')
+const isShipping = require('./middleware/is-shipping')
 
 
 const app = express();
@@ -33,7 +38,8 @@ app.use(morgan('tiny', {
 
 // API Routes 
 app.use(authRoutes, profileRoutes, shopRoutes);
-app.use('/admin', adminRoutes)
+app.use('/admin', isAuth, isAdmin, adminRoutes);
+app.use('/shipping', isAuth, isShipping, shippingRoutes);
 
 
 app.use(express.static(path.join(__dirname, 'public')));

@@ -44,7 +44,7 @@ function Homepage(props) {
     }
 
     useEffect(() => {
-        fetch('/admin/homepage', {
+        fetch('/homepage', {
             headers: {
                 'Content-Type': 'application/json'
             },

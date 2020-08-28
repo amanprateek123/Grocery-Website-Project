@@ -2,14 +2,10 @@
 module.exports = (sequelize, Sequelize = require('sequelize')) => {
     const shippingAddress = sequelize.define('shippingAddress', {
         id: {
-            type: Sequelize.UUID,
-            defaultValue: Sequelize.UUIDV4,
+            type: Sequelize.INTEGER,
             allowNull: false,
+            autoIncrement: true,
             primaryKey: true
-        },
-        userId: {
-            type: Sequelize.UUID,
-            allowNull: false,
         },
         name: {
             type: Sequelize.STRING,

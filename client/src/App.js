@@ -9,6 +9,7 @@ import Modal from './components/Modal/Modal';
 import SignUp from './components/SignUp/SignUp';
 import { Profile, Products, Admin, Details, Checkout, Test, Orders } from './containers'
 import AdminDashboard from './containers/Admin/Dashboard/Dashboard'
+import ShippingDashboard from './containers/Admin/Shipping/Dashboard'
 import { connect } from 'react-redux';
 import * as actions from './store/actions';
 import Footer from './components/Footer/Footer';
@@ -46,28 +47,58 @@ const App = (props) => {
           <Route path='/products' exact component={Products} />
           <Route path='/test' exact component={Test} />
 
-          {props.userId ?
-            <Route path="/profile">
-              <Profile />
-            </Route>
-            : null
+
+
+          <Route exact path="/product/:id" component={Details} />
+
+
+
+          {
+            props.userId ?
+              [
+                <Route exact path="/profile">
+                  <Profile />
+                </Route>,
+                <Route exact path="/order/:id" component={OrderItems} />,
+                <Route exact path="/checkout" component={Checkout} />,
+                <Route exact path="/orders">
+                  <Orders />
+                </Route>
+              ]
+              : null
           }
 
 
-          <Route path="/admin" exact>
-            <Admin />
-          </Route>
-          <Route path="/admin/dashboard" exact>
-            <AdminDashboard />
-          </Route>
+          {
+            props.userId && props.role == 'A' ?
+              [
+                <Route exact path="/admin" exact>
+                  <Admin />
+                </Route>,
+
+                <Route exact path="/admin/dashboard" >
+                  <AdminDashboard />
+                </Route>,
+                <Route exact path="/shipping">
+                  <ShippingDashboard />
+                </Route>
+              ]
+              : null
+          }
+
+          {
+            props.userId && props.role == 'D' ?
+              [
+                <Route exact path="/shipping">
+                  <ShippingDashboard />
+                </Route>
+              ]
+              : null
+          }
 
 
-          <Route path="/orders">
-            <Orders />
-          </Route>
-          <Route path="/product/:id" component={Details} />
-          <Route path="/order/:id" component={OrderItems} />
-          <Route path="/checkout" component={Checkout} />
+
+
           <Route component={E404} />
         </Switch>
       </div>

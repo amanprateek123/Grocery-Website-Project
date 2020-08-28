@@ -19,10 +19,11 @@ export const login = (email, password) => {
                     localStorage.setItem('idToken', res.idToken);
                     localStorage.setItem('userId', res.userId);
                     localStorage.setItem('userName', res.userName);
+                    localStorage.setItem('role', res.role);
                     localStorage.setItem('expireDate', new Date().getTime() + 7200000);
                     if (timer) { clearTimeout(timer) }
                     timer = setTimeout(() => dispatch(logout()), 7200000) // ! wont work as I am refreshing the page.
-                    dispatch({ type: actions.AUTH_SUCCESS, idToken: res.idToken, userId: res.userId, userName: res.userName });
+                    dispatch({ type: actions.AUTH_SUCCESS, idToken: res.idToken, userId: res.userId, userName: res.userName, role: res.role });
                     window.location.reload();
                 }
             })

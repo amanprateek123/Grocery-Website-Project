@@ -5,6 +5,7 @@ let initialState = {
     idToken: localStorage.getItem('idToken') || null,
     userId: localStorage.getItem('userId') || null,
     userName: localStorage.getItem('userName') || null,
+    role: localStorage.getItem('role') || null,
     authError: null,
     authenticating: false,
     response: { status: 0, message: '' },
@@ -91,6 +92,7 @@ function authSuccess(state, action) {
         idToken: action.idToken,
         userId: action.userId,
         userName: action.userName,
+        role: action.role,
         authenticating: false,
         authError: false,
         authModalVisible: false

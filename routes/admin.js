@@ -13,7 +13,6 @@ router.post('/add-parentCategories', multer.single('parentCategories'), adminCtr
 router.post('/add-departments', multer.single('departments'), adminCtrl.addDepartments)
 router.post('/add-products', multer.single('products'), adminCtrl.addProducts)
 router.post('/homepage', adminCtrl.homePage)
-router.get('/homepage', adminCtrl.getHome)
 router.post('/offers', adminCtrl.offers)
 router.get('/offers', adminCtrl.getOffers)
 router.delete('/offers', adminCtrl.delOffers)
@@ -48,7 +47,10 @@ router.delete('/delete-product', adminCtrl.deleteProduct)
 
 router.get('/orders', adminCtrl.getOrders);
 router.get('/ordered-items', adminCtrl.getOrderedItems);
-router.get('/set-status', adminCtrl.setStatus);
+router.post('/set-status', adminCtrl.setStatus);
+
+
+router.get('/get-users', adminCtrl.getUsers);
 
 
 module.exports = router

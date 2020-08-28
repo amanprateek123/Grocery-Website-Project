@@ -8,7 +8,6 @@ import './Dashboard.scss'
 import { useEffect } from 'react';
 
 import Orders from './Orders/Orders'
-import OrderedItems from './OrderedItems/OrderedItems'
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -22,7 +21,7 @@ function TabPanel(props) {
             {...other}
         >
             {value === index && (
-                <Box px={3} >
+                <Box p={0} >
                     {children}
                 </Box>
             )}
@@ -58,15 +57,12 @@ function Dashboard() {
                 className='tabs d-none d-md-block'
             >
                 <Tab label="Orders" {...a11yProps(0)} />
-                <Tab label="Ordered Items" {...a11yProps(1)} />
 
             </Tabs>
             <TabPanel value={value} index={0}>
                 <Orders />
             </TabPanel>
-            <TabPanel value={value} index={1}>
-                <OrderedItems />
-            </TabPanel>
+
 
         </div>
     );

@@ -291,7 +291,7 @@ const SignUp = props => {
 
                     <label htmlFor="email">Password</label>
                     <input type="password" name="password" id="password" onChange={handleChangePassword} value={password} />
-                    {[401].includes(props.response.status) ? <div className="error">{props.response.message}</div> : null}
+                    {[401, 500].includes(props.response.status) ? <div className="error">{props.response.message}</div> : null}
                     <div className="row px-2">
                         <button className="btn btn-link btn-sm" type="button" onClick={() => setResetPassword(true)}>Forgot Password?</button>
                     </div>

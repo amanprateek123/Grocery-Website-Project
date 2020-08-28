@@ -24,6 +24,10 @@ module.exports = (sequelize, Sequelize = require('sequelize')) => {
         password: {
             type: Sequelize.STRING,
         },
+        role: {
+            type: Sequelize.ENUM('U', 'D', 'A'), // normal User | Delivery Guy | Admin
+            defaultValue: 'U',
+        },
         verified: {
             type: Sequelize.BOOLEAN,
             default: false

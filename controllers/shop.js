@@ -13,6 +13,17 @@ const deliveryCharges = (distance, price, weight = 0, extraCharges = 0) => {
    return parseInt(distance * 2) + weight * 0.5 + extraCharges;
 }
 
+// Homepage
+
+//get homepage data
+exports.getHome = async (req, res) => {
+   db.homepage.findAll({
+      order: [['order', 'ASC']]
+   }).then(data => res.json(data)).catch((err) => res.json(err))
+}
+
+
+
 // *** CATEGORIES
 
 exports.getCategories = (req, res) => {
@@ -415,28 +426,28 @@ exports.predictiveSearch = (req, res) => {
             }
          ]
       },
-      include:[
+      include: [
          {
-         model: db.sku,
-         required: true,
-         include: [
-            {
-               model: db.image,
-               order: [['src', 'ASC']],
-               attributes: ['id', 'src'],
-            },
-            {
-               model: db.attribute,
-               attributes: ['id', 'name', 'value']
-            },
-         ]
-      }
-   ],
+            model: db.sku,
+            required: true,
+            include: [
+               {
+                  model: db.image,
+                  order: [['src', 'ASC']],
+                  attributes: ['id', 'src'],
+               },
+               {
+                  model: db.attribute,
+                  attributes: ['id', 'name', 'value']
+               },
+            ]
+         }
+      ],
       limit: 10,
    }).then(products => {
       let strings = products.map(p => {
-         return(
-            {name:p.name,brand:p.brand,img:p.skus[0].images[0].src,price:p.skus[0].price}
+         return (
+            { name: p.name, brand: p.brand, img: p.skus[0].images[0].src, price: p.skus[0].price }
          )
       });
       res.json(strings)
@@ -709,13 +720,7 @@ exports.getOrders = (req, res) => {
          }
       ],
    }).then(orders => {
-      orders = orders.map(o => {
-         o = o.toJSON();
-         o.deliveryCharges = o.price - o.orderItems.reduce((total, oi) => total + oi.sku.price, 0);
-         return o;
-      })
-      console.log(orders);
-
+      // console.log(orders);
       res.json(orders);
    }).catch(err => {
       res.json(err)
@@ -806,24 +811,23 @@ exports.postOrder = (req, res) => {
       let _address = await db.shippingAddress.findByPk(req.body.shippingAddress.id)
       _address = _address.toJSON();
 
-      let delivery_charges = deliveryCharges(_address.distance, price, totalWeight, totalExtraCharges);
+      let shipping_charges = deliveryCharges(_address.distance, price, totalWeight, totalExtraCharges);
 
-      console.log(`${price} + ${delivery_charges} = ${price + delivery_charges}`);
+      let discount = 0;
 
-      price += delivery_charges;
-
-
-      order.price = price;
+      order.shippingCharges = shipping_charges;
+      order.price = price + shipping_charges - discount;
       order.shippingAddress = JSON.stringify(_address);
       order.paymentType = req.body.paymentType;
       order.userId = req.userId;
       order.statusId = 1;
       order.cancelled = null
 
-      let date = new Date();
-      date.setDate(date.getDate() + 2)
+      // // Expected Delivery Date
+      // let date = new Date();
+      // date.setDate(date.getDate() + 2)
 
-      order.deliverOn = date.toISOString();
+      // order.deliverOn = date.toISOString();
 
       if (!orderCart.length) {
          let err = new Error('Cart Not Eligible for Order.');
@@ -831,10 +835,13 @@ exports.postOrder = (req, res) => {
          throw err;
       }
 
+      console.log(`Price : O ${price} + S ${shipping_charges} - D ${discount} = T  ${order.price}`);
+
       return db.order.create({
          ...order,
 
       })
+
    }).then(async (_order) => {
 
       order = _order;

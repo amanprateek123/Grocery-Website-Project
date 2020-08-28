@@ -26,7 +26,7 @@ function Orders(props) {
 
     const fetchOrders = () => {
         try {
-            fetch(`/admin/orders?status=${status != ' ' ? status : ''}&page=${page}`, {
+            fetch(`/shipping/orders?status=${status != ' ' ? status : ''}&page=${page}`, {
                 headers: {
                     'Authorization': 'Bearer ' + props.idToken,
                     'Content-Type': 'application/json'
@@ -36,9 +36,11 @@ function Orders(props) {
                     if (res.status == 200) {
 
                         let _orders = await res.json();
-
-                        setOrders(_orders.orders);
-                        setMeta(_orders.meta);
+                        console.log(_orders);
+                        if (Array.isArray(_orders.orders)) {
+                            setOrders(_orders.orders);
+                            setMeta(_orders.meta);
+                        }
                     }
                 })
         }
@@ -65,10 +67,6 @@ function Orders(props) {
 
         switch (statusId) {
             case 1:
-                let o_result = await Swal.fire('Ordered', 'Are you sure to revert the Order to Ordered State?', 'question')
-                if (o_result.isDismissed) {
-                    return;
-                }
                 break;
 
             case 2:
@@ -142,7 +140,7 @@ function Orders(props) {
                 break;
         }
 
-        fetch(`/admin/set-status`, {
+        fetch(`/shipping/set-status`, {
             method: 'POST',
             headers: {
                 'Authorization': 'Bearer ' + props.idToken,
@@ -157,9 +155,9 @@ function Orders(props) {
     }
 
     return (
-        <div className="admin-orders">
+        <div className="shipping-orders">
             <div className="container">
-                <h1>Orders</h1>
+                <h1>Shipping Orders</h1>
                 <div className="row p-3 px-4">
                     <Select
                         labelId="status-label"
@@ -170,14 +168,14 @@ function Orders(props) {
                         onChange={handleChange}
                     >
                         <MenuItem value=' '>All</MenuItem>
-                        <MenuItem value='ordered'>Ordered</MenuItem>
-                        <MenuItem value='packed'>Packed</MenuItem>
+                        {/* <MenuItem value='ordered'>Ordered</MenuItem> */}
+                        {/* <MenuItem value='packed'>Packed</MenuItem> */}
                         <MenuItem value='shipped'>Shipped</MenuItem>
                         <MenuItem value='delivered'>Delivered</MenuItem>
                     </Select>
                 </div>
                 <div className="row" style={{ flexWrap: 'wrap-reverse' }}>
-                    <div className="col-md-9">
+                    <div className="col">
                         <div className="orders">
                             {
                                 orders.map((order, i) => (
@@ -204,29 +202,7 @@ function Orders(props) {
                             }
                         </div>
                     </div>
-                    <div className="col-md-3  d-none d-md-block">
-                        {meta ?
-                            <div className="row stats">
-                                <div className="col-6" style={{ color: statusColors[0] }}>
-                                    <h1>{meta.count.ordered}</h1>
-                                    <div>Orders</div>
-                                </div>
-                                <div className="col-6" style={{ color: statusColors[2] }}>
-                                    <h1>{meta.count.shipped}</h1>
-                                    <div>Shipped</div>
-                                </div>
-                                <div className="col-6" style={{ color: statusColors[1] }}>
-                                    <h1>{meta.count.packed}</h1>
-                                    <div>Packed</div>
-                                </div>
-                                <div className="col-6" style={{ color: statusColors[3] }}>
-                                    <h1>{meta.count.delivered}</h1>
-                                    <div>Delivered</div>
-                                </div>
-                            </div>
-                            : null
-                        }
-                    </div>
+
                 </div>
             </div>
         </div>

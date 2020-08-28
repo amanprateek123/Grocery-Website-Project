@@ -187,7 +187,7 @@ exports.login = (req, res) => {
                         }, 'lalasupersecretkey', {
                             expiresIn: '2h'
                         });
-                        return res.json({ status: 200, message: flash.SUCCESS, userId: user.id, userName: user.dataValues.firstName + ' ' + user.dataValues.lastName, idToken: token })
+                        return res.json({ status: 200, message: flash.SUCCESS, userId: user.id, userName: user.firstName + ' ' + user.lastName, idToken: token, role: user.role })
                     }
                     else {
                         return res.json({ status: 401, message: flash.WRONG_PASSWORD })
@@ -202,6 +202,9 @@ exports.login = (req, res) => {
         else {
             return res.json({ status: 401, message: flash.NO_ACC })
         }
+    }).catch(err => {
+        console.log(err);
+        res.json({ status: 500, message: 'Server Error' })
     })
 }
 

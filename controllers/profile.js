@@ -133,6 +133,7 @@ exports.addAddress = async (req, res) => {
 
         res.json({ status: 200, message: flash.ADDRESS_ADDED, addressId: rowsUpdated.dataValues.id });
     }).catch(err => {
+        console.log(err)
         res.json({ status: 500, message: flash.SERVER_ERROR });
     })
 

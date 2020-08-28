@@ -634,7 +634,7 @@ exports.addDepartments = (req, res) => {
 }
 
 exports.homePage = async (req, res) => {
-    console.log(req.body)
+    // console.log(req.body)
     await db.homepage.destroy({ where: {} })
     let data = req.body
     Promise.all(
@@ -651,7 +651,7 @@ exports.homePage = async (req, res) => {
             })
         })
     ).then(result => {
-        console.log(result)
+        // console.log(result)
         res.json({ message: "Successfully Added", status: 201, data: req.body })
     }).catch(e => {
         console.log(e)
@@ -660,16 +660,10 @@ exports.homePage = async (req, res) => {
 
 }
 
-//get homepage data
-exports.getHome = async (req, res) => {
-    db.homepage.findAll({
-        order: [['order', 'ASC']]
-    }).then(data => res.json(data)).catch((err) => res.json(err))
-}
 
 //offers
 exports.offers = async (req, res) => {
-    console.log(req.body)
+    // console.log(req.body)
     let data = req.body
     const offer = await db.offers.findAll({ where: { offerCode: data.offerCode } })
     if (offer) {
@@ -683,7 +677,7 @@ exports.offers = async (req, res) => {
         minAmt: data.minAmt
     }
     ).then(result => {
-        console.log(result)
+        // console.log(result)
         res.json({ message: "Successfully Added", status: 201, data: req.body })
     }).catch(e => {
         console.log(e)
@@ -701,7 +695,7 @@ exports.getOffers = async (req, res) => {
 
 exports.delOffers = async (req, res) => {
     const data = req.body
-    console.log(data)
+    // console.log(data)
     const offer = await db.offers.findAll({ where: { offerCode: data.offerCode } })
     try {
         await db.offers.destroy({
@@ -792,7 +786,7 @@ exports.getOrders = async (req, res) => {
         })
         .then(c => {
             meta.count.delivered = c.length;
-            return db.order.count(emptyOptions)
+            return db.order.findAll(emptyOptions)
         })
 
         .then(orders => {
@@ -839,7 +833,21 @@ exports.getOrders = async (req, res) => {
                 o.deliveryCharges = o.price - o.orderItems.reduce((total, oi) => total + oi.sku.price, 0);
                 return o;
             })
-            console.log(orders);
+
+            orders.forEach(order => {
+                let filtered = [];
+                for (let oi of order.orderItems) {
+                    let existing = filtered.find(foi => foi.skuId == oi.skuId);
+                    if (existing) {
+                        existing.quantity++;
+                    }
+                    else {
+                        filtered.push({ ...oi, quantity: 1 })
+                    }
+                }
+
+                order.orderItems = filtered;
+            })
 
             res.json({ meta, orders });
         }).catch(err => {
@@ -888,31 +896,52 @@ exports.getOrderedItems = async (req, res) => {
 
 
 exports.setStatus = async (req, res) => {
-    let orderId = req.query.orderId;
-    let statusId = req.query.statusId;
-    let remarks = req.query.remarks || null;
+    let orderId = req.body.orderId;
+    let statusId = req.body.statusId;
+    let remarks = req.body.remarks || null;
 
     try {
         let order = await db.order.findByPk(orderId);
         order.statusId = statusId;
         if (remarks) order.remarks = remarks;
-        await order.save();
 
         // State Specific Notifications / Emails 
         switch (statusId) {
             case 1: // ORDERED
+                await order.save();
                 console.log('[_] Ordered');
                 break;
 
             case 2: // PACKED
+                await order.save();
                 console.log('[_] PACKED');
                 break;
 
             case 3: // SHIPPED
+                let userId = req.body.userId; // Delivery Guy ID;
+                let deliverOn = req.body.deliverOn; // Expected Delivery Date
+
+                let deliveryGuy = await db.user.findByPk(userId);
+                if (!deliveryGuy) throw new Error('NO SUCH USER')
+                if (deliveryGuy.role != 'D') throw new Error('USER is NOT a Delivery Guy.')
+
+                let existing = await db.shipping.findAll({ where: { userId, orderId } })
+
+                if (!existing[0]) {
+                    console.log(`New Shipping >> ${deliveryGuy.firstName} : Order ${orderId}.`)
+                    await db.shipping.create({ userId, orderId });
+                }
+
+                order.deliverOn = deliverOn;
+
+                await order.save();
+
                 console.log('[_] SHIPPED');
                 break;
 
             case 4: // DELIVERED
+
+                order.save();
                 console.log('[_] DELIVERED');
                 break;
 
@@ -925,4 +954,27 @@ exports.setStatus = async (req, res) => {
         res.json({ status: 500, error: err });
     }
 
+}
+
+
+// USERS
+
+exports.getUsers = async (req, res) => {
+    let where = {};
+    req.query.role ? (where.role = req.query.role) : null;
+
+    try {
+        let users = await db.user.findAll({
+            where,
+            attributes: {
+                exclude: ['password']
+            }
+        });
+
+        res.json(users);
+    }
+    catch (err) {
+        console.log(err);
+        res.json([]);
+    }
 }

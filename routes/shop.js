@@ -3,6 +3,8 @@ const router = express.Router();
 const shopCtrl = require('../controllers/shop')
 const isAuth = require('../middleware/is-auth')
 
+router.get('/homepage', shopCtrl.getHome)
+
 router.get('/get-categories', shopCtrl.getCategories)
 router.get('/get-products', shopCtrl.getProducts)
 router.get('/pre-search', shopCtrl.predictiveSearch)

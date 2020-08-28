@@ -10,7 +10,13 @@ module.exports = (sequelize, Sequelize = require('sequelize')) => {
         deliverOn: {
             type: Sequelize.DATEONLY,
         },
-        price: {
+        price: { // sum(orderItems.price) + shippingCharges - discount
+            type: Sequelize.FLOAT,
+        },
+        shippingCharges: {
+            type: Sequelize.FLOAT,
+        },
+        discount: {
             type: Sequelize.FLOAT,
         },
         shippingAddress: {
@@ -25,13 +31,13 @@ module.exports = (sequelize, Sequelize = require('sequelize')) => {
         transactionStatus: {
             type: Sequelize.ENUM(['SUCCESS', 'FAILED'])
         },
-        isCancelled:{
-            type:Sequelize.BOOLEAN,
-            defaultValue:false            
+        isCancelled: {
+            type: Sequelize.BOOLEAN,
+            defaultValue: false
         },
-        remarks:{
-            type:Sequelize.STRING,
-            defaultValue:null             
+        remarks: {
+            type: Sequelize.STRING,
+            defaultValue: null
         }
     },
         {

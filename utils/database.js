@@ -36,8 +36,15 @@ db.cart = require('../models/cart')(sequelize, Sequelize)
 db.order = require('../models/order')(sequelize, Sequelize);
 db.orderItem = require('../models/orderItem')(sequelize, Sequelize);
 db.status = require('../models/status')(sequelize, Sequelize);
+
 db.homepage = require('../models/homepage')(sequelize, Sequelize)
+
 db.offers = require('../models/offers')(sequelize, Sequelize)
+
+db.shipping = require('../models/shipping')(sequelize, Sequelize) // to Track shipping with delivery guys.
+
+
+
 // Relations - creates respective Foreign Keys as [ownerModel]Id 
 
 db.otp.belongsTo(db.user, { onDelete: 'CASCADE' });
@@ -85,5 +92,9 @@ db.sku.hasMany(db.orderItem)
 
 db.order.belongsTo(db.status);
 db.status.hasMany(db.order);
+
+// shipping
+db.user.hasMany(db.shipping);
+db.order.hasOne(db.shipping);
 
 module.exports = db;
