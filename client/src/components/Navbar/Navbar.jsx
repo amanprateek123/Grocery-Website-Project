@@ -35,6 +35,7 @@ import LocalOfferIcon from '@material-ui/icons/LocalOffer';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import PowerSettingsNewIcon from '@material-ui/icons/PowerSettingsNew';
+import AdminIcon from '@material-ui/icons/Security';
 
 import img from '../../assets/logos/LalaDukaan_nav_logo.png';
 import { Avatar } from '@material-ui/core';
@@ -178,31 +179,31 @@ const Navbar = (props) => {
             searchText.current.removeEventListener('keyup', handler)
         }
     }, [])
-  console.log('pre',preSearch)
-  const[show,setShow]=useState(false)
-  const[val,setVal]=useState(null)
-  const searchs= (e)=>{
-       setVal(e.target.value)
-       setShow(true)
-  }
+    console.log('pre', preSearch)
+    const [show, setShow] = useState(false)
+    const [val, setVal] = useState(null)
+    const searchs = (e) => {
+        setVal(e.target.value)
+        setShow(true)
+    }
 
-  const trimming = (string) => {
-    const length = 40
-    var trimmedString = string.length > length ?
-        string.substring(0, length) + "..." :
-        string;
-    return trimmedString
-}
+    const trimming = (string) => {
+        const length = 40
+        var trimmedString = string.length > length ?
+            string.substring(0, length) + "..." :
+            string;
+        return trimmedString
+    }
 
-  const convert = (string)=>{
-         if(!string.toLowerCase().includes(val.toLowerCase())){
-             return <span>{string}</span>
-         }
-         const word = string.toLowerCase().replace(val.toLowerCase(),'*')
-         const words = word.split('*')
-         return <span>{words[0]}<b>{val}</b>{words[1]}</span>
-  }
-  const[dis,setdis] = useState(false)
+    const convert = (string) => {
+        if (!string.toLowerCase().includes(val.toLowerCase())) {
+            return <span>{string}</span>
+        }
+        const word = string.toLowerCase().replace(val.toLowerCase(), '*')
+        const words = word.split('*')
+        return <span>{words[0]}<b>{val}</b>{words[1]}</span>
+    }
+    const [dis, setdis] = useState(false)
 
     return (
         <React.Fragment>
@@ -224,7 +225,7 @@ const Navbar = (props) => {
                             edge="start"
                             className={clsx(classes.menuButton, open && classes.hide, "d-md-none")}
                         >
-                            <MenuIcon  style={{float:'left'}} />
+                            <MenuIcon style={{ float: 'left' }} />
                         </IconButton>
                         <div className="logo" >
                             <Link to="/"><img src={img} height={60} className="" /></Link>
@@ -241,29 +242,29 @@ const Navbar = (props) => {
                                 {
                                     preSearch.length ?
                                         <div className="pre-search list-group">
-                                          {show?  <ul onMouseLeave={()=>setTimeout(()=>{
-                                              setShow(false)
-                                          },400)} >
-                                                 <div className="head-sch" >Showing results for {val}:</div>
+                                            {show ? <ul onMouseLeave={() => setTimeout(() => {
+                                                setShow(false)
+                                            }, 400)} >
+                                                <div className="head-sch" >Showing results for {val}:</div>
                                                 {
                                                     preSearch.map(str => (
                                                         <li className="pre-search-li" onClick={(e) => search(e, str.name)}>
                                                             <div className="row">
-                                                                 <div className="col-2 search-img" style={{backgroundImage:`url(${str.img})`}}>
-                                                                     
-                                                                 </div>
-                                                                 <div className="col-7">
-                                                                     <span className="br"><u>{str.brand}</u></span><br/>
-                                                                     <p style={{textTransform:'capitalize'}}>{convert(trimming(str.name))}</p>
-                                                                 </div>
-                                                                 <div className="col-2 pri">
-                                                                      Rs.<span>{str.price}</span>
-                                                                 </div>
+                                                                <div className="col-2 search-img" style={{ backgroundImage: `url(${str.img})` }}>
+
+                                                                </div>
+                                                                <div className="col-7">
+                                                                    <span className="br"><u>{str.brand}</u></span><br />
+                                                                    <p style={{ textTransform: 'capitalize' }}>{convert(trimming(str.name))}</p>
+                                                                </div>
+                                                                <div className="col-2 pri">
+                                                                    Rs.<span>{str.price}</span>
+                                                                </div>
                                                             </div>
                                                         </li>
                                                     ))
                                                 }
-                                            </ul>:null}
+                                            </ul> : null}
                                         </div>
                                         : null
                                 }
@@ -272,7 +273,7 @@ const Navbar = (props) => {
                         </div>
 
                         <div className="d-md-none d-flex navigation">
-                            {props.userName&&props.cart.length>0 ?
+                            {props.userName && props.cart.length > 0 ?
                                 <Link to="/checkout" style={{ color: 'inherit', margin: '5px 15px' }}>
                                     <ShoppingCartIcon />
                                     <div className="badge1">{props.cart.length}</div>
@@ -284,9 +285,9 @@ const Navbar = (props) => {
                         <div className="navigation d-md-flex d-none">
                             <div className="user" style={{ width: '180px', textAlign: 'center' }}>
                                 {props.userName ?
-                                    <div className="username-nav align-items-center MuiButton-root" style={{ width: '180px',cursor:'pointer', textAlign: 'center',paddingTop:'13.5px' }} onMouseEnter={()=>setdis(true)} onMouseLeave={()=>setdis(false)} >
+                                    <div className="username-nav align-items-center MuiButton-root" style={{ width: '180px', cursor: 'pointer', textAlign: 'center', paddingTop: '13.5px' }} onMouseEnter={() => setdis(true)} onMouseLeave={() => setdis(false)} >
                                         {props.userName}
-                                        {dis? <div className="more_details1">
+                                        {dis ? <div className="more_details1">
                                             <div style={{ border: 'solid transparent', position: 'absolute', bottom: '100%', left: '50%', borderWidth: '10px', transform: 'translateX(-10px)', borderBottomColor: '#fff' }}>
 
                                             </div>
@@ -298,8 +299,8 @@ const Navbar = (props) => {
                                                     </ul>
                                                 </div>
                                             </div>
-                                        </div>:null}
-                                        </div>
+                                        </div> : null}
+                                    </div>
                                     :
                                     <Button className="btn btn-login" onClick={props.openModal}>Login</Button>}
                             </div>
@@ -315,8 +316,11 @@ const Navbar = (props) => {
                                                     <ul>
                                                         <li><NavLink to="/orders"><LocalMallIcon style={{ width: '16px', height: '16px', color: 'var(--mainColor)' }} /><div style={{ marginLeft: '12px' }}>My Orders</div></NavLink></li>
                                                         <li><NavLink to="/"><LocalOfferIcon style={{ width: '16px', height: '16px', color: 'var(--mainColor)' }} /><div style={{ marginLeft: '12px' }}>Offers</div></NavLink></li>
-                                                        <li><NavLink to="/"><FavoriteIcon style={{ width: '16px', height: '16px', color: 'var(--mainColor)' }} /><div style={{ marginLeft: '12px' }}>WishList</div></NavLink></li>
-                                                        <li><NavLink to="/"><NotificationsIcon style={{ width: '16px', height: '16px', color: 'var(--mainColor)' }} /><div style={{ marginLeft: '12px' }}>Notification</div></NavLink></li>
+                                                        {/* <li><NavLink to="/"><FavoriteIcon style={{ width: '16px', height: '16px', color: 'var(--mainColor)' }} /><div style={{ marginLeft: '12px' }}>WishList</div></NavLink></li> */}
+                                                        {/* <li><NavLink to="/"><NotificationsIcon style={{ width: '16px', height: '16px', color: 'var(--mainColor)' }} /><div style={{ marginLeft: '12px' }}>Notification</div></NavLink></li> */}
+                                                        {props.role == 'D' ? <li><NavLink to="/shipping"><AdminIcon style={{ width: '16px', height: '16px', color: 'var(--mainColor)' }} /><div style={{ marginLeft: '12px' }}>Shipping</div></NavLink></li> : null}
+                                                        {props.role == 'A' ? <li><NavLink to="/admin"><AdminIcon style={{ width: '16px', height: '16px', color: 'var(--mainColor)' }} /><div style={{ marginLeft: '12px' }}>ADMIN</div></NavLink></li> : null}
+                                                        {props.role == 'A' ? <li><NavLink to="/admin/dashboard"><AdminIcon style={{ width: '16px', height: '16px', color: 'var(--mainColor)' }} /><div style={{ marginLeft: '12px' }}>Manage Orders</div></NavLink></li> : null}
                                                     </ul>
                                                 </div>
                                             </div>
@@ -400,8 +404,11 @@ const Navbar = (props) => {
                                         <ul>
                                             <li><NavLink to="/orders"><LocalMallIcon style={{ width: '16px', height: '16px', color: 'var(--mainColor)' }} /><div style={{ marginLeft: '12px' }}>My Orders</div></NavLink></li>
                                             <li><NavLink to="/"><LocalOfferIcon style={{ width: '16px', height: '16px', color: 'var(--mainColor)' }} /><div style={{ marginLeft: '12px' }}>Offers</div></NavLink></li>
-                                            <li><NavLink to="/"><FavoriteIcon style={{ width: '16px', height: '16px', color: 'var(--mainColor)' }} /><div style={{ marginLeft: '12px' }}>WishList</div></NavLink></li>
-                                            <li><NavLink to="/"><NotificationsIcon style={{ width: '16px', height: '16px', color: 'var(--mainColor)' }} /><div style={{ marginLeft: '12px' }}>Notification</div></NavLink></li>
+                                            {/* <li><NavLink to="/"><FavoriteIcon style={{ width: '16px', height: '16px', color: 'var(--mainColor)' }} /><div style={{ marginLeft: '12px' }}>WishList</div></NavLink></li> */}
+                                            {/* <li><NavLink to="/"><NotificationsIcon style={{ width: '16px', height: '16px', color: 'var(--mainColor)' }} /><div style={{ marginLeft: '12px' }}>Notification</div></NavLink></li> */}
+                                            {props.role == 'D' ? <li><NavLink to="/shipping"><AdminIcon style={{ width: '16px', height: '16px', color: 'var(--mainColor)' }} /><div style={{ marginLeft: '12px' }}>Shipping</div></NavLink></li> : null}
+                                            {props.role == 'A' ? <li><NavLink to="/admin"><AdminIcon style={{ width: '16px', height: '16px', color: 'var(--mainColor)' }} /><div style={{ marginLeft: '12px' }}>ADMIN</div></NavLink></li> : null}
+                                            {props.role == 'A' ? <li><NavLink to="/admin/dashboard"><AdminIcon style={{ width: '16px', height: '16px', color: 'var(--mainColor)' }} /><div style={{ marginLeft: '12px' }}>Manage Orders</div></NavLink></li> : null}
                                             <li onClick={props.logout}><NavLink to="/"><PowerSettingsNewIcon style={{ width: '16px', height: '16px', color: 'var(--mainColor)' }} /><div style={{ marginLeft: '12px' }}>Logout</div></NavLink></li>
                                         </ul>
                                     </div>
@@ -423,7 +430,8 @@ const mapStateToProps = state => {
         idToken: state.idToken,
         userName: state.userName,
         cart: state.cart,
-        menu: state.menu
+        menu: state.menu,
+        role: state.role,
     }
 }
 
