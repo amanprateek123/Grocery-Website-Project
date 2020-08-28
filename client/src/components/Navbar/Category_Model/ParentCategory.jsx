@@ -8,17 +8,19 @@ export default class ParentCategory extends Component {
     super(props);
     this.toggleHidden = this.toggleHidden.bind(this);
     this.state = {
-      isVisible: false
+      isVisible: false,
+      identity:null
     }
   }
 
-  toggleHidden(key) {
+  toggleHidden(key,i) {
     this.setState({
-      isVisible: key
+      isVisible: key,
+      identity:i
     })
   }
   resetVisible = () => {
-    this.setState({ isVisible: -1 });
+    this.setState({ isVisible: -1,identity:null });
   }
   render() {
     return (
@@ -27,10 +29,10 @@ export default class ParentCategory extends Component {
         <div className="after">
         </div>
         {this.props.module.map(parentCategory =>
-          <div className="drop_content" key={parentCategory.id} onMouseEnter={() => this.toggleHidden(parentCategory.name)} onMouseLeave={this.resetVisible} >
+          <div className="drop_content" key={parentCategory.id} onMouseEnter={() => this.toggleHidden(parentCategory.name,parentCategory.id)} onMouseLeave={this.resetVisible} >
             <div className="subdept">
-              <Link to={`/products?parentCategory=${parentCategory.name}`} id={parentCategory.name} className="nav_drop" >
-                {parentCategory.name}
+              <Link to={`/products?parentCategory=${parentCategory.name}`} id={parentCategory.name} className={parentCategory.id===this.state.identity?"nava1":"nav_drop"} >
+                {parentCategory.name}{parentCategory.id===this.state.identity?<i className="fa fa-caret-down icon" aria-hidden="true" style={{transform:'rotate(-90deg)'}} />:null}
               </Link>
             </div>
             <div className={this.state.isVisible == parentCategory.name ? "visible" : "invisible"}>

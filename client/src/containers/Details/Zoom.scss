@@ -6,6 +6,9 @@
     box-shadow: 0 0 5px #d5d6d9;
     background: #fff;
     animation: fadeInUp 0.1s;
+    @media(max-width:600px){
+        width: 100%;
+    }
     .zoom_img1{
     position: relative;
     padding: 1%;
@@ -26,7 +29,11 @@
   }
     img{
         height: 90%;
-        width: auto;    
+        width: auto;   
+        @media(max-width:600px){
+            width: 100%;
+            height: auto;
+        } 
         // max-width: 100%;
     }
     }
@@ -36,6 +43,10 @@
    flex-direction: row;
    justify-content: center;
    align-items: center;
+   @media(max-width:600px){
+    width: 95%;
+    margin: 5px auto;
+}
 }
 .img_det1a{
     cursor: pointer;

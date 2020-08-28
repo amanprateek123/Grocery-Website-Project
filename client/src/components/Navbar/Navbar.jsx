@@ -202,6 +202,7 @@ const Navbar = (props) => {
          const words = word.split('*')
          return <span>{words[0]}<b>{val}</b>{words[1]}</span>
   }
+  const[dis,setdis] = useState(false)
 
     return (
         <React.Fragment>
@@ -223,7 +224,7 @@ const Navbar = (props) => {
                             edge="start"
                             className={clsx(classes.menuButton, open && classes.hide, "d-md-none")}
                         >
-                            <MenuIcon />
+                            <MenuIcon  style={{float:'left'}} />
                         </IconButton>
                         <div className="logo" >
                             <Link to="/"><img src={img} height={60} className="" /></Link>
@@ -240,20 +241,22 @@ const Navbar = (props) => {
                                 {
                                     preSearch.length ?
                                         <div className="pre-search list-group">
-                                          {show?  <ul onMouseLeave={()=>setShow(false)}>
-                                                 <div className="head-sch">Showing results for {val}:</div>
+                                          {show?  <ul onMouseLeave={()=>setTimeout(()=>{
+                                              setShow(false)
+                                          },400)} >
+                                                 <div className="head-sch" >Showing results for {val}:</div>
                                                 {
                                                     preSearch.map(str => (
                                                         <li className="pre-search-li" onClick={(e) => search(e, str.name)}>
                                                             <div className="row">
-                                                                 <div className="col-md-2 search-img" style={{backgroundImage:`url(${str.img})`}}>
+                                                                 <div className="col-2 search-img" style={{backgroundImage:`url(${str.img})`}}>
                                                                      
                                                                  </div>
-                                                                 <div className="col-md-7">
+                                                                 <div className="col-7">
                                                                      <span className="br"><u>{str.brand}</u></span><br/>
-                                                                     <p style={{fontSize:'12px',textTransform:'capitalize'}}>{convert(trimming(str.name))}</p>
+                                                                     <p style={{textTransform:'capitalize'}}>{convert(trimming(str.name))}</p>
                                                                  </div>
-                                                                 <div className="col-md-2" style={{marginTop:'21px',fontSize:'12px'}}>
+                                                                 <div className="col-2 pri">
                                                                       Rs.<span>{str.price}</span>
                                                                  </div>
                                                             </div>
@@ -269,9 +272,9 @@ const Navbar = (props) => {
                         </div>
 
                         <div className="d-md-none d-flex navigation">
-                            {props.userName ?
+                            {props.userName&&props.cart.length>0 ?
                                 <Link to="/checkout" style={{ color: 'inherit', margin: '5px 15px' }}>
-                                    <ShoppingCartIcon style={{}} />
+                                    <ShoppingCartIcon />
                                     <div className="badge1">{props.cart.length}</div>
                                 </Link>
                                 : null
@@ -281,7 +284,22 @@ const Navbar = (props) => {
                         <div className="navigation d-md-flex d-none">
                             <div className="user" style={{ width: '180px', textAlign: 'center' }}>
                                 {props.userName ?
-                                    <Link to="/profile" style={{ textDecoration: 'none' }} ><div className="username-nav align-items-center MuiButton-root"><PersonIcon /> <span style={{ textAlign: 'left', width: '100%' }}>{props.userName}</span></div></Link>
+                                    <div className="username-nav align-items-center MuiButton-root" style={{ width: '180px',cursor:'pointer', textAlign: 'center',paddingTop:'13.5px' }} onMouseEnter={()=>setdis(true)} onMouseLeave={()=>setdis(false)} >
+                                        {props.userName}
+                                        {dis? <div className="more_details1">
+                                            <div style={{ border: 'solid transparent', position: 'absolute', bottom: '100%', left: '50%', borderWidth: '10px', transform: 'translateX(-10px)', borderBottomColor: '#fff' }}>
+
+                                            </div>
+                                            <div className="more_conts1">
+                                                <div style={{ margin: '-16px' }}>
+                                                    <ul>
+                                                        <li><Link to="/profile" style={{ textDecoration: 'none' }} ><PersonIcon style={{ width: '16px', height: '16px', color: 'var(--mainColor)' }} /><span style={{ marginLeft: '12px' }}>My Profile</span></Link></li>
+                                                        <li onClick={props.logout}><NavLink to="/"><PowerSettingsNewIcon style={{ width: '16px', height: '16px', color: 'var(--mainColor)' }} /><div style={{ marginLeft: '12px' }}>Logout</div></NavLink></li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>:null}
+                                        </div>
                                     :
                                     <Button className="btn btn-login" onClick={props.openModal}>Login</Button>}
                             </div>
@@ -299,7 +317,6 @@ const Navbar = (props) => {
                                                         <li><NavLink to="/"><LocalOfferIcon style={{ width: '16px', height: '16px', color: 'var(--mainColor)' }} /><div style={{ marginLeft: '12px' }}>Offers</div></NavLink></li>
                                                         <li><NavLink to="/"><FavoriteIcon style={{ width: '16px', height: '16px', color: 'var(--mainColor)' }} /><div style={{ marginLeft: '12px' }}>WishList</div></NavLink></li>
                                                         <li><NavLink to="/"><NotificationsIcon style={{ width: '16px', height: '16px', color: 'var(--mainColor)' }} /><div style={{ marginLeft: '12px' }}>Notification</div></NavLink></li>
-                                                        <li onClick={props.logout}><NavLink to="/"><PowerSettingsNewIcon style={{ width: '16px', height: '16px', color: 'var(--mainColor)' }} /><div style={{ marginLeft: '12px' }}>Logout</div></NavLink></li>
                                                     </ul>
                                                 </div>
                                             </div>

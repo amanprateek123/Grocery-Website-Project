@@ -103,7 +103,10 @@ function PriceDetail(props) {
       setDiscount(0)
       setCoupon(false)
   }
-
+const remInput = ()=>{
+    setCoupon(false)
+    setValid(5)
+}
 
     return (
         <React.Fragment>
@@ -138,7 +141,7 @@ function PriceDetail(props) {
                         <h6 onClick={()=>setCoupon(true)} >Apply coupon code?</h6>
                          {coupon?
                         <div className="code">
-                          <input type="text" onChange={(e)=>setCode(e.target.value)} /><span><DoneIcon onClick={()=>apply(code)} style={{margin:'0 10px'}} /><CloseIcon onClick={()=>setCoupon(false)}/></span>
+                          <input type="text" onChange={(e)=>setCode(e.target.value)} /><span><DoneIcon onClick={()=>apply(code)} style={{margin:'0 10px'}} /><CloseIcon onClick={remInput}/></span>
                         </div>:null}                        
                      </div>:null}
                      {valid===0?<div>
