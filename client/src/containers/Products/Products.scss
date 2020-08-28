@@ -5,6 +5,7 @@
     @media (min-width:1200){
         min-width: 1250px;
     }
+
     
     .chip{
         margin: 0.2em !important;
@@ -121,6 +122,8 @@
             flex-wrap: wrap;
             @media (max-width: 480px){
                 justify-content: center;
+                display: grid;
+                grid-template-columns: 1fr 1fr ;
             }
         }
     
