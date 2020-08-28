@@ -56,12 +56,12 @@ const App = (props) => {
           {
             props.userId ?
               [
-                <Route exact path="/profile">
+                <Route key="profile" exact path="/profile">
                   <Profile />
                 </Route>,
-                <Route exact path="/order/:id" component={OrderItems} />,
-                <Route exact path="/checkout" component={Checkout} />,
-                <Route exact path="/orders">
+                <Route key="order/:id" exact path="/order/:id" component={OrderItems} />,
+                <Route key="checkout" exact path="/checkout" component={Checkout} />,
+                <Route key="orders" exact path="/orders">
                   <Orders />
                 </Route>
               ]
@@ -72,14 +72,14 @@ const App = (props) => {
           {
             props.userId && props.role == 'A' ?
               [
-                <Route exact path="/admin" exact>
+                <Route key="admin" exact path="/admin" exact>
                   <Admin />
                 </Route>,
 
-                <Route exact path="/admin/dashboard" >
+                <Route key="admin/dashboard" exact path="/admin/dashboard" >
                   <AdminDashboard />
                 </Route>,
-                <Route exact path="/shipping">
+                <Route key="shipping" exact path="/shipping">
                   <ShippingDashboard />
                 </Route>
               ]
@@ -89,7 +89,7 @@ const App = (props) => {
           {
             props.userId && props.role == 'D' ?
               [
-                <Route exact path="/shipping">
+                <Route key="//shipping" exact path="/shipping">
                   <ShippingDashboard />
                 </Route>
               ]

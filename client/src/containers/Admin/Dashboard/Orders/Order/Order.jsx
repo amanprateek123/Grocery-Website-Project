@@ -61,7 +61,7 @@ function Order(props) {
                 </div>
                 {
                     order.orderItems.map(oi => (
-                        <div className="item row">
+                        <div key={oi.id} className="item row">
                             <div className="col-3 skuCode" >
                                 <span className="text-muted">{oi.sku.id} | </span>
                                 {oi.sku.code}

@@ -860,7 +860,15 @@ exports.getOrderedItems = async (req, res) => {
 
     let where = {};
 
+    let limit = 10;
+    parseInt(req.query.limit) ? (limit = Math.max(0, parseInt(req.query.limit))) : null;
+    let offset = (parseInt(req.query.page) - 1) * limit || 0;
+
     db.sku.findAll({
+        offset, limit,
+        subQuery: false,
+        group: ['id'],
+        nest: true,
         where: {
             ['$orderItems.id$']: {
                 [Op.not]: null // ONLY THOSE SKUS WHICH ARE ORDERED
@@ -885,9 +893,36 @@ exports.getOrderedItems = async (req, res) => {
 
             }
         ]
-    }).then(orderedItems => {
-        res.json(orderedItems)
+    }).then(orderedIds => {
+        let ids = orderedIds.map(o => o.id);
+        return db.sku.findAll({
+            where: {
+                id: {
+                    [Op.in]: ids
+                }
+            },
+            attributes: ['id', 'code', 'stockQuantity', 'price'],
+            include: [
+                {
+                    model: db.orderItem,
+                    attributes: ['id'],
+                    include: {
+                        model: db.order,
+                        attrributes: ['id']
+                    }
+                },
+                {
+                    model: db.product,
+                    attributes: ['id', 'name'],
+
+                }
+            ]
+        })
+
     })
+        .then(orderedItems => {
+            res.json(orderedItems)
+        })
         .catch(err => {
             console.log(err);
             res.json(err);
