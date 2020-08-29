@@ -4,10 +4,13 @@ const jwt = require('jsonwebtoken')
 const { validationResult } = require('express-validator')
 const flash = require('../utils/flash')
 
-const sgMail = require('@sendgrid/mail');
 require('dotenv').config()
+let EMAILS = require('../utils/email');
+let EMAILS_ON = true; // CONFIG
+EMAILS_ON = !EMAILS.transporter ? false : EMAILS_ON;
 
-// sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+
+
 
 const db = require('../utils/database')
 
@@ -22,7 +25,7 @@ exports.sendOTP = (req, res) => {
 
     db.user.findAll({
         where: { email: req.body.email }
-    }).then(docs => {
+    }).then(async docs => {
         if (docs.length) {
             if (docs[0].dataValues.verified) {
                 return res.json({ status: 7, message: flash.USER_EXISTS })
@@ -37,35 +40,40 @@ exports.sendOTP = (req, res) => {
                         lastName: req.body.lastName,
                         password: hashedPassword,
                         mobile: req.body.mobile
-                    }, { where: { id: id } }).then(rowsUpdated => {
-                        console.log('User UPDATED with ID : ' + id);
-                        let authToken = jwt.sign({ id }, 'lalasupersecretkey', { expiresIn: '2h' });
-                        let token = parseInt(Math.random() * 1000000) % 10000000;
-                        console.log('otp : ' + token);
+                    }, { where: { id: id } })
+                        .then(async rowsUpdated => {
+                            console.log('User UPDATED with ID : ' + id);
+                            let authToken = jwt.sign({ id }, 'lalasupersecretkey', { expiresIn: '2h' });
+                            let token = parseInt(Math.random() * 1000000) % 10000000;
+                            console.log('otp : ' + token);
 
-                        db.otp.create({
-                            userId: id,
-                            value: token
-                        })
-                        const msg = {
-                            to: req.body.email,
-                            from: process.env.MAIL_SENDER,
-                            subject: flash.REG_OTP_SUBJECT,
-                            html: flash.REG_OTP_BODY(token),
-                        };
-                        // sgMail.send(msg).then(success => {
-                        //     console.log(success);
-                        //     return res.json({ status: 200, message: flash.OTP_SENT, id: authToken });
-                        // }).catch(err => {
-                        //     console.log(err);
-                        //     console.log(err.response.body.errors);
-                        //     res.status(500).json({ message: flash.SERVER_ERROR })
-                        // });
-                        return res.json({ status: 200, message: flash.OTP_SENT, id: authToken });
-                    }).catch(err => {
-                        console.log(err);
-                        res.status(500).json({ message: flash.SERVER_ERROR })
-                    });
+                            db.otp.create({
+                                userId: id,
+                                value: token
+                            })
+
+                            if (EMAILS_ON) {
+                                try {
+                                    let info = await EMAILS.sendMail({
+                                        to: req.body.email,
+                                        subject: flash.REG_OTP_SUBJECT,
+                                        html: flash.REG_OTP_BODY(token),
+                                    })
+                                    console.log('EMAIL SENT ', info.messageId);
+                                }
+                                catch (err) {
+                                    console.log('EMAIL NOT SENT');
+                                    console.log(err);
+                                    throw new Error('Failed to send Email.')
+                                }
+                            }
+
+
+                            return res.json({ status: 200, message: flash.OTP_SENT, id: authToken });
+                        }).catch(err => {
+                            console.log(err);
+                            res.status(500).json({ message: err.message })
+                        });
                 });
             }
         }
@@ -78,7 +86,7 @@ exports.sendOTP = (req, res) => {
                     lastName: req.body.lastName,
                     password: hashedPassword,
                     mobile: req.body.mobile
-                }).then(user => {
+                }).then(async user => {
                     let id = user.dataValues.id;
                     console.log('User created with ID : ' + id);
                     let authToken = jwt.sign({ id }, 'lalasupersecretkey', { expiresIn: '2h' });
@@ -90,20 +98,24 @@ exports.sendOTP = (req, res) => {
                         userId: id,
                         value: token
                     })
-                    const msg = {
-                        to: req.body.email,
-                        from: process.env.MAIL_SENDER,
-                        subject: flash.REG_OTP_SUBJECT,
-                        html: flash.REG_OTP_BODY(token),
-                    };
-                    // sgMail.send(msg).then(success => {
-                    //     console.log(success);
-                    //     return res.json({ status: 200, message: flash.OTP_SENT, id: authToken });
-                    // }).catch(err => {
-                    //     console.log(err);
-                    //     console.log(err.response.body.errors);
-                    //     res.status(500).json({ message: flash.SERVER_ERROR })
-                    // });
+
+
+                    if (EMAILS_ON) {
+                        try {
+                            let info = await EMAILS.sendMail({
+                                to: req.body.email,
+                                subject: flash.REG_OTP_SUBJECT,
+                                html: flash.REG_OTP_BODY(token),
+                            })
+                            console.log('EMAIL SENT ', info.messageId);
+                        }
+                        catch (err) {
+                            console.log('EMAIL NOT SENT');
+                            console.log(err);
+                            throw new Error('Failed to send Email.')
+                        }
+                    }
+
                     return res.json({ status: 200, message: flash.OTP_SENT, id: authToken });
 
                 }).catch(err => {
@@ -116,7 +128,7 @@ exports.sendOTP = (req, res) => {
 
 };
 
-
+// Verify OTP for Registration
 exports.verifyOTP = (req, res) => {
     // console.log(req.body);
     let authToken = req.body.id;
@@ -148,12 +160,28 @@ exports.verifyOTP = (req, res) => {
                 db.user.update(
                     { verified: true },
                     { where: { id: userId } }
-                ).then(rowsUpdated => {
+                ).then(async rowsUpdated => {
                     console.log(rowsUpdated);
 
                     db.otp.destroy({
                         where: { userId: userId },
                     })
+
+                    if (EMAILS_ON) {
+                        try {
+                            let info = await EMAILS.sendMail({
+                                to: req.body.email,
+                                subject: 'Welcome to LalaDukaan',
+                                html: 'Your account for LalaDukaan is successfully created.',
+                            })
+                            console.log('EMAIL SENT ', info.messageId);
+                        }
+                        catch (err) {
+                            console.log('EMAIL NOT SENT');
+                            console.log(err);
+                        }
+                    }
+
                     return res.json({ status: 200, message: flash.OTP_VERIFIED })
                 })
             }
@@ -261,7 +289,7 @@ exports.prOTP = (req, res) => {
         where: {
             email: req.body.email
         }
-    }).then(rows => {
+    }).then(async rows => {
         if (rows) {
             let user = rows[0];
 
@@ -274,20 +302,24 @@ exports.prOTP = (req, res) => {
                     value: token
                 })
 
-                const msg = {
-                    to: req.body.email,
-                    from: process.env.MAIL_SENDER,
-                    subject: flash.PR_OTP_SUBJECT,
-                    html: flash.PR_OTP_BODY(token),
-                };
-                // sgMail.send(msg).then(success => {
-                //     console.log(success);
-                //     return res.json({ message: 'OTP has been sent to your email.', id: id });
-                // }).catch(err => {
-                //     console.log(err);
-                //     console.log(err.response.body.errors);
-                //     res.status(500).json({ message: 'Server Error' });
-                // });
+
+                if (EMAILS_ON) {
+                    try {
+                        let info = await EMAILS.sendMail({
+                            to: req.body.email,
+                            subject: flash.PR_OTP_SUBJECT,
+                            html: flash.PR_OTP_BODY(token),
+                        })
+                        console.log('EMAIL SENT ', info.messageId);
+                    }
+                    catch (err) {
+                        console.log('EMAIL NOT SENT');
+                        console.log(err);
+                        throw new Error('Failed to send Email.')
+                    }
+                }
+
+
                 return res.json({ status: 200, message: flash.OTP_SENT, id: user.id });
             } else {
                 return res.json({ status: 400, message: flash.NO_ACC })

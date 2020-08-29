@@ -1,4 +1,16 @@
 
+require('dotenv').config()
+let EMAILS = require('../utils/email');
+let EMAILS_ON = false; // CONFIG
+EMAILS_ON = !EMAILS.transporter ? false : EMAILS_ON;
+
+const PAGINATION = 7; //CONFIG
+// CONFIG
+const deliveryCharges = (distance, price, weight = 0, extraCharges = 0) => {
+   return parseInt(distance * 2) + weight * 0.5 + extraCharges;
+}
+
+
 const PDFDocument = require('pdfkit')
 
 const db = require('../utils/database')
@@ -6,12 +18,6 @@ const { createInvoice } = require('../utils/createInvoice');
 const sku = require('../models/sku');
 const Op = require('sequelize').Op;
 
-const PAGINATION = 7;
-
-// from config
-const deliveryCharges = (distance, price, weight = 0, extraCharges = 0) => {
-   return parseInt(distance * 2) + weight * 0.5 + extraCharges;
-}
 
 // Homepage
 

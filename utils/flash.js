@@ -35,7 +35,7 @@ module.exports = {
     // EMAILS
     REG_OTP_SUBJECT: `OTP for ${this.COMPANY}`,
     REG_OTP_BODY: (token) => `
-    <div style="display: flex; flex-direction: column; max-width: 700px; margin: auto;">
+    <div style="max-width: 700px; margin: auto;">
         <header style="min-height:4em; background:black; display:flex; justify-content: center; align-items: center;">
             <img src="" />
             <h2 style="color: #fff;">LalaDukaan</h2>

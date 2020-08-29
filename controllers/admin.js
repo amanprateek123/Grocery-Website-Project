@@ -1,3 +1,8 @@
+require('dotenv').config()
+let EMAILS = require('../utils/email');
+let EMAILS_ON = false; // CONFIG
+EMAILS_ON = !EMAILS.transporter ? false : EMAILS_ON;
+
 
 const fs = require('fs')
 const path = require('path')
@@ -11,6 +16,8 @@ const { validateProduct } = require('../utils/validators')
 const { validationResult } = require('express-validator')
 const { Op } = require('sequelize')
 const order = require('../models/order')
+
+
 
 // *** DB Functions
 async function createProduct(prod, files) {
@@ -943,7 +950,21 @@ exports.setStatus = async (req, res) => {
                 await order.save();
                 console.log(`[_] PACKED ${order.id}`);
 
-                // EMAIL
+                // EMAIL PACKED
+                // if (EMAILS_ON) {
+                //     try {
+                //         let info = await EMAILS.sendMail({
+                //             to: req.body.email,
+                //             subject: "SUNJECT",
+                //             html: "BODY",
+                //         })
+                //         console.log('EMAIL SENT ', info.messageId);
+                //     }
+                //     catch (err) {
+                //         console.log('EMAIL NOT SENT');
+                //         console.log(err);
+                //     }
+                // }
 
                 break;
 
@@ -969,8 +990,21 @@ exports.setStatus = async (req, res) => {
 
                     await db.shipping.create({ userId, orderId, deliveryOtp });
 
-                    // EMAIL
-
+                    // EMAIL SHIPPED with otp probably
+                    // if (EMAILS_ON) {
+                    //     try {
+                    //         let info = await EMAILS.sendMail({
+                    //             to: req.body.email,
+                    //             subject: "SUNJECT",
+                    //             html: "BODY",
+                    //         })
+                    //         console.log('EMAIL SENT ', info.messageId);
+                    //     }
+                    //     catch (err) {
+                    //         console.log('EMAIL NOT SENT');
+                    //         console.log(err);
+                    //     }
+                    // }
 
                 }
 
@@ -988,7 +1022,21 @@ exports.setStatus = async (req, res) => {
                 order.save();
                 console.log(`[_] DELIVERED ${order.id} by ADMIN`);
 
-                // EMAIL
+                // EMAIL DELIVERED
+                // if (EMAILS_ON) {
+                //     try {
+                //         let info = await EMAILS.sendMail({
+                //             to: req.body.email,
+                //             subject: "SUNJECT",
+                //             html: "BODY",
+                //         })
+                //         console.log('EMAIL SENT ', info.messageId);
+                //     }
+                //     catch (err) {
+                //         console.log('EMAIL NOT SENT');
+                //         console.log(err);
+                //     }
+                // }
 
                 break;
 

@@ -19,8 +19,16 @@ const isAdmin = require('./middleware/is-admin')
 const isShipping = require('./middleware/is-shipping')
 
 
+
 const app = express();
 const PORT = process.env.PORT || 5000;
+
+const EMAILS = require('./utils/email')
+const EMAILS_ON = true; // CONFIG
+if (EMAILS_ON) {
+    EMAILS.init();
+}
+
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
