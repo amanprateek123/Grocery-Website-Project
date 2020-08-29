@@ -145,6 +145,7 @@ exports.setStatus = async (req, res) => {
     let orderId = req.body.orderId;
     let statusId = req.body.statusId;
     let remarks = req.body.remarks || null;
+    let deliveryOtp = req.body.deliveryOtp || null;
 
     try {
         let order = await db.order.findByPk(orderId);
@@ -162,11 +163,25 @@ exports.setStatus = async (req, res) => {
             case 4: // DELIVERED
 
                 if (order.statusId != 3) {
+                    throw new Error('Operation NOT allowed. : Order is not in Shipped State.')
                     break;
                 }
+
+                let [shipping] = await db.shipping.findAll({ where: { orderId: order.id } });
+                if (order.verifyDelivery) {
+                    if (shipping.deliveryOtp != deliveryOtp) {
+                        console.log(`${shipping.deliveryOtp} != ${deliveryOtp}`);
+                        throw new Error('OTP Do Not Match');
+                        break;
+                    }
+                }
+
                 order.statusId = statusId;
                 order.save();
-                console.log('[_] DELIVERED');
+
+                // EMAIL
+
+                console.log(`[_] DELIVERED #${order.id}`);
                 break;
 
         }
@@ -175,7 +190,7 @@ exports.setStatus = async (req, res) => {
     }
     catch (err) {
         console.log(err);
-        res.json({ status: 500, error: err });
+        res.json({ status: 500, message: err.message });
     }
 
 }

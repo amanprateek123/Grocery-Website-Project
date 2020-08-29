@@ -12,7 +12,7 @@ import './Order.scss'
 import site from '../../../../../site_config.js';
 import { Link } from 'react-router-dom';
 
-import { Lock } from "@material-ui/icons";
+import { Lock, Security } from "@material-ui/icons";
 
 
 function Order(props) {
@@ -112,8 +112,8 @@ function Order(props) {
                     color: statusColors[3],
                     background: statusColors[3] + '55',
                 }}
-                    onClick={props.changeStatus.bind(this, order.id, 4)}
-                >Delivered</div>
+                    onClick={props.changeStatus.bind(this, order, 4)}
+                >{order.verifyDelivery ? <Security style={{ fontSize: '1.2em', marginRight: '5px' }} /> : null} Delivered</div>
             </div>
         </div>
     )

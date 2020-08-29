@@ -944,12 +944,15 @@ exports.setStatus = async (req, res) => {
         switch (statusId) {
             case 1: // ORDERED
                 await order.save();
-                console.log('[_] Ordered');
+                console.log(`[_] Ordered ${order.id}`);
                 break;
 
             case 2: // PACKED
                 await order.save();
-                console.log('[_] PACKED');
+                console.log(`[_] PACKED ${order.id}`);
+
+                // EMAIL
+
                 break;
 
             case 3: // SHIPPED
@@ -962,22 +965,39 @@ exports.setStatus = async (req, res) => {
 
                 let existing = await db.shipping.findAll({ where: { userId, orderId } })
 
+                let deliveryOtp;
+
                 if (!existing[0]) {
                     console.log(`New Shipping >> ${deliveryGuy.firstName} : Order ${orderId}.`)
-                    await db.shipping.create({ userId, orderId });
+
+                    deliveryOtp = 'NA';
+                    if (order.verifyDelivery) {
+                        deliveryOtp = parseInt(Math.random() * 1000000) % 10000000;
+                    }
+
+                    await db.shipping.create({ userId, orderId, deliveryOtp });
+
+                    // EMAIL
+
+
                 }
 
                 order.deliverOn = deliverOn;
 
                 await order.save();
 
-                console.log('[_] SHIPPED');
+                console.log(`[_] SHIPPED Order #${order.id} via ${deliveryGuy.firstName} ${deliveryGuy.firstName} -  with delivery OTP ${deliveryOtp}`);
+
+
                 break;
 
             case 4: // DELIVERED
 
                 order.save();
-                console.log('[_] DELIVERED');
+                console.log(`[_] DELIVERED ${order.id} by ADMIN`);
+
+                // EMAIL
+
                 break;
 
         }

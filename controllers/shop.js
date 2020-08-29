@@ -757,7 +757,8 @@ exports.postOrder = (req, res) => {
 
       instance order = {
          shippingAddress : Address,
-         paymentType:  'cod' | 'card' ,
+         paymentType:  'COD' | 'PREPAID' ,
+         verifyDelivery: boolean : // if true user will provide OTP to the Delivery Guy to mark the order Delivered.
       }
 
    */
@@ -819,6 +820,7 @@ exports.postOrder = (req, res) => {
       order.price = price + shipping_charges - discount;
       order.shippingAddress = JSON.stringify(_address);
       order.paymentType = req.body.paymentType;
+      order.verifyDelivery = req.body.verifyDelivery;
       order.userId = req.userId;
       order.statusId = 1;
       order.cancelled = null
@@ -847,6 +849,8 @@ exports.postOrder = (req, res) => {
       order = _order;
       let orderItems = [];
 
+
+      // Reduce Respective stockItems.
       orderCart.forEach((ci) => {
          orderItems.push(new Promise(async (resolve, reject) => {
             for (let i = 0; i < ci.quantity; i++) {
@@ -898,6 +902,8 @@ exports.postOrder = (req, res) => {
       })
    }).then(order => {
       console.log(' >>> ORDER PLACED.');
+
+      // EMAIL
 
       // EMPTY CART 
       db.cart.findAll({

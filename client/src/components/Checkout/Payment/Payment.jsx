@@ -18,6 +18,7 @@ const Payment = (props) => {
         delete shippingAddress.createdAt
         delete shippingAddress.updatedAt
         let paymentType = document.querySelector('input[name=paymentType]:checked');
+        let verifyDelivery = document.querySelector('input[name=verifyDelivery]').checked;
         if (!paymentType) {
             throw new Error('No payment method selected.')
             return;
@@ -32,7 +33,8 @@ const Payment = (props) => {
             method: 'POST',
             body: JSON.stringify({
                 shippingAddress,
-                paymentType
+                paymentType,
+                verifyDelivery
             })
         }).then(async res => {
             res = await res.json();
@@ -76,28 +78,16 @@ const Payment = (props) => {
                    </div>
                 </label>
                 <label className="pay_label">
-                    <input type="radio" id="radio" name='paymentType' value="CARD" />
+                    <input type="radio" id="radio" name='paymentType' value="PREPAID" />
                     <div className="mode">
-                        Credit Card / Debit Card / ATM Card
+                        Prepaid : Card / Net Banking / UPI / Online Wallets
                    </div>
                 </label>
-                <label className="pay_label">
-                    <input type="radio" id="radio" name='paymentType' value="UPI" />
-                    <div className="mode">
-                        UPI(PhonePe / Google Pay / BHIM)
-                   </div>
-                </label>
-                <label className="pay_label">
-                    <input type="radio" id="radio" name='paymentType' value="NET BANKING" />
-                    <div className="mode">
-                        Net Banking
-                   </div>
-                </label>
-                <label className="pay_label">
-                    <input type="radio" id="radio" name='paymentType' value="EMI" />
-                    <div className="mode">
-                        EMI (Easy Installments)
-                   </div>
+            </div>
+            <div className="verify-delivery">
+                <label>
+                    <input type="checkbox" name="verifyDelivery" id="verifyDelivery" />
+                    <b>Verify Delivery</b> <span>You will have to provide the OTP sent to your email to the Delivery Boy in order to mark the Order Delivered.</span>
                 </label>
             </div>
             <div className="confirm">

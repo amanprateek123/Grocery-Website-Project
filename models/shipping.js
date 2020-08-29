@@ -9,6 +9,10 @@ module.exports = (sequelize, Sequelize) => {
         },
         // userId : only users with role : D - Delivery Guy
         // orderId: Order assigned to that Delivery Guy
+
+        deliveryOtp: { // to mark order Delivered.
+            type: Sequelize.STRING,
+        }
     },
         {
             tableName: 'db_ld_shipping'

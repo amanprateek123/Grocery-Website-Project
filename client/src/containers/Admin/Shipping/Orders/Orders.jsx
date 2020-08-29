@@ -8,6 +8,8 @@ import {
     InputLabel, Snackbar, CircularProgress, LinearProgress, Select, MenuItem, Button, Accordion, AccordionSummary, AccordionDetails
 }
     from '@material-ui/core';
+import Alert from '@material-ui/lab/Alert';
+
 import './Orders.scss'
 
 import Order from './Order/Order'
@@ -22,6 +24,7 @@ function Orders(props) {
     const [orders, setOrders] = useState([]);
     const [meta, setMeta] = useState(null);
     const [status, setStatus] = useState(' ')
+
 
 
     const fetchOrders = () => {
@@ -59,7 +62,8 @@ function Orders(props) {
 
     let statusColors = ['#2862ff', '#ff9900', '#ff0066', '#00cc77'];
 
-    const changeStatus = async (orderId, statusId) => {
+    const changeStatus = async (order, statusId) => {
+        let orderId = order.id;
         let body = {
             orderId,
             statusId
@@ -70,7 +74,12 @@ function Orders(props) {
                 break;
 
             case 2:
-                let p_result = await Swal.fire('Item Packed', 'Change Status to packed?', 'question')
+                let p_result = await Swal.fire({
+                    title: 'Item Packed',
+                    text: 'Change Status to packed?',
+                    icon: 'question',
+                    showCancelButton: true,
+                })
                 if (p_result.isDismissed) {
                     return;
                 }
@@ -97,6 +106,7 @@ function Orders(props) {
                         title: 'Ship Product',
                         text: 'Assign a Delivery Guy',
                         icon: 'question',
+                        showCancelButton: true,
                         input: 'select',
                         inputOptions: select_options,
                         inputPlaceholder: 'Delivery By',
@@ -114,6 +124,7 @@ function Orders(props) {
                     {
                         text: 'Expected Delivery Date',
                         icon: 'question',
+                        showCancelButton: true,
                         input: 'text',
                         inputPlaceholder: 'MM/DD/YYYY',
                         inputValidator: (value) => {
@@ -133,7 +144,27 @@ function Orders(props) {
 
                 break;
             case 4:
-                let d_result = await Swal.fire('Delivered', 'Are you sure to mark the Order Delivered?', 'question')
+                let d_result;
+                if (order.verifyDelivery) {
+                    d_result = await Swal.fire({
+                        title: 'Delivered',
+                        icon: 'question',
+                        text: 'Need Verification : Ask the User for OTP to mark this order Delivered.',
+                        showCancelButton: true,
+                        input: 'text',
+                        inputPlaceholder: 'OTP',
+                    })
+
+                    body.deliveryOtp = d_result.value;
+                }
+                else {
+                    d_result = await Swal.fire({
+                        title: 'Delivered',
+                        text: 'Are you sure to mark the Order Delivered?',
+                        icon: 'question',
+                        showCancelButton: true,
+                    })
+                }
                 if (d_result.isDismissed) {
                     return;
                 }
@@ -147,15 +178,29 @@ function Orders(props) {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(body)
-        }).then(res => {
+        }).then(async res => {
             if (res.status == 200) {
-                fetchOrders();
+                res = await res.json();
+                if (res.status == 200) {
+                    fetchOrders();
+                }
+                else {
+                    Swal.fire({
+                        title: 'Oops! ',
+                        text: "OTP don't match!",
+                        icon: 'error',
+                        toast: true,
+                        timerProgressBar: true,
+                        timer: 2000
+                    })
+                }
             }
         });
     }
 
     return (
         <div className="shipping-orders">
+
             <div className="container">
                 <h1>Shipping Orders</h1>
                 <div className="row p-3 px-4">

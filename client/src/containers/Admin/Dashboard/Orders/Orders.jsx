@@ -65,14 +65,24 @@ function Orders(props) {
 
         switch (statusId) {
             case 1:
-                let o_result = await Swal.fire('Ordered', 'Are you sure to revert the Order to Ordered State?', 'question')
+                let o_result = await Swal.fire({
+                    title: 'Ordered',
+                    text: 'Are you sure to revert the Order to Ordered State?',
+                    icon: 'question',
+                    showCancelButton: true,
+                })
                 if (o_result.isDismissed) {
                     return;
                 }
                 break;
 
             case 2:
-                let p_result = await Swal.fire('Item Packed', 'Change Status to packed?', 'question')
+                let p_result = await Swal.fire({
+                    title: 'Item Packed',
+                    text: 'Change Status to packed?',
+                    icon: 'question',
+                    showCancelButton: true,
+                })
                 if (p_result.isDismissed) {
                     return;
                 }
@@ -98,6 +108,7 @@ function Orders(props) {
                     {
                         title: 'Ship Product',
                         text: 'Assign a Delivery Guy',
+                        showCancelButton: true,
                         icon: 'question',
                         input: 'select',
                         inputOptions: select_options,
@@ -114,10 +125,12 @@ function Orders(props) {
 
                 s_result = await Swal.fire(
                     {
-                        text: 'Expected Delivery Date',
+                        text: 'Expected Delivery Date (MM/DD/YYYY)',
                         icon: 'question',
                         input: 'text',
                         inputPlaceholder: 'MM/DD/YYYY',
+                        showCancelButton: true,
+                        inputValue: new Date().toLocaleDateString(),
                         inputValidator: (value) => {
                             let date = new Date(value);
                             if (!date.getDate()) {
@@ -135,7 +148,12 @@ function Orders(props) {
 
                 break;
             case 4:
-                let d_result = await Swal.fire('Delivered', 'Are you sure to mark the Order Delivered?', 'question')
+                let d_result = await Swal.fire({
+                    title: 'Delivered',
+                    text: 'Are you sure to mark the Order Delivered?',
+                    icon: 'question',
+                    showCancelButton: true,
+                })
                 if (d_result.isDismissed) {
                     return;
                 }

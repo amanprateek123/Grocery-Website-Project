@@ -23,13 +23,17 @@ module.exports = (sequelize, Sequelize = require('sequelize')) => {
             type: Sequelize.TEXT
         },
         paymentType: {
-            type: Sequelize.ENUM(['COD', 'CARD', 'NET BANKING'])
+            type: Sequelize.ENUM(['COD', 'PREPAID',])
         },
         transactionId: {
             type: Sequelize.STRING
         },
         transactionStatus: {
             type: Sequelize.ENUM(['SUCCESS', 'FAILED'])
+        },
+        verifyDelivery: {
+            type: Sequelize.BOOLEAN,
+            defaultValue: false
         },
         isCancelled: {
             type: Sequelize.BOOLEAN,
