@@ -83,8 +83,6 @@ const useStyles = makeStyles((theme) => ({
         width: drawerWidth,
     },
     drawerHeader: {
-        display: 'flex',
-        alignItems: 'center',
         padding: theme.spacing(0, 1),
         // necessary for content to be below app bar
         ...theme.mixins.toolbar,
@@ -300,13 +298,15 @@ const Navbar = (props) => {
                                                 </div>
                                             </div>
                                         </div> : null}
+
+                                        <span><ExpandMoreIcon style={{height:'auto',marginTop:'-5px'}} /></span>
                                     </div>
                                     :
                                     <Button className="btn btn-login" onClick={props.openModal}>Login</Button>}
                             </div>
                             {props.userName ?
                                 <div className="more" style={{ width: '80px', height: '64px', paddingTop: '3.3%' }} onMouseEnter={more_dis} onMouseLeave={more_hide}>
-                                    <Button className="btn btn-more" style={{ fontSize: '16.5px', paddingLeft: '35%' }}>More
+                                    <Button className="btn btn-more more-btn" style={{ fontSize: '15px', paddingLeft: '35%',marginTop:'2px' }}>More
                             <div className={more}>
                                             <div style={{ border: 'solid transparent', position: 'absolute', bottom: '100%', left: '50%', borderWidth: '10px', transform: 'translateX(-10px)', borderBottomColor: '#fff' }}>
 
@@ -359,10 +359,13 @@ const Navbar = (props) => {
                         paper: classes.drawerPaper,
                     }}
                 >
-                    <div className={classes.drawerHeader}>
-                        <IconButton onClick={handleDrawerClose} >
+                    <div className={classes.drawerHeader} style={{backgroundColor:'black',float:'left',height:'50px'}}>
+                        <div className="logo" >
+                            <Link to="/"><img onClick={handleDrawerClose} src={img} height={60} className="" /></Link>
+                        <IconButton onClick={handleDrawerClose} style={{color:'white',float:'right'}}>
                             {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
                         </IconButton>
+                        </div>
                     </div>
                     <Divider />
 
@@ -388,7 +391,7 @@ const Navbar = (props) => {
                             <React.Fragment>
                                 <List>
 
-                                    <ListItem button key={1}>
+                                    <ListItem button key={1} onClick={handleDrawerClose}>
                                         <ListItemIcon>{<InboxIcon />}</ListItemIcon>
                                         <ListItemText primary={"Login"} onClick={props.openModal} />
                                     </ListItem>
@@ -402,14 +405,14 @@ const Navbar = (props) => {
                                 <div className="more_cont" style={{ padding: '0' }}>
                                     <div style={{ margin: '-16px' }}>
                                         <ul>
-                                            <li><NavLink to="/orders"><LocalMallIcon style={{ width: '16px', height: '16px', color: 'var(--mainColor)' }} /><div style={{ marginLeft: '12px' }}>My Orders</div></NavLink></li>
-                                            <li><NavLink to="/"><LocalOfferIcon style={{ width: '16px', height: '16px', color: 'var(--mainColor)' }} /><div style={{ marginLeft: '12px' }}>Offers</div></NavLink></li>
+                                            <li><NavLink to="/orders"><LocalMallIcon style={{ width: '16px', height: '16px', color: 'var(--mainColor)' }} /><div onClick={handleDrawerClose} style={{ marginLeft: '12px' }}>My Orders</div></NavLink></li>
+                                            <li><NavLink to="/"><LocalOfferIcon style={{ width: '16px', height: '16px', color: 'var(--mainColor)' }} /><div onClick={handleDrawerClose} style={{ marginLeft: '12px' }}>Offers</div></NavLink></li>
                                             {/* <li><NavLink to="/"><FavoriteIcon style={{ width: '16px', height: '16px', color: 'var(--mainColor)' }} /><div style={{ marginLeft: '12px' }}>WishList</div></NavLink></li> */}
                                             {/* <li><NavLink to="/"><NotificationsIcon style={{ width: '16px', height: '16px', color: 'var(--mainColor)' }} /><div style={{ marginLeft: '12px' }}>Notification</div></NavLink></li> */}
-                                            {props.role == 'D' ? <li><NavLink to="/shipping"><AdminIcon style={{ width: '16px', height: '16px', color: 'var(--mainColor)' }} /><div style={{ marginLeft: '12px' }}>Shipping</div></NavLink></li> : null}
-                                            {props.role == 'A' ? <li><NavLink to="/admin"><AdminIcon style={{ width: '16px', height: '16px', color: 'var(--mainColor)' }} /><div style={{ marginLeft: '12px' }}>ADMIN</div></NavLink></li> : null}
-                                            {props.role == 'A' ? <li><NavLink to="/admin/dashboard"><AdminIcon style={{ width: '16px', height: '16px', color: 'var(--mainColor)' }} /><div style={{ marginLeft: '12px' }}>Manage Orders</div></NavLink></li> : null}
-                                            <li onClick={props.logout}><NavLink to="/"><PowerSettingsNewIcon style={{ width: '16px', height: '16px', color: 'var(--mainColor)' }} /><div style={{ marginLeft: '12px' }}>Logout</div></NavLink></li>
+                                            {props.role == 'D' ? <li><NavLink to="/shipping"><AdminIcon style={{ width: '16px', height: '16px', color: 'var(--mainColor)' }} /><div onClick={handleDrawerClose} style={{ marginLeft: '12px' }}>Shipping</div></NavLink></li> : null}
+                                            {props.role == 'A' ? <li><NavLink to="/admin"><AdminIcon style={{ width: '16px', height: '16px', color: 'var(--mainColor)' }} /><div onClick={handleDrawerClose} style={{ marginLeft: '12px' }}>ADMIN</div></NavLink></li> : null}
+                                            {props.role == 'A' ? <li><NavLink to="/admin/dashboard"><AdminIcon style={{ width: '16px', height: '16px', color: 'var(--mainColor)' }} /><div onClick={handleDrawerClose} style={{ marginLeft: '12px' }}>Manage Orders</div></NavLink></li> : null}
+                                            <li onClick={props.logout}><NavLink to="/"><PowerSettingsNewIcon style={{ width: '16px', height: '16px', color: 'var(--mainColor)' }} /><div onClick={handleDrawerClose} style={{ marginLeft: '12px' }}>Logout</div></NavLink></li>
                                         </ul>
                                     </div>
                                 </div>
