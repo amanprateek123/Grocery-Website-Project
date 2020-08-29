@@ -220,6 +220,12 @@
     }
     
 }
+.more-btn{
+    span{
+        height: 40px!important;
+        align-items: flex-start;
+    }
+}
 .cartRem{
     display: none;
 }
@@ -273,7 +279,7 @@
     position: absolute;
     min-width: 240px;
     background: #fff;
-    top: 50px;
+    top: 47px;
     color: #212121;
     font-size: 14px;
     font-weight: 400;
