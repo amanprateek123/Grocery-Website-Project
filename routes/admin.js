@@ -14,7 +14,6 @@ router.post('/add-departments', multer.single('departments'), adminCtrl.addDepar
 router.post('/add-products', multer.single('products'), adminCtrl.addProducts)
 router.post('/homepage', adminCtrl.homePage)
 router.post('/offers', adminCtrl.offers)
-router.get('/offers', adminCtrl.getOffers)
 router.delete('/offers', adminCtrl.delOffers)
 
 router.post('/add-product',

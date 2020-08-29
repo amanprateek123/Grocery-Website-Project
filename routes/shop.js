@@ -4,6 +4,7 @@ const shopCtrl = require('../controllers/shop')
 const isAuth = require('../middleware/is-auth')
 
 router.get('/homepage', shopCtrl.getHome)
+router.get('/offers', shopCtrl.getOffers)
 
 router.get('/get-categories', shopCtrl.getCategories)
 router.get('/get-products', shopCtrl.getProducts)

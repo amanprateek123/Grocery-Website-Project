@@ -179,7 +179,6 @@ const Navbar = (props) => {
             searchText.current.removeEventListener('keyup', handler)
         }
     }, [])
-    console.log('pre', preSearch)
     const [show, setShow] = useState(false)
     const [val, setVal] = useState(null)
     const searchs = (e) => {

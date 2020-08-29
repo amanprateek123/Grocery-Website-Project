@@ -308,8 +308,9 @@ function OrderItems(props) {
             <div className="col-md-4">
               <h5 style={{ fontSize: '16px', fontWeight: 'bold' }}>Order Summary</h5>
               <div style={{ fontSize: '13px' }}>
-                Item(s) Subtotal: <span style={{ float: 'right' }}> ₹{order.price - order.shippingCharges} </span><br />
-                      Shipping: <span style={{ float: 'right' }}> ₹{order.shippingCharges} </span><br />
+                Item(s) Subtotal: <span style={{ float: 'right' }}> ₹{order.price - order.shippingCharges + order.discount} </span><br />
+                      Shipping: <span style={{ float: 'right' }}> +₹{order.shippingCharges} </span><br />
+                {order.discount ? <React.Fragment>Discount : <span style={{ float: 'right' }}> -₹{order.discount} </span><br /></React.Fragment> : null}
                       Total: <span style={{ float: 'right' }}> ₹{order.price} </span><br />
                 <div className="mt-3" style={{ fontWeight: 'bold' }}>
                   <span >Grand Total:</span> <span style={{ float: 'right' }}> ₹{order.price} </span>
@@ -339,7 +340,7 @@ function OrderItems(props) {
                 })}
               </div>
             </div>
-            <div className="col-md-4" style={{display:'flex',justifyContent:'center'}}>
+            <div className="col-md-4" style={{ display: 'flex', justifyContent: 'center' }}>
               {!order.isCancelled ?
                 <div className="mt-3">
                   <Button variant="contained" color="inherit" style={{ backgroundColor: 'var(--mainColor)', color: 'white', padding: '10px 15px', width: '260px', fontSize: '14px' }}>Track Package</Button>

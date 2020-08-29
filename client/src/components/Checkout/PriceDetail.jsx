@@ -50,63 +50,70 @@ function PriceDetail(props) {
     const [code, setCode] = useState('')
     const [data, setData] = useState(null)
 
-    useEffect(() => {
-        fetch('/admin/offers', {
+
+    let coup;
+
+    const [valid, setValid] = useState()
+
+    const apply = async (codes) => {
+        let res = await fetch('/offers', {
             headers: {
                 'Content-Type': 'application/json'
             },
             method: 'GET',
-        }).then(res => res.json()).then(res => {
-            setData(res)
         })
-    }, [code])
-    let coup
 
-   const [valid,setValid] = useState()
+        let _data = await res.json();
 
-  const apply=(codes)=>{
-    if (data){
-        coup = data.find(itm=>itm.offerCode===codes)
-        console.log('coup',coup)
-        setDetail(coup)
-        
-        if(coup){
-          let d = new Date()
-          let e = new Date(coup.endDate)
-          let f = new Date(coup.startDate)
-          if(d.getTime()<=e.getTime() && d.getTime()>=f.getTime()){
-            if(price<coup.minAmt){
-                setValid(4)
+        setData(_data)
+
+        if (_data) {
+            coup = _data.find(itm => itm.offerCode === codes)
+
+            if (coup) {
+                setDetail(coup)
+                let d = new Date()
+                let e = new Date(coup.endDate)
+                let f = new Date(coup.startDate)
+                if (d.getTime() <= e.getTime() && d.getTime() >= f.getTime()) {
+                    if (price < coup.minAmt) {
+                        setValid(4);
+                        props.setOffer(null);
+                    }
+                    else {
+                        setValid(1);
+                        props.setOffer(codes);
+                        setWhole(false)
+                        setDiscount(coup.discount)
+                    }
+                }
+                else if (d.getTime() < f.getTime()) {
+                    setValid(3);
+                    props.setOffer(null);
+                }
+                else {
+                    setValid(2);
+                    props.setOffer(null);
+                }
             }
-            else{
-            setValid(1)
-            setWhole(false)
-            setDiscount(coup.discount)
+            else {
+                setValid(0)
+                props.setOffer(null);
             }
-          }
-          else if(d.getTime()<f.getTime()){
-              setValid(3)
-          }
-          else{
-              setValid(2)
-          }   
         }
-        else{
-            setValid(0)
-        }
-   } 
-  }
-  const [discount,setDiscount]=useState(0)
-  const rem_offer = ()=>{
-      setValid(5)
-      setWhole(true)
-      setDiscount(0)
-      setCoupon(false)
-  }
-const remInput = ()=>{
-    setCoupon(false)
-    setValid(5)
-}
+    }
+    const [discount, setDiscount] = useState(0)
+
+    const rem_offer = () => {
+        setValid(5)
+        setWhole(true)
+        setDiscount(0)
+        setCoupon(false)
+    }
+    const remInput = () => {
+        setCoupon(false)
+        setValid(5)
+    }
 
     return (
         <React.Fragment>
@@ -120,7 +127,7 @@ const remInput = ()=>{
                             <div style={{ width: '100%' }}>
                                 Price({props.cart.length} item)
                             <span>
-                                    <div className="hel_price" style={{fontSize:'16px'}}>
+                                    <div className="hel_price" style={{ fontSize: '16px' }}>
                                         ₹ {price}
                                     </div>
                                 </span>
@@ -130,34 +137,34 @@ const remInput = ()=>{
                             <div style={{ width: '100%' }}>
                                 Delivery Charges
                             <span>
-                                    <div className="hel_price" style={{fontSize:'16px'}}>
+                                    <div className="hel_price" style={{ fontSize: '16px' }}>
                                         ₹ {shippingCharges}
                                     </div>
                                 </span>
                             </div>
                         </div>
-                       {whole?
-                        <div className="coupons">
-                        <h6 onClick={()=>setCoupon(true)} >Apply coupon code?</h6>
-                         {coupon?
-                        <div className="code">
-                          <input type="text" onChange={(e)=>setCode(e.target.value)} /><span><DoneIcon onClick={()=>apply(code)} style={{margin:'0 10px'}} /><CloseIcon onClick={remInput}/></span>
-                        </div>:null}                        
-                     </div>:null}
-                     {valid===0?<div>
-                         <p style={{color:'red',fontSize:'11px'}}>Invalid Coupon.Try another!</p>
-                         </div>:valid===1?
-                         <div className="applied">
-                           Coupon : {detail.offerCode} Appllied! ({detail.discount}% off) <span className="cross_offer" ><CloseIcon fontSize="inherit" onClick={rem_offer} /></span>
-                         </div>:
-                         valid===2?<p style={{color:'red',fontSize:'11px'}}>Sorry,this coupon is expired!</p>
-                     :valid===3?<p style={{color:'red',fontSize:'11px'}}>This coupon is valid after {new Date(detail.startDate).getDate()} {month[new Date(detail.startDate).getMonth()]} {new Date(detail.startDate).getFullYear()} </p>
-                         :valid===4?<p style={{color:'red',fontSize:'11px'}}>Your Order price should be above ₹{detail.minAmt} </p>
-                         :null}
-                        
+                        {whole ?
+                            <div className="coupons">
+                                <h6 onClick={() => setCoupon(true)} >Apply coupon code?</h6>
+                                {coupon ?
+                                    <div className="code">
+                                        <input type="text" onChange={(e) => setCode(e.target.value)} /><span><DoneIcon onClick={() => apply(code)} style={{ margin: '0 10px' }} /><CloseIcon onClick={remInput} /></span>
+                                    </div> : null}
+                            </div> : null}
+                        {valid === 0 ? <div>
+                            <p style={{ color: 'red', fontSize: '11px' }}>Invalid Coupon.Try another!</p>
+                        </div> : valid === 1 ?
+                                <div className="applied">
+                                    Coupon : {detail?.offerCode} Appllied! ({detail.discount}% off) <span className="cross_offer" ><CloseIcon fontSize="inherit" onClick={rem_offer} /></span>
+                                </div> :
+                                valid === 2 ? <p style={{ color: 'red', fontSize: '11px' }}>Sorry,this coupon is expired!</p>
+                                    : valid === 3 ? <p style={{ color: 'red', fontSize: '11px' }}>This coupon is valid after {new Date(detail?.startDate).getDate()} {month[new Date(detail.startDate).getMonth()]} {new Date(detail.startDate).getFullYear()} </p>
+                                        : valid === 4 ? <p style={{ color: 'red', fontSize: '11px' }}>Your Order price should be above ₹{detail?.minAmt} </p>
+                                            : null}
+
                         <div className="price_total">
                             <div className="price_det">
-                                <div style={{ width: '100%',fontSize:'16px' }}>
+                                <div style={{ width: '100%', fontSize: '16px' }}>
                                     Total Payable
                             <span>
                                         {valid === 1 ?
@@ -173,8 +180,8 @@ const remInput = ()=>{
                         </div>
                     </div>
                     <div className="price_det">
-                        <div style={{ width: '100%', color: 'darkgreen',fontSize:'12px' ,fontWeight: 'bold', padding: '5px 20px' }}>
-                            Your Total Savings on this order ₹ {((discount/100)*price).toFixed(2)}
+                        <div style={{ width: '100%', color: 'darkgreen', fontSize: '12px', fontWeight: 'bold', padding: '5px 20px' }}>
+                            Your Total Savings on this order ₹ {((discount / 100) * price).toFixed(2)}
                         </div>
                     </div>
                 </CardContent>

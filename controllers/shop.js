@@ -22,6 +22,14 @@ exports.getHome = async (req, res) => {
    }).then(data => res.json(data)).catch((err) => res.json(err))
 }
 
+//getOffers
+exports.getOffers = async (req, res) => {
+   db.offers.findAll({}).then(data => res.json(data)).catch(e => {
+      res.json(e)
+      console.log('error', e)
+   })
+}
+
 
 
 // *** CATEGORIES
@@ -814,9 +822,26 @@ exports.postOrder = (req, res) => {
 
       let shipping_charges = deliveryCharges(_address.distance, price, totalWeight, totalExtraCharges);
 
+
       let discount = 0;
+      if (req.body.offer) {
+         console.log('OFFER ', req.body.offer);
+         let [offer] = await db.offers.findAll({ where: { offerCode: req.body.offer } })
+
+         if (offer.discount) {
+            if (price >= offer.minAmt) {
+               let startDate = new Date(offer.startDate);
+               let endDate = new Date(offer.endDate);
+               let today = new Date();
+               if (today > startDate && today < endDate) {
+                  discount = price * offer.discount / 100;
+               }
+            }
+         }
+      }
 
       order.shippingCharges = shipping_charges;
+      order.discount = discount;
       order.price = price + shipping_charges - discount;
       order.shippingAddress = JSON.stringify(_address);
       order.paymentType = req.body.paymentType;
@@ -965,7 +990,6 @@ exports.getInvoice = async (req, res) => {
          res.setHeader('Content-Disposition', 'inline; filename="' + filename + '"')
 
          order = order.toJSON();
-         order.deliveryCharges = order.price - order.orderItems.reduce((total, oi) => total + oi.sku.price, 0);
 
          let filtered = [];
          for (let oi of order.orderItems) {

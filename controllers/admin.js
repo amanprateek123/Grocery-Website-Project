@@ -685,14 +685,6 @@ exports.offers = async (req, res) => {
     })
 }
 
-//getOffers
-exports.getOffers = async (req, res) => {
-    db.offers.findAll({}).then(data => res.json(data)).catch(e => {
-        res.json(e)
-        console.log('error', e)
-    })
-}
-
 exports.delOffers = async (req, res) => {
     const data = req.body
     // console.log(data)

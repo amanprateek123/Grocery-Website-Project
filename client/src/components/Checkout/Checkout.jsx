@@ -142,6 +142,8 @@ function Checkout(props) {
         setAddressEditMode(false);
         setEditingAddress(null);
     }
+
+
     return (
         box === 1 ?
             (
@@ -161,7 +163,7 @@ function Checkout(props) {
                                     <div>
                                         {user.addresses.slice(0, addr).map((add, i) => {
                                             return (
-                                                <label for="radio" className="add_radio" key={add+i}>
+                                                <label for="radio" className="add_radio" key={add + i}>
                                                     <input type="radio" id="radio" name='address' value={i} checked={radio == i} onChange={() => radiochange(i)} onClick={remAdd} />
                                                     <div className="user_add">
                                                         <div style={{ width: '100%' }}>
@@ -242,7 +244,19 @@ function Checkout(props) {
                     </Paper>
                     : null
             ) : box === 2 ? <Order idx={idx} address={user.addresses} takeBox={takeBox} user={user} change={change} payment={setPayment} /> :
-                box === 3 ? <Payment setPlacedOrder={props.setPlacedOrder} setOrderData={props.setOrderData} idx={idx} address={user.addresses} addrIndex={radio} takeBox={takeBox} user={user} change={change} cart={props.cart} change1={change1} /> : null
+                box === 3 ? <Payment
+                    setPlacedOrder={props.setPlacedOrder}
+                    setOrderData={props.setOrderData}
+                    idx={idx}
+                    address={user.addresses}
+                    addrIndex={radio}
+                    takeBox={takeBox}
+                    user={user}
+                    change={change}
+                    cart={props.cart}
+                    change1={change1}
+                    offer={props.offer}
+                /> : null
 
     )
 }

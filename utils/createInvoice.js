@@ -100,7 +100,17 @@ function generateInvoiceTable(doc, order) {
         "",
         "Delivery Charges",
         "",
-        formatCurrency(order.deliveryCharges)
+        '+ ' + formatCurrency(order.shippingCharges)
+    );
+    subtotalPosition += 20;
+    generateTableRow(
+        doc,
+        subtotalPosition,
+        "",
+        "",
+        "Discount",
+        "",
+        '- ' + formatCurrency(order.discount)
     );
     subtotalPosition += 20;
     generateHr(doc, subtotalPosition - 5);
@@ -110,7 +120,7 @@ function generateInvoiceTable(doc, order) {
         subtotalPosition + 5,
         "",
         "",
-        "Subtotal",
+        "Total",
         "",
         formatCurrency(order.price)
     );

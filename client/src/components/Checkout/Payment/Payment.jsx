@@ -17,13 +17,18 @@ const Payment = (props) => {
         let shippingAddress = props.address[props.addrIndex];
         delete shippingAddress.createdAt
         delete shippingAddress.updatedAt
+
         let paymentType = document.querySelector('input[name=paymentType]:checked');
         let verifyDelivery = document.querySelector('input[name=verifyDelivery]').checked;
+
         if (!paymentType) {
             throw new Error('No payment method selected.')
             return;
         }
         paymentType = paymentType.value;
+
+        let offer = props.offer;
+
 
         return fetch('/post-order', {
             headers: {
@@ -34,7 +39,8 @@ const Payment = (props) => {
             body: JSON.stringify({
                 shippingAddress,
                 paymentType,
-                verifyDelivery
+                verifyDelivery,
+                offer,
             })
         }).then(async res => {
             res = await res.json();
