@@ -43,9 +43,9 @@ function Order(props) {
                     <div className="col-md-4">
                         <h5 style={{ fontSize: '16px', fontWeight: 'bold' }}>Order Summary</h5>
                         <div style={{ fontSize: '13px' }}>
-                            Item(s) Subtotal: <span style={{ float: 'right' }}> ₹{order.price - order.shippingCharges} </span><br />
-                      Shipping: <span style={{ float: 'right' }}> ₹{order.shippingCharges} </span><br />
-                      Total: <span style={{ float: 'right' }}> ₹{order.price} </span><br />
+                            Item(s) Subtotal: <span style={{ float: 'right' }}> ₹{order.price - order.shippingCharges + order.discount} </span><br />
+                      Shipping: <span style={{ float: 'right' }}> +₹{order.shippingCharges} </span><br />
+                            {order.discount ? <React.Fragment>Discount : <span style={{ float: 'right' }}> -₹{order.discount} </span><br /></React.Fragment> : null}
                             <div className="mt-3" style={{ fontWeight: 'bold' }}>
                                 <span >Grand Total:</span> <span style={{ float: 'right' }}> ₹{order.price} </span>
                             </div>

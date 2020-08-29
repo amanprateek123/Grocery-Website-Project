@@ -311,7 +311,6 @@ function OrderItems(props) {
                 Item(s) Subtotal: <span style={{ float: 'right' }}> ₹{order.price - order.shippingCharges + order.discount} </span><br />
                       Shipping: <span style={{ float: 'right' }}> +₹{order.shippingCharges} </span><br />
                 {order.discount ? <React.Fragment>Discount : <span style={{ float: 'right' }}> -₹{order.discount} </span><br /></React.Fragment> : null}
-                      Total: <span style={{ float: 'right' }}> ₹{order.price} </span><br />
                 <div className="mt-3" style={{ fontWeight: 'bold' }}>
                   <span >Grand Total:</span> <span style={{ float: 'right' }}> ₹{order.price} </span>
                 </div>
