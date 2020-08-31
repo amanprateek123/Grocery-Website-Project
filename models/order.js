@@ -29,7 +29,7 @@ module.exports = (sequelize, Sequelize = require('sequelize')) => {
             type: Sequelize.STRING
         },
         transactionStatus: {
-            type: Sequelize.ENUM(['SUCCESS', 'FAILED'])
+            type: Sequelize.STRING
         },
         verifyDelivery: {
             type: Sequelize.BOOLEAN,

@@ -30,7 +30,11 @@ if (EMAILS_ON) {
 }
 
 
-app.use(bodyParser.json());
+app.use(bodyParser.json({
+    verify: (req, res, buf) => {
+        req.rawBody = buf
+    }
+}));
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // Logging
