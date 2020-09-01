@@ -18,6 +18,11 @@
         margin-bottom: 1em;
     }
     .form-group{
+        h2{
+            @media(max-width: 600px){
+                font-size: 15px;
+            }
+        }
         &>*{
             margin-right: 1em;
             width: 100%;
@@ -57,4 +62,7 @@
             color: red;
         }
     }
+}
+.json{
+    padding: 0 2em;
 }

@@ -70,3 +70,16 @@
         font-size: 0.75rem;
     }
 }
+.left_ad{
+    @media(max-width: 600px){
+        display: none;
+    }
+}
+.drop_ad{
+    display: none;
+    @media(max-width: 600px){
+        display: block;
+        text-align: center;
+        background-color: transparent!important;
+    }
+}

@@ -280,9 +280,9 @@ const Navbar = (props) => {
                         </div>
 
                         <div className="navigation d-md-flex d-none">
-                            <div className="user" style={{ width: '180px', textAlign: 'center' }}>
+                            <div className="user" style={{ width: '180px', textAlign: 'center',height:'64px' }}>
                                 {props.userName ?
-                                    <div className="username-nav align-items-center MuiButton-root" style={{ width: '180px', cursor: 'pointer', textAlign: 'center', paddingTop: '13.5px' }} onMouseEnter={() => setdis(true)} onMouseLeave={() => setdis(false)} >
+                                    <div className="username-nav align-items-center MuiButton-root" style={{ width: '180px', cursor: 'pointer', textAlign: 'center',height:'70px' }} onMouseEnter={() => setdis(true)} onMouseLeave={() => setdis(false)} >
                                         {props.userName}
                                         {dis ? <div className="more_details1">
                                             <div style={{ border: 'solid transparent', position: 'absolute', bottom: '100%', left: '50%', borderWidth: '10px', transform: 'translateX(-10px)', borderBottomColor: '#fff' }}>
@@ -301,7 +301,7 @@ const Navbar = (props) => {
                                         <span><ExpandMoreIcon style={{height:'auto',marginTop:'-5px'}} /></span>
                                     </div>
                                     :
-                                    <Button className="btn btn-login" onClick={props.openModal}>Login</Button>}
+                                    <Button className="btn btn-login" style={{marginTop:'13px'}} onClick={props.openModal}>Login</Button>}
                             </div>
                             {props.userName ?
                                 <div className="more" style={{ width: '80px', height: '64px', paddingTop: '3.3%' }} onMouseEnter={more_dis} onMouseLeave={more_hide}>
@@ -370,7 +370,7 @@ const Navbar = (props) => {
 
                     <Link to="/profile">
                         {props.userName ?
-                            <div className="row align-items-center my-3 drawer-user">
+                            <div className="row align-items-center my-3 drawer-user" onClick={handleDrawerClose}>
                                 <div className="col-3 ml-1">
                                     <Avatar className="dp" src={male_avatar} />
                                 </div>

@@ -13,12 +13,12 @@ import Modal from '../../../components/Modal/Modal'
 import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline';
 import Swal from 'sweetalert2'
 
-export default function Offers() {
+function Offers(props) {
 
     const [data, setData] = useState(null)
 
     const fetchOffers = () => {
-        fetch('/admin/offers', {
+        fetch('/offers', {
             headers: {
                 'Content-Type': 'application/json'
             },
@@ -47,7 +47,8 @@ export default function Offers() {
                 if (result.value) {
                     fetch('/admin/offers', {
                         headers: {
-                            'Content-Type': 'application/json'
+                            'Content-Type': 'application/json',
+                            'Authorization': 'Bearer '+ props.idToken
                         },
                         method: 'DELETE',
                         body: JSON.stringify({ offerCode: variable.variables })
@@ -71,7 +72,8 @@ export default function Offers() {
         return (
             fetch('/admin/offers', {
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer '+ props.idToken
                 },
                 method: 'POST',
                 body: JSON.stringify(offer)
@@ -161,7 +163,7 @@ const cancel1 = ()=>{
             <h1>Genric Offers</h1>
             <div className="row mt-4" >
                 {(!form && !edit)?<div className="col-md-6" style={{ display: 'flex', justifyContent: 'center' }}>
-                    <Button color="secondary" variant="contained" style={{ padding: '10px' }} onClick={show} >Add new Offer</Button>
+                    <Button color="secondary" className="add_off" variant="contained" style={{ padding: '10px' }} onClick={show} >Add new Offer</Button>
                 </div>:null}
                 {(!form && !edit)?<div className="col-md-6" style={{ display: 'flex', justifyContent: 'center' }}>
                     <Button color="primary" variant="contained" style={{ padding: '10px 15px' }} onClick={editForm} >Edit Offers</Button>
@@ -170,7 +172,7 @@ const cancel1 = ()=>{
                     {edit ?
                         <select style={{ width: '30%', padding: '3px' }} onChange={handle}>
                             <option>Select Offer</option>
-                            {data ? data.map(itm => (
+                            {data.length>0 ? data.map(itm => (
                                 <option key={itm.offerCode + itm.discount}>{itm.offerCode}</option>
                             )) : null}
                         </select> : null}
@@ -197,11 +199,11 @@ const cancel1 = ()=>{
                                 <input name='minAmt' id='minAmt' type="text" style={{ padding: '3px' }} value={offer.minAmt} required onChange={handleOffer} />
                             </div>
                             {!edit?<Button type="submit" variant="contained" color="primary" style={{ padding: '5px 4px', borderRadius: '200px', width: '180px', margin: '5% 0', fontSize: '15px' }}>Submit</Button>:
-                            <Button type="submit" variant="contained" color="primary" style={{ padding: '5px 4px', borderRadius: '200px', width: '120px', margin: '5% 0', fontSize: '15px' }}>Submit</Button>}
+                            <Button type="submit" variant="contained" className="sbmt_off" color="primary" style={{ padding: '5px 4px', borderRadius: '200px', width: '120px', fontSize: '15px' }}>Submit</Button>}
                             <span>
                                 {!edit ? <Button variant="contained" color="secondary" style={{ padding: '5px 4px', float: 'right', borderRadius: '200px', width: '180px', margin: '5% 0', fontSize: '15px' }} onClick={cancel} >Cancel</Button>
-                                    : <Button variant="contained" color="secondary" style={{ padding: '5px 4px', float: 'right', borderRadius: '200px', width: '120px', margin: '5% 0', fontSize: '15px' }} onClick={() => del({ variables: code })} >Delete</Button>}</span>
-                                    {edit?<Button variant="contained" color="secondary" style={{ padding: '5px 4px', float: 'right', borderRadius: '200px', width: '120px', margin: '5% 10px', fontSize: '15px' }} onClick={cancel1} >Cancel</Button>:null}
+                                    : <Button variant="contained" color="secondary" className="edit_off" style={{ padding: '5px 4px', borderRadius: '200px', width: '120px', fontSize: '15px' }} onClick={() => del({ variables: code })} >Delete</Button>}</span>
+                                    {edit?<Button variant="contained" color="secondary" className="edit_off" style={{ padding: '5px 4px', borderRadius: '200px', width: '120px', fontSize: '15px' }} onClick={cancel1} >Cancel</Button>:null}
                         </form>
                     ) : null}
                     <Snackbar open={snackbar} autoHideDuration={2000} className="home-snackbar" onClose={() => setSnackbar(false)} anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}>
@@ -363,3 +365,15 @@ const cancel1 = ()=>{
         // </Paper>
     )
 }
+const mapStateToProps = state => {
+    return {
+        ...state
+    }
+}
+const mapDispatchToProps = dispatch => {
+    return {
+        
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Offers);

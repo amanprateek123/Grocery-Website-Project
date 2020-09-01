@@ -100,7 +100,7 @@ const DeleteProduct = (props) => {
                     <h2>Delete Product</h2>
                     <form onSubmit={getProduct}>
                         <div className="form-group">
-                            <TextField className="text-center" value={productId} onChange={(e) => setProductId(e.target.value)} label="find product by Id" name="productId" />
+                            <TextField className="text-center" style={{width:'200px'}} value={productId} onChange={(e) => setProductId(e.target.value)} label="find product by Id" name="productId" />
                         </div>
                     </form>
                     {

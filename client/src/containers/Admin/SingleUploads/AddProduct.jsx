@@ -357,7 +357,7 @@ const AddProduct = (props) => {
                                     <div className="attributes ml-2 mt-2">
                                         <div className="d-flex align-items-center">
                                             <h5>Attributes</h5>
-                                            <Button onClick={() => addATTR(i)}>Add Attribute</Button>
+                                            <Button style={{fontSize:'12px'}} onClick={() => addATTR(i)}>Add Attribute</Button>
                                         </div>
                                         <div className="imgs">
                                             {sku.attributes.map((attr, j) => (

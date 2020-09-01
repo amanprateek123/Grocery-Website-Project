@@ -96,7 +96,7 @@ function Homepage(props) {
                                                         <div key={sec.id + index} style={{ margin: '1em 0', padding: '1em', background: '#eee7' }}>
                                                             <div className="mt-3" style={{ display: 'flex', justifyContent: 'space-between', flexDirection: 'column' }}>
                                                                 <label htmlFor={`sections.${index}.fieldType`}>Enter the Field Type:</label>
-                                                                <Field name={`sections.${index}.fieldType`} as="select" style={{ padding: '3px', width: '300px' }}>
+                                                                <Field name={`sections.${index}.fieldType`} as="select" className="offer_form" style={{ padding: '3px' }}>
                                                                     <option value="">Select Option</option>
                                                                     <option value="product">Product</option>
                                                                     <option value="banners">Banners</option>
@@ -134,8 +134,8 @@ function Homepage(props) {
                    {meta.isSuccess?<div style={{color:'green',textAlign:'center',fontSize:'15px'}}>Uploaded Successfully</div>:null} */}
                                                 {meta.isError ? <div style={{ color: 'red', textAlign: 'center', fontSize: '15px' }}>Uploading Failed</div> : null}
                                                 <div className="mt-3">
-                                                    <Button style={{ padding: '5px 4px', borderRadius: '200px', width: '180px', marginBottom: '5px', fontSize: '15px' }} variant="contained" color="secondary" onClick={() => push({ key: "", value: "", fieldType: "" })}>Add Section</Button>
-                                                    <Button type="submit" variant="contained" color="primary" style={{ padding: '5px 4px', borderRadius: '200px', width: '180px', margin: '5% 37%', fontSize: '15px' }}>Submit</Button>
+                                                    <Button className="admt" style={{ borderRadius: '200px', marginBottom: '5px', fontSize: '15px' }} variant="contained" color="secondary" onClick={() => push({ key: "", value: "", fieldType: "" })}>Add Section</Button>
+                                                    <Button type="submit" className="sbmt" variant="contained" color="primary" style={{ borderRadius: '200px', fontSize: '15px' }}>Submit</Button>
                                                 </div>
                                             </React.Fragment>
                                         )}
