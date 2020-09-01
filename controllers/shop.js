@@ -1,5 +1,9 @@
 
 require('dotenv').config()
+
+const STRIPE_WEBHOOK_SECRET = process.env.STRIPE_WEBHOOK_SECRET;
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+
 let EMAILS = require('../utils/email');
 let EMAILS_ON = false; // CONFIG
 EMAILS_ON = !EMAILS.transporter ? false : EMAILS_ON;
@@ -761,7 +765,7 @@ exports.cancelOrder = async (req, res) => {
    }
 }
 
-exports.postOrder = (req, res) => {
+exports.postOrder = async (req, res) => {
    /*
       Authenticated User : `req.userId` is available.
       
@@ -781,123 +785,214 @@ exports.postOrder = (req, res) => {
    let price = 0;
    let order = {};
    let orderCart;
+   let paymentDone = false;
+
+
+   // if request was sent by STRIPE WEBHOOK on success full payment 
+   const sig = req.headers['stripe-signature'];
+   let event = null;
+   if (sig) {
+      try {
+         event = stripe.webhooks.constructEvent(req.rawBody, sig, STRIPE_WEBHOOK_SECRET);
+         console.log('STRIPE WEBHOOK ');
+      }
+      catch (err) {
+         console.log('NOT STRIPE');
+         event = null;
+      }
+   }
+   if (event) {
+      if (event.type == 'charge.succeeded') {
+
+         console.log(event);
+
+         const paymentIntent = event.data.object;
+         console.log('PAYMENT SUCCEEDED');
+
+
+         order = JSON.parse(paymentIntent.metadata.order);
+         req.userId = order.userId;
+         order.statusId = 1;
+         order.cancelled = null;
+         let _address = await db.shippingAddress.findByPk(order.shippingAddress)
+         _address = _address.toJSON();
+         order.shippingAddress = JSON.stringify(_address);
+         order.transactionId = paymentIntent.id;
+         order.transactionStatus = paymentIntent.status;
+
+         orderCart = JSON.parse(paymentIntent.metadata.orderCart);
+
+         paymentDone = true;
+      }
+   }
+
+
+
 
    // Fetch Cart
-   db.cart.findAll({
-      where: {
-         userId: req.userId
-      },
-      include: {
-         model: db.sku,
-         include: {
-            model: db.product
-         }
-      }
-   }).then(async cart => {
-      // If there are some products in the cart which were DELETED by ADMIN
-      // they need to be deleted from the cart.
+   try {
 
-      if (!cart.length) {
-         let error = new Error('Your Cart is Empty!');
-         error.status = 400;
-         throw error;
-      }
-
-      // cart = cart.filter(ci => !ci.sku).map(deleted => deleted.destroy().then(del => console.log(' >> Deleted cartId', del.id, ' as the product was deleted')))
-      orderCart = cart.filter(ci => {
-         if (ci.sku) {
-            if (ci.quantity > ci.sku.stockQuantity) {
-               let err = new Error(`Only ${ci.sku.stockQuantity} stocks left of ${ci.sku.product.name}. Please reduce quantity.`)
-               throw err;
+      if (!paymentDone) {
+         let cart = await db.cart.findAll({
+            where: {
+               userId: req.userId
+            },
+            include: {
+               model: db.sku,
+               include: {
+                  model: db.product
+               }
             }
-            return true;
+         })
+
+         // If there are some products in the cart which were DELETED by ADMIN
+         // they need to be deleted from the cart.
+
+         if (!cart.length) {
+            let error = new Error('Your Cart is Empty!');
+            error.status = 400;
+            throw error;
          }
-         console.log(`NOT in stock.${ci.quantity} vs ${ci.sku.stockQuantity}`);
-         return false;
-      })
 
-      // 
+         // cart = cart.filter(ci => !ci.sku).map(deleted => deleted.destroy().then(del => console.log(' >> Deleted cartId', del.id, ' as the product was deleted')))
+         orderCart = cart.filter(ci => {
+            if (ci.sku) {
+               if (ci.quantity > ci.sku.stockQuantity) {
+                  let err = new Error(`Only ${ci.sku.stockQuantity} stocks left of ${ci.sku.product.name}. Please reduce quantity.`)
+                  throw err;
+               }
+               return true;
+            }
+            console.log(`NOT in stock.${ci.quantity} vs ${ci.sku.stockQuantity}`);
+            return false;
+         })
 
-      price = orderCart.reduce((acc, cur) => acc + cur.sku.price * Math.min(cur.quantity, cur.sku.stockQuantity), 0);
-      let totalWeight = orderCart.reduce((acc, cur) => acc + cur.sku.weight * Math.min(cur.quantity, cur.sku.stockQuantity), 0);
-      let totalExtraCharges = orderCart.reduce((acc, cur) => acc + cur.sku.extraCharges * Math.min(cur.quantity, cur.sku.stockQuantity), 0);
-      console.log('ORDER PRICE >> ', price);
+         // 
 
-      let _address = await db.shippingAddress.findByPk(req.body.shippingAddress.id)
-      _address = _address.toJSON();
+         price = orderCart.reduce((acc, cur) => acc + cur.sku.price * Math.min(cur.quantity, cur.sku.stockQuantity), 0);
+         let totalWeight = orderCart.reduce((acc, cur) => acc + cur.sku.weight * Math.min(cur.quantity, cur.sku.stockQuantity), 0);
+         let totalExtraCharges = orderCart.reduce((acc, cur) => acc + cur.sku.extraCharges * Math.min(cur.quantity, cur.sku.stockQuantity), 0);
+         console.log('ORDER PRICE >> ', price);
 
-      let shipping_charges = deliveryCharges(_address.distance, price, totalWeight, totalExtraCharges);
+         let _address = await db.shippingAddress.findByPk(req.body.shippingAddress.id)
+         _address = _address.toJSON();
+
+         let shipping_charges = deliveryCharges(_address.distance, price, totalWeight, totalExtraCharges);
 
 
-      let discount = 0;
-      if (req.body.offer) {
-         console.log('OFFER ', req.body.offer);
-         let [offer] = await db.offers.findAll({ where: { offerCode: req.body.offer } })
+         let discount = 0;
+         if (req.body.offer) {
+            console.log('OFFER ', req.body.offer);
+            let [offer] = await db.offers.findAll({ where: { offerCode: req.body.offer } })
 
-         if (offer.discount) {
-            if (price >= offer.minAmt) {
-               let startDate = new Date(offer.startDate);
-               let endDate = new Date(offer.endDate);
-               let today = new Date();
-               if (today > startDate && today < endDate) {
-                  discount = price * offer.discount / 100;
+            if (offer.discount) {
+               if (price >= offer.minAmt) {
+                  let startDate = new Date(offer.startDate);
+                  let endDate = new Date(offer.endDate);
+                  let today = new Date();
+                  if (today > startDate && today < endDate) {
+                     discount = price * offer.discount / 100;
+                  }
                }
             }
          }
+
+         let totalPrice = price + shipping_charges - discount;
+
+         // PRICE CALCULATED
+
+         order.shippingCharges = shipping_charges;
+         order.discount = discount;
+         order.price = totalPrice;
+         order.shippingAddress = JSON.stringify(_address);
+         order.paymentType = req.body.paymentType;
+         order.verifyDelivery = req.body.verifyDelivery;
+         order.userId = req.userId;
+         order.statusId = 1;
+         order.cancelled = null
+
+         // // Expected Delivery Date
+         // let date = new Date();
+         // date.setDate(date.getDate() + 2)
+
+         // order.deliverOn = date.toISOString();
+
+         if (!orderCart.length) {
+            let err = new Error('Cart Not Eligible for Order.');
+            err.status = 400;
+            throw err;
+         }
+
+         console.log(`Price : O ${price} + S ${shipping_charges} - D ${discount} = T  ${order.price}`);
+
+         if (req.body.paymentType == 'PREPAID') {
+            // generate online payment client secret and return to client to proceed with online payment
+
+            orderCart = orderCart.map(oc => oc.toJSON());
+            orderCart = orderCart.map(oc => ({ id: oc.id, quantity: oc.quantity, skuId: oc.skuId }));
+            order.shippingAddress = _address.id;
+
+            delete order.cancelled;
+            delete order.statusId;
+
+            console.log(orderCart);
+
+            const paymentIntent = await stripe.paymentIntents.create({
+               amount: totalPrice * 100,
+               currency: 'inr',
+               payment_method_types: ['card'],
+               metadata: {
+                  order: JSON.stringify(order),
+                  orderCart: JSON.stringify(orderCart)
+               },
+            });
+
+            console.log("PAYMENT INTENT : ", paymentIntent);
+            res.json({
+               payOnline: true,
+               amount: totalPrice,
+               clientSecret: paymentIntent.client_secret,
+            })
+            return;
+         }
+
+         else if (req.body.paymentType != 'COD') {
+            res.json({
+               status: 400,
+               message: 'Invalid Payment Method'
+            })
+            return;
+         }
+
       }
 
-      order.shippingCharges = shipping_charges;
-      order.discount = discount;
-      order.price = price + shipping_charges - discount;
-      order.shippingAddress = JSON.stringify(_address);
-      order.paymentType = req.body.paymentType;
-      order.verifyDelivery = req.body.verifyDelivery;
-      order.userId = req.userId;
-      order.statusId = 1;
-      order.cancelled = null
+      // CREATE AN ORDER
 
-      // // Expected Delivery Date
-      // let date = new Date();
-      // date.setDate(date.getDate() + 2)
-
-      // order.deliverOn = date.toISOString();
-
-      if (!orderCart.length) {
-         let err = new Error('Cart Not Eligible for Order.');
-         err.status = 400;
-         throw err;
-      }
-
-      console.log(`Price : O ${price} + S ${shipping_charges} - D ${discount} = T  ${order.price}`);
-
-      return db.order.create({
+      let _order = await db.order.create({
          ...order,
 
       })
 
-   }).then(async (_order) => {
-
       order = _order;
-      let orderItems = [];
+      let orderItems = []; // hold promises
 
-
-      // Reduce Respective stockItems.
+      // Reduce Respective stockItems. and add them to orderItems
       orderCart.forEach((ci) => {
          orderItems.push(new Promise(async (resolve, reject) => {
             for (let i = 0; i < ci.quantity; i++) {
                await db.sku.findByPk(ci.skuId).then(async _sku => {
-                  if (+_sku.stockQuantity > 0) {
-                     _sku.stockQuantity = _sku.stockQuantity - 1;
-                     await _sku.save();
-                     console.log(`Remaining Stock . ${_sku.stockQuantity}`);
-                     db.orderItem.create({
-                        orderId: _order.id,
-                        skuId: ci.skuId,
-                     })
-                  }
-                  else {
-                     console.log(ci.skuId, ' is OUT OF STOCK.!');
-                  }
+                  // if (+_sku.stockQuantity > 0) {
+                  _sku.stockQuantity = _sku.stockQuantity - 1;
+                  await _sku.save();
+                  console.log(`Remaining Stock . ${_sku.stockQuantity}`);
+                  db.orderItem.create({
+                     orderId: _order.id,
+                     skuId: ci.skuId,
+                  })
+                  // }
+                  // else {
+                  //    console.log(ci.skuId, ' is OUT OF STOCK.!');
+                  // }
                })
             }
             resolve()
@@ -905,9 +1000,9 @@ exports.postOrder = (req, res) => {
 
       })
 
-      return Promise.all(orderItems)
-   }).then(result => {
-      return db.order.findByPk(order.id, {
+      let result = await Promise.all(orderItems)
+
+      order = await db.order.findByPk(order.id, {
          include: [
             {
                model: db.orderItem,
@@ -931,7 +1026,7 @@ exports.postOrder = (req, res) => {
             }
          ]
       })
-   }).then(order => {
+
       console.log(' >>> ORDER PLACED.');
 
       // EMAIL
@@ -945,36 +1040,15 @@ exports.postOrder = (req, res) => {
          cart.forEach(ci => ci.destroy())
       })
       res.json(order);
-   })
-      .catch(err => {
-         console.log(err.message);
-         res.json({ message: err.message, status: err.status })
-      })
 
+   }
+   catch (err) {
+      console.log(err);
+      res.json({ message: err.message, status: err.status })
+   }
 
-
-   // Use some payment API to proceed the payment which returns a promise on the status of payment.
-   // if payment is Successful
 
 }
-
-//deleting Order
-// exports.delOrder = async (req,res)=>{
-//      try{
-//       const order = await db.order.findByPk(req.body.id)
-//       if(order.userId === req.userId){
-//          await order.destroy()
-//          res.json({status:"200",message:"Order cancel successfully"})
-//       }
-//       else{
-//          res.json({status:"400",message:"Unauthorised"})
-//       }
-//      }
-//      catch(e){
-//         console.log(e)
-//         res.json(e)
-//      }
-// }
 
 // INVOICE
 

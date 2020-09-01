@@ -10,7 +10,21 @@ import { useEffect } from 'react';
 
 import site from '../../../site_config';
 
+import Modal from '../../Modal/Modal'
+
+import StripeCheckout from './StripeCheckout/StripeCheckout'
+
+import { Elements } from '@stripe/react-stripe-js';
+import { loadStripe } from '@stripe/stripe-js';
+import { useState } from 'react';
+
+const stripePromise = loadStripe("pk_test_PkPcqrgpZoRl7DVSoeLXdCH100TEU5AfdY");
+
 const Payment = (props) => {
+
+    const [payOnline, setPayOnline] = useState(false);
+    const [clientSecret, setClientSecret] = useState(null)
+    const [orderPrice, setOrderPrice] = useState(null)
 
 
     const placeOrderPOST = () => {
@@ -47,6 +61,17 @@ const Payment = (props) => {
             console.log(res)
             props.setOrderData(res);
             props.fetchCart();
+
+            if (res.payOnline) {
+                // if order place
+                setClientSecret(res.clientSecret);
+                setOrderPrice(res.amount);
+                setPayOnline(true);
+            }
+            else {
+                props.setPlacedOrder(true);
+            }
+
             if (res.status != 200) {
                 return res;
             }
@@ -59,12 +84,6 @@ const Payment = (props) => {
     }
 
     const [placeOrder, payMeta] = useMutation(placeOrderPOST)
-
-    useEffect(() => {
-        if (payMeta.isSuccess && payMeta.data.statusId) {
-            props.setPlacedOrder(payMeta.isSuccess)
-        }
-    }, [payMeta])
 
     const pay = (
         <div className="order_det">
@@ -88,6 +107,18 @@ const Payment = (props) => {
                     <div className="mode">
                         Prepaid : Card / Net Banking / UPI / Online Wallets
                    </div>
+                    <Modal visible={payOnline} closeModal={() => setPayOnline(false)} closeModal={() => setPayOnline(false)}>
+                        <div className="stripe">
+                            <Elements stripe={stripePromise}>
+                                <StripeCheckout
+                                    clientSecret={clientSecret}
+                                    orderPrice={orderPrice}
+                                    setPayOnline={setPayOnline}
+                                    setPlacedOrder={props.setPlacedOrder}
+                                    setOrderData={props.setOrderData} />
+                            </Elements>
+                        </div>
+                    </Modal>
                 </label>
             </div>
             <div className="verify-delivery">
