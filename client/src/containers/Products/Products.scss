@@ -150,14 +150,22 @@
         right: 1em;
         top: 0.2em;
         z-index: 0;
-        background-color: #fff9;
-        height: 1.4em;
-        padding: 0;
+        background-color: white;
+        height: 1.5em;
+        @media(max-width: 600px){
+            width: 40%;
+            padding: 5px 1px;
+            height: 2.5em;
+        text-align: center;
+        }
         select, option{
             outline: none;
             color: #999;
             border: 1px solid #eee;
             background: transparent;
+            @media(max-width: 600px){
+                width: 60%;
+            }
         }
     }
 
@@ -188,4 +196,18 @@
      font-weight:bold;
      color:#555;
      cursor: pointer ;
+}
+.filter-lists{
+    position: absolute;
+    top: -0.7em;
+    padding: 0 0.1em;
+    display:none;
+    @media(max-width: 600px){
+        display: block;
+    }
+}
+.product-sec{
+    @media(max-width: 600px){
+        margin-top:20px!important;
+    }
 }

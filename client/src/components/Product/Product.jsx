@@ -46,7 +46,7 @@ const Product = (props) => {
 
 
     return (
-        <Card className={`product ${selectedSKU.stockQuantity ? '' : 'no-stock-card'}`} variant="outlined" style={{ ...props.style }
+        <Card className={`product ${selectedSKU.stockQuantity ? '' : 'no-stock-card'}`} variant="outlined" style={{ ...props.style}
         }>
             <Link to={`/product/${product.id}`} className="stretched-link"></Link>
             <CardMedia

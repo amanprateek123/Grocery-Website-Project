@@ -203,7 +203,7 @@ const Navbar = (props) => {
     const [dis, setdis] = useState(false)
 
     return (
-        <React.Fragment>
+        <React.Fragment >
             <div className={classes.root}>
                 <CssBaseline />
                 <AppBar
@@ -211,7 +211,7 @@ const Navbar = (props) => {
                     className={clsx(classes.appBar, {
                         [classes.appBarShift]: open,
                     })}
-                    style={{ zIndex: '1' }}
+                    style={{ zIndex: '2' }}
                 >
                     <Toolbar className="app-bar">
 
@@ -420,7 +420,6 @@ const Navbar = (props) => {
                     </List>
                     {props.menu}
                 </Drawer>
-
             </div>
 
         </React.Fragment>
