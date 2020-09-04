@@ -227,3 +227,13 @@
 .cats::-webkit-scrollbar {
     display: none;
   }
+
+.sel{
+    position: absolute;
+    right: 1em;
+    top: -0.3em;
+}
+.sels{
+    width: 100%;
+    display: flex;    
+}  
