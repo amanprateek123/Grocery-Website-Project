@@ -949,6 +949,7 @@ exports.postOrder = async (req, res) => {
 
             console.log("PAYMENT INTENT : ", paymentIntent);
             res.json({
+               status: 200,
                payOnline: true,
                amount: totalPrice,
                clientSecret: paymentIntent.client_secret,
@@ -1044,7 +1045,7 @@ exports.postOrder = async (req, res) => {
    }
    catch (err) {
       console.log(err);
-      res.json({ message: err.message, status: err.status })
+      res.json({ message: err.message, status: (err.status || 500) })
    }
 
 
