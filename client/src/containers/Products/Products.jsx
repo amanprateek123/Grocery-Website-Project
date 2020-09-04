@@ -29,7 +29,6 @@ import emptySvg from '../../assets/illustrations/empty.svg'
 
 import './Products.scss'
 import { useRef } from 'react';
-import { compareSync } from 'bcryptjs';
 
 
 const Products = (props) => {
