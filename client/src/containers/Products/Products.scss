@@ -146,16 +146,15 @@
     }
 
     .sort-ctrl{
-        position: absolute;
-        right: 1em;
-        top: 0.2em;
-        z-index: 0;
+        padding: 4px 2px;
+        z-index: 1!important;
         background-color: white;
-        height: 1.5em;
+        height: 2em;
         @media(max-width: 600px){
             width: 40%;
-            padding: 5px 1px;
-            height: 2.5em;
+            padding: 12px 1px;
+            top: 3.5em;
+            height: 3.4em;
         text-align: center;
         }
         select, option{
@@ -198,12 +197,11 @@
      cursor: pointer ;
 }
 .filter-lists{
-    position: absolute;
-    top: -0.7em;
     padding: 0 0.1em;
     display:none;
     @media(max-width: 600px){
         display: block;
+        margin: 0 15px;
     }
 }
 .product-sec{
@@ -211,3 +209,21 @@
         margin-top:20px!important;
     }
 }
+.cats{
+    display: none;
+    @media(max-width: 600px){
+        display: block;
+        margin: -10px 0 10px 0;
+        z-index: 2;
+        overflow: auto;
+        white-space: nowrap;
+    }
+    .acco{
+        display: inline-block;
+        margin: 0 10px 0 0;
+        width: 40%;
+    }
+}
+.cats::-webkit-scrollbar {
+    display: none;
+  }

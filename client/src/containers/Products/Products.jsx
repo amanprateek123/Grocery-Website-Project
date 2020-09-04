@@ -29,6 +29,7 @@ import emptySvg from '../../assets/illustrations/empty.svg'
 
 import './Products.scss'
 import { useRef } from 'react';
+import { compareSync } from 'bcryptjs';
 
 
 const Products = (props) => {
@@ -43,11 +44,21 @@ const Products = (props) => {
     const [SKUTypes, setSKUTypes] = useState([]);
     const [priceRange, setPriceRange] = useState([0, 10000000]);
     const [sortBy, setSortBy] = useState('');
-
+     const [cata,setCata] = useState(null)
     const [loading, setLoading] = useState(true);
     const [snackbar, setSnackbar] = useState(false);
 
     const [metaData, setMetaData] = useState({});
+
+    const [dep,setDep] = useState([])
+
+//    useEffect(()=>{
+//     fetch('/get-categories').then(res => {
+//         res.json().then(departments=>{
+//             setDep(departments)
+//         })})
+//    },[])
+
 
     useEffect(() => {
         products.length && null || setLoading(true);
@@ -66,7 +77,7 @@ const Products = (props) => {
                     products = products.sort((a, b) => a.skus[0].price - b.skus[0].price);
                 }
             }
-
+            setCata(_searchParams.get('category'))
             setVisibleProducts(products);
 
             setMetaData(meta)
@@ -102,6 +113,32 @@ const Products = (props) => {
 
 
     }, [props.location])
+
+    const [a,setA] = useState(null)
+
+    useEffect(()=>{
+        fetch('/get-categories').then(res => {
+            res.json().then(departments=>{
+                setDep(departments)
+            })})
+        if(cata && dep.length>0){
+            dep.forEach(item=>(
+                item.parentCategories.forEach(i=>{
+                    i.categories.forEach(j=>{
+                        if(j.name===cata){
+                            setA(item)
+                            console.log('i',item)
+                        }
+                        else{
+                            console.log(j.name + '!=' + cata)
+                        }
+                        
+                    })
+                 })
+            ))
+        }
+    },[cata])
+    console.log('a',a)
 
 
     const changeBrand = (name, e) => {
@@ -238,6 +275,22 @@ const Products = (props) => {
     return (
         <div className="container-fluid page products-page">
             <div className="container-fluid">
+                <div className="cats">
+                    {a?a.parentCategories.map(parent=>(
+                        <Accordion key={parent.id} className="acco">
+                            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                                {parent.name}
+                            </AccordionSummary>
+                            <AccordionDetails className="row">
+                                {parent.categories.map(cata=>(
+                                    <div key={cata.id} className="col-12 text-center mt-2"  >
+                                         <Link to={`/products?category=${cata.name}`} style={{color:'var(--mainColor',textDecoration:'none'}}>{cata.name}</Link>
+                                    </div>
+                                ))}
+                            </AccordionDetails>
+                        </Accordion>
+                    )):null}
+                </div>
                 <div className="row">
                     <div className="col-2 d-none d-md-block">
                         {
@@ -355,12 +408,12 @@ const Products = (props) => {
                     </div>
                     {
                         categories.length ?
-                            <div>
+                            <div style={{width:'100%',display:'flex'}}>
                                 <div className="filter-lists">
                                     <Accordion style={{zIndex:'1',width:'180px',backgroundColor:'#fff',boxShadow:'none'}}>
                                         <AccordionSummary
                                         expandIcon={<ExpandMoreIcon/>}
-                                        style={{position:'relative',top:'4px'}}
+                                        style={{position:'relative',top:'2px'}}
                                         >
                                             <span style={{color:'#999'}}>Filters</span>
                                         </AccordionSummary>

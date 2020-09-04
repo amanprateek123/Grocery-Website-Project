@@ -21,7 +21,6 @@ export default function Cata() {
             setDept(departments)
         })})
    },[])
-   console.log('setdept',dept)
 
     return (
         dept?<div className="cata">
