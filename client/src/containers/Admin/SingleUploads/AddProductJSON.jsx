@@ -110,7 +110,7 @@ const AddProductJSON = (props) => {
                     <form onSubmit={addProduct}>
                         <div className="form-group">
                             <h2 className="mb-2 text-muted">Add Product JSON</h2>
-                            <Button type="submit" color={`${!error ? 'primary' : 'secondary'}`} disabled={error} variant="contained" style={{ width: 'fit-content', padding: '0 2em' }}>Submit</Button>
+                            <Button type="submit" className="json" color={`${!error ? 'primary' : 'secondary'}`} disabled={error} variant="contained" style={{ width: 'fit-content'}}>Submit</Button>
                         </div>
                         <div>
                             {success ? <Alert severity="success">{`Product Added with id ${success.id}`}</Alert> : null}

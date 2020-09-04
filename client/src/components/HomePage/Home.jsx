@@ -10,6 +10,7 @@ import { useState } from 'react';
 import Product from '../Product/Product'
 import Carousels from '../Carousel/Carousel'
 import { Link } from 'react-router-dom';
+import Cata from './ShopByCata/Cata'
 
 export default function Home() {
     //fetch homepage table using query
@@ -151,6 +152,9 @@ export default function Home() {
     }
     return (
         <React.Fragment>
+            <div>
+                <Cata/>
+            </div>
             <div style={{ backgroundColor: '#f3f3f3' }}>
                 {array.map((data, i) => (
                     <React.Fragment key={data + i} >

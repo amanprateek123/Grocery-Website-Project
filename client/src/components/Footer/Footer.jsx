@@ -7,7 +7,8 @@ import { footer } from '../../site_config';
 
 const Footer = (props) => {
     return (
-        <div className="footer-main">
+        <React.Fragment>
+            <div className="footer-main">
             <div className="container-fluid mx-auto">
                 <div className="row">
                     <div className="col-md-2">
@@ -62,6 +63,10 @@ const Footer = (props) => {
                 </div>
             </div>
         </div>
+        <div className="copyrights foots">
+                        &copy; 2020. all rights reserved, powered by <span style={{color:'var(--mainColor'}}>Lala-Logix!</span>
+                    </div>
+        </React.Fragment>
     );
 }
 

@@ -78,3 +78,15 @@
         color: var(--mainColor);
     }
 }
+
+.foots{
+    display: none;
+    @media(max-width: 600px){
+        display: block!important;
+        background-color: black;
+        color: white;
+        text-align: center;
+        margin:  0!important;
+        padding: 4px;
+    }
+}

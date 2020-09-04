@@ -1,0 +1,13 @@
+.cata{
+    display: none;
+    @media(max-width: 600px){
+        display: block;
+        margin:  0 0 10px 0;
+    }
+    .cata_img{
+        width: 100%;
+        img{
+            width: 100%;
+        }
+    }
+}

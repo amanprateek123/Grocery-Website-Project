@@ -33,7 +33,7 @@ const Profile = (props) => {
     const [user, setUser] = useState({});
     const [modal, setModal] = useState(false);
 
-    const [tab, setTab] = useState('offers');
+    const [tab, setTab] = useState('homepage');
 
 
 
@@ -49,7 +49,9 @@ const Profile = (props) => {
         window.scrollTo(0, 0);
     }, [tab])
 
-
+   const handler =(e)=>{
+       setTab(e.target.value)
+   }
 
 
     return (
@@ -76,7 +78,26 @@ const Profile = (props) => {
                             </div>
 
                             <div className="mb-3">
-                                <Card>
+                                <Card style={{boxShadow:'none'}} className="drop_ad">
+                                    <select onChange={handler}>
+                                        <optgroup label="Upload">
+                                            <option value="homepage">Homepage</option>
+                                            <option value="offers">Offers</option>
+                                            <option value="category">Departments and Category</option>
+                                            <option value="product">Add Product</option>
+                                            <option value="productJSON">Add product as JSON</option>
+                                        </optgroup>
+                                        <optgroup label="Bulk Uploads">
+                                            <option value="categories">Departments and Categories</option>
+                                            <option value="products">Add Products</option>
+                                        </optgroup>
+                                        <optgroup label="Edit">
+                                            <option value="deleteProduct">Delete Product</option>
+                                            <option value="editProduct">Edit Product</option>
+                                        </optgroup>
+                                    </select>
+                                </Card>
+                                <Card className="left_ad">
                                     <CardContent>
 
                                         <List component="nav" aria-label="main"

@@ -27,3 +27,25 @@
 #del1{
     margin-right: 100px!important;
 }
+.add_off{
+    @media(max-width: 600px){
+        margin: 0 0 10px 0!important;
+    }
+}
+.sbmt_off{
+    margin: 5% 0;
+    @media(max-width: 600px){
+        margin-left: 12%!important;
+        width: 150px!important;
+    }
+
+}
+.edit_off{
+    float: right;
+    margin-left: 4%!important;
+    @media(max-width: 600px){
+        margin: 5% 12%!important;
+        float: left;
+        width: 150px!important;
+    }
+}
