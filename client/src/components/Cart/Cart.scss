@@ -1,0 +1,202 @@
+
+.checkout{
+    margin: -1px 0 0;
+    padding: 8px 10px;
+    min-width: 500px;
+    width: 25%;
+    z-index: 2;
+    border-top-left-radius: 4px;
+    box-shadow: 0 3px 5px rgba(0,0,0,.175);
+    font-size: 16px ;
+    background: #f2f2f2;
+    border-radius: 0!important;
+    display: block;
+    text-align: left;
+    list-style: none;
+    border: 1px solid #ccc;
+    border-top: none;
+    position: absolute;
+    top: 102%;
+    right: 5%;
+    @media(max-width:600px){
+        width: 100%;
+        right: 0;
+        min-width: 100px;
+    }
+    li{
+        display: list-item;
+    }
+    .check_btn{
+    font-size: 17px ;
+    color: #444;
+    padding: 6px 10px;
+    background: #fff;
+    margin-left: -10px;
+    margin-right: 0;
+    p{
+        line-height: 20px;
+        text-align: right;
+        span{
+            float: right;
+        }
+        margin-bottom: 10px;
+        span{
+            font-weight: bold;
+        }
+    }
+    }
+
+}
+.list_cart{
+    min-height: 80px;
+    max-height: 220px;
+    overflow-y: scroll;
+    position: relative;
+    margin-bottom: 5px;
+    ul{
+        display: flex;
+        flex-direction: column;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        li{
+            &>div{
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+
+            img{
+                width: 100%;
+                min-width: 70px;
+                height: auto;
+                vertical-align: middle;
+            }
+        }
+    }
+}
+.brand{
+    margin-top: 2%;
+    margin-bottom: 10px;
+    line-height: 0;
+    p{
+    margin: 0;
+    padding-top: 10px;
+    font-size: 9px;
+    color: #666;
+    font-weight: bold;
+    text-transform: uppercase;
+    cursor: pointer;
+    }
+}
+.product_name{
+    line-height: 1;
+    .p{
+        margin-top: 2px;
+        padding: 0;
+        font-size: 10px;
+        color: #222;
+        cursor: pointer;
+        font-weight: 600;
+    }
+    .p:hover{
+        color:var(--mainColor);
+    }
+}
+.add_rem{
+    border: 0;
+    overflow: hidden;
+    height: 35px;
+    float: left;
+    margin-left: -20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .remove{
+        border: 1px solid black;
+        border-radius: 100%;
+        padding: 0;
+        text-align: center;
+        cursor: pointer;
+        width: 18px;
+        height: 18px;
+        color: black;
+        font-size: 11px ;
+        background: #fff;
+        transition-duration: .3s;
+        transition-property: color,background-color;
+    }
+    input{
+    border: 0;
+    float: left;
+    margin-top: 0px;
+    width: 20px;
+    height: 20px;
+    background: #fff;
+    font-size: 16px;
+    color: #000;
+    text-align: center;
+    }
+    .add{
+        border: 1px solid black;
+        border-radius: 100%;
+        text-align: center;
+        padding: 0;
+        cursor: pointer;
+        width: 18px;
+        height: 18px;
+        color: black;
+        font-size: 11px ;
+        background: #fff;
+        transition-duration: .3s;
+        transition-property: color,background-color;
+    }
+    button:hover{
+        background-color: var(--mainColor);
+        color: white;
+        border: 1px solid white;
+    }
+}
+.cart_price{
+    font-size: 13px;
+    line-height: 1;
+    margin-top: 5px;
+    text-align: left;
+    color: #444;
+}
+.tooltips {
+    width: 100%;
+    visibility: hidden;
+    background-color: #fff;
+    position: absolute;
+    top: 15px;
+    text-align: center; 
+    box-shadow: 0 0 50px 0 rgba(0,0,0,0.3);
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    z-index: 2;
+    font-size: 10px;
+    color: #222;
+    cursor: pointer;
+    font-weight: 600;
+  }
+  .sku_cart:hover + span .tooltips{
+   visibility: visible;
+   border-radius: 10px;
+  transition: opacity 0.5s ease;
+  padding: 2px;
+  opacity: 1;
+}
+.stock{
+    color: red;
+    font-size: 12px;
+    font-weight: bold;
+    margin-left: 6%;
+    margin-top: -5%;
+}
+.cartimg{
+    background-color: #fff;
+    background-size: contain !important;
+    background-repeat: no-repeat;
+    background-position: center;
+}

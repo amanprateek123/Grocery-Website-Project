@@ -1,0 +1,59 @@
+.home_edit{
+    font-size: 22px;
+    h1{
+        color:grey;
+        padding: 20px;
+    }
+    label{
+        font-size: 13px;
+    }
+}
+.home_form{
+    margin: 20px;
+
+    label{
+        color:#888;
+        margin-bottom: 0.2em;
+    }
+}
+.home-snackbar{
+    width: 100%;
+    text-align: center;
+    border-radius: 0;
+    padding: 1em;
+    position: fixed;
+    bottom: 0;
+    // left: 0;
+    &>*{
+        text-align: center;
+        justify-content: center;
+        align-items: center;
+    }
+}
+.offer_form{
+    input{
+      @media(max-width: 600px){
+          width: 100px!important;
+      }
+    }
+}
+.sbmt{
+    margin: 5% 37%;
+    padding: 5px 4px;
+    width: 180px;
+    @media(max-width: 600px){
+        margin: 3% 25% !important;
+        padding: 2px;
+        width: 150px;
+    }
+}
+.admt{
+    margin: 5% 37%;
+    padding: 5px 4px;
+    width: 180px;
+    @media(max-width: 600px){
+        margin: 5% 25%!important;
+        padding: 2px;
+        width: 150px;
+    }
+}

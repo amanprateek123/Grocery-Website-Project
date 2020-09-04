@@ -1,0 +1,46 @@
+{
+  "name": "lala-dukaan",
+  "version": "1.0.0",
+  "description": "A grocery Shop",
+  "main": "index.js",
+  "scripts": {
+    "client": "cd client && npm start",
+    "server": "nodemon server.js",
+    "dev": "concurrently --kill-others-on-fail \"npm run server\" \"npm run client\""
+  },
+  "dependencies": {
+    "@sendgrid/mail": "^7.1.1",
+    "@sweetalert2/theme-minimal": "^3.2.0",
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.18.3",
+    "clsx": "^1.1.1",
+    "csvtojson": "^2.0.10",
+    "dotenv": "^8.2.0",
+    "express": "^4.16.4",
+    "express-validator": "^6.5.0",
+    "jsonwebtoken": "^8.5.1",
+    "mariadb": "^2.3.1",
+    "mariasql": "^0.2.6",
+    "morgan": "^1.10.0",
+    "multer": "^1.4.2",
+    "mysql2": "^2.1.0",
+    "node-fetch": "^2.6.0",
+    "nodemailer": "^6.4.11",
+    "pdfkit": "^0.11.0",
+    "react-medium-image-zoom": "^4.3.1",
+    "react-multi-carousel": "^2.5.5",
+    "sequelize": "^5.21.10",
+    "stripe": "^8.90.0",
+    "validator": "^13.1.1"
+  },
+  "devDependencies": {
+    "concurrently": "^4.0.1",
+    "nodemon": "^2.0.4"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://LalaDukaan@dev.azure.com/LalaDukaan/LalaDukaan/_git/LalaDukaan"
+  },
+  "author": "",
+  "license": "ISC"
+}

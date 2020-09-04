@@ -1,0 +1,51 @@
+.offers{
+    padding: 2em 1em;
+    h1{
+     font-size: 30px;
+     color: grey;
+     text-align: center;
+    }
+}
+.offer_head{
+    margin-top:30px;
+    p{
+        font-size: 20px;
+        margin-left: 20px;
+    }
+}
+.option{
+    p{
+        text-align: center;
+        color: gray;
+        font-size: 15px;
+    }
+}
+
+#del{
+    margin-left: 100px !important;
+}
+#del1{
+    margin-right: 100px!important;
+}
+.add_off{
+    @media(max-width: 600px){
+        margin: 0 0 10px 0!important;
+    }
+}
+.sbmt_off{
+    margin: 5% 0;
+    @media(max-width: 600px){
+        margin-left: 12%!important;
+        width: 150px!important;
+    }
+
+}
+.edit_off{
+    float: right;
+    margin-left: 4%!important;
+    @media(max-width: 600px){
+        margin: 5% 12%!important;
+        float: left;
+        width: 150px!important;
+    }
+}

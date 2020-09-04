@@ -1,0 +1,174 @@
+.detail-page{
+
+    max-width: 1400px !important;
+    width: 100% !important;
+    .paper{
+        // height:830px;
+        display:flex;
+        flex-direction:column;
+        align-items:center;
+        box-shadow:none;
+        padding-bottom:70px;
+    }
+    .img12{
+        // width:540px;
+        padding-bottom:-10px;
+    }
+    
+    .image-col, .detail-col{
+        overflow: hidden;
+        border-radius: 1em !important;
+        box-shadow: none !important;
+        border: none !important;
+        padding: 1em;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        min-height: 45em;
+        @media(max-width:600px){
+            min-height: 0;
+        }
+        // position: relative;
+        position: sticky;
+        top: 9em;
+        &>*{
+            border: none !important;
+        }
+        .main_img{
+            margin:auto;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            &::after{
+                content: '';
+                height: 6em;
+            }
+            
+            img{
+                max-height: 500px;
+                max-width: 100%;
+                margin: auto;
+                @media(max-width:600px){
+                    max-height: 200px;
+                }
+            }
+            img:hover{
+                cursor: pointer;
+            }
+        }
+        .slide_image{
+            overflow: auto;
+            width: 450px;
+            margin: auto;
+            justify-content: center;
+            position: absolute;
+            bottom: 1em;
+            margin: auto;
+            display: flex;
+            margin-top: 10%;
+            @media(max-width:600px){
+                width: 95%;
+                margin: 0 auto!important;
+            }
+            .img_det1{
+                cursor: pointer;
+                height: 60px;
+                width: 70px;
+                margin-left: 1%;
+                border: 1px solid gray;
+                overflow: hidden;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                @media(max-width:600px){
+                    height: 40px;
+                    width: 40px;
+                }
+               img{
+                padding: 5px;
+                opacity: 1;
+                height: auto;
+                width: 100%;
+                transition: opacity .5s linear;
+               }
+            }
+            .img_det2{
+                cursor: pointer;
+                height: 60px;
+                width: 70px;
+                margin-left: 1%;
+                border: 1px solid var(--mainColor);
+                overflow: hidden;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                @media(max-width:600px){
+                    height: 40px;
+                    width: 40px;
+                }
+               img{
+                opacity: 1;
+                padding: 5px;
+                height: auto;
+                width: 100%;
+                transition: opacity .5s linear;
+               }
+            }
+        }
+    }
+
+    .image-col{
+        max-height: 90vh;
+        animation: fadeInRight 0.7s ;
+    }
+    .detail-col{
+        justify-content: flex-start;
+        align-items: flex-start;
+    }
+
+    .row{
+        align-items: stretch;
+    }
+    
+    .colu{
+        position: relative;
+        width: 100%;
+        padding-right: 15px;
+        padding-left: 15px;
+        flex: 0 0 50%;
+        max-width: 50%;
+    }
+    
+    
+    
+    
+    @media only screen and (max-width: 600px){
+        .paper{
+            width: 100%;
+            height: 10%;
+            display: inline-block;
+        }
+        .img12{
+            width:100%;
+        }
+        .colu{
+            max-width: 100%;
+            width: 100%;
+            flex: 0 0 100%;
+        }
+        .slide_image{
+            width: 100%;
+        }
+        .img_det1, .img_det2{
+            width: 4rem;
+            height: 4rem;
+            img{
+                padding-top: 5px;
+            }
+        }
+    }
+    
+}

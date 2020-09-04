@@ -1,0 +1,129 @@
+
+.error,.help-block{
+    color: #d60000;
+    font-size: 0.8em;
+    margin: 0.2em 0 ;
+}
+.help-block{
+    color: #777;
+    margin-top: 0;
+    margin-bottom: 0.5em;
+}
+
+.form-container{
+    padding: 3em 1em 2em;
+    width: 25em;
+    min-height: 30em;
+    height: fit-content;
+    background: #fff;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-radius: 0.2em;
+    position: relative;
+
+    .terms{
+        font-size: 0.7em;
+        position: absolute;
+        bottom: 4.5em;
+        text-align: center;
+        left: 55%;
+        transform: translate(-50%,0);
+    }
+
+    .form-nav{
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        height: 3em;
+        background: #eee;
+        text-align: center;
+        padding: 0.3em;
+        color: #0077c7;
+        transition: all 0.3s;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+
+        .tab{
+            font-weight: bold;
+            color: inherit;
+
+
+        }
+
+        &:hover{
+            color: #fff;
+            background: #0077c799;
+        }
+    }
+
+    p{
+        text-align: center;
+        color: #777;
+    }
+
+    .form{
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: flex-start;
+        color: #444;
+        width: 100%;
+        margin-bottom: 3em;
+        padding: 1em 2em;
+
+        label{
+            color: #0077c7;
+            font-weight: bold;
+            font-size: 0.8em;
+            margin-top: 1em;
+        }
+        input{
+            width: 100%;
+            padding: 0.5em 0.7em;
+            font-size: 1em;
+            margin: 0 0 0em 0;
+            border: none;
+            background: #eee;
+            border-radius: 0.2em;
+
+        }
+        
+
+    }
+    *{
+        animation: slide-in 0.4s;
+    }
+}
+
+
+.hidden{
+    display: none;
+}
+
+.m-centered{
+    margin: auto;
+    margin-top: 1rem;
+}
+
+.msg-box{
+    .res-img{
+        img{
+            width: 100%;
+        }
+    }
+}
+
+
+
+@keyframes slide-in{
+    0%{
+        transform: translate(0,10px);
+    }
+    100%{
+        transform: translate(0,0);
+    }
+}

@@ -1,0 +1,133 @@
+.del_chng1{
+    padding: 0 32px;
+    height: 40px;
+    border-radius: 2px;
+    border: 1px solid #e0e0e0;
+    color: var(--mainColor);
+    font-size: 14px;
+    font-weight: 500;
+    background: transparent;
+    cursor: pointer;
+    text-transform: uppercase;
+    float: right;
+     margin-right: 29%;
+    margin-top: -6%;
+    @media(max-width:600px){
+        margin-top:5%;
+    }
+}
+.pay_label{
+    display: block;
+    background-color: white;
+    border-bottom: 1px solid #f0f0f0;
+    padding: 16px 25px;
+    margin: 0;
+    input{
+        display: inline-block;
+        border: 2px solid #979797;
+        border-radius: 100%;
+        border-color: #2874f0;
+        height: 16px;
+        width: 16px;
+        position: relative;
+        vertical-align: top;
+        margin-top: 3px;
+        cursor: pointer;
+    }
+}
+.mode{
+    margin-top: 2px;
+    display: inline-block;
+    margin-left: 18px;
+    width: calc(100% - 34px);
+}
+.add_list_1{
+    width: 96%;
+    float: right;
+    vertical-align: top;
+    min-height: 112px;
+    overflow: hidden;
+    position: relative;
+    left: -25px;
+    @media(max-width: 600px){
+        width: 96%;
+        left: 0px;
+        top: -18px;
+    }
+}
+.oreder_list_sum{
+    padding: 24px 0 22px;
+}
+.lister_img{
+    width: 56px;
+    height: 56px;
+    margin: 10px 20px;
+    img{
+        margin: auto;
+        justify-content: center;
+        align-items: center;
+        opacity: 1;
+        max-width: 100%;
+        max-height: 100%;
+    }
+}
+.list_img{
+    padding-top: 50px;
+    margin-bottom: 3%;
+    background-color: #fff;
+    background-size: contain !important;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+.deli_sum{
+    @media(max-width: 600px){
+        height: auto;
+        margin: auto;
+    }
+}
+.lilly{
+    min-height:56px;
+     width: 60%;
+     @media(max-width: 600px){
+         width: 100%;
+     }
+}
+// #but{
+//     z-index: 5!important;
+//     position: relative;
+//     top: -18rem;
+//     right: -22rem;
+// }
+
+.verify-delivery{
+    
+    input{
+        margin: 1em;
+        margin-left: 2em;
+    }
+    label{
+        display: flex;
+        align-items: center;
+        // color: #444;
+        span{
+            display: inline-block;
+            opacity: 0;
+            transition: all 0.1s;
+            margin-left: 1em;
+            font-size: smaller;
+            color: #666;
+        }
+        &:hover{
+            span{
+                // display: inline-block;
+                opacity: 1;
+            }
+        }
+    }
+}
+
+.stripe{
+    background: #fff;
+    padding: 3em 2em;
+    min-width: 30em;
+}

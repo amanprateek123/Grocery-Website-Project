@@ -1,0 +1,24 @@
+:root{
+ --mainColor: #E35F21;
+  transition: all 1s linear;
+}
+body{
+  font-family: "Oswald", sans-serif !important;
+  color: black !important;
+}
+.text-title{
+  font-family: "Permanent Marker" cursive;
+  letter-spacing: 0.3rem;
+  text-transform: uppercase;
+}
+.text-blue{
+  color: var(--mainblue);
+}
+.btn-black{
+  background: transparent;
+  text-transform: capitalize;
+  font-size: 0.8rem !important;
+  color:var(--maindark);
+  border-radius: 0 !important;
+  border: 0.1rem solid var(--maindark) !important;
+}

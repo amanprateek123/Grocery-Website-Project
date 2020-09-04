@@ -1,0 +1,46 @@
+.admin-order{
+    width: 100%;
+
+    .items{
+        
+        .item{
+            border-bottom: 1px solid #eee;
+            padding: 0.5em 0.5em;
+        }
+
+        .header{
+            *{
+                font-weight: bold;
+            }
+            border-bottom: 1px solid #888;
+            margin-top: 2em;
+        }
+        .footer{
+            *{
+                font-weight: bold;
+            }
+            border-top: 1px solid #888;
+            margin-bottom: 2em;
+        }
+    }
+
+    .status{
+        .stat{
+            text-align: center;
+            white-space: nowrap;
+            padding: 1em;
+            margin: 1em 1em;
+            font-weight: bold;
+            cursor: pointer;
+            filter: grayscale(1);
+            &:hover{
+                filter: none;
+            }
+
+            &.active{
+                transform: scale(1.1);
+                filter: none;
+            }
+        }
+    }
+}

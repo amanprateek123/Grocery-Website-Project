@@ -1,0 +1,70 @@
+.order_conf{
+    height: 120px;
+    border-bottom: 1px solid #f3f3f3;
+    img{
+        width: 25%;
+        padding: 20px 40px;
+        @media(max-width: 600px){
+            width: 90%;
+            margin: 0 5%;
+        }
+    }
+}
+.order_btn{
+    height: 55px;
+    width: 250px;
+    font-size: 20px;
+    border-radius: 10px;
+    font-weight: 500;
+    margin-top: 20px;
+    float: right;
+    background: var(--mainColor);
+    box-shadow: 0 1px 2px 0 rgba(0,0,0,.2);
+    border: none;
+    color: #fff;
+    @media(max-width:600px){
+        margin-right: 20px;
+    }
+}
+.cancel_btn{
+    height: 60px;
+    width: 250px;
+    font-size: 20px;
+    border-radius: 10px;
+    font-weight: 500;
+    background: #f3f3f3;
+    box-shadow: 0 1px 2px 0 rgba(0,0,0,.2);
+    border: none;
+    color: black;
+    margin:  3% 35%;
+    margin-top: 16%;
+}
+.price_conf{
+    float: right;
+    font-size: 17px;
+    @media(max-width:600px){
+        margin-right: 60px;
+    }
+}
+.ord_tot{
+    width:  60%;
+    margin: 0 auto;
+    padding-bottom: 10px;
+    p{
+        font-size: 17px;
+        span{
+            float: right;
+        }
+    }
+}
+#confi{
+    @media(max-width: 600px){
+        margin-top: 5px!important;
+    }
+    h2{
+        font-size: 22px;
+        @media(max-width: 600px){
+            font-size: 19px;
+        }
+    }
+}

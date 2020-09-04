@@ -1,0 +1,48 @@
+.shipping-orders{
+    .container{
+        max-width: 2100px;
+    }
+    h1{
+        margin-top: 0;
+    }
+
+    .summary{
+        *{
+            text-transform: capitalize;
+        }
+        >*{
+            width: 50%;
+        }
+    }
+
+    
+    .details{
+        padding: 2em;
+        background: #fafaff;
+        
+        .items{
+            overflow: scroll;
+            .item{
+                min-width: 700px;
+            }
+        }
+    }
+    
+    .stats{
+        text-align: center;
+        >*{
+            padding: 1em;
+        }
+    }
+    .date{
+        white-space: nowrap;
+        overflow: hidden;
+        min-width: 150px;
+        small{
+            display: inline-block;
+            width: 100%;
+            white-space: nowrap;
+        width: fit-content;
+        }
+    }
+}
