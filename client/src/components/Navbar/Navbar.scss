@@ -302,7 +302,7 @@
     color: #212121;
     li{
         margin-left: -41px;
-        border: 1px solid #f0f0f0;
+        border-bottom: 1px solid #f0f0f0;
         min-width: 240px;
         a{
             display: flex;
@@ -393,4 +393,8 @@
         }
         }
     }
+}
+.makeStyles-drawerPaper-7{
+    overflow-x: hidden;
+    overflow-y: scroll;
 }
