@@ -29,13 +29,12 @@ import emptySvg from '../../assets/illustrations/empty.svg'
 
 import './Products.scss'
 import { useRef } from 'react';
-import { compareSync } from 'bcryptjs';
 
 
 const Products = (props) => {
 
     const history = useHistory();
-
+    
     const [products, setProducts] = useState([])
     const [visibleProducts, setVisibleProducts] = useState([])
     const [categories, setCategories] = useState([]);
@@ -50,7 +49,7 @@ const Products = (props) => {
 
     const [metaData, setMetaData] = useState({});
 
-    const [dep,setDep] = useState([])
+    // const [dep,setDep] = useState([])
 
 //    useEffect(()=>{
 //     fetch('/get-categories').then(res => {
@@ -58,8 +57,18 @@ const Products = (props) => {
 //             setDep(departments)
 //         })})
 //    },[])
+     const[style,setStyle] = useState(window.innerWidth>600)
+     const [cls,setCls] = useState('sel')
 
-
+     useEffect(()=>{
+        if(style){
+            setCls("sel")
+       }
+       else{
+           setCls('sels')
+       }
+     },[style])
+    
     useEffect(() => {
         products.length && null || setLoading(true);
         fetch(`/get-products${props.location.search}`).then(res => res.json().then(({ meta, products }) => {
@@ -114,7 +123,7 @@ const Products = (props) => {
 
     }, [props.location])
 
-    const [a,setA] = useState(null)
+    // const [a,setA] = useState(null)
 
     // useEffect(()=>{
     //     fetch('/get-categories').then(res => {
@@ -408,7 +417,7 @@ const Products = (props) => {
                     </div>
                     {
                         categories.length ?
-                            <div style={{width:'100%',display:'flex'}}>
+                            <div className={cls}>
                                 <div className="filter-lists">
                                     <Accordion style={{zIndex:'1',width:'180px',backgroundColor:'#fff',boxShadow:'none'}}>
                                         <AccordionSummary

@@ -18,7 +18,7 @@ import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 import { useState } from 'react';
 
-const stripePromise = loadStripe("pk_test_PkPcqrgpZoRl7DVSoeLXdCH100TEU5AfdY");
+const stripePromise = loadStripe("pk_test_PkPcqrgpZoRl7DVSoeLXdCH100TEU5AfdY"); // CONFIG STRIPE PUB KEY
 
 const Payment = (props) => {
 
@@ -62,6 +62,10 @@ const Payment = (props) => {
             props.setOrderData(res);
             props.fetchCart();
 
+            if (res.status != 200) {
+                return res;
+            }
+
             if (res.payOnline) {
                 // if order place
                 setClientSecret(res.clientSecret);
@@ -72,9 +76,7 @@ const Payment = (props) => {
                 props.setPlacedOrder(true);
             }
 
-            if (res.status != 200) {
-                return res;
-            }
+
 
             return 'Order Placed Successfully.';
         }).catch(err => {
