@@ -152,9 +152,9 @@ export default function Home() {
     }
     return (
         <React.Fragment>
-            <div>
+            {/* <div>
                 <Cata/>
-            </div>
+            </div> */}
             <div style={{ backgroundColor: '#f3f3f3' }}>
                 {array.map((data, i) => (
                     <React.Fragment key={data + i} >
