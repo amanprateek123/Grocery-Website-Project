@@ -49,7 +49,7 @@ const Products = (props) => {
 
     const [metaData, setMetaData] = useState({});
 
-    const [dep, setDep] = useState([])
+    // const [dep,setDep] = useState([])
 
     //    useEffect(()=>{
     //     fetch('/get-categories').then(res => {
@@ -123,31 +123,31 @@ const Products = (props) => {
 
     }, [props.location])
 
-    const [a, setA] = useState(null)
+    // const [a,setA] = useState(null)
 
-    useEffect(() => {
-        fetch('/get-categories').then(res => {
-            res.json().then(departments => {
-                setDep(departments)
-            })
-        })
-        if (cata && dep.length > 0) {
-            dep.forEach(item => (
-                item.parentCategories.forEach(i => {
-                    i.categories.forEach(j => {
-                        if (j.name === cata) {
-                            setA(item)
-                            console.log('i', item)
-                        }
-                        else {
-                            // console.log(j.name + '!=' + cata)
-                        }
+    // useEffect(()=>{
+    //     fetch('/get-categories').then(res => {
+    //         res.json().then(departments=>{
+    //             setDep(departments)
+    //         })})
+    //     if(cata && dep.length>0){
+    //         dep.forEach(item=>(
+    //             item.parentCategories.forEach(i=>{
+    //                 i.categories.forEach(j=>{
+    //                     if(j.name===cata){
+    //                         setA(item)
+    //                         console.log('i',item)
+    //                     }
+    //                     else{
+    //                         console.log(j.name + '!=' + cata)
+    //                     }
 
-                    })
-                })
-            ))
-        }
-    }, [cata])
+    //                 })
+    //              })
+    //         ))
+    //     }
+    // },[cata])
+    // console.log('a',a)
 
 
     const changeBrand = (name, e) => {
@@ -284,8 +284,8 @@ const Products = (props) => {
     return (
         <div className="container-fluid page products-page">
             <div className="container-fluid">
-                <div className="cats">
-                    {a ? a.parentCategories.map(parent => (
+                {/* <div className="cats">
+                    {a?a.parentCategories.map(parent=>(
                         <Accordion key={parent.id} className="acco">
                             <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                                 {parent.name}
@@ -298,8 +298,8 @@ const Products = (props) => {
                                 ))}
                             </AccordionDetails>
                         </Accordion>
-                    )) : null}
-                </div>
+                    )):null}
+                </div> */}
                 <div className="row">
                     <div className="col-2 d-none d-md-block">
                         {

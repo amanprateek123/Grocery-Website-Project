@@ -202,6 +202,33 @@ const Navbar = (props) => {
     }
     const [dis, setdis] = useState(false)
 
+    const [dept, setDept] = useState([])
+
+    useEffect(() => {
+        fetch('/get-categories').then(res => {
+            res.json().then(departments => {
+                setDept(departments)
+            })
+        })
+    }, [])
+    //   console.log('d',dept)
+
+    const [tab, setTab] = useState(1)
+    const [pind, setPind] = useState(0)
+    const [cind, setCind] = useState(0)
+    const parent = (i) => {
+        setTab(2)
+        setPind(i)
+    }
+    const catagory = (j) => {
+        setTab(3)
+        setCind(j)
+    }
+    const closeAll = () => {
+        handleDrawerClose()
+        setTab(1)
+    }
+
     return (
         <React.Fragment >
             <div className={classes.root}>
@@ -280,9 +307,9 @@ const Navbar = (props) => {
                         </div>
 
                         <div className="navigation d-md-flex d-none">
-                            <div className="user" style={{ width: '180px', textAlign: 'center',height:'64px' }}>
+                            <div className="user" style={{ width: '180px', textAlign: 'center', height: '64px' }}>
                                 {props.userName ?
-                                    <div className="username-nav align-items-center MuiButton-root" style={{ width: '180px', cursor: 'pointer', textAlign: 'center',height:'70px' }} onMouseEnter={() => setdis(true)} onMouseLeave={() => setdis(false)} >
+                                    <div className="username-nav align-items-center MuiButton-root" style={{ width: '180px', cursor: 'pointer', textAlign: 'center', height: '70px' }} onMouseEnter={() => setdis(true)} onMouseLeave={() => setdis(false)} >
                                         {props.userName}
                                         {dis ? <div className="more_details1">
                                             <div style={{ border: 'solid transparent', position: 'absolute', bottom: '100%', left: '50%', borderWidth: '10px', transform: 'translateX(-10px)', borderBottomColor: '#fff' }}>
@@ -298,14 +325,14 @@ const Navbar = (props) => {
                                             </div>
                                         </div> : null}
 
-                                        <span><ExpandMoreIcon style={{height:'auto',marginTop:'-5px'}} /></span>
+                                        <span><ExpandMoreIcon style={{ height: 'auto', marginTop: '-5px' }} /></span>
                                     </div>
                                     :
-                                    <Button className="btn btn-login" style={{marginTop:'13px'}} onClick={props.openModal}>Login</Button>}
+                                    <Button className="btn btn-login" style={{ marginTop: '13px' }} onClick={props.openModal}>Login</Button>}
                             </div>
                             {props.userName ?
-                                <div className="more" style={{ width: '80px', height: '64px', paddingTop: '3.3%' }} onMouseEnter={more_dis} onMouseLeave={more_hide}>
-                                    <Button className="btn btn-more more-btn" style={{ fontSize: '15px', paddingLeft: '35%',marginTop:'2px' }}>More
+                                <div className="more" style={{ width: '80px', height: '64px', paddingTop: '3.2%' }} onMouseEnter={more_dis} onMouseLeave={more_hide}>
+                                    <Button className="btn btn-more more-btn" style={{ fontSize: '15px', paddingLeft: '35%', marginTop: '2px' }}>More
                             <div className={more}>
                                             <div style={{ border: 'solid transparent', position: 'absolute', bottom: '100%', left: '50%', borderWidth: '10px', transform: 'translateX(-10px)', borderBottomColor: '#fff' }}>
 
@@ -358,19 +385,19 @@ const Navbar = (props) => {
                         paper: classes.drawerPaper,
                     }}
                 >
-                    <div className={classes.drawerHeader} style={{backgroundColor:'black',float:'left',height:'50px'}}>
+                    <div className={classes.drawerHeader} style={{ backgroundColor: 'black', float: 'left', height: '50px' }}>
                         <div className="logo" >
-                            <Link to="/"><img onClick={handleDrawerClose} src={img} height={60} className="" /></Link>
-                        <IconButton onClick={handleDrawerClose} style={{color:'white',float:'right'}}>
-                            {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
-                        </IconButton>
+                            <Link to="/"><img onClick={closeAll} src={img} height={60} className="" /></Link>
+                            <IconButton onClick={closeAll} style={{ color: 'white', float: 'right' }}>
+                                {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
+                            </IconButton>
                         </div>
                     </div>
                     <Divider />
 
                     <Link to="/profile">
                         {props.userName ?
-                            <div className="row align-items-center my-3 drawer-user" onClick={handleDrawerClose}>
+                            <div className="row align-items-center my-3 drawer-user" onClick={closeAll}>
                                 <div className="col-3 ml-1">
                                     <Avatar className="dp" src={male_avatar} />
                                 </div>
@@ -402,7 +429,8 @@ const Navbar = (props) => {
                         <ListItem>
                             {props.userName ?
                                 <div className="more_cont" style={{ padding: '0' }}>
-                                    <div style={{ margin: '-16px' }}>
+                                    {tab === 1 ? <div style={{ margin: '-16px' }}>
+                                        <h4 style={{ color: 'black', fontWeight: 'bold', fontSize: '17px', margin: '5px 0px 0px 0', padding: '0 12px' }}>Laladukaan.com</h4>
                                         <ul>
                                             <li><NavLink to="/orders"><LocalMallIcon style={{ width: '16px', height: '16px', color: 'var(--mainColor)' }} /><div onClick={handleDrawerClose} style={{ marginLeft: '12px' }}>My Orders</div></NavLink></li>
                                             <li><NavLink to="/"><LocalOfferIcon style={{ width: '16px', height: '16px', color: 'var(--mainColor)' }} /><div onClick={handleDrawerClose} style={{ marginLeft: '12px' }}>Offers</div></NavLink></li>
@@ -413,7 +441,33 @@ const Navbar = (props) => {
                                             {props.role == 'A' ? <li><NavLink to="/admin/dashboard"><AdminIcon style={{ width: '16px', height: '16px', color: 'var(--mainColor)' }} /><div onClick={handleDrawerClose} style={{ marginLeft: '12px' }}>Manage Orders</div></NavLink></li> : null}
                                             <li onClick={props.logout}><NavLink to="/"><PowerSettingsNewIcon style={{ width: '16px', height: '16px', color: 'var(--mainColor)' }} /><div onClick={handleDrawerClose} style={{ marginLeft: '12px' }}>Logout</div></NavLink></li>
                                         </ul>
-                                    </div>
+                                        <h4 style={{ color: 'black', fontWeight: 'bold', fontSize: '17px', margin: '25px 0 0px 0px', padding: '0 12px' }}>Departments</h4>
+                                        <ul>
+                                            {dept.length > 0 ? dept.map((department, i) => (
+                                                <li style={{ width: '16px', padding: '16px 12px' }} onClick={() => parent(i)} ><div style={{ marginLeft: '12px' }}>{department.name}<span style={{ float: 'right' }}><ChevronRightIcon /></span></div></li>
+                                            )) : null}
+                                        </ul>
+                                    </div> :
+                                        tab === 2 ?
+                                            <div style={{ margin: '-16px' }}>
+                                                <h4 style={{ color: 'black', fontWeight: 'bold', fontSize: '17px', margin: '5px 0px 0px 0', padding: '0 12px' }}>{dept[pind].name}</h4>
+                                                <ul>
+                                                    {dept[pind].parentCategories.map((parent, j) => (
+                                                        <li style={{ width: '16px', padding: '16px 12px' }} onClick={() => catagory(j)} ><div style={{ marginLeft: '12px' }}>{parent.name}<span style={{ float: 'right' }}><ChevronRightIcon /></span></div></li>
+                                                    ))}
+                                                    <li style={{ width: '16px', padding: '16px 12px' }} onClick={() => setTab(1)} ><ChevronLeftIcon /><span style={{ marginLeft: '5px', fontWeight: 'bold' }}>Back To Main</span></li>
+                                                </ul>
+                                            </div> :
+                                            tab === 3 ?
+                                                <div style={{ margin: '-16px' }}>
+                                                    <h4 style={{ color: 'black', fontWeight: 'bold', fontSize: '15px', margin: '5px 0px 0px 0', padding: '0 12px' }}>{dept[pind].name}<ChevronRightIcon />{dept[pind].parentCategories[cind].name}</h4>
+                                                    <ul>
+                                                        {dept[pind].parentCategories[cind].categories.map(cata => (
+                                                            <li onClick={closeAll}><NavLink to={`/products?category=${cata.name}`} ><div style={{ marginLeft: '12px' }} >{cata.name}</div></NavLink></li>
+                                                        ))}
+                                                        <li style={{ width: '16px', padding: '16px 12px' }} onClick={() => setTab(2)} ><ChevronLeftIcon /><span style={{ marginLeft: '5px', fontWeight: 'bold' }}>Prev. Page</span></li>
+                                                    </ul>
+                                                </div> : null}
                                 </div>
                                 : null}
                         </ListItem>
