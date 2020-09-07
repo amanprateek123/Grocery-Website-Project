@@ -7,7 +7,11 @@ import {
     Grid, Card, CardContent, Paper, Typography, FormControl,
     InputLabel, Snackbar, CircularProgress, LinearProgress, Select, MenuItem, Button, Accordion, AccordionSummary, AccordionDetails
 }
+
     from '@material-ui/core';
+
+import { Alert, Pagination, PaginationItem } from '@material-ui/lab';
+
 import './Orders.scss'
 
 import Order from './Order/Order'
@@ -246,6 +250,27 @@ function Orders(props) {
                         }
                     </div>
                 </div>
+
+                {
+                    meta ?
+                        <div className="row">
+                            <div className="pagination mt-4">
+                                <Pagination
+                                    page={page}
+                                    count={meta.pageCount}
+                                    onChange={(ev, val) => {
+                                        setPage(val);
+                                    }}
+                                    renderItem={(item) => (
+                                        <PaginationItem
+                                            {...item}
+                                        />
+                                    )}
+                                />
+                            </div>
+                        </div>
+                        : null
+                }
             </div>
         </div>
     )

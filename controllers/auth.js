@@ -199,7 +199,7 @@ exports.verifyOTP = (req, res) => {
 
 
 exports.login = (req, res) => {
-    console.log(req.body);
+    console.log(req.body.email);
 
     db.user.findOne({
         where: { email: req.body.email }

@@ -1040,7 +1040,7 @@ exports.postOrder = async (req, res) => {
       }).then(cart => {
          cart.forEach(ci => ci.destroy())
       })
-      res.json(order);
+      res.json({ status: 200, order });
 
    }
    catch (err) {
