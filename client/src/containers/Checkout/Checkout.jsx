@@ -10,19 +10,21 @@ export default function Checkout() {
     const [orderData, setOrderData] = useState(null);
     const [address, setAddress] = useState(null)
     const [offer, setOffer] = useState(null)
+    const [paymentData, setPaymentData] = useState(null);
+
 
 
     return (
         !placedOrder ?
             <div className="checkout12 row" style={{ margin: '0 auto', width: '95%' }}>
                 <div className="col-md-9">
-                    <Check setPlacedOrder={setPlacedOrder} setOrderData={setOrderData} setAddress={setAddress} offer={offer} />
+                    <Check setPlacedOrder={setPlacedOrder} setOrderData={setOrderData} setAddress={setAddress} offer={offer} setPaymentData={setPaymentData} />
                 </div>
                 <div className="col-md-3">
                     <Price address={address} setOffer={setOffer} />
                 </div>
             </div>
             :
-            <OrderConf data={orderData} />
+            <OrderConf data={orderData} paymentData={paymentData} />
     )
 }

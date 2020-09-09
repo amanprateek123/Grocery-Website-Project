@@ -17,6 +17,7 @@ import StripeCheckout from './StripeCheckout/StripeCheckout'
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 import { useState } from 'react';
+import { LinearProgress } from '@material-ui/core';
 
 const stripePromise = loadStripe("pk_test_PkPcqrgpZoRl7DVSoeLXdCH100TEU5AfdY"); // CONFIG STRIPE PUB KEY
 
@@ -59,10 +60,10 @@ const Payment = (props) => {
         }).then(async res => {
             res = await res.json();
             console.log(res)
-            props.setOrderData(res);
             props.fetchCart();
 
             if (res.status != 200) {
+                console.log('NOT OK');
                 return res;
             }
 
@@ -73,6 +74,8 @@ const Payment = (props) => {
                 setPayOnline(true);
             }
             else {
+                props.setOrderData(res.order);
+                console.log('Order Placed on COD');
                 props.setPlacedOrder(true);
             }
 
@@ -101,26 +104,35 @@ const Payment = (props) => {
                 <label className="pay_label">
                     <input type="radio" id="radio" name='paymentType' value="COD" />
                     <div className="mode">
-                        COD
+                        COD (Cash / UPI - GPay, Paytm)
                    </div>
                 </label>
+
                 <label className="pay_label">
                     <input type="radio" id="radio" name='paymentType' value="PREPAID" />
                     <div className="mode">
-                        Prepaid : Card / Net Banking / UPI / Online Wallets
+                        Prepaid : Debit / Credit Card
                    </div>
-                    <Modal visible={payOnline} closeModal={() => setPayOnline(false)} closeModal={() => setPayOnline(false)}>
-                        <div className="stripe">
-                            <Elements stripe={stripePromise}>
-                                <StripeCheckout
-                                    clientSecret={clientSecret}
-                                    orderPrice={orderPrice}
+                    {
+                        payOnline ?
+                            <div className="stripe">
+                                <Elements stripe={stripePromise}
                                     setPayOnline={setPayOnline}
                                     setPlacedOrder={props.setPlacedOrder}
-                                    setOrderData={props.setOrderData} />
-                            </Elements>
-                        </div>
-                    </Modal>
+                                    setOrderData={props.setOrderData}
+                                >
+                                    <StripeCheckout
+                                        clientSecret={clientSecret}
+                                        orderPrice={orderPrice}
+                                        setPayOnline={setPayOnline}
+                                        setPlacedOrder={props.setPlacedOrder}
+                                        setPaymentData={props.setPaymentData}
+                                        setOrderData={props.setOrderData} />
+                                </Elements>
+                            </div>
+
+                            : null
+                    }
                 </label>
             </div>
             <div className="verify-delivery">
@@ -128,6 +140,9 @@ const Payment = (props) => {
                     <input type="checkbox" name="verifyDelivery" id="verifyDelivery" />
                     <b>Verify Delivery</b> <span>You will have to provide the OTP sent to your email to the Delivery Boy in order to mark the Order Delivered.</span>
                 </label>
+            </div>
+            <div>
+                {payMeta.isLoading ? <LinearProgress /> : null}
             </div>
             <div className="confirm">
                 <span className="error">
@@ -138,7 +153,7 @@ const Payment = (props) => {
                     {
                         props.cart.filter(ci => ci.sku.stockQuantity === 0).length ?
                             <div className="error">Please remove the products in your cart which are Out of Stock.</div>
-                            : <button className="cont_order" id="but" onClick={placeOrder}>Place Order</button>
+                            : <button className={`cont_order ${payMeta.isLoading ? 'disabled' : ''}`} id="but" disabled={payMeta.isLoading} onClick={placeOrder}>Place Order</button>
                     }
                 </span>
             </div>

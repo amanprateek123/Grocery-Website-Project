@@ -5,7 +5,7 @@ import '../Admin.scss'
 import UploadIcon from '@material-ui/icons/CloudUpload'
 import * as actions from '../../../store/actions'
 import { connect } from 'react-redux'
-
+import './bulk.scss'
 // const ProductRow = (props) => {
 //     return (
 //         <div className="product-row">
@@ -111,7 +111,7 @@ const AddProductsFile = (props) => {
                 </div>
                 : null}
 
-            <div>
+            <div className="media_catag">
                 <h2 className="mb-2 text-muted">Departments</h2>
                 <p className="text-muted mb-4" style={{ opacity: 0.7 }}>upload a csv file with fields : [ name  ]</p>
                 <form encType="multipart/form-data" onSubmit={addDepartments}>
@@ -122,7 +122,7 @@ const AddProductsFile = (props) => {
                 </form>
             </div>
             <Divider />
-            <div>
+            <div className="media_catag">
                 <h2 className="mb-2 text-muted">parentCategories</h2>
                 <p className="text-muted mb-4" style={{ opacity: 0.7 }}>upload a csv file with fields : [ department | name ]</p>
                 <form encType="multipart/form-data" onSubmit={addParentCategories}>
@@ -133,7 +133,7 @@ const AddProductsFile = (props) => {
                 </form>
             </div>
             <Divider />
-            <div>
+            <div className="media_catag">
                 <h2 className="mb-2 text-muted">Categories</h2>
                 <p className="text-muted mb-4" style={{ opacity: 0.7 }}>upload a csv file with fields : [ parentCategory | name ]</p>
                 <form encType="multipart/form-data" onSubmit={addCategories}>

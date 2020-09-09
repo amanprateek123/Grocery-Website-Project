@@ -97,7 +97,7 @@ const DeleteProduct = (props) => {
         <Paper className="admin-content">
             <div className="row delete-product full-width">
                 <div className="col">
-                    <h2>Delete Product</h2>
+                    <h2 style={{fontSize:'25px'}}>Delete Product</h2>
                     <form onSubmit={getProduct}>
                         <div className="form-group">
                             <TextField className="text-center" style={{width:'200px'}} value={productId} onChange={(e) => setProductId(e.target.value)} label="find product by Id" name="productId" />

@@ -66,3 +66,15 @@
 .json{
     padding: 0 2em;
 }
+.media_cata{
+    @media(max-width: 600px){
+        display: flex;
+        flex-direction: column;
+    }
+}
+.media_btn{
+    @media(max-width: 600px){
+        font-size: 10px!important;
+        padding: 0 10px!important;
+    }
+}

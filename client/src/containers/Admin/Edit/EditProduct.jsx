@@ -266,7 +266,7 @@ const AddProduct = (props) => {
                     ?
                     <div className="row">
                         <div className="col">
-                            <h2>Edit Product</h2>
+                            <h2 style={{fontSize:'25px'}}>Edit Product</h2>
                             <form onSubmit={getProduct}>
                                 <div className="form-group">
                                     <TextField className="text-center" value={productId} onChange={(e) => setProductId(e.target.value)} label="find product by Id" name="productId" />

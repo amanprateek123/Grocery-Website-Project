@@ -17,7 +17,7 @@ function OrderSum(props) {
                 <span className="span2">
                     Order Summary
             </span>
-                <span className="span3">Delivery by Saturday Jun 27</span>
+                <span className="span3">Delivery by {(new Date(new Date() + 3)).toLocaleDateString()}</span>
             </h3>
             <div style={{ backgroundColor: '#fff' }}>
                 {props.cart.map((item, i) => {

@@ -1,0 +1,15 @@
+.media_catag{
+    @media(max-width: 600px){
+        width: 100%;
+    }
+    input{
+        @media(max-width: 600px){
+            width: 65%;
+        }
+    }
+    p{
+        @media(max-width: 600px){
+            width: 100%;
+        }
+    }
+}

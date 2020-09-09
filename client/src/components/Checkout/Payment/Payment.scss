@@ -129,5 +129,11 @@
 .stripe{
     background: #fff;
     padding: 3em 2em;
-    min-width: 30em;
+    // min-width: 30em;
+}
+
+.order_det{
+    .disabled{
+        filter: grayscale(1);
+    }
 }

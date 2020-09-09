@@ -237,7 +237,7 @@ const AddProduct = (props) => {
                         <div className="col">
                             <div className="d-flex mb-4">
                                 <h2 className="mb-2 text-muted">Product</h2>
-                                <Button variant="contained" color="primary" type="submit">Add Product</Button>
+                                <Button variant="contained" className="media_btn" color="primary" type="submit">Add Product</Button>
                             </div>
                             <div className="info">
                                 <p>
@@ -261,7 +261,7 @@ const AddProduct = (props) => {
                             <h5>Category</h5>
                             {
                                 categories && selectedCat ?
-                                    <div className="form-group">
+                                    <div className="form-group media_cata">
                                         <div className="w-100">
                                             <Select name="department" label="department" value={selectedCat.department.id} onChange={(e) => handleChangeCat(e, "department")}>
                                                 {categories.map(dept => <MenuItem key={dept.id} value={dept.id}>{dept.name}</MenuItem>)}
