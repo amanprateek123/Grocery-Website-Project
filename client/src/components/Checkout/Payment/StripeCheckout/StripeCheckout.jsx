@@ -3,7 +3,7 @@ import { useStripe, useElements, CardElement } from '@stripe/react-stripe-js';
 
 import './StripeCheckout.scss';
 import { useState } from 'react';
-import { Spinner } from 'react-bootstrap';
+import { CircularProgress, LinearProgress } from "@material-ui/core";
 import { useEffect } from 'react';
 import { useHistory } from 'react-router-dom'
 
@@ -29,7 +29,7 @@ const CARD_ELEMENT_OPTIONS = {
 export default function CheckoutForm(props) {
     const stripe = useStripe();
     const elements = useElements();
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const [success, setSuccess] = useState(null);
 
@@ -48,7 +48,7 @@ export default function CheckoutForm(props) {
 
         console.log('submitted');
 
-        if (!stripe || !elements) {
+        if (!stripe || !elements || loading) {
             // Stripe.js has not yet loaded.
             // Make sure to disable form submission until Stripe.js has loaded.
             return;
@@ -77,11 +77,10 @@ export default function CheckoutForm(props) {
                 // execution. Set up a webhook or plugin to listen for the
                 // payment_intent.succeeded event that handles any business critical
                 // post-payment actions.
-                setTimeout(() => {
-                    // props.setPayOnline(false);
-                    // props.setPlacedOrder(true);
-                    history.push('/orders')
-                }, 2000);
+                // props.setPayOnline(false);
+                props.setPlacedOrder(true);
+                props.setPaymentData(result.paymentIntent);
+                // props.setOrderData(null);
 
             }
         }
@@ -90,19 +89,15 @@ export default function CheckoutForm(props) {
 
     return (
         <form className="stripe-checkout">
-            <h2>Pay with Card</h2>
+            {/* <h2>Pay with Card</h2> */}
             <div className="card-details">
                 <CardElement options={CARD_ELEMENT_OPTIONS} billingAddress shippingAddress />
             </div>
-            <button onClick={handleSubmit} type="submit" className="btn btn-primary" disabled={!stripe || loading}>
-                {
-                    loading || !stripe ?
-                        <Spinner />
-                        : success ?
-                            success :
-                            `Pay $${props.orderPrice}`
-                }
-            </button>
+
+            <div style={{ width: '100%' }}>
+                {loading ? <LinearProgress /> : null}
+            </div>
+
             {
                 error ?
                     <div className="error">
@@ -110,6 +105,19 @@ export default function CheckoutForm(props) {
                     </div>
                     : null
             }
+
+            <button onClick={handleSubmit} type="submit" className={`cont_order ${(!stripe || loading) ? 'disabled' : ''}`} disabled={!stripe || loading}>
+                {
+                    loading || !stripe ?
+                        'Processing Payment'
+                        : success ?
+                            success :
+                            `Pay $${props.orderPrice}`
+                }
+            </button>
+            <div className="footer">
+                we do not store any of your card information.
+            </div>
             <div className="footer">
                 powered by Stripe
             </div>

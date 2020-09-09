@@ -247,6 +247,7 @@ function Checkout(props) {
                 box === 3 ? <Payment
                     setPlacedOrder={props.setPlacedOrder}
                     setOrderData={props.setOrderData}
+                    setPaymentData={props.setPaymentData}
                     idx={idx}
                     address={user.addresses}
                     addrIndex={radio}

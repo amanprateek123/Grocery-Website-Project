@@ -785,6 +785,11 @@ exports.getOrders = async (req, res) => {
         })
         .then(c => {
             meta.count.delivered = c.length;
+
+            meta.total = meta.count.ordered + meta.count.packed + meta.count.shipped + meta.count.delivered;
+
+            meta.pageCount = Math.ceil(meta.total / limit);
+
             return db.order.findAll(emptyOptions)
         })
 

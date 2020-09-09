@@ -34,7 +34,7 @@ import { useRef } from 'react';
 const Products = (props) => {
 
     const history = useHistory();
-    
+
     const [products, setProducts] = useState([])
     const [visibleProducts, setVisibleProducts] = useState([])
     const [categories, setCategories] = useState([]);
@@ -43,7 +43,7 @@ const Products = (props) => {
     const [SKUTypes, setSKUTypes] = useState([]);
     const [priceRange, setPriceRange] = useState([0, 10000000]);
     const [sortBy, setSortBy] = useState('');
-     const [cata,setCata] = useState(null)
+    const [cata, setCata] = useState(null)
     const [loading, setLoading] = useState(true);
     const [snackbar, setSnackbar] = useState(false);
 
@@ -51,24 +51,24 @@ const Products = (props) => {
 
     // const [dep,setDep] = useState([])
 
-//    useEffect(()=>{
-//     fetch('/get-categories').then(res => {
-//         res.json().then(departments=>{
-//             setDep(departments)
-//         })})
-//    },[])
-     const[style,setStyle] = useState(window.innerWidth>600)
-     const [cls,setCls] = useState('sel')
+    //    useEffect(()=>{
+    //     fetch('/get-categories').then(res => {
+    //         res.json().then(departments=>{
+    //             setDep(departments)
+    //         })})
+    //    },[])
+    const [style, setStyle] = useState(window.innerWidth > 600)
+    const [cls, setCls] = useState('sel')
 
-     useEffect(()=>{
-        if(style){
+    useEffect(() => {
+        if (style) {
             setCls("sel")
-       }
-       else{
-           setCls('sels')
-       }
-     },[style])
-    
+        }
+        else {
+            setCls('sels')
+        }
+    }, [style])
+
     useEffect(() => {
         products.length && null || setLoading(true);
         fetch(`/get-products${props.location.search}`).then(res => res.json().then(({ meta, products }) => {
@@ -141,7 +141,7 @@ const Products = (props) => {
     //                     else{
     //                         console.log(j.name + '!=' + cata)
     //                     }
-                        
+
     //                 })
     //              })
     //         ))
@@ -291,9 +291,9 @@ const Products = (props) => {
                                 {parent.name}
                             </AccordionSummary>
                             <AccordionDetails className="row">
-                                {parent.categories.map(cata=>(
+                                {parent.categories.map(cata => (
                                     <div key={cata.id} className="col-12 text-center mt-2"  >
-                                         <Link to={`/products?category=${cata.name}`} style={{color:'var(--mainColor',textDecoration:'none'}}>{cata.name}</Link>
+                                        <Link to={`/products?category=${cata.name}`} style={{ color: 'var(--mainColor', textDecoration: 'none' }}>{cata.name}</Link>
                                     </div>
                                 ))}
                             </AccordionDetails>
@@ -419,83 +419,83 @@ const Products = (props) => {
                         categories.length ?
                             <div className={cls}>
                                 <div className="filter-lists">
-                                    <Accordion style={{zIndex:'1',width:'180px',backgroundColor:'#fff',boxShadow:'none'}}>
+                                    <Accordion style={{ zIndex: '1', width: '180px', backgroundColor: '#fff', boxShadow: 'none' }}>
                                         <AccordionSummary
-                                        expandIcon={<ExpandMoreIcon/>}
-                                        style={{position:'relative',top:'2px'}}
+                                            expandIcon={<ExpandMoreIcon />}
+                                            style={{ position: 'relative', top: '2px' }}
                                         >
-                                            <span style={{color:'#999'}}>Filters</span>
+                                            <span style={{ color: '#999' }}>Filters</span>
                                         </AccordionSummary>
                                         <AccordionDetails className="row" style={{}}>
-                                        {
-                                                    brands.length ?
-                                                        <Accordion className="filter-list acc" dense aria-controls="brands-content" style={{width:'180px',boxShadow: '0px 2px 1px -1px rgba(0,0,0,0.2), 0px 1px 1px 0px rgba(0,0,0,0.14), 0px 1px 3px 0px rgba(0,0,0,0.12)'}}>
-                                                            <AccordionSummary className="" expandIcon={<ExpandMoreIcon />}>Brands</AccordionSummary>
+                                            {
+                                                brands.length ?
+                                                    <Accordion className="filter-list acc" dense aria-controls="brands-content" style={{ width: '180px', boxShadow: '0px 2px 1px -1px rgba(0,0,0,0.2), 0px 1px 1px 0px rgba(0,0,0,0.14), 0px 1px 3px 0px rgba(0,0,0,0.12)' }}>
+                                                        <AccordionSummary className="" expandIcon={<ExpandMoreIcon />}>Brands</AccordionSummary>
+                                                        <AccordionDetails>
+                                                            <div className="brands">
+                                                                {brands.map((brand, i) => <FormControlLabel key={brand.name + i} className="d-block ctrl m-0" label={brand.name} control={<Checkbox color="primary" checked={brand.selected} onChange={(e) => changeBrand(brand.name, e)} value={brand.name} />} />)}
+                                                            </div>
+                                                        </AccordionDetails>
+                                                    </Accordion>
+                                                    : null
+                                            }
+                                            {/* <Divider /> */}
+
+                                            {
+                                                categories.length ?
+                                                    <Accordion className="filter-list acc" dense aria-controls="brands-content" style={{ width: '180px', boxShadow: '0px 2px 1px -1px rgba(0,0,0,0.2), 0px 1px 1px 0px rgba(0,0,0,0.14), 0px 1px 3px 0px rgba(0,0,0,0.12)' }}>
+                                                        <AccordionSummary className="list-heading" expandIcon={<ExpandMoreIcon />}>Price Filter</AccordionSummary>
+                                                        <AccordionDetails style={{ display: 'flex', flexDirection: 'column' }}>
+                                                            <div onClick={applyPrice} style={{ margin: '-1.5em 0 1em 0' }} className="btn-sec">
+                                                                Apply
+                                                                </div>
+                                                            <div className="prices">
+                                                                <TextField InputProps={{
+                                                                    startAdornment: <InputAdornment position="start">$</InputAdornment>,
+                                                                }} type="number" label="min" value={priceRange[0]} onChange={(e) => handlePriceChange(e, 0)} />
+                                                                <TextField InputProps={{
+                                                                    startAdornment: <InputAdornment position="start">$</InputAdornment>,
+                                                                }} type="number" label="max" value={priceRange[1]} onChange={(e) => handlePriceChange(e, 1)} />
+
+                                                            </div>
+                                                        </AccordionDetails>
+                                                    </Accordion>
+                                                    : null
+                                            }
+
+                                            {SKUTypes.map(name => (
+                                                name?.trim() ?
+                                                    <React.Fragment key={name}>
+                                                        <Accordion className="filter-list acc" key={name} style={{ width: '180px', boxShadow: '0px 2px 1px -1px rgba(0,0,0,0.2), 0px 1px 1px 0px rgba(0,0,0,0.14), 0px 1px 3px 0px rgba(0,0,0,0.12)' }} >
+                                                            <AccordionSummary className="list-heading" expandIcon={<ExpandMoreIcon />}>{name}</AccordionSummary>
                                                             <AccordionDetails>
-                                                                <div className="brands">
-                                                                    {brands.map((brand, i) => <FormControlLabel key={brand.name + i} className="d-block ctrl m-0" label={brand.name} control={<Checkbox color="primary" checked={brand.selected} onChange={(e) => changeBrand(brand.name, e)} value={brand.name} />} />)}
+                                                                <div className="pack-sizes">
+                                                                    {SKUs.map(sku => (
+                                                                        sku.name == name && sku.value ?
+                                                                            <FormControlLabel key={sku.value + sku.id + sku.name} className="d-block ctrl m-0" label={sku.value} control={<Checkbox color="primary"
+                                                                                checked={sku.selected} onChange={(e) => changeSKU(sku.value, e)} value={sku.value} />} />
+                                                                            : null
+                                                                    ))}
                                                                 </div>
                                                             </AccordionDetails>
                                                         </Accordion>
-                                                        : null
-                                                }
-                                                {/* <Divider /> */}
-
-                                                {
-                                                    categories.length ?
-                                                        <Accordion className="filter-list acc" dense aria-controls="brands-content" style={{width:'180px',boxShadow: '0px 2px 1px -1px rgba(0,0,0,0.2), 0px 1px 1px 0px rgba(0,0,0,0.14), 0px 1px 3px 0px rgba(0,0,0,0.12)'}}>
-                                                            <AccordionSummary className="list-heading" expandIcon={<ExpandMoreIcon />}>Price Filter</AccordionSummary>
-                                                            <AccordionDetails style={{ display: 'flex', flexDirection: 'column' }}>
-                                                                <div onClick={applyPrice} style={{ margin: '-1.5em 0 1em 0' }} className="btn-sec">
-                                                                    Apply
-                                                                </div>
-                                                                <div className="prices">
-                                                                    <TextField InputProps={{
-                                                                        startAdornment: <InputAdornment position="start">$</InputAdornment>,
-                                                                    }} type="number" label="min" value={priceRange[0]} onChange={(e) => handlePriceChange(e, 0)} />
-                                                                    <TextField InputProps={{
-                                                                        startAdornment: <InputAdornment position="start">$</InputAdornment>,
-                                                                    }} type="number" label="max" value={priceRange[1]} onChange={(e) => handlePriceChange(e, 1)} />
-
-                                                                </div>
-                                                            </AccordionDetails>
-                                                        </Accordion>
-                                                        : null
-                                                }
-
-                                                {SKUTypes.map(name => (
-                                                    name?.trim() ?
-                                                        <React.Fragment key={name}>
-                                                            <Accordion className="filter-list acc" key={name} style={{width:'180px',boxShadow: '0px 2px 1px -1px rgba(0,0,0,0.2), 0px 1px 1px 0px rgba(0,0,0,0.14), 0px 1px 3px 0px rgba(0,0,0,0.12)'}} >
-                                                                <AccordionSummary className="list-heading" expandIcon={<ExpandMoreIcon />}>{name}</AccordionSummary>
-                                                                <AccordionDetails>
-                                                                    <div className="pack-sizes">
-                                                                        {SKUs.map(sku => (
-                                                                            sku.name == name && sku.value ?
-                                                                                <FormControlLabel key={sku.value + sku.id + sku.name} className="d-block ctrl m-0" label={sku.value} control={<Checkbox color="primary"
-                                                                                    checked={sku.selected} onChange={(e) => changeSKU(sku.value, e)} value={sku.value} />} />
-                                                                                : null
-                                                                        ))}
-                                                                    </div>
-                                                                </AccordionDetails>
-                                                            </Accordion>
-                                                            {/* <Divider /> */}
-                                                        </React.Fragment>
-                                                        : null
-                                                ))}
+                                                        {/* <Divider /> */}
+                                                    </React.Fragment>
+                                                    : null
+                                            ))}
                                         </AccordionDetails>
                                     </Accordion>
-                                 </div>   
+                                </div>
                                 <div className="filter-list acc sort-ctrl" dense aria-controls="brands-content">
-                                <label style={{ color: '#aaa' }}>Sort by : </label>
-                                <select onChange={handleChangeSort}>
-                                    <option name="sort" value="">None</option>
-                                    <option name="sort" value="skus.price&dir=ASC" >Price - Low to High</option>
-                                    <option name="sort" value="skus.price&dir=DESC">Price - High to Low</option>
-                                </select>
+                                    <label style={{ color: '#aaa' }}>Sort by : </label>
+                                    <select onChange={handleChangeSort}>
+                                        <option name="sort" value="">None</option>
+                                        <option name="sort" value="skus.price&dir=ASC" >Price - Low to High</option>
+                                        <option name="sort" value="skus.price&dir=DESC">Price - High to Low</option>
+                                    </select>
+                                </div>
                             </div>
-                             </div>   
-                            
+
                             : null
                     }
                     <div className="col-md-10 col">

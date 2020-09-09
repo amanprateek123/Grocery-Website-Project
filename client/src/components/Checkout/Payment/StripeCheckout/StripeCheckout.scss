@@ -4,13 +4,15 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    
 
     .card-details{
         width: 100%;
         padding: 1em 0.2em;
+        margin-bottom: 0.5em;
     }
 
-    .btn{
+    .cont_order{
         margin: 1em auto;
     }
     .footer{
@@ -18,5 +20,13 @@
         color:#999;
         position: relative;
         bottom: -2em;
+    }
+
+    .btn{
+        text-transform: capitalize;
+    }
+
+    .btn.disabled{
+        filter: grayscale(1);
     }
 }
