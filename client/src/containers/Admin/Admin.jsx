@@ -68,8 +68,7 @@ const Profile = (props) => {
                                                 <Avatar className="dp" src={user.gender == 'F' ? female_avatar : male_avatar} />
                                             </div>
                                             <div className="col">
-                                                <div><i>Hello,</i></div>
-                                                <h5>Admin</h5>
+                                                <div>Hello,<span  style={{fontSize:'19px'}}>  Admin</span></div>                                                
                                             </div>
                                         </div>
 

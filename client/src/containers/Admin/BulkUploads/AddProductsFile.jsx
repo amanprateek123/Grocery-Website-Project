@@ -5,6 +5,7 @@ import '../Admin.scss'
 import UploadIcon from '@material-ui/icons/CloudUpload'
 import * as actions from '../../../store/actions'
 import { connect } from 'react-redux'
+import './bulk.scss'
 
 const ProductRow = (props) => {
     return (
@@ -50,10 +51,12 @@ const AddProductsFile = (props) => {
 
     return (
         <Paper className="admin-content">
-            <div>
+            <div className="media_catag">
                 <h2 className="mb-2 text-muted">Upload Products CSV</h2>
-                <p className="text-muted mb-4" style={{ opacity: 0.7 }}>upload a csv file with fields : <br /> [sn,op,categoryId,name,brand,description,keywords,code,model,price,stock,json,src,attr,attrv] </p>
-                <form encType="multipart/form-data" onSubmit={addProducts}>
+                <p className="text-muted mb-4" style={{ opacity: 0.7 }}>upload a csv file with fields : <br />
+                 {/* [sn,op,categoryId,name,brand,description,keywords,code,model,price,stock,json,src,attr,attrv] */}
+                  </p>
+                <form encType="multipart/form-data" onSubmit={addProducts}>git
                     <div className="form-group">
                         <input required type="file" name="products" id="products-file" style={{ opacity: 0.5 }} />
                         <Button startIcon={<UploadIcon />} variant="contained" color="primary" type="submit">Upload</Button>
