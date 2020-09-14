@@ -419,14 +419,14 @@ const Products = (props) => {
                         categories.length ?
                             <div className={cls}>
                                 <div className="filter-lists">
-                                    <Accordion style={{ zIndex: '1', width: '180px', backgroundColor: '#fff', boxShadow: 'none' }}>
+                                    <Accordion style={{ zIndex: '2', width: '180px', backgroundColor: '#fff', boxShadow: 'none' }}>
                                         <AccordionSummary
                                             expandIcon={<ExpandMoreIcon />}
                                             style={{ position: 'relative', top: '2px' }}
                                         >
                                             <span style={{ color: '#999' }}>Filters</span>
                                         </AccordionSummary>
-                                        <AccordionDetails className="row" style={{}}>
+                                        <AccordionDetails className="row" >
                                             {
                                                 brands.length ?
                                                     <Accordion className="filter-list acc" dense aria-controls="brands-content" style={{ width: '180px', boxShadow: '0px 2px 1px -1px rgba(0,0,0,0.2), 0px 1px 1px 0px rgba(0,0,0,0.14), 0px 1px 3px 0px rgba(0,0,0,0.12)' }}>

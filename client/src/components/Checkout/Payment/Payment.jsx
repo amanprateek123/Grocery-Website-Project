@@ -178,9 +178,9 @@ const Payment = (props) => {
                             </span>
                             <span className="span_plac">Home</span><span className="span_num">{props.address[props.idx].mobile}</span>
                             <br />
-                            <span style={{ marginLeft: '3%' }}> {props.address[props.idx].address}</span>
+                            <span className="lefts"> {props.address[props.idx].address}</span>
                             <br />
-                            <span style={{ marginLeft: '3%' }}> {props.address[props.idx].state}, <span> {props.address[props.idx].country} - <span>{props.address[props.idx].zip}</span></span></span>
+                            <span className="lefts"> {props.address[props.idx].state}, <span> {props.address[props.idx].country} - <span>{props.address[props.idx].zip}</span></span></span>
                         </div>
                         <button className="del_chng" onClick={props.change}>Change</button>
                     </div>
@@ -201,7 +201,7 @@ const Payment = (props) => {
                                 <p style={{ fontSize: "16px" }}>{site.name} Basket <span style={{ fontWeight: 'bold' }}>({props.cart.length} items)</span></p>
                             </div>
                             <div className="order_list_sum">
-                                <div className="row lilly" >
+                                <div className="row lilly m-0" >
                                     {props.cart.map(itm => {
                                         return (
                                             <div className="list_img col-md-2" key={itm.id} style={{ backgroundImage: `url(${itm.sku.images[0].src})` }}>

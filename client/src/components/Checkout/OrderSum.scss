@@ -84,12 +84,15 @@
     margin-top: 3px;
     margin-right: 2%;
     cursor: pointer;    
+    @media(max-width:600px){
+        display: none;
+    }
 }
 .add_list{
     font-size: 14px;
     @media(max-width:600px) {
         font-size: 12px;
-        text-align: center;
+        text-align: left;
     }
 }
 
@@ -142,8 +145,12 @@
     width: 112px;
     position: relative;
     margin: 0 auto;
+    @media(max-width:600px){
+        width: 80px;
+        height: 80px;
+    }
     img{
-     position: absolute;
+    position: absolute;
     bottom: 0;
     left: 0;
     right: 0;
@@ -273,6 +280,7 @@
         margin-left: -16px;
         @media(max-width: 600px){
             font-size: 14px;
+            margin-left: -30px;
         }
     }
 }
@@ -349,4 +357,10 @@
         vertical-align: baseline;
         margin-right: 17px
         }
+}
+.lef{
+    margin-left:3.3%;
+    @media(max-width:600px){
+     margin-left: 0;
+    }
 }

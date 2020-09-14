@@ -14,6 +14,7 @@
     margin-top: -6%;
     @media(max-width:600px){
         margin-top:5%;
+        margin-right: 24%;
     }
 }
 .pay_label{
@@ -51,8 +52,10 @@
     left: -25px;
     @media(max-width: 600px){
         width: 96%;
-        left: 0px;
         top: -18px;
+        p{
+            margin-top: 15px;
+        }
     }
 }
 .oreder_list_sum{
@@ -135,5 +138,11 @@
 .order_det{
     .disabled{
         filter: grayscale(1);
+    }
+}
+.lefts{
+    margin-left: 3.3%;
+    @media(max-width:600px){
+        margin-left: 0;
     }
 }
