@@ -444,7 +444,7 @@ const Navbar = (props) => {
                                         <h4 style={{ color: 'black', fontWeight: 'bold', fontSize: '17px', margin: '25px 0 0px 0px', padding: '0 12px' }}>Departments</h4>
                                         <ul>
                                             {dept.length > 0 ? dept.map((department, i) => (
-                                                <li style={{ width: '16px', padding: '16px 12px' }} onClick={() => parent(i)} ><div style={{ marginLeft: '12px' }}>{department.name}<span style={{ float: 'right' }}><ChevronRightIcon /></span></div></li>
+                                                <li style={{ width: '16px', padding: '16px 12px' }} key={department.id} onClick={() => parent(i)} ><div style={{ marginLeft: '12px' }}>{department.name}<span style={{ float: 'right' }}><ChevronRightIcon /></span></div></li>
                                             )) : null}
                                         </ul>
                                     </div> :
@@ -453,7 +453,7 @@ const Navbar = (props) => {
                                                 <h4 style={{ color: 'black', fontWeight: 'bold', fontSize: '17px', margin: '5px 0px 0px 0', padding: '0 12px' }}>{dept[pind].name}</h4>
                                                 <ul>
                                                     {dept[pind].parentCategories.map((parent, j) => (
-                                                        <li style={{ width: '16px', padding: '16px 12px' }} onClick={() => catagory(j)} ><div style={{ marginLeft: '12px' }}>{parent.name}<span style={{ float: 'right' }}><ChevronRightIcon /></span></div></li>
+                                                        <li style={{ width: '16px', padding: '16px 12px' }} key={parent.id} onClick={() => catagory(j)} ><div style={{ marginLeft: '12px' }}>{parent.name}<span style={{ float: 'right' }}><ChevronRightIcon /></span></div></li>
                                                     ))}
                                                     <li style={{ width: '16px', padding: '16px 12px' }} onClick={() => setTab(1)} ><ChevronLeftIcon /><span style={{ marginLeft: '5px', fontWeight: 'bold' }}>Back To Main</span></li>
                                                 </ul>
@@ -463,7 +463,7 @@ const Navbar = (props) => {
                                                     <h4 style={{ color: 'black', fontWeight: 'bold', fontSize: '15px', margin: '5px 0px 0px 0', padding: '0 12px' }}>{dept[pind].name}<ChevronRightIcon />{dept[pind].parentCategories[cind].name}</h4>
                                                     <ul>
                                                         {dept[pind].parentCategories[cind].categories.map(cata => (
-                                                            <li onClick={closeAll}><NavLink to={`/products?category=${cata.name}`} ><div style={{ marginLeft: '12px' }} >{cata.name}</div></NavLink></li>
+                                                            <li onClick={closeAll} key={cata.id}><NavLink to={`/products?category=${cata.name}`} ><div style={{ marginLeft: '12px' }} >{cata.name}</div></NavLink></li>
                                                         ))}
                                                         <li style={{ width: '16px', padding: '16px 12px' }} onClick={() => setTab(2)} ><ChevronLeftIcon /><span style={{ marginLeft: '5px', fontWeight: 'bold' }}>Prev. Page</span></li>
                                                     </ul>

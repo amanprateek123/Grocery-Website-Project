@@ -56,7 +56,7 @@ const AddProductsFile = (props) => {
                 <p className="text-muted mb-4" style={{ opacity: 0.7 }}>upload a csv file with fields : <br />
                  {/* [sn,op,categoryId,name,brand,description,keywords,code,model,price,stock,json,src,attr,attrv] */}
                   </p>
-                <form encType="multipart/form-data" onSubmit={addProducts}>git
+                <form encType="multipart/form-data" onSubmit={addProducts}>
                     <div className="form-group">
                         <input required type="file" name="products" id="products-file" style={{ opacity: 0.5 }} />
                         <Button startIcon={<UploadIcon />} variant="contained" color="primary" type="submit">Upload</Button>

@@ -112,9 +112,9 @@ function OrderSum(props) {
                             </span>
                             <span className="span_plac">Home</span><span className="span_num">{props.address[props.idx].mobile}</span>
                             <br />
-                            <span style={{ marginLeft: '3%' }}> {props.address[props.idx].address}</span>
+                            <span className="lef"> {props.address[props.idx].address}</span>
                             <br />
-                            <span style={{ marginLeft: '3%' }}> {props.address[props.idx].state}, <span> {props.address[props.idx].country} - <span>{props.address[props.idx].zip}</span></span></span>
+                            <span className="lef"> {props.address[props.idx].state}, <span> {props.address[props.idx].country} - <span>{props.address[props.idx].zip}</span></span></span>
                         </div>
                         <button className="del_chng" onClick={props.change}>Change</button>
                     </div>

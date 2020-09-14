@@ -93,7 +93,7 @@ function Homepage(props) {
                                             <React.Fragment>
                                                 <div>
                                                     {values.sections.map((sec, index) => (
-                                                        <div key={sec.id + index} style={{ margin: '1em 0', padding: '1em', background: '#eee7' }}>
+                                                        <div key={sec.id} style={{ margin: '1em 0', padding: '1em', background: '#eee7' }}>
                                                             <div className="mt-3" style={{ display: 'flex', justifyContent: 'space-between', flexDirection: 'column' }}>
                                                                 <label htmlFor={`sections.${index}.fieldType`}>Enter the Field Type:</label>
                                                                 <Field name={`sections.${index}.fieldType`} as="select" className="offer_form" style={{ padding: '3px' }}>
